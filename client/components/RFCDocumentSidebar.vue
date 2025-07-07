@@ -1,13 +1,14 @@
 <template>
   <div class="h-full print:block">
-    <DialogRoot v-model:open="isModalOpen" @close="isModalOpen = false">
+    <DialogRoot
+      v-model:open="isModalOpen"
+      @close="isModalOpen = false"
+    >
       <DialogTrigger />
       <DialogPortal>
         <DialogOverlay />
-        <DialogContent
-          :class="// needs overflow-y-scroll to force scrollbars, to ensure same page width as the main view
-          'absolute inset-0 z-50 bg-blue-900 text-white dark:bg-blue-950 dark:text-white overflow-y-scroll h-full'"
-        >
+        <DialogContent :class="// needs overflow-y-scroll to force scrollbars, to ensure same page width as the main view
+          'absolute inset-0 z-50 bg-blue-900 text-white dark:bg-blue-950 dark:text-white overflow-y-scroll h-full'">
           <DialogTitle />
           <DialogDescription>
             <RFCMobileBanner
@@ -36,13 +37,161 @@
         </DialogContent>
       </DialogPortal>
     </DialogRoot>
-    <div class="sticky top-0 h-[100vh] overflow-y-scroll">
+
+    <div class="sticky top-0 h-[calc(100vh-0px)] flex flex-col">
       <RFCTabs
         ref="desktopRFCTabs"
         v-model:selected-tab="selectedTab"
         :rfc="props.rfc"
         :rfc-bucket-html-doc="props.rfcBucketHtmlDoc"
-      />
+      >
+        <template #slot0>
+          <TableOfContentsHighlight
+            :toc="props.rfcBucketHtmlDoc.tableOfContents!"
+            list-type="ordered"
+            wrapper-class="flex flex-col min-h-0 pt-4 pb-2 px-4"
+            list-class="mr-1"
+            nested-list-class="pl-2"
+            :links-class="`block text-sm py-2 dark:border-t-gray-500 ${ANCHOR_TAILWIND_STYLE}`"
+            links-active-class="text-shadow-bold"
+            link-class="block no-underline hover:underline"
+            last-link-class="flex-1"
+          >
+            <Heading
+              level="2"
+              style-level="5"
+              class="mt-4 mb-1 sr-only"
+            >
+              In this section
+            </Heading>
+          </TableOfContentsHighlight>
+        </template>
+        <template #slot1>
+          <Heading
+            level="3"
+            style-level="4"
+            class="mt-4"
+          >
+            Details
+          </Heading>
+          <dl class="text-sm">
+            <dt class="font-bold mt-2">Updates</dt>
+            <dd>...</dd>
+
+            <dt class="font-bold mt-2">Date published</dt>
+            <dd>{{ formattedPublished }}</dd>
+
+            <dt class="font-bold mt-2">Authors</dt>
+            <dd>
+              <ul class="-mt-1">
+                <li
+                  v-for="(author, authorIndex) in props.rfc.authors"
+                  :key="authorIndex"
+                  class="inline"
+                >
+                  <A
+                    v-if="author.email"
+                    :href="mailToBuilder(author.email)"
+                    class="whitespace-nowrap underline inline-block py-0.5 pr-1 mb-0.5"
+                  >
+                    {{ author.name }}
+                  </A>
+                  <span v-else>
+                    {{ author.name }}
+                  </span>
+                  <template v-if="authorIndex < props.rfc.authors.length - 1">
+                    {{ COMMA }}
+                    {{ SPACE }}
+                  </template>
+                  <template v-else>.</template>
+                </li>
+              </ul>
+            </dd>
+
+            <dt class="font-bold mt-2">Working group</dt>
+            <dd>
+              <template v-if="props.rfc.group.acronym">
+                {{ props.rfc.group.acronym.toUpperCase() }}
+              </template>
+              {{ props.rfc.group.name }}
+            </dd>
+
+            <dt class="font-bold mt-2">Area</dt>
+            <dd>
+              <template v-if="props.rfc.area?.acronym">
+                {{ props.rfc.area.acronym.toUpperCase() }}
+              </template>
+              {{ props.rfc.area?.name }}
+            </dd>
+
+            <dt class="font-bold mt-2">Stream</dt>
+            <dd>{{ props.rfc.stream.name }}</dd>
+
+            <template v-if="props.rfc.identifiers">
+              <template
+                v-for="(identifier, identifierIndex) in props.rfc.identifiers"
+                :key="identifierIndex"
+              >
+                <dt class="font-bold mt-2">
+                  <template v-if="identifier.type === 'doi'">
+                    <abbr title="Digital object identifier">DOI</abbr>
+                  </template>
+                  <template v-else>
+                    {{ identifier.type }}
+                  </template>
+                </dt>
+                <dd>
+                  {{ identifier.value }}
+                </dd>
+              </template>
+            </template>
+
+            <dt class="font-bold mt-2">
+              <abbr title="International Standard Serial Number">ISSN</abbr>
+            </dt>
+            <dd>ISSN number where?</dd>
+          </dl>
+
+          <!-- <Heading level="3" class="mt-5 mb-2">Cite this RFC</Heading>
+          <ul class="text-sm flex flex-col gap-2">
+            <li v-for="(citation, citationIndex) in props.rfc.citations" :key="citationIndex">
+              <A :href="citation.url" class="underline block px-2 -ml-2">
+                {{ citation.title }}
+              </A>
+            </li>
+          </ul> -->
+
+          <Heading
+            level="3"
+            class="mt-5 mb-2"
+          >
+            Formats
+          </Heading>
+          <ul class="text-sm flex flex-col gap-2">
+            <li
+              v-for="(format, formatIndex) in props.rfc.formats"
+              :key="formatIndex"
+            >
+              <A
+                :href="format"
+                class="underline block px-2 -ml-2"
+              >
+                {{ format }}
+              </A>
+            </li>
+          </ul>
+        </template>
+        <template #slot3>
+          <ul class="text-sm">
+            <li
+              v-for="(errataItem, errataIndex) in props.rfc.obsoleted_by"
+              :key="errataIndex"
+            >
+              {{ errataItem }}
+            </li>
+          </ul>
+        </template>
+      </RFCTabs>
     </div>
   </div>
 </template>
@@ -58,7 +207,14 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'reka-ui'
+import { DateTime } from 'luxon'
 import type { RfcBucketHtmlDocument, RfcCommon } from '~/utilities/rfc'
+import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme'
+import { COMMA, SPACE } from '~/utilities/strings'
+import {
+  mailToBuilder,
+} from '~/utilities/url'
+import { formatDatePublished } from '~/utilities/rfc-converters-utils'
 
 type Props = {
   rfc: RfcCommon
@@ -71,4 +227,9 @@ const isModalOpen = defineModel<boolean>('isModalOpen')
 const selectedTab = defineModel<number>('selectedTab')
 
 const props = defineProps<Props>()
+
+const formattedPublished = computed(() => {
+  const dt = DateTime.fromISO(props.rfc.published)
+  return formatDatePublished(dt, true)
+})
 </script>

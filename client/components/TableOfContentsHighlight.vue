@@ -1,5 +1,9 @@
 <template>
-  <div ref="wrapperRef" :class="['overflow-y-auto', props.wrapperClass]">
+  <VerticalScrollable
+    v-if="props"
+    ref="vertical-scrollable"
+    :class="`overflow-y-auto min-h-0 flex flex-col ${props.wrapperClass}`"
+  >
     <slot />
     <TableOfContentsHighlightSection
       v-if="props.toc.sections"
@@ -12,10 +16,12 @@
       :is-ssr="isSSR"
       :list-class="props.listClass"
       :nested-list-class="props.nestedListClass"
-      :list-item-class="props.listItemClass"
-      :list-item-active-class="props.listItemActiveClass"
+      :links-class="props.linksClass"
+      :links-active-class="props.linksActiveClass"
+      :link-class="props.linkClass"
+      :last-link-class="props.lastLinkClass"
     />
-  </div>
+  </VerticalScrollable>
 </template>
 
 <script setup lang="ts">
@@ -37,8 +43,10 @@ type Props = {
   wrapperClass?: string
   listClass?: string
   nestedListClass?: string
-  listItemClass?: string
-  listItemActiveClass?: string
+  linksClass?: string
+  linksActiveClass?: string
+  linkClass?: string
+  lastLinkClass?: string
 }
 
 const props = defineProps<Props>()
@@ -47,7 +55,15 @@ const listTypeElement = computed(() =>
   props.listType === 'numbered' ? 'ol' : 'ul'
 )
 
-const wrapperRef = ref<HTMLElement>()
+const verticalScrollableRef = useTemplateRef('vertical-scrollable')
+
+const wrapperRef = computed(() => {
+  const { value } = verticalScrollableRef
+  if (value && typeof value === 'object' && "scrollContainer" in value && value.scrollContainer instanceof HTMLElement) {
+    return value.scrollContainer
+  }
+  return null
+})
 
 const flattenSections = (section: Section): string[] =>
   [...section.links.map((link) => link.id)].concat(
@@ -100,5 +116,7 @@ useScrollTocContainer({
 })
 
 const isSSR = ref(true)
-onMounted(() => (isSSR.value = false))
+onMounted(() => {
+  isSSR.value = false
+})
 </script>
