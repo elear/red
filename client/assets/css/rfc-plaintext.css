@@ -1,0 +1,31 @@
+/**
+
+Derived from 
+
+https://github.com/ietf-tools/datatracker/blob/2bf633bf70c40b9cb6baf428901615a0403e1ea5/ietf/static/css/document_html.scss#L175
+
+*/
+pre {
+    width: 80ch;
+    white-space: pre-wrap;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    white-space: pre;
+    display: inline;
+}
+
+@media only screen {
+    .newpage {    
+        margin-top: -1.25em;
+    }
+}
+
+.newpage {
+    page-break-before: always;
+}
