@@ -6,7 +6,6 @@
   >
     <slot />
     <TableOfContentsHighlightSection
-      v-if="props.toc.sections"
       :sections="props.toc.sections"
       :depth="0"
       :list-type-element="listTypeElement"

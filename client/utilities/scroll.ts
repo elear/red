@@ -51,10 +51,11 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
 
   const updateElements = () => {
     // Note that ids might not be unique (ie, multiple TOC links to the same thing)
-    // so we have to uniquely select elements and map them back onto the elements.
+    // so we have to uniquely select elements, and map them back onto the array of
+    // elements with duplicates so that array indexes line up between `ids` and
+    // `elementTops`
     const uniqueIds = Array.from(new Set([...ids.value]))
     const selector = uniqueIds.map((id) => `#${CSS.escape(id)}`).join(',')
-    console.log({ selector, 'selector.length ': selector.length }, ids.value)
     elements =
       selector.length > 0 ? Array.from(document.querySelectorAll(selector)) : []
 
