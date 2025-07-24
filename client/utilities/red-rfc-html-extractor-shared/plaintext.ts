@@ -224,17 +224,6 @@ const parsePlaintextToc = (
 }
 
 export const getPlaintextRfcDocument = (dom: Document): Node[] => {
-  const tocSelector = 'h2, h3, h4, h5, h6, .h2, .h3, .h4, .h5, .h6'
-
-  const headings = Array.from(
-    dom.body.querySelectorAll<HTMLElement>(tocSelector)
-  )
-
-  console.log(
-    'ids:',
-    headings.map((heading) => heading.id)
-  )
-
   return Array.from(dom.body.childNodes).filter((node) => {
     if (isHtmlElement(node)) {
       switch (node.nodeName.toLowerCase()) {
@@ -250,22 +239,14 @@ export const getPlaintextMaxLineLength = (dom: Document): number => {
   const DEFAULT_MAX_LINE_LENGTH = 50
 
   const pres = Array.from(dom.body.querySelectorAll<HTMLElement>('pre'))
-  return pres.reduce((prevMaxLineLength, pre) => {
-    const maxLineLengthContenders = getInnerText(pre)
-      .split('\n')
-      .map((text) => ({
-        text,
-        length: text.length
-      }))
-    const biggerLines = maxLineLengthContenders.filter(
-      (line) => line.length > prevMaxLineLength
-    )
-    if (biggerLines.length) {
-      console.log('bigger', biggerLines)
-    }
-    return Math.max(
-      prevMaxLineLength,
-      ...maxLineLengthContenders.map((line) => line.length)
-    )
-  }, DEFAULT_MAX_LINE_LENGTH)
+  return pres.reduce(
+    (prevMaxLineLength, pre) =>
+      Math.max(
+        prevMaxLineLength,
+        ...getInnerText(pre)
+          .split('\n')
+          .map((line) => line.length)
+      ),
+    DEFAULT_MAX_LINE_LENGTH
+  )
 }
