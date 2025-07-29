@@ -4,17 +4,21 @@
     :opacity="0.02"
   />
 
-  <Breadcrumbs :breadcrumb-items="breadcrumbItems" />
-
-  <button
-    type="button"
-    class="fixed right-0 rounded-l bg-white dark:bg-black border border-gray-200 align-middle flex items-center p-1 pr-2 lg:hidden print:hidden"
-    aria-label="Open details modal"
-    @click="isModalOpen = true"
-  >
-    <GraphicsExpandSidebar class="inline-block mr-1" />
-    Info
-  </button>
+  <div class="flex flex-col">
+    <Breadcrumbs
+      :breadcrumb-items="breadcrumbItems"
+      class="flex-1"
+    />
+    <button
+      type="button"
+      class="fixed right-0 mt-3 font-bold rounded-l z-10 bg-white dark:bg-black border border-r-0 border-gray-200 align-middle flex items-center px-3 py-2 text-sm lg:hidden print:hidden shadow-lg shadow-gray-300 dark:shadow-blue-900"
+      aria-label="Open details modal"
+      @click="isModalOpen = true"
+    >
+      <GraphicsExpandSidebar class="inline-block mr-1" />
+      Info
+    </button>
+  </div>
 
   <Heading
     level="1"
@@ -30,47 +34,7 @@
     {{ rfc.title }}
   </Heading>
 
-  <RFCMobileBanner
-    :rfc="rfc"
-    :is-fixed="true"
-  />
-
-  <div class="flex ml-2 flex-row justify-between items-center flex-wrap">
-    <div class="flex align-middle">
-      <Tag
-        :text="rfcId.type === RFC_TYPE_RFC ?
-          ['Internet Standard', `${props.rfc.number}`]
-          : [rfcId.type, rfcId.number]
-          "
-        size="normal"
-      />
-
-      <PopoverRoot>
-        <PopoverTrigger class="p-2">
-          <GraphicsQuestionMarkCircle />
-        </PopoverTrigger>
-        <PopoverAnchor />
-        <PopoverPortal>
-          <PopoverContent>
-            <PopoverClose />
-            <PopoverArrow />
-            <p class="leading-6">
-              For the definition of <b>Status</b>, see
-              <A :href="infoRfcPathBuilder('rfc2026')">
-                <component :is="formatTitleAsVNode('rfc2026')" />
-              </A>
-            </p>
-            <p class="leading-6">
-              For the definition of <b>Stream</b>, see
-              <A :href="infoRfcPathBuilder('rfc8729')">
-                <component :is="formatTitleAsVNode('rfc8729')" />
-              </A>.
-            </p>
-          </PopoverContent>
-        </PopoverPortal>
-      </PopoverRoot>
-    </div>
-  </div>
+  <RFCDocumentBodyPill :rfc="props.rfc" />
 
   <Alert
     v-if="props.rfc.obsoleted_by?.length"
@@ -95,7 +59,7 @@
   </Alert>
 
   <div
-    :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDoc.documentHtmlType} mt-10 pl-2 text-[9px] sm:text-base lg:text-base`"
+    :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDoc.documentHtmlType} wrap-anywhere mt-10 sm:text-base lg:text-base`"
   >
     <div
       v-if="!enrichedDocument"
@@ -107,24 +71,20 @@
       :val="enrichedDocument"
     />
   </div>
+
+  <RFCMobileBanner
+    :rfc="rfc"
+    :is-fixed="true"
+  />
 </template>
 
 <script setup lang="ts">
 import { createTextVNode } from 'vue'
-import {
-  PopoverAnchor,
-  PopoverArrow,
-  PopoverClose,
-  PopoverContent,
-  PopoverPortal,
-  PopoverRoot,
-  PopoverTrigger
-} from 'reka-ui'
 import AMaybeRFCLink from './AMaybeRFCLink.vue'
+import HorizontalScrollable from './HorizontalScrollable.vue'
 import {
   formatTitleAsVNode,
   parseRFCId,
-  RFC_TYPE_RFC,
   type RfcBucketHtmlDocument,
   type RfcCommon
 } from '~/utilities/rfc'
@@ -132,7 +92,7 @@ import { infoRfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 import {
   elementAttributesToObject,
-  isAnchorElement,
+  getTagName,
   isHtmlElement,
   isTextNode
 } from '~/utilities/dom'
@@ -174,10 +134,20 @@ onMounted(async () => {
     return
   }
 
-  enrichedDocument.value = await enrichRfcDocument([...htmlElement.childNodes])
+  enrichedDocument.value = await enrichRfcDocumentClientside(Array.from(htmlElement.childNodes))
 })
 
-const enrichRfcDocument = async (nodes: Node[]): Promise<VNode> => {
+/**
+ * Walks the DOM within the RFC and replaces some elements with Vue components.
+ *
+ * Be careful to avoid any Layout Shift https://web.dev/articles/cls when replacing
+ * elements (ie, page elements should not move around).
+ *
+ * Consider whether you should instead modify the HTML string provided by
+ * https://github.com/ietf-tools/red-rfc-html-extractor see
+ * `getXml2RfcRfcDocument` and `getPlaintextRfcDocument` etc
+ */
+const enrichRfcDocumentClientside = async (nodes: Node[]): Promise<VNode> => {
   const unwrapChildrenForVue = (vnodes: VNode[]) => {
     switch (vnodes.length) {
       case 0:
@@ -189,17 +159,23 @@ const enrichRfcDocument = async (nodes: Node[]): Promise<VNode> => {
     }
   }
 
-  const enrichNode = async (node: Node): Promise<VNode> => {
+  const enrichNodeClientside = async (node: Node): Promise<VNode> => {
     if (isHtmlElement(node)) {
       const attributes = elementAttributesToObject(node.attributes)
       const children = await Promise.all(
-        Array.from(node.childNodes).map(enrichNode)
+        Array.from(node.childNodes).map(enrichNodeClientside)
       )
       const childrenForVue = unwrapChildrenForVue(children)
-      if (isAnchorElement(node)) {
-        // fix Vue "Non-function value encountered for default slot." performance warning
-        // by wrapping children in a function so the Vue can defer rendering
-        return h(AMaybeRFCLink, attributes, () => childrenForVue)
+      const tagName = getTagName(node)
+      switch (tagName) {
+        case 'a':
+          // fix Vue "Non-function value encountered for default slot." performance warning
+          // by wrapping children in a function so the Vue can defer rendering
+          return h(AMaybeRFCLink, attributes, () => childrenForVue)
+        case 'div':
+          if (attributes['data-component'] === 'HorizontalScrollable') {
+            return h(HorizontalScrollable, () => childrenForVue)
+          }
       }
       return h(node.nodeName, attributes, childrenForVue)
     } else if (isTextNode(node)) {
@@ -208,7 +184,7 @@ const enrichRfcDocument = async (nodes: Node[]): Promise<VNode> => {
     throw Error(`Unhandled node type ${node.nodeType} ${node}`)
   }
 
-  const children = await Promise.all(nodes.map(enrichNode))
+  const children = await Promise.all(nodes.map(enrichNodeClientside))
   return h('div', {}, children)
 }
 </script>
@@ -224,8 +200,18 @@ const enrichRfcDocument = async (nodes: Node[]): Promise<VNode> => {
 }
 
 .rfc-content-type-xml2rfc {
-  /* Using postcss-nested-import scope these imported styles */
+  --layout-bleed-left: 10px;
+  --layout-bleed-right: 10px;
+
+  /* Using postcss-nested-import to scope these imported styles,
+     so that we can sandbox them and use them safely without major changes,
+     to reduce maintenance burden.
+  */
   @nested-import "../assets/css/upstream-xml2rfc.css"
+}
+
+html.dark .rfc-content-type-xml2rfc {
+  @nested-import "../assets/css/xml2rfc-darkmode-patches.css"
 }
 
 .rfc-content-type-plaintext {
@@ -236,6 +222,6 @@ const enrichRfcDocument = async (nodes: Node[]): Promise<VNode> => {
   --preformatted-max-line-length: v-bind(props.rfcBucketHtmlDoc.maxPreformattedLineLength);
 
   /* Using postcss-nested-import scope these imported styles */
-  @nested-import "../assets/css/rfc-plaintext.css"
+  @nested-import "../assets/css/rfc-plaintext.css";
 }
 </style>
