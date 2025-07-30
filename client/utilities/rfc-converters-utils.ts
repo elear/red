@@ -277,7 +277,7 @@ export const parseTypeSenseSubseries = (
 
 type TocSection = RfcEditorToc['sections'][number]
 export const isTocSection = (
-  maybeTocSection?: TocSection
+  maybeTocSection?: unknown
 ): maybeTocSection is TocSection => {
   return Boolean(
     maybeTocSection &&
