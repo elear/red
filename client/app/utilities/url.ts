@@ -349,15 +349,8 @@ export const isRfcEditorSite = (href?: string): boolean => {
   if (href === undefined) {
     return false
   }
-  const hrefUrl = tryParseHref(href)
-  if (!hrefUrl) {
-    return false
-  }
   return (
-    (typeof window !== 'undefined' &&
-      !!window.location &&
-      hrefUrl.host === window.location.host) || // if it's same `location` then it's either prod, staging, or a dev server so we'll attempt to parse RFC numbers from the href
-    hrefUrl.host === publicSiteUrl.host // if it's a hardcoded link to prod then we'll also attempt it
+    href.startsWith(PUBLIC_SITE) || href.startsWith('/') || href.startsWith('#')
   )
 }
 
