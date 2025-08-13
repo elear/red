@@ -1,20 +1,16 @@
 import type { DateTime } from 'luxon'
+import { useHead } from 'nuxt/app'
 import { linkPreviewImageUrlBuilder } from './url'
-
-const OPENGRAPH_DIMENSIONS = [1200, 630]
-const TWITTER_DIMENSIONS = [1200, 675]
-
-export const imagePreviewDimensions = [
-  OPENGRAPH_DIMENSIONS, // OpenGraph (Facebook)
-  TWITTER_DIMENSIONS // Twitter
-] as const
+import type {
+  imagePreviewDimensions } from '#shared/utils/meta-preview-images'
+import {
+  OPENGRAPH_DIMENSIONS,
+  TWITTER_DIMENSIONS
+} from '#shared/utils/meta-preview-images'
 
 const IMAGE_PREVIEW_ALT_TEXT = 'RFC-Editor: Official home of RFCs'
 
 type WidthHeight = (typeof imagePreviewDimensions)[number]
-
-export type ImagePreviewFilename =
-  `link-preview-image-${(typeof imagePreviewDimensions)[number][0]}x${(typeof imagePreviewDimensions)[number][1]}.png`
 
 const SITE_NAME = 'RFC Editor'
 
@@ -60,7 +56,9 @@ const linkPreviewImageBuilder = (mode: 'opengraph' | 'twitter') => {
     twitter: TWITTER_DIMENSIONS
   }
   const widthHeight = dimensions[mode]
-
+  if (!widthHeight || !widthHeight[0] || !widthHeight[1]) {
+    throw Error(`Cannot find dimensions from mode ${mode}, ${widthHeight}`)
+  }
   const url = linkPreviewImageUrlBuilder(widthHeight[0], widthHeight[1])
 
   return {
@@ -107,11 +105,11 @@ const buildOpenGraph = (props: UseRfcEditorProps) => {
     },
     {
       property: 'og:image:width',
-      content: linkPreviewImage.widthHeight[0].toString()
+      content: linkPreviewImage.widthHeight[0]?.toString() ?? '1024'
     },
     {
       property: 'og:image:height',
-      content: linkPreviewImage.widthHeight[1].toString()
+      content: linkPreviewImage.widthHeight[1]?.toString() ?? '1024'
     }
   ]
 
@@ -179,11 +177,11 @@ const buildTwitter = (props: UseRfcEditorProps) => {
     },
     {
       property: 'twitter:image:width',
-      content: linkPreviewImage.widthHeight[0].toString()
+      content: linkPreviewImage.widthHeight[0]?.toString() ?? '1024'
     },
     {
       property: 'twitter:image:height',
-      content: linkPreviewImage.widthHeight[1].toString()
+      content: linkPreviewImage.widthHeight[1]?.toString() ?? '1024'
     }
   ]
 

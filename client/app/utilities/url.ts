@@ -1,7 +1,10 @@
 import { kebabCase } from 'lodash-es'
+import type {
+  ImagePreviewHorizontalDimensions,
+  ImagePreviewVerticalDimensions
+} from '../../shared/utils/meta-preview-images'
+import type { MarkdownValidHrefs } from '../../shared/utils/markdown-valid-hrefs'
 import { parseRFCId } from './rfc'
-import type { imagePreviewDimensions } from './head'
-
 /**
  * Represents all known href string patterns
  */
@@ -248,7 +251,7 @@ export const dashboardPathBuilder = (dashboardPath: string) => {
 }
 
 export const mailToBuilder = (email: string) => {
-  return `mailto:${email}` as const
+  return `mailto:${encodeURI(email.trim())}` as const
 }
 
 export const apiRfcBucketDocumentURLBuilder = (rfcNumber: number) => {
@@ -305,20 +308,12 @@ export const textToAnchorId = (text: string): string | undefined => {
   return kebabCase(normalized)
 }
 
-const RFC_6761_EXAMPLECOM_URL = 'https://example.com/'
-
 /**
- * Try parsing a relative url `href` string into a URL.
- * Because it's a `href` it will be resolved relative to `window.location`
+ * Try parsing a relative url `href` string into a URL, relative to prod
  */
 const tryParseHref = (href: string): URL | undefined => {
   try {
-    return new URL(
-      href,
-      typeof window !== 'undefined' ?
-        window.location.toString()
-      : RFC_6761_EXAMPLECOM_URL
-    )
+    return new URL(href, PUBLIC_SITE)
   } catch (e: unknown) {
     console.info(
       `Failed to parse href ${JSON.stringify(href)} into URL. Error:`,
@@ -328,8 +323,8 @@ const tryParseHref = (href: string): URL | undefined => {
 }
 
 export const linkPreviewImageUrlBuilder = (
-  widthPx: (typeof imagePreviewDimensions)[number][0],
-  heightPx: (typeof imagePreviewDimensions)[number][1]
+  widthPx: ImagePreviewHorizontalDimensions,
+  heightPx: ImagePreviewVerticalDimensions
 ) => {
   return `${PUBLIC_SITE}/link-preview-image-${widthPx}x${heightPx}.png` as const
 }

@@ -3,6 +3,10 @@ import fs from 'node:fs'
 import { renderToString } from 'vue/server-renderer'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { isVNode } from 'vue'
+import type {
+  ApiClient,
+  PaginatedRfcMetadataList
+} from '../../generated/red-client'
 import { rfcToRfcIndexRow, rfcCommaList } from './rfc-index-html'
 import { getRedClient, getRFCs } from './redClientWrappers'
 import { infoRfcPathBuilder } from './url'
@@ -17,10 +21,7 @@ import {
   parseHtml,
   getXMLBuilder
 } from './test-utils/html-test-utils'
-import type {
-  ApiClient,
-  PaginatedRfcMetadataList
-} from '~/generated/red-client'
+import { assertIsDefined } from './typescript'
 
 test('rfcCommaList', () => {
   const result = rfcCommaList([{ number: 1 }, { number: 2 }])
@@ -64,7 +65,9 @@ describe('rfcToRfcIndexRow for /rfc-index/', () => {
     )
 
     rfcSummaries.forEach((rfcSummary, index) => {
-      const originalRfcSummary = originalRfcSummaries[index][1]
+      const originalRfcSummaryItem = originalRfcSummaries[index]
+      assertIsDefined(originalRfcSummaryItem)
+      const originalRfcSummary = originalRfcSummaryItem[1]
       expect(rfcSummary).toBe(originalRfcSummary)
     })
   })
