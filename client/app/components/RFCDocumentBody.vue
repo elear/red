@@ -29,6 +29,23 @@
     {{ rfc.title }}
   </Heading>
 
+  <ul class="block ml-2">
+    <li
+      v-for="(author, authorIndex) in props.rfc.authors"
+      :key="authorIndex"
+      class="inline-block"
+    >
+      <span>
+        {{ author.name }}
+      </span>
+      <template v-if="authorIndex < props.rfc.authors.length - 1">
+        {{ COMMA }}
+        {{ NONBREAKING_SPACE }}
+      </template>
+      <template v-else>.</template>
+    </li>
+  </ul>
+
   <RFCDocumentBodyPill :rfc="props.rfc" />
 
   <Alert
@@ -52,7 +69,7 @@
   </Alert>
 
   <div
-    :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDocument.documentHtmlType} wrap-anywhere mt-10 sm:text-base lg:text-base`"
+    :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDocument.documentHtmlType} wrap-anywhere mt-5 sm:text-base lg:text-base`"
   >
     <component :is="enrichedDocument" />
   </div>
@@ -77,6 +94,7 @@ import {
 import { infoRfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 import type { DocumentPojo, NodePojo } from '~/utilities/rfc-validators'
+import { COMMA, NONBREAKING_SPACE } from '~/utilities/strings'
 
 type Props = {
   rfc: RfcCommon
