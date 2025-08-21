@@ -82,6 +82,7 @@
 
 <script setup lang="ts">
 import { createTextVNode } from 'vue'
+import { pickBy } from 'lodash-es'
 import AMaybeRFCLink from './AMaybeRFCLink.vue'
 import HorizontalScrollable from './HorizontalScrollable.vue'
 import AbsoluteHorizontalScrollable from './AbsoluteHorizontalScrollable.vue'
@@ -94,7 +95,7 @@ import {
 } from '~/utilities/rfc'
 import { infoRfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
-import type { DocumentPojo, NodePojo } from '~/utilities/rfc-validators'
+import type { DocumentPojo, ElementPojo, NodePojo } from '~/utilities/rfc-validators'
 import { COMMA, NONBREAKING_SPACE } from '~/utilities/strings'
 
 type Props = {
@@ -165,10 +166,14 @@ const renderDocumentPojo = (nodes: DocumentPojo): VNode => {
             const childWidthAttr = node.attributes[ATTR_ABSOLUTE_CHILDWIDTH]
             const ATTR_ABSOLUTE_CHILDHEIGHT = 'data-component-childheight'
             const childHeightAttr = node.attributes[ATTR_ABSOLUTE_CHILDHEIGHT]
+            let className = node.attributes.class ?? ''
             if (childWidthAttr && childHeightAttr) {
+              const deleteDataAttributes = (attributes: ElementPojo["attributes"]): ElementPojo["attributes"] =>
+                pickBy(attributes, (_value, key) => !key.startsWith('data-'))
+              className = `${className} py-3 rfc-content-padding-left rfc-content-padding-right`
               return h(
                 AbsoluteHorizontalScrollable,
-                { ...node.attributes, childWidthAttr, childHeightAttr },
+                { ...deleteDataAttributes(node.attributes), childWidthAttr, childHeightAttr, class: className },
                 () => childrenForVue
               )
             } else {
@@ -253,5 +258,13 @@ html.dark .rfc-content-type-xml2rfc {
 
   /* Using postcss-nested-import scope these imported styles */
   @nested-import "../assets/css/rfc-plaintext.css";
+}
+
+.rfc-content-padding-left {
+  padding-left: var(--layout-bleed-left, 10px);
+}
+
+.rfc-content-padding-right {
+  padding-right: var(--layout-bleed-right, 10px);
 }
 </style>
