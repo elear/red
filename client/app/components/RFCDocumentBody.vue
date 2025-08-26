@@ -214,7 +214,7 @@ const maxPreformattedLineLength = computed(() =>
 
 const isAprilFool = computed(() => {
   const datetime = DateTime.fromISO(props.rfc.published)
-  return datetime.month === 4 && datetime.day === 1
+  return datetime.month === 4 && datetime.day === 1 && props.rfc.group.acronym === 'none'
 })
 </script>
 
