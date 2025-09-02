@@ -160,6 +160,7 @@ export type RFCJSON = {
 export type RfcBucketHtmlDocument = z.infer<typeof RfcBucketHtmlDocumentSchema>
 
 export const isAprilFoolsRfc = (rfc: RfcCommon): boolean => {
+  // FIXME: this should use different logic, checking for date and 'Independent Submission'
   const datetime = DateTime.fromISO(rfc.published)
   return (
     datetime.month === 4 && datetime.day === 1 && rfc.group.acronym === 'none'
