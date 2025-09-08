@@ -35,7 +35,7 @@ See `/client/`
 
 #### RFC HTML preprocessing
 
-To display RFCs we preprocesses their HTML into JSON with certain features extracted (eg Table Of Contents). This is done in [`red-rfc-html-extractor`](https://github.com/ietf-tools/red-rfc-html-extractor).
+To display RFCs we preprocesses their HTML into JSON with certain features extracted (eg Table Of Contents). This is done in [`rfc-html-extractor`](rfc-html-extractor).
 
 #### Page content documentation (markdown)
 
