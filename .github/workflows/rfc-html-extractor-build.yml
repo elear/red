@@ -3,9 +3,9 @@ name: Build RFC HTML Extractor Docker Image
 on:
   push:
     paths:
-      - rfc-html-extrator/src/**
-      - rfc-html-extrator/package.json
-      - rfc-html-extrator/Dockerfile
+      - rfc-html-extractor/src/**
+      - rfc-html-extractor/package.json
+      - rfc-html-extractor/Dockerfile
   workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
       env:
         DOCKER_BUILD_SUMMARY: false
       with:
-        context: rfc-html-extrator
+        context: rfc-html-extractor
         file: Dockerfile
         platforms: linux/amd64,linux/arm64
         push: true
