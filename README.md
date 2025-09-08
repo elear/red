@@ -5,7 +5,7 @@
 [![Release](https://img.shields.io/github/release/ietf-tools/rfced-www.svg?style=flat&maxAge=300)](https://github.com/ietf-tools/rfced-www/releases)
 [![License](https://img.shields.io/github/license/ietf-tools/rfced-www)](https://github.com/ietf-tools/rfced-www/blob/main/LICENSE)
 ![Node Version](https://img.shields.io/badge/node.js-20-green?logo=node.js&logoColor=white)
-![Nuxt Version](https://img.shields.io/badge/nuxt-3-green?logo=nuxt.js&logoColor=white)
+![Nuxt Version](https://img.shields.io/badge/nuxt-4-green?logo=nuxt.js&logoColor=white)
 ![Vue Version](https://img.shields.io/badge/vue-3-green?logo=vue.js&logoColor=white)
 
 ##### Website for the RFC Editor
