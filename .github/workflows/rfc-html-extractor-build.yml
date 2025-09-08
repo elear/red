@@ -41,7 +41,7 @@ jobs:
         DOCKER_BUILD_SUMMARY: false
       with:
         context: rfc-html-extractor
-        file: Dockerfile
+        file: rfc-html-extractor/Dockerfile
         platforms: linux/amd64,linux/arm64
         push: true
         tags: |
