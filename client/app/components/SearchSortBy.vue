@@ -22,6 +22,14 @@
         {
           value: 'docs/sort/publicationDate:desc',
           label: 'Publication date (Newest first)'
+        },
+        {
+          value: 'docs/sort/subseries.number:asc',
+          label: 'Subseries no. (Lowest first)'
+        },
+        {
+          value: 'docs/sort/subseries.number:desc',
+          label: 'Subseries no. (Highest first)'
         }
       ]"
     >

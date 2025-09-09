@@ -223,6 +223,7 @@ type UIState = {
       'stream.name'?: string
       'area.full'?: string
     }
+    sortBy?: string
     toggle?: {
       'flags.obsoleted': boolean
     }
@@ -262,6 +263,7 @@ const routing = {
       const authors = uiState[INDEX_NAME].refinementList?.['authors.name']?.join(',') ?? null
       const pubDate = uiState[INDEX_NAME].range?.['publicationDate'] ?? null
       const showObsoleted = !(uiState[INDEX_NAME].toggle?.['flags.obsoleted'] || false)
+      const sort = uiState[INDEX_NAME].sortBy?.substring(10) ?? null
       // TODO: don't navigateTo when the resulting URL would be the same
       navigateTo(
         {
@@ -273,14 +275,15 @@ const routing = {
             ...group && { group },
             ...authors && { authors },
             ...pubDate && { pubDate },
-            ...showObsoleted && { showObsoleted: 1 }
+            ...showObsoleted && { showObsoleted: 1 },
+            ...sort && { sort }
           }
         },
         { replace: true }
       )
     },
     routeToState(routeState: unknown): UIState {
-      console.log('routeToState', routeState)
+      console.log('routeToState', routeState, route.query)
       const query = route.query.q?.toString() ?? ''
       const status = route.query.status?.toString().split(',')
       const stream = route.query.stream?.toString() ?? ''
@@ -289,6 +292,7 @@ const routing = {
       const authors = route.query.authors?.toString().split(',')
       const pubDate = route.query.pubDate?.toString() ?? ''
       const showObsoleted = route.query.showObsoleted === '1'
+      const sortBy = route.query.sort?.toString() ?? ''
       return {
         [INDEX_NAME]: {
           query,
@@ -304,6 +308,9 @@ const routing = {
           menu: {
             ...stream && { 'stream.name': stream },
             ...area && { 'area.full': area }
+          },
+          ...sortBy && {
+            sortBy: `docs/sort/${sortBy}`
           },
           toggle: {
             'flags.obsoleted': !showObsoleted

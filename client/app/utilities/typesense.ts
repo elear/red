@@ -41,10 +41,12 @@ export const TypeSenseSearchItemSchema = z.object({
 
   subseries: z
     .object({
-      bcp: z.string().optional(),
-      fyi: z.string().optional(),
-      std: z.string().optional(),
-      his: z.string().optional(),
+      acronym: z.enum([
+        'std',
+        'fyi',
+        'bcp'
+      ]).optional(),
+      number: z.number().optional(),
       total: z.number().optional()
     })
     .optional(),

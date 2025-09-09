@@ -41,7 +41,8 @@ export function adaptSearchClient(
             const subseries = subseriesMatch.groups.subseries
             assertIsDefined(subseries)
             r.params.facetFilters.push(
-              `subseries.${subseries.toLowerCase()}:${subseriesMatch.groups.num}`
+              `subseries.acronym:${subseries.toLowerCase()}`,
+              `subseries.number:${subseriesMatch.groups.num}`
             )
             r.params.query = '*'
 
