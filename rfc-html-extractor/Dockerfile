@@ -6,4 +6,7 @@ WORKDIR /app
 
 COPY rfc-html-extractor/ .
 
+RUN mkdir -p client/app/utilities/
+COPY client/app/utilities/rfc-validators.ts client/app/utilities/rfc-validators.ts
+
 RUN npm ci
