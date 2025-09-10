@@ -50,7 +50,8 @@
     "tailwindcss": "4.1.11",
     "typesense-instantsearch-adapter": "2.9.0",
     "vue": "3.5.13",
-    "vue-instantsearch": "4.20.8"
+    "vue-instantsearch": "4.20.8",
+    "zod": "3.25.30"
   },
   "devDependencies": {
     "@babel/runtime": "7.27.1",
