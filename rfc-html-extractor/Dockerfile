@@ -7,9 +7,12 @@ RUN mkdir -p /app/client/app/utilities
 WORKDIR /app
 
 COPY client/app/utilities/rfc-validators.ts ./client/app/utilities/rfc-validators.ts
-
+COPY client/package.json ./client/package.json
+COPY client/package-lock.json ./client/package-lock.json
 COPY rfc-html-extractor/ ./rfc-html-extractor
 
-WORKDIR ./rfc-html-extractor
+WORKDIR /app/client
+RUN npm ci
 
+WORKDIR /app/rfc-html-extractor
 RUN npm ci
