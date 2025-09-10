@@ -47,7 +47,8 @@ export const TypeSenseSearchItemSchema = z.object({
         'bcp'
       ]).optional(),
       number: z.number().optional(),
-      total: z.number().optional()
+      total: z.number().optional(),
+      bcp: z.string().optional()
     })
     .optional(),
   rfc: z.string(),

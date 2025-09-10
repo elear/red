@@ -6,7 +6,6 @@ import { parseRFCId } from './rfc'
 import type { RfcCommon, RFCJSON } from './rfc'
 import { NONBREAKING_SPACE } from './strings'
 import { assertIsString, assertNever } from './typescript'
-import type { HintedString } from './typescript'
 import type { TypeSenseSearchItemSchema } from './typesense'
 import type { RfcEditorToc } from './tableOfContents'
 

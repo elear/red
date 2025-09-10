@@ -50,6 +50,20 @@ const exampleTypesenseResult = {
           counts: [
             {
               count: 1,
+              highlighted: 'false',
+              value: 'false'
+            }
+          ],
+          field_name: 'flags.obsoleted',
+          sampled: false,
+          stats: {
+            total_values: 1
+          }
+        },
+        {
+          counts: [
+            {
+              count: 1,
               highlighted: 'art - Applications and Real-Time Area',
               value: 'art - Applications and Real-Time Area'
             }
@@ -100,7 +114,7 @@ const exampleTypesenseResult = {
               value: 'IETF'
             }
           ],
-          field_name: 'stream',
+          field_name: 'stream.name',
           sampled: false,
           stats: {
             total_values: 1
@@ -135,6 +149,10 @@ const exampleTypesenseResult = {
             ],
             date: 1558461935,
             filename: 'rfc8589',
+            flags: {
+              obsoleted: false,
+              updated: false
+            },
             group: {
               acronym: 'art',
               full: 'art - Applications and Real-Time Area',
@@ -148,18 +166,15 @@ const exampleTypesenseResult = {
             rfc: '8589',
             rfcNumber: 8589,
             state: ['Published'],
-            subseries: {
-              bcp: '5',
-              total: 10
-            },
             status: {
-              name: 'Best Current Practice', // this isn't a BCP, this is just test data
-              slug: 'bcp'
+              name: 'Informational',
+              slug: 'inf'
             },
             stream: {
-              slug: 'ietf',
-              name: 'IETF'
+              name: 'IETF',
+              slug: 'ietf'
             },
+            subseries: {},
             title: "The 'leaptofrogans' URI Scheme",
             type: 'rfc'
           } satisfies TypeSenseSearchItem,
@@ -190,7 +205,7 @@ const exampleTypesenseResult = {
           }
         }
       ],
-      out_of: 9586,
+      out_of: 9635,
       page: 1,
       request_params: {
         collection_name: 'docs',
@@ -199,7 +214,7 @@ const exampleTypesenseResult = {
         q: 'frog'
       },
       search_cutoff: false,
-      search_time_ms: 1
+      search_time_ms: 0
     },
     {
       facet_counts: [
@@ -207,24 +222,20 @@ const exampleTypesenseResult = {
           counts: [
             {
               count: 1,
-              highlighted: '1558461935',
-              value: '1558461935'
+              highlighted: 'false',
+              value: 'false'
             }
           ],
-          field_name: 'publicationDate',
+          field_name: 'flags.obsoleted',
           sampled: false,
           stats: {
-            avg: 1558461935.0,
-            max: 1558461935.0,
-            min: 1558461935.0,
-            sum: 1558461935.0,
             total_values: 1
           }
         }
       ],
       found: 1,
       hits: [],
-      out_of: 9586,
+      out_of: 9635,
       page: 1,
       request_params: {
         collection_name: 'docs',
@@ -271,12 +282,8 @@ test('typeSenseSearchItemToRFC', () => {
       name: 'Applications and Real-Time Area'
     },
     published: '2019-05-21T18:05:35.000Z',
-    status: 'Best Current Practice',
-    subseries: {
-      type: 'bcp',
-      number: 5,
-      subseriesLength: 10
-    },
+    status: 'Informational',
+    subseries: undefined,
     stream: {
       name: 'IETF',
       slug: 'ietf'

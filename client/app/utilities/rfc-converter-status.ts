@@ -1,7 +1,7 @@
 import type { RfcCommon } from "./rfc-validators"
 
 export const parseRfcStatusSlug = (
-  rfcStatusSlug: string
+  rfcStatusSlug?: string
 ): RfcCommon['status'] => {
   const normalisedSlug = rfcStatusSlug?.toLowerCase().replace(/[^a-z]/g, '')
 

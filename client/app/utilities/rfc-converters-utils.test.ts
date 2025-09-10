@@ -1,7 +1,7 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
 
-import { parseRfcStatusSlug } from './rfc-converters-utils'
+import { parseRfcStatusSlug } from './rfc-converter-status'
 
 test('parseRfcStatusSlug: bad inputs', () => {
   expect(() => parseRfcStatusSlug('unknown status slug')).toThrow()

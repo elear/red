@@ -55,8 +55,6 @@ export const rfcMetadataToRfcCommon = cacheResponse(
   }
 )
 
-
-
 /**
  * Converts between types of RFC data
  */
