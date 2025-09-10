@@ -33,7 +33,7 @@
     "@pinia/nuxt": "0.11.2",
     "@tailwindcss/vite": "4.1.11",
     "@vueuse/core": "13.1.0",
-    "apigen-ts": "1.1.0",
+    "apigen-ts": "1.2.1",
     "better-sqlite3": "12.2.0",
     "core-js": "3.40.0",
     "feed": "4.2.2",

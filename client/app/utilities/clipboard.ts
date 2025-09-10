@@ -24,8 +24,10 @@ export const copyToClipboard = async (text: string): Promise<boolean> => {
       if (previousFocus instanceof HTMLElement) {
         previousFocus.focus()
       }
-      console.info(`Successfully copied ${text} to clipboard`)
-      return successful
+      if (successful) {
+        console.info(`Successfully copied ${text} to clipboard`)
+        return true
+      }
     }
   } catch (err) {
     console.error('Failed to copy text:', err)

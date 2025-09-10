@@ -6,7 +6,13 @@ import {
   isTextNode,
   rfcDocumentToPojo
 } from './utilities/dom.ts'
-import type { RfcCommon, RfcBucketHtmlDocument, MaxPreformattedLineLengthSchemaType, DocumentHtmlType, TableOfContents } from '../../client/app/utilities/rfc-validators.ts'
+import type {
+  RfcCommon,
+  RfcBucketHtmlDocument,
+  MaxPreformattedLineLengthSchemaType,
+  DocumentHtmlType,
+  TableOfContents
+} from '../../client/app/utilities/rfc-validators.ts'
 import { blankRfcCommon, extractHrefRfcPart } from './rfc.ts'
 import { assertNever } from './utilities/typescript.ts'
 import { PUBLIC_SITE } from './utilities/url.ts'
@@ -235,9 +241,7 @@ export const rfcBucketHtmlToRfcDocument = async (
 export const rfcBucketHtmlFilenameBuilder = (rfcNumber: number) =>
   `rfc${rfcNumber}-html.json`
 
-const sniffRfcBucketHtmlType = (
-  dom: Document
-): DocumentHtmlType => {
+const sniffRfcBucketHtmlType = (dom: Document): DocumentHtmlType => {
   const isPlaintext = dom.querySelector('body > pre')
   const generator = dom.querySelector('meta[name=generator]')
 
