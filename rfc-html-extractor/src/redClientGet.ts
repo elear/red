@@ -13,9 +13,14 @@ export const getRedClient = () => {
 };
 
 export const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon> => {
+  console.log("Getting API client")
   const api = getRedClient()
+  console.log("Got API client", api)
+  console.log("docRetrive", rfcNumber)
   const rfc = await api.red.docRetrieve(rfcNumber)
+  console.log("after docRetrieve", api)
   const rfcCommon = rfcToRfcCommon(rfc)
+  console.log("after docRetrieve common", api)
   return rfcCommon
 }
 
