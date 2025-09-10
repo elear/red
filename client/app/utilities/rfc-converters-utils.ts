@@ -14,7 +14,7 @@ type RfcMetadataAuthor = RfcMetadata['authors'][number]
 /**
  * Formats author names into an initialised format.
  *
- * , eg.
+ * eg.
  * author.name:
  * * "First Name" becomes "F. Name"
  * * "First Second Name" becomes "F.S. Name"

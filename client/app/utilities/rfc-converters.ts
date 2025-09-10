@@ -37,7 +37,7 @@ const cacheResponse = <T extends Rfc | RfcMetadata>(
 export const rfcMetadataToRfcCommon = cacheResponse(
   (rfcMetadata: RfcMetadata): RfcCommon => {
     return {
-      ...blankRfcCommon,
+      ...structuredClone(blankRfcCommon),
       number: rfcMetadata.number,
       abstract: rfcMetadata.abstract,
       published: rfcMetadata.published,
