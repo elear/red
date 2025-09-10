@@ -4,9 +4,10 @@ import { blankRfcCommon } from "./rfc.ts";
 import type { Rfc } from "../../client/generated/red-client.ts";
 import type { RfcCommon } from "../../client/app/utilities/rfc-validators.ts";
 
-const redApiBase = process.env.RED_API_BASE ?? 'http://dt-datatracker.datatracker.svc/'
+const redApiBase = process.env.RED_API_BASE ?? 'https://dt-datatracker.datatracker.svc/'
 
 export const getRedClient = () => {
+  console.log('getting api client with base', redApiBase)
   return new ApiClient({
     baseUrl: redApiBase,
   });
@@ -17,11 +18,18 @@ export const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon> => {
   const api = getRedClient()
   console.log("Got API client", api)
   console.log("docRetrive", rfcNumber)
-  const rfc = await api.red.docRetrieve(rfcNumber)
-  console.log("after docRetrieve", api)
-  const rfcCommon = rfcToRfcCommon(rfc)
-  console.log("after docRetrieve common", api)
-  return rfcCommon
+  try {
+    const rfc = await api.red.docRetrieve(rfcNumber)
+    console.log("after docRetrieve", api)
+    const rfcCommon = rfcToRfcCommon(rfc)
+    console.log("after docRetrieve common", api)
+    return rfcCommon
+  } catch (e) {
+    console.error(
+      "docRetrive catch()", e
+    )
+    throw e
+  }  
 }
 
 export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
