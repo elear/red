@@ -4,7 +4,7 @@ import { blankRfcCommon } from "./rfc.ts";
 import type { Rfc } from "../../client/generated/red-client.ts";
 import type { RfcCommon } from "../../client/app/utilities/rfc-validators.ts";
 
-const redApiBase = process.env.RED_API_BASE ?? 'http://dt-datatracker.datatracker.svc/'
+const redApiBase = process.env.RED_API_BASE ?? 'http://datatracker-rpc.datatracker.svc/'
 
 export const getRedClient = () => {
   console.log('getting api client with base', redApiBase)
