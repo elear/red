@@ -2,14 +2,13 @@ FROM node:24
 LABEL maintainer="IETF Tools Team <tools-discuss@ietf.org>"
 
 RUN mkdir -p /app/rfc-html-extractor
+RUN mkdir -p /app/client/app/utilities
 
 WORKDIR /app
 
-COPY rfc-html-extractor/ ./rfc-html-extractor/
+COPY client/app/utilities/rfc-validators.ts /app/client/app/utilities/rfc-validators.ts
 
-RUN mkdir -p ./client/app/utilities/
-
-COPY client/app/utilities/rfc-validators.ts ./client/app/utilities/rfc-validators.ts
+COPY rfc-html-extractor/ /app/rfc-html-extractor
 
 WORKDIR /app/rfc-html-extrractor
 
