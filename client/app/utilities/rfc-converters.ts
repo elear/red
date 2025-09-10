@@ -8,9 +8,9 @@ import {
   formatFormat,
   parseRfcFormat,
   parseRfcJsonPubDateToISO,
-  parseRfcStatusSlug,
   parseTypeSenseSubseries
 } from './rfc-converters-utils'
+import { parseRfcStatusSlug } from './rfc-converter-status'
 import { TypeSenseSearchItemSchema } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
 import { assertIsDefined } from './typescript'
@@ -55,24 +55,7 @@ export const rfcMetadataToRfcCommon = cacheResponse(
   }
 )
 
-export const rfcToRfcCommon = cacheResponse((rfc: Rfc): RfcCommon => {
-  return {
-    ...blankRfcCommon,
-    number: rfc.number,
-    abstract: rfc.abstract,
-    published: rfc.published,
-    status: parseRfcStatusSlug(rfc.status.slug),
-    pages: rfc.pages,
-    authors: rfc.authors,
-    group: rfc.group,
-    area: rfc.area,
-    stream: rfc.stream,
-    identifiers: rfc.identifiers,
-    obsoleted_by: rfc.obsoleted_by,
-    updated_by: rfc.updated_by,
-    title: rfc.title
-  }
-})
+
 
 /**
  * Converts between types of RFC data
