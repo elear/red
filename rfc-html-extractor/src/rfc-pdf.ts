@@ -1,16 +1,18 @@
-import { blankRfcCommon } from './rfc.ts'
 import { apiRfcBucketDocumentURLBuilder, PUBLIC_SITE } from './utilities/url.ts'
 import { gc } from './utilities/gc.ts'
 import { BLANK_HTML, getDOMParser, rfcDocumentToPojo } from './utilities/dom.ts'
 import { rfcImageFileNameBuilder } from './utilities/s3.ts'
-import type { TableOfContents, RfcBucketHtmlDocument } from '../../client/app/utilities/rfc-validators.ts'
+import {
+  type TableOfContents,
+  type RfcBucketHtmlDocument,
+  RfcBucketHtmlDocumentSchema
+} from '../../client/app/utilities/rfc-validators.ts'
 import {
   getTextDetails,
   takeScreenshotOfPage
 } from './utilities/unpdf-parent.ts'
-import { PDF_WIDTH_PX } from './utilities/layout.ts'
 import { getRfcCommon } from './redClientGet.ts'
-import { validateRfcBucketHtmlDocument } from './utilities/validate-doc.ts'
+import { validateDocument } from './utilities/validate-doc.ts'
 
 export const fetchRfcPDF = async (rfcNumber: number) => {
   const url = `${PUBLIC_SITE}/rfc/rfc${rfcNumber}.pdf`
@@ -50,7 +52,7 @@ export const rfcBucketPdfToRfcDocument = async (
   }
 
   // FIXME: the extracted altText has unnecessary spaces in it, breaking up words and harming readability
-  // perhaps consider instead of alt text just rendering transparent text in the page like PDF.js does. We could 
+  // perhaps consider instead of alt text just rendering transparent text in the page like PDF.js does. We could
   // extract the coordinaate of text and overlay it. I have no reason to think this would be better for screen readers
   // but it might allow copy pasting of text (albeit with unnecessary spaces)
   const textDetails = await getTextDetails(base64)
@@ -124,7 +126,7 @@ export const rfcBucketPdfToRfcDocument = async (
     }
   }
 
-  validateRfcBucketHtmlDocument(response)
+  validateDocument(response, RfcBucketHtmlDocumentSchema)
 
   return response
 }

@@ -1,5 +1,4 @@
-import { RfcBucketHtmlDocumentSchema } from '../../../client/app/utilities/rfc-validators.ts'
-import type { RfcBucketHtmlDocument } from '../../../client/app/utilities/rfc-validators.ts'
+import { z } from 'zod'
 
 /**
  * Serializing to JSON and parsing again ('roundTripped') can result in a different object structure
@@ -9,17 +8,18 @@ import type { RfcBucketHtmlDocument } from '../../../client/app/utilities/rfc-va
  * which could affect schema validation.
  * This is done to simulate how Red will parse JSON and validate against the schema.
  */
-export const validateRfcBucketHtmlDocument = (
-  doc: RfcBucketHtmlDocument
+export const validateDocument = (
+  doc: unknown,
+  schema: z.Schema
 ): void => {
   const responseRoundTrippedThroughJSON = JSON.parse(JSON.stringify(doc))
 
-  const validationResult = RfcBucketHtmlDocumentSchema.safeParse(
+  const validationResult = schema.safeParse(
     responseRoundTrippedThroughJSON
   )
 
   if (validationResult.error) {
-    const errorTitle = `Failed to generate valid RfcBucketHtmlDocument due to validation error:`
+    const errorTitle = `Failed to generate valid document due to validation error:`
     console.log(errorTitle, validationResult.error)
     throw Error(`${errorTitle}. See console for details.`)
   }

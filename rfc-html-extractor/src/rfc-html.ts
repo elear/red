@@ -6,12 +6,13 @@ import {
   isTextNode,
   rfcDocumentToPojo
 } from './utilities/dom.ts'
-import type {
-  RfcCommon,
-  RfcBucketHtmlDocument,
-  MaxPreformattedLineLengthSchemaType,
-  DocumentHtmlType,
-  TableOfContents
+import {
+  type RfcCommon,
+  type RfcBucketHtmlDocument,
+  type MaxPreformattedLineLengthSchemaType,
+  type DocumentHtmlType,
+  type TableOfContents,
+  RfcBucketHtmlDocumentSchema
 } from '../../client/app/utilities/rfc-validators.ts'
 import { extractHrefRfcPart } from './rfc.ts'
 import { assertNever } from './utilities/typescript.ts'
@@ -28,7 +29,7 @@ import {
 } from './rfc-html-xml2rfc.ts'
 import { chunkString, getAllIndexes } from './utilities/string.ts'
 import { getRfcCommon } from './redClientGet.ts'
-import { validateRfcBucketHtmlDocument } from './utilities/validate-doc.ts'
+import { validateDocument } from './utilities/validate-doc.ts'
 
 export const fetchSourceRfcHtml = async (
   rfcNumber: number
@@ -237,7 +238,7 @@ export const rfcBucketHtmlToRfcDocument = async (
     maxPreformattedLineLength
   }
 
-  validateRfcBucketHtmlDocument(response)
+  validateDocument(response, RfcBucketHtmlDocumentSchema)
 
   return response
 }

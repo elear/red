@@ -31,3 +31,5 @@ export const rfcJSONPathBuilder = (rfcNumber: number) => `rfc/${rfcNumber}.json`
 export const rfcImageFileNameBuilder = (rfcNumber: number, pageNumber: number) => `${rfcNumber}-page-${pageNumber}.png` as const
 
 export const rfcImagePathBuilder = (fileName: string) => `rfc/${fileName}` as const
+
+export const HOMEPAGE_LATEST_PATH = `other/homepage-latest.json` as const

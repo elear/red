@@ -117,12 +117,12 @@ export const getAllRFCs = async ({ api }: Props) => {
 
     if (
       // if we got no results then stop
-      response.results.length === 0 ||
-      // or if we've
+      rfcCommons.length === 0 ||
+      // or if we've reached RFC 1
       rfcCommons.some((rfc) => rfc.number === FIRST_RFC_NUMBER)
     ) {
       console.log(
-        `Done (${rfcs[0].number}-${rfcs[rfcs.length - 1].number}} rfcs)`
+        `Finished downloading metadata for ALL rfcs (${rfcs[0].number}-${rfcs[rfcs.length - 1].number})`
       )
       break
     }
