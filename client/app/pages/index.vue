@@ -6,61 +6,36 @@
       </template>
       <div class="container mx-auto">
         <div class="md:mx-2 flex flex-col-reverse lg:flex-row lg:items-center justify-between">
-          <Heading
-            level="2"
-            has-icon
-            class="text-left mt-10 mb-4 pl-5 md:pl-0"
-          >
+          <Heading level="2" has-icon class="text-left mt-10 mb-4 pl-5 md:pl-0">
             Latest RFCs
           </Heading>
           <p class="hidden mt-8 lg:block text-base text-grey-800 pl-5">
             Looking for works in progress? Go to
-            <A
-              :href="DATATRACKER_URL"
-              class="text-blue-300 dark:text-blue-100"
-            >
+            <A :href="DATATRACKER_URL" class="text-blue-300 dark:text-blue-100">
               datatracker.ietf.org
             </A>
           </p>
         </div>
 
         <div v-if="searchStatus === 'error' && searchError">
-          <Alert
-            variant="warning"
-            heading="Unable to load latest RFCs"
-          >
+          <Alert variant="warning" heading="Unable to load latest RFCs">
             {{ searchError.statusMessage }}
           </Alert>
         </div>
 
-        <div v-if="searchStatus === 'success' && topSearchResults?.length === 0">
-          <Alert
-            variant="warning"
-            heading="Unable to load latest RFCs"
-          >
+        <div v-if="searchStatus === 'success' && latestRfcs.length === 0">
+          <Alert variant="warning" heading="Unable to load latest RFCs">
             Try again later (API error)
           </Alert>
         </div>
 
-        <div
-          v-if="searchStatus === 'success'"
-          class="md:mx-2 grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4"
-        >
-          <RFCCard
-            v-for="searchResult in topSearchResults"
-            :key="searchResult.number"
-            heading-level="3"
-            :rfc="searchResult"
-            :show-abstract="false"
-            :show-tag-date="true"
-          />
+        <div v-if="searchStatus === 'success'"
+          class="md:mx-2 grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <RFCCard v-for="rfc in latestRfcs" :key="rfc.number" heading-level="3" :rfc="rfc" :show-abstract="false"
+            :show-tag-date="true" />
         </div>
 
-        <Heading
-          level="2"
-          has-icon
-          class="md:mx-2 mt-10 mb-5 pl-5 md:p-0"
-        >
+        <Heading level="2" has-icon class="md:mx-2 mt-10 mb-5 pl-5 md:p-0">
           Learn about RFCs
         </Heading>
         <div class="md:mx-2 grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -70,30 +45,18 @@
           <MarkdownCard id="/about/rfc-editor/" />
         </div>
 
-        <Heading
-          level="2"
-          has-icon
-          class="md:mx-2 mt-10 mb-5 pl-5 md:p-0"
-        >
+        <Heading level="2" has-icon class="md:mx-2 mt-10 mb-5 pl-5 md:p-0">
           Browse RFCs
         </Heading>
         <div class="md:mx-2 grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card
-            :href="searchPathBuilder({ status: ['Internet Standard'] })"
-            heading-level="3"
-            has-cover-link
-          >
+          <Card :href="searchPathBuilder({ status: ['Internet Standard'] })" heading-level="3" has-cover-link>
             <template #headingTitle>Standards</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Stable or mature protocols and services
             </p>
           </Card>
 
-          <Card
-            :href="searchPathBuilder({ status: ['Best Current Practice'] })"
-            heading-level="3"
-            has-cover-link
-          >
+          <Card :href="searchPathBuilder({ status: ['Best Current Practice'] })" heading-level="3" has-cover-link>
             <template #headingTitle>Best Current Practices</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Common guidelines for policies, operations, or procedures
@@ -103,19 +66,11 @@
           <MarkdownCard id="/series/rfc-download/" />
         </div>
 
-        <Heading
-          level="2"
-          has-icon
-          class="md:mx-2 pl-5 mt-10 mb-5 md:p-0"
-        >
+        <Heading level="2" has-icon class="md:mx-2 pl-5 mt-10 mb-5 md:p-0">
           Start Participating
         </Heading>
         <div class="md:mx-2 grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card
-            :href="IETF_URL"
-            heading-level="3"
-            has-cover-link
-          >
+          <Card :href="IETF_URL" heading-level="3" has-cover-link>
             <template #headingTitle>Internet Engineering Task Force</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Protocol standards, best current practices, experimental, and
@@ -123,22 +78,14 @@
             </p>
           </Card>
 
-          <Card
-            :href="IRTF_URL"
-            heading-level="3"
-            has-cover-link
-          >
+          <Card :href="IRTF_URL" heading-level="3" has-cover-link>
             <template #headingTitle>Internet Research Task Force</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Research issues related to the Internet
             </p>
           </Card>
 
-          <Card
-            :href="IAB_URL"
-            heading-level="3"
-            has-cover-link
-          >
+          <Card :href="IAB_URL" heading-level="3" has-cover-link>
             <template #headingTitle>Internet Architecture Board</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Long-range technical direction for Internet development
@@ -154,14 +101,14 @@
 
 <script setup lang="ts">
 import { useRfcEditorHead } from '~/utilities/head'
-import { rfcMetadataToRfcCommon } from '~/utilities/rfc-converters'
+import { HomepageLatestSchema, type RfcCommon } from '~/utilities/rfc-validators'
 import {
   DATATRACKER_URL,
   IAB_URL,
   IETF_URL,
   IRTF_URL,
   PUBLIC_SITE,
-  SEARCH_API_PATH,
+  API_HOMEPAGE_LATEST_PATH,
   searchPathBuilder
 } from '~/utilities/url'
 
@@ -173,13 +120,15 @@ const {
   data: searchResponse,
   status: searchStatus,
   error: searchError
-} = await useAsyncData(() => $fetch(SEARCH_API_PATH))
+} = await useAsyncData(() => $fetch(API_HOMEPAGE_LATEST_PATH))
 
-const topSearchResults = computed(() => {
-  const allSearchResults = searchResponse.value?.results
-  return Array.isArray(allSearchResults) ?
-    allSearchResults.slice(0, 3).map(rfcMetadataToRfcCommon)
-    : []
+const latestRfcs = computed((): RfcCommon[] => {
+  const { data, error } = HomepageLatestSchema.safeParse(searchResponse.value)
+  if (error) {
+    console.error(error)
+    return []
+  }
+  return data.homepageLatest
 })
 
 useRfcEditorHead({

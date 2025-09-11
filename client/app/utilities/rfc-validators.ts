@@ -156,6 +156,10 @@ export const RfcCommonSchema = z.object({
 
 export type RfcCommon = z.infer<typeof RfcCommonSchema>
 
+export const HomepageLatestSchema = z.object({
+  homepageLatest: z.array(RfcCommonSchema)
+})
+
 /**
  * Document HTML Schema (html/vue as pojo)
  */

@@ -103,7 +103,7 @@ export const rfcBucketPdfToRfcDocument = async (
     pageImg.setAttribute('width', screenshotDimensions.widthPx.toString())
     pageImg.setAttribute('height', screenshotDimensions.heightPx.toString())
     pageImg.setAttribute('alt', `Page ${pageNumber}: ${pageText}`)
-    if (pageNumber > 1) {
+    if (pageNumber >= 2) {
       // for pages 2+ we'll lazy load images
       // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img#loading
       pageImg.setAttribute('loading', 'lazy')

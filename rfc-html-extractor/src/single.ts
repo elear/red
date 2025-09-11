@@ -1,6 +1,10 @@
+import { processCron } from './cron.ts'
 import { processRfc } from './index.ts'
 
 const main = async (rfcNumber: number): Promise<void> => {
+  if(rfcNumber === 0) {
+    return await processCron()
+  }
   console.log(`Processing RFC ${rfcNumber}...`)
   try {
     const isDone = await processRfc(rfcNumber)

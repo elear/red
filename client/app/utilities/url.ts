@@ -61,7 +61,7 @@ export const IAD_URL = 'https://iad.rfc-editor.org'
 export const DASHBOARD_URL = 'https://dashboard.rfc-editor.org'
 
 export const SEARCH_PATH = '/search/'
-export const SEARCH_API_PATH = '/api/search/'
+export const API_HOMEPAGE_LATEST_PATH = '/api/v1/homepage-latest.json'
 
 export const RFC_INDEX_XML_PATH = '/rfc-index.xml'
 export const RFC_INDEX_ALL_ASCENDING_PATH = '/rfc-index/'

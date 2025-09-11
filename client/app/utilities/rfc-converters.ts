@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import type { Rfc, RfcMetadata } from '../../generated/red-client'
-import { blankRfcCommon, parseRFCId } from './rfc'
+import type { Rfc } from '../../generated/red-client'
+import { parseRFCId } from './rfc'
 import type { RfcCommon, RFCJSON } from './rfc'
 import {
   formatAuthor,
@@ -13,47 +13,6 @@ import {
 import { parseRfcStatusSlug } from './rfc-converter-status'
 import { TypeSenseSearchItemSchema } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
-import { assertIsDefined } from './typescript'
-
-/**
- * Caches response to avoid computation but mostly to make === comparisons of RFCs easier
- */
-const cacheResponse = <T extends Rfc | RfcMetadata>(
-  fn: (rfcData: T) => RfcCommon
-): ((rfcData: T) => RfcCommon) => {
-  const cache: Record<string, RfcCommon> = {}
-
-  return (rfcData: T) => {
-    const cacheKey = `${rfcData.number}`
-    if (!(cacheKey in cache)) {
-      cache[cacheKey] = fn(rfcData)
-    }
-    const value = cache[cacheKey]
-    assertIsDefined(value)
-    return value
-  }
-}
-
-export const rfcMetadataToRfcCommon = cacheResponse(
-  (rfcMetadata: RfcMetadata): RfcCommon => {
-    return {
-      ...structuredClone(blankRfcCommon),
-      number: rfcMetadata.number,
-      abstract: rfcMetadata.abstract,
-      published: rfcMetadata.published,
-      status: parseRfcStatusSlug(rfcMetadata.status.slug),
-      pages: rfcMetadata.pages,
-      authors: rfcMetadata.authors,
-      group: rfcMetadata.group,
-      area: rfcMetadata.area,
-      stream: rfcMetadata.stream,
-      identifiers: rfcMetadata.identifiers,
-      obsoleted_by: rfcMetadata.obsoleted_by,
-      updated_by: rfcMetadata.updated_by,
-      title: rfcMetadata.title
-    }
-  }
-)
 
 /**
  * Converts between types of RFC data
