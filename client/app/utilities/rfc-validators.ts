@@ -118,7 +118,8 @@ export const RfcCommonSchema = z.object({
       acronym: z.string(),
       name: z.string()
     })
-    .optional(),
+    .optional()
+    .nullable(),
   pages: z.number().nullable().optional(),
   status: RfcCommonStatusSchema,
   subseries: z

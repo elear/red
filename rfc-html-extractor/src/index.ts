@@ -1,13 +1,9 @@
-import { getRfcCommon } from './redClientGet.ts'
 import { fetchSourceRfcHtml, rfcBucketHtmlToRfcDocument } from './rfc-html.ts'
 import { rfcBucketPdfToRfcDocument } from './rfc-pdf.ts'
 import { rfcJSONPathBuilder, saveToS3 } from './utilities/s3.ts'
 import { validateRfcBucketHtmlDocument } from './utilities/validate-doc.ts'
 
 export const processRfc = async (rfcNumber: number): Promise<boolean> => {
-  const rfcCommon = await getRfcCommon(rfcNumber)
-  console.log(JSON.stringify(rfcCommon, null, 2))
-
   const html = await fetchSourceRfcHtml(rfcNumber)
   if (html !== null) {
     const rfcDocFromHtml = await rfcBucketHtmlToRfcDocument(html, rfcNumber)
