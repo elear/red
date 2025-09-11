@@ -104,14 +104,14 @@ export const getAllRFCs = async ({ api }: Props) => {
     docListArg.offset = offset
     docListArg.limit = MAX_LIMIT_PER_REQUEST
     const response = await api.red.docList(docListArg)
-    const rfcCommons = response.results.map(rfcMetadataToRfcCommon)
+    const rfcCommons = response.results.map(rfcMetadataToRfcCommon).sort((a, b) => a.number - b.number)
     rfcs.unshift(...rfcCommons)
 
     if (rfcCommons.length > 0) {
       console.log(
         ` - rfc ${rfcCommons[rfcCommons.length - 1].number}-${
           rfcCommons[0].number
-        }}`
+        }`
       )
     }
 
@@ -126,6 +126,8 @@ export const getAllRFCs = async ({ api }: Props) => {
       )
       break
     }
+
+    offset += rfcCommons.length
 
     await setTimeoutPromise(DELAY_BETWEEN_REQUESTS_MS)
   }
