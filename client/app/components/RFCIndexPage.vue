@@ -111,7 +111,6 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import { getRedClient, getRFCs } from '~/utilities/redClientWrappers'
 import { rfcToRfcIndexRow } from '~/utilities/rfc-index-html'
 import {
   PUBLIC_SITE,
@@ -140,15 +139,10 @@ useSeoMeta({
 const createdOn = DateTime.now().toFormat('d LLLL yyyy')
 
 const { data: rfcs, error } = await useAsyncData(
-  props.cacheKey, // technically it's a de-duplication key but cacheKey is clearer usage / prop name imo
-  () => {
-    const apiClient = getRedClient()
-    return getRFCs({
-      apiClient,
-      sort: props.sort,
-      rfcNumberLimit: props.rfcNumberLimit,
-      delayBetweenRequestsMs: 0
-    })
+  props.cacheKey,
+  async () => {
+    // FIXME: fetch all RFCs
+   return []
   }
 )
 const rfcRows = computed(() => {

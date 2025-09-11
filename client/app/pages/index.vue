@@ -101,7 +101,7 @@
 
 <script setup lang="ts">
 import { useRfcEditorHead } from '~/utilities/head'
-import { HomepageLatestSchema, type RfcCommon } from '~/utilities/rfc-validators'
+import { HomepageLatestSchema } from '~/utilities/rfc-validators'
 import {
   DATATRACKER_URL,
   IAB_URL,
@@ -111,6 +111,7 @@ import {
   API_HOMEPAGE_LATEST_PATH,
   searchPathBuilder
 } from '~/utilities/url'
+import type { RfcCommon } from '~/utilities/rfc-validators'
 
 definePageMeta({
   layout: false

@@ -9,7 +9,7 @@ import { assertIsString, assertNever } from './typescript'
 import type { TypeSenseSearchItemSchema } from './typesense'
 import type { RfcEditorToc } from './tableOfContents'
 
-type RfcMetadataAuthor = RfcMetadata['authors'][number]
+type RfcMetadataAuthor = RfcCommon['authors'][number]
 
 /**
  * Formats author names into an initialised format.

@@ -73,3 +73,30 @@ export const getRedClient = () => {
     headers
   })
 }
+
+/** Safety wrapper around docRetrieve access to catch errors  */
+export const docRetrieve = async (redApi: ApiClient, rfcNumber: number) => {
+  try {
+    return await redApi.red.docRetrieve(rfcNumber)
+  } catch (e: unknown) {
+    // The API client can throw to express 404s... if so, return null
+    if (
+      e &&
+      typeof e === 'object' &&
+      'type' in e &&
+      e.type === 'client_error' &&
+      'errors' in e &&
+      Array.isArray(e.errors) &&
+      e.errors.length > 0
+    ) {
+      const error = e.errors[0]
+      if ('code' in error && error.code === 'not_found') {
+        return null
+      }
+    }
+
+    const errorMessage = 'Unhandled Red API response'
+    console.error(errorMessage, e)
+    throw Error(`${errorMessage}. See console`)
+  }
+}

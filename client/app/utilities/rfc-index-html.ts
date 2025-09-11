@@ -1,12 +1,10 @@
 import { DateTime } from 'luxon'
-import type { getRFCs } from './redClientWrappers'
 import { infoRfcPathBuilder } from './url'
 import { COMMA } from './strings'
 import { formatAuthor } from './rfc-converters-utils'
+import type { RfcCommon } from './rfc-validators'
 
-type Rfc = Awaited<ReturnType<typeof getRFCs>>[number]
-
-export const rfcToRfcIndexRow = (rfc: Rfc) => {
+export const rfcToRfcIndexRow = (rfc: RfcCommon) => {
   const [month, year] = DateTime.fromISO(rfc.published)
     .toFormat('LLLL yyyy')
     .split(' ')
@@ -28,7 +26,7 @@ export const rfcToRfcIndexRow = (rfc: Rfc) => {
     ...(rfc.updated_by && rfc.updated_by.length > 0 ?
       [' (Updated-By ', ...rfcCommaList(rfc.updated_by), ' )']
     : []),
-    ` (Status: ${rfc.status.name.toUpperCase()})`,
+    ` (Status: ${rfc.status.toUpperCase()})`,
     ` (Stream: ${rfc.stream.name})`,
     ' ',
     rfc.identifiers ?
