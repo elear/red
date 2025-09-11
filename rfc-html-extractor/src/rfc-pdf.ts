@@ -9,6 +9,7 @@ import {
   takeScreenshotOfPage
 } from './utilities/unpdf-parent.ts'
 import { PDF_WIDTH_PX } from './utilities/layout.ts'
+import { getRfcCommon } from './redClientGet.ts'
 
 export const fetchRfcPDF = async (rfcNumber: number) => {
   const url = `${PUBLIC_SITE}/rfc/rfc${rfcNumber}.pdf`
@@ -111,7 +112,7 @@ export const rfcBucketPdfToRfcDocument = async (
   }
 
   const response: RfcBucketHtmlDocument = {
-    rfc: structuredClone(blankRfcCommon),
+    rfc: await getRfcCommon(rfcNumber),
     tableOfContents,
     documentHtmlType: 'pdf-or-ps',
     documentHtmlObj: rfcDocumentToPojo(Array.from(dom.body.childNodes)),

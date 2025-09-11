@@ -27,6 +27,7 @@ import {
   parseXml2RfcBody
 } from './rfc-html-xml2rfc.ts'
 import { chunkString, getAllIndexes } from './utilities/string.ts'
+import { getRfcCommon } from './redClientGet.ts'
 
 export const fetchSourceRfcHtml = async (
   rfcNumber: number
@@ -191,7 +192,7 @@ export const rfcBucketHtmlToRfcDocument = async (
   const dom = parser.parseFromString(rfcBucketHtml, 'text/html')
 
   const rfcAndToc: RfcAndToc = {
-    rfc: structuredClone(blankRfcCommon),
+    rfc: await getRfcCommon(rfcNumber),
     tableOfContents: undefined
   }
 
