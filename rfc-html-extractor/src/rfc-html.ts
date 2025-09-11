@@ -13,7 +13,7 @@ import type {
   DocumentHtmlType,
   TableOfContents
 } from '../../client/app/utilities/rfc-validators.ts'
-import { blankRfcCommon, extractHrefRfcPart } from './rfc.ts'
+import { extractHrefRfcPart } from './rfc.ts'
 import { assertNever } from './utilities/typescript.ts'
 import { PUBLIC_SITE } from './utilities/url.ts'
 import {
@@ -33,7 +33,7 @@ import { validateRfcBucketHtmlDocument } from './utilities/validate-doc.ts'
 export const fetchSourceRfcHtml = async (
   rfcNumber: number
 ): Promise<string | null> => {
-  const url = `${PUBLIC_SITE}/rfc-neue/rfc${rfcNumber}.html`
+  const url = `${PUBLIC_SITE}/rfc/rfc${rfcNumber}.html`
   const response = await fetch(url)
   if (!response.ok) {
     console.warn(
