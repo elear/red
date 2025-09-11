@@ -28,6 +28,7 @@ import {
 } from './rfc-html-xml2rfc.ts'
 import { chunkString, getAllIndexes } from './utilities/string.ts'
 import { getRfcCommon } from './redClientGet.ts'
+import { validateRfcBucketHtmlDocument } from './utilities/validate-doc.ts'
 
 export const fetchSourceRfcHtml = async (
   rfcNumber: number
@@ -235,6 +236,8 @@ export const rfcBucketHtmlToRfcDocument = async (
     documentHtmlObj: rfcDocumentToPojo(rfcDocument),
     maxPreformattedLineLength
   }
+
+  validateRfcBucketHtmlDocument(response)
 
   return response
 }

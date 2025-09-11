@@ -10,6 +10,7 @@ import {
 } from './utilities/unpdf-parent.ts'
 import { PDF_WIDTH_PX } from './utilities/layout.ts'
 import { getRfcCommon } from './redClientGet.ts'
+import { validateRfcBucketHtmlDocument } from './utilities/validate-doc.ts'
 
 export const fetchRfcPDF = async (rfcNumber: number) => {
   const url = `${PUBLIC_SITE}/rfc/rfc${rfcNumber}.pdf`
@@ -122,6 +123,8 @@ export const rfcBucketPdfToRfcDocument = async (
       maxWithAnchorSuffix: 80
     }
   }
+
+  validateRfcBucketHtmlDocument(response)
 
   return response
 }
