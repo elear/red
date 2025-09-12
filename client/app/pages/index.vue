@@ -17,21 +17,15 @@
           </p>
         </div>
 
-        <div v-if="searchStatus === 'error' && searchError">
+        <div v-if="homepageLatestStatus === 'error' && homepageLatestError">
           <Alert variant="warning" heading="Unable to load latest RFCs">
-            {{ searchError.statusMessage }}
+            {{ homepageLatestError.statusMessage }}
           </Alert>
         </div>
 
-        <div v-if="searchStatus === 'success' && latestRfcs.length === 0">
-          <Alert variant="warning" heading="Unable to load latest RFCs">
-            Try again later (API error)
-          </Alert>
-        </div>
-
-        <div v-if="searchStatus === 'success'"
+        <div v-if="homepageLatestStatus === 'success'"
           class="md:mx-2 grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <RFCCard v-for="rfc in latestRfcs" :key="rfc.number" heading-level="3" :rfc="rfc" :show-abstract="false"
+          <RFCCard v-for="rfc in homepageLatest" :key="rfc.number" heading-level="3" :rfc="rfc" :show-abstract="false"
             :show-tag-date="true" />
         </div>
 
@@ -118,13 +112,13 @@ definePageMeta({
 })
 
 const {
-  data: searchResponse,
-  status: searchStatus,
-  error: searchError
+  data: homepageLatestData,
+  status: homepageLatestStatus,
+  error: homepageLatestError
 } = await useAsyncData(() => $fetch(API_HOMEPAGE_LATEST_PATH))
 
-const latestRfcs = computed((): RfcCommon[] => {
-  const { data, error } = HomepageLatestSchema.safeParse(searchResponse.value)
+const homepageLatest = computed((): RfcCommon[] => {
+  const { data, error } = HomepageLatestSchema.safeParse(homepageLatestData.value)
   if (error) {
     console.error(error)
     return []
