@@ -5,8 +5,8 @@ import { rfcImageFileNameBuilder } from '../utilities/s3.ts'
 import {
   type TableOfContents,
   type RfcBucketHtmlDocument,
-  RfcBucketHtmlDocumentSchema,
-  RfcCommon
+  type RfcCommon,
+  RfcBucketHtmlDocumentSchema,  
 } from '../../../client/app/utilities/rfc-validators.ts'
 import {
   getTextDetails,
