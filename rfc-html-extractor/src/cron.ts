@@ -8,7 +8,10 @@ const RFC_NUMBER_WIDTH = 5 // for Red the default width is 5 chars to handle eg 
 export const processCron = async (): Promise<void> => {
   console.log('Triggered by a cron job')
   const api = getRedClient()
-  const allRfcs = await getAllRFCs({ api })
+  const allRfcs = await getAllRFCs({ api }).catch((e) => {
+    console.error("getAllRFCs error", e)
+    throw Error(e)
+  })
 
   await Promise.all([
     uploadHomepageLatest(allRfcs),

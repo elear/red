@@ -5,29 +5,39 @@ import type { Rfc, RfcMetadata } from '../../../client/generated/red-client.ts'
 import type { RfcCommon } from '../../../client/app/utilities/rfc-validators.ts'
 import { assertIsString } from './typescript.ts'
 
-export const getRedClient = () => {
+export const getRedClient = (): ApiClient => {
   const NUXT_PUBLIC_DATATRACKER_BASE = process.env.NUXT_PUBLIC_DATATRACKER_BASE
   const NUXT_CF_SERVICE_TOKEN_ID = process.env.NUXT_CF_SERVICE_TOKEN_ID
   const NUXT_CF_SERVICE_TOKEN_SECRET = process.env.NUXT_CF_SERVICE_TOKEN_SECRET
 
-  assertIsString(
-    NUXT_PUBLIC_DATATRACKER_BASE,
-    "datatracker base wasn't a string"
-  )
-  assertIsString(NUXT_CF_SERVICE_TOKEN_ID, "cloudflare token wasn't a string")
-  assertIsString(
-    NUXT_CF_SERVICE_TOKEN_SECRET,
-    "cloudflare secret wasn't a string"
-  )
+  if (NUXT_PUBLIC_DATATRACKER_BASE) {
+    console.log('Using API', NUXT_PUBLIC_DATATRACKER_BASE)
+    assertIsString(
+      NUXT_PUBLIC_DATATRACKER_BASE,
+      "datatracker base wasn't a string"
+    )
+    assertIsString(NUXT_CF_SERVICE_TOKEN_ID, "cloudflare token wasn't a string")
+    assertIsString(
+      NUXT_CF_SERVICE_TOKEN_SECRET,
+      "cloudflare secret wasn't a string"
+    )
 
-  const headers: ApiClient['Config']['headers'] = {
-    'CF-Access-Client-Id': NUXT_CF_SERVICE_TOKEN_ID,
-    'CF-Access-Client-Secret': NUXT_CF_SERVICE_TOKEN_SECRET
+    const headers: ApiClient['Config']['headers'] = {
+      'CF-Access-Client-Id': NUXT_CF_SERVICE_TOKEN_ID,
+      'CF-Access-Client-Secret': NUXT_CF_SERVICE_TOKEN_SECRET
+    }
+
+    return new ApiClient({
+      baseUrl: NUXT_PUBLIC_DATATRACKER_BASE,
+      headers
+    })
   }
 
+  const localServer = 'http://localhost:8000'
+  console.log('Using local API', localServer)
+
   return new ApiClient({
-    baseUrl: NUXT_PUBLIC_DATATRACKER_BASE,
-    headers
+    baseUrl: localServer
   })
 }
 
@@ -99,7 +109,7 @@ export const getAllRFCs = async ({
   const rfcs: RfcCommon[] = []
 
   const docListArg: DocListArg = {}
-  docListArg.sort = ['-number'] // we start at the end and walk back
+  docListArg.sort = ['-number'] // we start at the end and walk back to RFC 1
   let offset = 0 // offset is API database row offset, not an RFC number offset
 
   while (true) {
