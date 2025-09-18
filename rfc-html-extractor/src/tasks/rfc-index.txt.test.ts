@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { vi, describe, test, expect } from 'vitest'
 import { splitLinesAt, renderRfcIndexTxt } from './rfc-index-txt'
-import { RfcCommon } from '../../../client/app/utilities/rfc-validators'
+import type { RfcCommon } from '../../../client/app/utilities/rfc-validators'
 
 const paragraph =
   'Obsoletes xxxx refers to other RFCs that this one replaces; Obsoleted by xxxx refers to RFCs that have replaced this one. Updates xxxx refers to other RFCs that this one merely updates (but does not replace);'

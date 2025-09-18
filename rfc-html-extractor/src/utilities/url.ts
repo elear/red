@@ -1,4 +1,4 @@
-import { RfcCommon } from "../../../client/app/utilities/rfc-validators.ts"
+import type { RfcCommon } from "../../../client/app/utilities/rfc-validators.ts"
 
 export const PUBLIC_SITE = 'https://www.rfc-editor.org'
 
