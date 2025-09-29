@@ -282,11 +282,14 @@ test('typeSenseSearchItemToRFC', () => {
       name: 'Applications and Real-Time Area'
     },
     published: '2019-05-21T18:05:35.000Z',
-    status: 'Informational',
+    status: {
+      slug: 'fyi',
+      name: 'Informational'
+    },
     subseries: undefined,
     stream: {
-      name: 'IETF',
-      slug: 'ietf'
+      slug: 'IETF',
+      name: 'IETF'
     },
     text: '',
     title: "The 'leaptofrogans' URI Scheme"

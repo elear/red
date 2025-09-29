@@ -203,11 +203,11 @@ export const parseTypeSenseSubseries = (
   item: z.infer<typeof TypeSenseSearchItemSchema>
 ): RfcCommon['subseries'] => {
   if (item.subseries?.acronym) {
-    return {
+    return [{
       type: item.subseries?.acronym,
       number: item.subseries?.number,
       subseriesLength: item.subseries?.total
-    }
+    }]
   }
   return undefined
 }

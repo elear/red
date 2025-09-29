@@ -39,7 +39,28 @@ export type TableOfContents = z.infer<typeof TableOfContentsSchema>
 /**
  * RFC Common
  */
-export const RfcCommonStatusSchema = z.union([
+export const RfcCommonStatusSlugSchema = z.union([
+  z.literal('bcp'),
+  z.literal('experimental'),
+  z.literal('his'),
+  z.literal('fyi'),
+  z.literal('not-issued'),
+  z.literal('standard'),
+  z.literal('unknown'),
+  z.literal('proposed'),
+  z.literal('draft')
+])
+
+export const RfcCommonStreamSlugSchema = z.union([
+  z.literal('IETF'),
+  z.literal('IAB'),
+  z.literal('IRTF'),
+  z.literal('INDEPENDENT'),
+  z.literal('Editorial'),
+  z.literal('Legacy')
+])
+
+export const RfcCommonStatusNameSchema = z.union([
   z.literal('Best Current Practice'),
   z.literal('Experimental'),
   z.literal('Historic'),
@@ -50,6 +71,11 @@ export const RfcCommonStatusSchema = z.union([
   z.literal('Proposed Standard'),
   z.literal('Draft Standard')
 ])
+
+export const RfcCommonStatusSchema = z.object({
+  slug: RfcCommonStatusSlugSchema,
+  name: RfcCommonStatusNameSchema
+})
 
 export const RfcCommonSubseriesTypeSchema = z.union([
   z.literal('bcp'),
@@ -106,7 +132,8 @@ const RfcCommonAuthorSchema = z.object({
 const RfcCommonDraftSchema = z.object({
   id: z.number(),
   number: z.number(),
-  title: z.string()
+  title: z.string(),
+  slug: z.string()
 })
 
 export const RfcCommonSchema = z.object({
@@ -123,11 +150,13 @@ export const RfcCommonSchema = z.object({
   pages: z.number().nullable().optional(),
   status: RfcCommonStatusSchema,
   subseries: z
-    .object({
-      type: RfcCommonSubseriesTypeSchema,
-      number: z.number().optional(),
-      subseriesLength: z.number().optional()
-    })
+    .array(
+      z.object({
+        type: RfcCommonSubseriesTypeSchema,
+        number: z.number().optional(),
+        subseriesLength: z.number().optional()
+      })
+    )
     .optional(),
   authors: z.array(RfcCommonAuthorSchema),
   group: z.object({
@@ -135,9 +164,9 @@ export const RfcCommonSchema = z.object({
     name: z.string()
   }),
   stream: z.object({
-    slug: z.string(),
+    slug: RfcCommonStreamSlugSchema,
     name: z.string(),
-    desc: z.string().optional()
+    description: z.string().optional()
   }),
   identifiers: z.array(RfcCommonIdentifierSchema).optional(),
   obsoletes: z.array(RfcCommonObsoleteSchema).optional(),
