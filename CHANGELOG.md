@@ -1,6 +1,6 @@
 # CHANGE LOG
 
-## 2025 March 4
+## RFC Editor.org
 
 ### Upcoming API changes
 
@@ -18,7 +18,11 @@ The global changes, and the table layout of this file must change to make space 
 
 #### `/rfc-index.xml`
 
-The global changes. Here's [a sample file of the new `rfc-index.xml`](https://raw.githubusercontent.com/ietf-tools/rfced-www/refs/heads/main/client/utilities/rfc-index.xml). No redirect is expected. The `/rfc-index.xsd` file will remain.
+The XML was previously 4 digits (with leading zeros as padding), but is now 1-5 digits without leading zeroes. The existing path will be retained. No redirect is expected.
+
+#### `/rfc-index.xsd`
+
+The schema previously required 4 digit RFC numbers (with leading zeroes as padding) is [now 1-5 digits without leading zeroes](https://github.com/ietf-tools/red/commit/9464cc948dfeff4dad729ad94ea6d56a75a8a473#diff-75332ae4c2fe619e9f54cd4c16f54ea1a28de7ab6effa8316db35da80eadd186L78). The existing path will be retained. No redirect is expected.
 
 #### `/rfcrss.xml` and `/rfcatom.xml`
 
