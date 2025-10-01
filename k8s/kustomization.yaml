@@ -1,3 +1,4 @@
 namespace: red
 resources:
   - red.yaml
+  - cron.yaml

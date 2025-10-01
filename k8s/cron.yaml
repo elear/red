@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: red-rfc-html-extractor-cron
+spec:
+  concurrencyPolicy: Forbid
+  schedule: "30 11 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            runAsNonRoot: true
+          containers:
+            - name: red-rfc-html-extractor
+              image: "ghcr.io/ietf-tools/red-rfc-html-extractor:latest"
+              imagePullPolicy: Always
+              command: ['sh', '-c', 'node ./src/cron.ts']
+              envFrom:
+                - secretRef:
+                    name: red-secrets-env
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                  - ALL
+                readOnlyRootFilesystem: true
+                runAsUser: 1000
+                runAsGroup: 1000
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 5
