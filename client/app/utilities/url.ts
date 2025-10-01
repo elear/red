@@ -61,7 +61,7 @@ export const DASHBOARD_URL = 'https://dashboard.rfc-editor.org'
 
 export const SEARCH_PATH = '/search/'
 
-export const API_HOMEPAGE_LATEST_PATH = `${PUBLIC_SITE}/api/v1/homepage-latest.json`
+export const API_HOMEPAGE_LATEST_PATH = `/api/v1/homepage-latest.json`
 
 export const RFC_INDEX_XML_PATH = '/rfc-index.xml'
 export const RFC_INDEX_ALL_ASCENDING_PATH = '/rfc-index/'
@@ -141,8 +141,6 @@ type SearchPathBuilderProps = {
   from: string
   to: string
 }
-
-export const publicSiteUrl = new URL(PUBLIC_SITE)
 
 export const searchPathBuilder = (
   searchParams: Partial<SearchPathBuilderProps>
@@ -249,11 +247,7 @@ export const mailToBuilder = (email: string) => {
 }
 
 export const apiRfcBucketDocumentURLBuilder = (rfcNumber: number) => {
-  // Intentionally not a relative url, the PUBLIC_SITE prefix is because this URL is served
-  // from a bucket on prod; it's not something that a localhost Nuxt can serve.
-  // The CORS headers of the prod URL should allow access from localhost:3000 as well as staging,
-  // etc. sites.
-  return `${PUBLIC_SITE}/api/v1/rfc-html/${rfcNumber}.json` as const
+  return `/api/v1/rfc-html/${rfcNumber}.json` as const
 }
 
 export const apiRfcDocRetrievePathBuilder = (rfcNumber: number) => {
@@ -307,7 +301,7 @@ export const textToAnchorId = (text: string): string | undefined => {
  */
 const tryParseHref = (href: string): URL | undefined => {
   try {
-    return new URL(href, PUBLIC_SITE)
+    return new URL(href)
   } catch (e: unknown) {
     console.info(
       `Failed to parse href ${JSON.stringify(href)} into URL. Error:`,
@@ -320,7 +314,7 @@ export const linkPreviewImageUrlBuilder = (
   widthPx: ImagePreviewHorizontalDimensions,
   heightPx: ImagePreviewVerticalDimensions
 ) => {
-  return `${PUBLIC_SITE}/link-preview-image-${widthPx}x${heightPx}.png` as const
+  return `/link-preview-image-${widthPx}x${heightPx}.png` as const
 }
 
 /**
@@ -332,7 +326,7 @@ export const needsCloudflareHeaderForApi = (apiBaseUrl: string): boolean =>
 /**
  * Based on the URL of the API detect whether it's prod
  */
-export const isProd = (url: string): boolean => !url.includes(PUBLIC_SITE)
+export const isProd = (url: string): boolean => !import.meta.dev
 
 export const isRfcEditorSite = (href?: string): boolean => {
   if (href === undefined) {

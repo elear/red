@@ -108,6 +108,12 @@ export default defineNuxtConfig({
       ]
     }
   },
+  $development: {
+    routeRules: {
+      '/api/v1/homepage-latest.json': { proxy: 'https://red.staging.rfc-editor.org/api/v1/homepage-latest.json' },
+      '/api/v1/rfc-html/**': { proxy: 'https://red.staging.rfc-editor.org/api/v1/rfc-html/**' }
+    }
+  },
   $production: {
     /**
      * Only apply route rules in production builds, because prerendering takes a while
