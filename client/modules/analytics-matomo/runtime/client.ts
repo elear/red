@@ -13,8 +13,8 @@ const eventuallyDispatchEvent = (
   if (matomoEventQueue !== undefined) {
     events?.forEach((event) => {
       matomoEventQueue.push(event)
+      console.info('Analytics (Matomo) queued:', event)
     })
-    console.info('Analytic (Matomo) queued:', events)
   } else if (attemptsRemaining > 0) {
     setTimeout(() => {
       eventuallyDispatchEvent(events, attemptsRemaining - 1)
@@ -31,6 +31,15 @@ const eventuallyDispatchEvent = (
 
 export default defineNuxtPlugin({
   setup(_nuxtApp) {
+    if (
+      import.meta.env.TEST ||
+      import.meta.env.VITEST ||
+      import.meta.env.test ||
+      import.meta.env.vitest
+    ) {
+      return
+    }
+
     useHead({
       script: [
         {
