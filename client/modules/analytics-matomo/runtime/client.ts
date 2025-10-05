@@ -1,3 +1,10 @@
+// This Nuxt module is supposed to be standalone so it intentionally doesn't import shared code from the rest of the project
+declare global {
+  interface Window {
+    _paq?: (string | string[])[]
+  }
+}
+
 export default defineNuxtPlugin({
   setup(_nuxtApp) {
     useHead({
@@ -7,6 +14,27 @@ export default defineNuxtPlugin({
         }
       ]
     })
+    const route = useRoute()
+
+    watch(
+      route,
+      (value) => {
+        try {
+          const newUrl = new URL(value.fullPath, location.toString()).toString()
+          const matomoEventQueue = window._paq
+          if (Array.isArray(matomoEventQueue)) {
+            matomoEventQueue.push(['setCustomUrl', newUrl])
+            matomoEventQueue.push('trackPageView')
+            console.info('[PageView]', newUrl)
+          } else {
+            console.error('Unable to track page view due to lack of `window._paq` variable')
+          }
+        } catch (e) {
+          console.error('Analytics matomo error: ', e)
+        }
+      },
+      { deep: true, immediate: true }
+    )
   }
 })
 
