@@ -3,7 +3,8 @@ import { DateTime } from 'luxon'
 import type { z } from 'zod'
 import type { Rfc, RfcMetadata } from '../../generated/red-client'
 import { parseRFCId } from './rfc'
-import type { RfcCommon, RFCJSON } from './rfc'
+import type { RfcCommon } from './rfc'
+import type { RFCJSON } from './rfc-validators'
 import { NONBREAKING_SPACE } from './strings'
 import { assertIsString, assertNever } from './typescript'
 import type { TypeSenseSearchItemSchema } from './typesense'
@@ -101,7 +102,10 @@ export const formatDatePublished = (
 
 export const parseRfcJsonPubDateToISO = (
   pub_date: RFCJSON['pub_date']
-): string => {
+): string | undefined => {
+  if (pub_date === null) {
+    return undefined
+  }
   const parts = pub_date.split(/\s/g)
   let day: number = 0
   let month: number = 0
@@ -203,11 +207,13 @@ export const parseTypeSenseSubseries = (
   item: z.infer<typeof TypeSenseSearchItemSchema>
 ): RfcCommon['subseries'] => {
   if (item.subseries?.acronym) {
-    return [{
-      type: item.subseries?.acronym,
-      number: item.subseries?.number,
-      subseriesLength: item.subseries?.total
-    }]
+    return [
+      {
+        type: item.subseries?.acronym,
+        number: item.subseries?.number,
+        subseriesLength: item.subseries?.total
+      }
+    ]
   }
   return undefined
 }

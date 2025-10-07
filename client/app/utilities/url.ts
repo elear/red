@@ -251,10 +251,6 @@ export const apiRfcBucketDocumentPathBuilder = (rfcNumber: number) => {
   return `/api/v1/rfc-html/${rfcNumber}.json` as const
 }
 
-export const apiRfcDocRetrievePathBuilder = (rfcNumber: number) => {
-  return `/api/v1/docretrieve/rfc${rfcNumber}.json` as const
-}
-
 const mailtoRegex = /^mailto:/
 export const isMailToLink = (href?: string): boolean => {
   return mailtoRegex.test(href ?? '')

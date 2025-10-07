@@ -149,15 +149,14 @@ const RfcCommonDraftSchema = z.object({
 export const RfcCommonSchema = z.object({
   number: z.number(),
   title: z.string(),
-  published: z.string(),
+  published: z.string().optional(),
   area: z
     .object({
       acronym: z.string(),
       name: z.string()
     })
-    .optional()
-    .nullable(),
-  pages: z.number().nullable().optional(),
+    .optional(),
+  pages: z.number().optional(),
   status: RfcCommonStatusSchema,
   subseries: z
     .array(
@@ -190,7 +189,7 @@ export const RfcCommonSchema = z.object({
   errata: z.array(z.string()).optional(),
   formats: z.array(RfcCommonFormatSchema),
   abstract: z.string().optional(),
-  text: z.string().nullable()
+  text: z.string().optional()
 })
 
 export type RfcCommon = z.infer<typeof RfcCommonSchema>
@@ -261,3 +260,48 @@ export const isNodePojo = (maybeNode: unknown): maybeNode is NodePojo => {
     ['Element', 'Text'].includes(maybeNode.type)
   )
 }
+
+const RfcJsonStatusSchema = z.union([
+  z.literal('UNKNOWN'),
+  z.literal('INTERNET STANDARD'),
+  z.literal('EXPERIMENTAL'),
+  z.literal('HISTORIC'),
+  z.literal('INFORMATIONAL'),
+  z.literal('NOT ISSUED'),
+  z.literal('PROPOSED STANDARD'),
+  z.literal('BEST CURRENT PRACTICE')
+])
+
+const RfcJsonFormatSchema = z.union([
+  z.literal('ASCII'),
+  z.literal('TEXT'),
+  z.literal('HTML'),
+  z.literal('PDF'),
+  z.literal('PS'),
+  z.literal('XML'),
+  z.literal('')
+])
+
+export const RfcJsonSchema = z.object({
+  draft: z.string().nullable(),
+  doc_id: z.string(),
+  title: z.string(),
+  authors: z.array(z.string()),
+  format: RfcJsonFormatSchema.array(),
+  page_count: z.string().nullable(),
+  pub_status: RfcJsonStatusSchema,
+  status: RfcJsonStatusSchema,
+  source: z.string(),
+  abstract: z.string().nullable(),
+  pub_date: z.string().nullable(),
+  keywords: z.array(z.string()),
+  obsoletes: z.array(z.string()),
+  obsoleted_by: z.array(z.string()),
+  updates: z.array(z.string()),
+  updated_by: z.array(z.string()),
+  see_also: z.array(z.string()),
+  doi: z.string().nullable(),
+  errata_url: z.string().nullable()
+})
+
+export type RFCJSON = z.infer<typeof RfcJsonSchema>

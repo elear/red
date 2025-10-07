@@ -1,11 +1,8 @@
-import { DateTime } from 'luxon'
 import type { Rfc } from '../../generated/red-client'
 import { parseRFCId } from './rfc'
-import type { RfcCommon, RFCJSON } from './rfc'
+import type { RfcCommon } from './rfc'
+import type { RFCJSON } from './rfc-validators'
 import {
-  formatAuthor,
-  formatDatePublished,
-  formatFormat,
   parseRfcFormat,
   parseRfcJsonPubDateToISO,
   parseTypeSenseSubseries
@@ -16,57 +13,15 @@ import type { TypeSenseSearchItem } from './typesense'
 
 /**
  * Converts between types of RFC data
- */
-export const rfcToRfcJSON = (rfc: Rfc): RFCJSON => {
-  const date = DateTime.fromISO(rfc.published)
-
-  return {
-    draft: rfc.draft?.name ?? '',
-    doc_id: `RFC${rfc.number}`,
-    title: rfc.title,
-    authors: rfc.authors.map((author) => formatAuthor(author, 'regular')) ?? [],
-    format: rfc.formats.map((format) =>
-      formatFormat(
-        format,
-        // FIXME: get info on whether it's a pre-V3 rfc.... or ensure API will return ASCII
-        true
-      )
-    ),
-    page_count: rfc.pages?.toString() ?? '0',
-    pub_status: rfc.status.name.toUpperCase(),
-    status: rfc.status.name.toUpperCase(),
-    source: rfc.stream.name,
-    abstract: rfc.abstract,
-    pub_date: formatDatePublished(date, false),
-    keywords: rfc.keywords ?? [],
-    obsoletes: rfc.obsoletes?.map((obsolete) => `RFC${obsolete.number}`) ?? [],
-    obsoleted_by:
-      rfc.obsoleted_by?.map((obsoleted_by) => `RFC${obsoleted_by.number}`) ??
-      [],
-    updates: rfc.updates?.map((update) => `RFC${update.number}`) ?? [],
-    updated_by:
-      rfc.updated_by?.map(
-        (updated_by_item) => `RFC${updated_by_item.number}`
-      ) ?? [],
-    see_also: rfc.see_also ?? [],
-    doi:
-      rfc.identifiers?.find((identifier) => identifier.type === 'doi')?.value ??
-      null,
-    errata_url: rfc.errata?.[0] ?? null
-  }
-}
-
-/**
- * Converts between types of RFC data
  * FIXME: this is losing details
  */
 export const rfcJSONToRfcCommon = (rfcJson: RFCJSON): RfcCommon => {
   return {
     number: parseInt(parseRFCId(rfcJson.doc_id).number, 10),
     title: rfcJson.title,
-    published: parseRfcJsonPubDateToISO(rfcJson.pub_date),
+    published: rfcJson.pub_date ? parseRfcJsonPubDateToISO(rfcJson.pub_date) : undefined,
     status: parseRfcStatusSlug(rfcJson.status),
-    pages: parseInt(rfcJson.page_count, 10),
+    pages: rfcJson.page_count ? parseInt(rfcJson.page_count, 10) : undefined,
     authors: rfcJson.authors.map((authorName) => ({
       person: 0,
       name: authorName
@@ -134,13 +89,13 @@ export const rfcJSONToRfcCommon = (rfcJson: RFCJSON): RfcCommon => {
     ),
     is_also: undefined,
     see_also: rfcJson.see_also,
-    draft: {
+    draft: rfcJson.draft ? {
       id: 0,
       number: parseFloat(rfcJson.draft),
       title: rfcJson.draft,
       slug: rfcJson.draft
-    },
-    abstract: rfcJson.abstract,
+    } : undefined,
+    abstract: rfcJson.abstract ?? undefined,
     formats: rfcJson.format.map(parseRfcFormat),
     keywords: rfcJson.keywords,
     errata: [],

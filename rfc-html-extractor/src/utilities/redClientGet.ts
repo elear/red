@@ -51,9 +51,20 @@ export const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon> => {
     const rfcCommon = rfcToRfcCommon(rfc)
     return rfcCommon
   } catch (e) {
-    console.error('docRetrive catch()', e)
+    console.error('docRetrieve catch()', e)
     throw e
   }
+}
+
+const _getRfcCommonCache: Record<number, undefined | Promise<RfcCommon>> = {}
+
+export const getRfcCommonCached = async (
+  rfcNumber: number
+): Promise<RfcCommon> => {
+  if (!_getRfcCommonCache[rfcNumber]) {
+    _getRfcCommonCache[rfcNumber] = getRfcCommon(rfcNumber)
+  }
+  return _getRfcCommonCache[rfcNumber]
 }
 
 export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
@@ -63,7 +74,7 @@ export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
     abstract: rfc.abstract,
     published: rfc.published,
     status: parseRfcStatusSlug(rfc.status.slug),
-    pages: rfc.pages,
+    pages: rfc.pages ?? undefined,
     authors: rfc.authors,
     group: rfc.group,
     area: rfc.area,
@@ -86,7 +97,7 @@ export const rfcMetadataToRfcCommon = (rfcMetadata: RfcMetadata): RfcCommon => {
     abstract: rfcMetadata.abstract,
     published: rfcMetadata.published,
     status: parseRfcStatusSlug(rfcMetadata.status.slug),
-    pages: rfcMetadata.pages,
+    pages: rfcMetadata.pages ?? undefined,
     authors: rfcMetadata.authors,
     group: rfcMetadata.group,
     area: rfcMetadata.area,

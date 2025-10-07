@@ -1,5 +1,9 @@
 import { assertNever } from './typescript.ts'
-import type { RfcCommon } from '../../../client/app/utilities/rfc-validators.ts'
+import type {
+  RfcCommon,
+  RFCJSON
+} from '../../../client/app/utilities/rfc-validators.ts'
+import { DateTime } from 'luxon'
 
 type RfcAuthor = RfcCommon['authors'][number]
 
@@ -89,4 +93,61 @@ export const formatFormat = (
       return 'PS'
   }
   throw Error(`Unexpected format "${format}"`)
+}
+
+export const formatDatePublished = (
+  dt: DateTime,
+  isAprilFirstMode: boolean
+): string => {
+  if (isAprilFirstMode && dt.month === 4 && dt.day === 1) {
+    // handle April 1st
+    return dt.toFormat('d LLLL yyyy')
+  }
+  return dt.toFormat('LLLL yyyy')
+}
+
+export const formatRfcStatusAsRfcJsonStatus = (
+  status: RfcCommon['status']
+): RFCJSON['status'] => {
+  switch (status.name) {
+    case 'Best Current Practice':
+      return 'BEST CURRENT PRACTICE'
+    case 'Draft Standard':
+      return 'PROPOSED STANDARD'
+    case 'Experimental':
+      return 'EXPERIMENTAL'
+    case 'Historic':
+      return 'HISTORIC'
+    case 'Informational':
+      return 'INFORMATIONAL'
+    case 'Internet Standard':
+      return 'INTERNET STANDARD'
+    case 'Not Issued':
+      return 'NOT ISSUED'
+    case 'Proposed Standard':
+      return 'PROPOSED STANDARD'
+    case 'Unknown':
+      return 'UNKNOWN'
+  }
+  assertNever(status)
+}
+
+export const formatRfcFormatAsRfcJsonFormat = (
+  format: RfcCommon['formats'][number]
+): RFCJSON['format'][number] => {
+  switch (format) {
+    case 'txt':
+      return 'TEXT'
+    case 'xml':
+      return 'XML'
+    case 'html':
+      return 'HTML'
+    case 'htmlized':
+      return 'HTML'
+    case 'pdf':
+      return 'PDF'
+    case 'ps':
+      return 'PS'
+  }
+  assertNever(format)
 }
