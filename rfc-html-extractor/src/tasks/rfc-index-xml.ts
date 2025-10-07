@@ -1,6 +1,11 @@
 import { resolve } from 'node:path'
 import { readFile } from 'node:fs/promises'
-import { XmlDocument, XsdValidator } from 'libxml2-wasm'
+import {
+  XmlDocument,
+  XsdValidator,
+  XmlLibError,
+  XmlValidateError
+} from 'libxml2-wasm'
 import { DateTime } from 'luxon'
 import {
   formatAuthor,
@@ -52,7 +57,24 @@ export const renderRfcIndexXml = async (
   try {
     xsdDocument.validate(xmlDocument)
   } catch (e) {
-    console.error('rfc-index.xml validiation failure during regeneration', e)
+    const lines = xml.split('\n')
+    if (e instanceof XmlValidateError) {
+      console.error(
+        e.details
+          .map((detail) => {
+            const nearby = lines
+              .slice(
+                Math.max(0, detail.line - 5),
+                Math.min(lines.length, detail.line + 5)
+              )
+              .join('')
+            return `${detail.message}\n${nearby}`
+    })
+          .join('\n')
+      )
+    } else {
+      console.error('rfc-index.xml validiation failure during regeneration', e)
+    }
     throw e
   }
 
@@ -252,22 +274,23 @@ const renderSubseries = async (
     )
     if (shouldRenderFirstContentsAsTitle) {
       let title = ''
-      if(subseriesDoc.contents.length > 0) {
+      if (subseriesDoc.contents.length > 0) {
         const firstSubseriesDoc = subseriesDoc.contents[0]
-        const referencedRfc = allRfcs.find(rfc => rfc.number === firstSubseriesDoc.number)
-        if(referencedRfc) {
+        const referencedRfc = allRfcs.find(
+          (rfc) => rfc.number === firstSubseriesDoc.number
+        )
+        if (referencedRfc) {
           title = referencedRfc.title
         }
       }
       entry.appendChild(createElementNS('title', title))
     }
-    entry.appendChild(
-      createElementListNS(
-        'is-also',
-        'doc-id',
-        subseriesDoc.contents.map((content) => `RFC${content.number}`)
-      )
+    const docIds = subseriesDoc.contents.map(
+      (content) => `RFC${content.number}`
     )
+    if (docIds.length > 0) {
+      entry.appendChild(createElementListNS('is-also', 'doc-id', docIds))
+    }
     responseXml.push(`${entry.outerHTML}\n`)
   })
 
