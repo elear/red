@@ -9,6 +9,10 @@ spec:
   failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      # Terminate job if still running after 2 hours
+      activeDeadlineSeconds: 7200
+      # Delete finished job after a day
+      ttlSecondsAfterFinished: 86400
       template:
         spec:
           securityContext:
