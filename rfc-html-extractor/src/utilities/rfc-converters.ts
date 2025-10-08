@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon'
-import {
+import type {
   RfcCommon,
-  RfcMini
+  RfcMini,
+  RFCJSON
 } from '../../../client/app/utilities/rfc-validators.ts'
-import type { RFCJSON } from '../../../client/app/utilities/rfc-validators.ts'
 import {
   formatAuthor,
   formatDatePublished,
