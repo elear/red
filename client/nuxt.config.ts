@@ -113,6 +113,9 @@ export default defineNuxtConfig({
       '/api/v1/homepage-latest.json': {
         proxy: 'https://red.staging.rfc-editor.org/api/v1/homepage-latest.json'
       },
+      '/api/v1/rfc-mini-index.json': {
+        proxy: 'https://red.staging.rfc-editor.org/api/v1/rfc-mini-index.json'
+      },
       '/api/v1/rfc-html/**': {
         proxy: 'https://red.staging.rfc-editor.org/api/v1/rfc-html/**'
       },

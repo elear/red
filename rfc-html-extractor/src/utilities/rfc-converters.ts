@@ -75,7 +75,9 @@ export const rfcToRfcMini = (rfc: RfcCommon): RfcMini => {
     number,
     title,
     published,
-    authors,
+    authors: authors.map(author => ({
+      name: author.name // we don't need other details
+    })),
     formats,
     obsoletes,
     obsoleted_by,
