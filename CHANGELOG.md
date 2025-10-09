@@ -20,6 +20,8 @@ The global changes, and the table layout of this file must change to make space 
 
 The XML was previously 4 digits (with leading zeros as padding), but is now 1-5 digits without leading zeroes. The existing path will be retained. No redirect is expected.
 
+The XML file is validated against the XSD.
+
 #### `/rfc-index.xsd`
 
 The schema previously required 4 digit RFC numbers (with leading zeroes as padding) is [now 1-5 digits without leading zeroes](https://github.com/ietf-tools/red/commit/9464cc948dfeff4dad729ad94ea6d56a75a8a473#diff-75332ae4c2fe619e9f54cd4c16f54ea1a28de7ab6effa8316db35da80eadd186L78). The existing path will be retained. No redirect is expected.
@@ -41,3 +43,8 @@ TODO: sample files
 #### HTML pages
 
 Developers who scrape rfc-editor.org HTML pages should expect a different HTML structure when the new site is released. This is necessary for the new graphic design. No guarantees about maintaining HTML structure can be made and further changes may occur after the release of the site. We recommend that software migrate to JSON or XML APIs instead of scraping HTML as this will be more resilient against these design changes.
+
+##### Pages that will be removed
+
+* `/rfc-index2.html` (RFC index in descending order)
+* `/rfc-index-100a.html` and `/rfc-index-100d.html` (a range of RFCs in ascending and descending order respectively)

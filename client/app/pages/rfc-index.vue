@@ -1,3 +1,3 @@
 <template>
-  <RFCIndexPage cache-key="rfc-index" sort="ascending" />
+  <RFCIndexPage />
 </template>
