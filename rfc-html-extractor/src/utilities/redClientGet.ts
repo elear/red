@@ -77,7 +77,7 @@ export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
     pages: rfc.pages ?? undefined,
     authors: rfc.authors,
     group: rfc.group,
-    area: rfc.area,
+    area: rfc.area ?? undefined,
     stream: {
       slug: parseRfcStreamSlug(rfc.stream.slug),
       name: rfc.stream.name,
