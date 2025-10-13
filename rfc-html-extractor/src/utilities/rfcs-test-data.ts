@@ -1020,7 +1020,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Network Meeting',
     published: '1970-03-01',
     pages: 1,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [],
     group: {
       acronym: 'none',
@@ -2860,7 +2860,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'An Interactive Network Experiment to Study Modes of Access the Network Information Center',
     published: '1971-02-01',
     pages: 5,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [],
     group: {
       acronym: 'none',
@@ -15537,7 +15537,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Recommendations on the Filtering of IPv6 Packets Containing IPv6 Extension Headers at Transit Routers',
     published: '2022-08-18',
     pages: 33,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 147130,
@@ -15953,7 +15953,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'ifStackTable for the Point-to-Point (P2P) Interface over a LAN Type: Definition and Examples',
     published: '2022-08-23',
     pages: 9,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 128418,
@@ -16101,7 +16101,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'An Architectural Introduction to the Locator/ID Separation Protocol (LISP)',
     published: '2022-10-20',
     pages: 24,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 111762,
@@ -16584,7 +16584,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Report from the IAB Workshop on Analyzing IETF Data (AID) 2021',
     published: '2022-09-26',
     pages: 15,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 116736,
@@ -16646,7 +16646,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Applicability of the QUIC Transport Protocol',
     published: '2022-09-27',
     pages: 22,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 112330,
@@ -16818,7 +16818,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Running an IETF Hackathon',
     published: '2022-09-13',
     pages: 23,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 112611,
@@ -16859,7 +16859,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Manageability of the QUIC Transport Protocol',
     published: '2022-09-27',
     pages: 29,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 112330,
@@ -16908,7 +16908,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Pros and Cons of IPv6 Transition Technologies for IPv4-as-a-Service (IPv4aaS)',
     published: '2022-10-14',
     pages: 27,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 120637,
@@ -17046,7 +17046,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Intent-Based Networking - Concepts and Definitions',
     published: '2022-10-11',
     pages: 23,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 122457,
@@ -17108,7 +17108,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Intent Classification',
     published: '2022-10-21',
     pages: 35,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 111884,
@@ -17184,7 +17184,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Operational Considerations for Streaming Media',
     published: '2022-10-28',
     pages: 37,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 122540,
@@ -17239,7 +17239,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'IAB Workshop Report: Measuring Network Quality for End-Users',
     published: '2022-10-05',
     pages: 31,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 117099,
@@ -17357,7 +17357,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Deterministic Networking (DetNet) Bounded Latency',
     published: '2022-11-30',
     pages: 26,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 105922,
@@ -17426,7 +17426,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Signature Validation Token',
     published: '2022-10-15',
     pages: 34,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 106863,
@@ -17946,7 +17946,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Low Latency, Low Loss, and Scalable Throughput (L4S) Internet Service: Architecture',
     published: '2023-01-19',
     pages: 36,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 23177,
@@ -18113,7 +18113,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Minimal IP Encapsulating Security Payload (ESP)',
     published: '2023-01-13',
     pages: 13,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 109969,
@@ -18161,7 +18161,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Remote ATtestation procedureS (RATS) Architecture',
     published: '2023-01-13',
     pages: 46,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 117723,
@@ -18342,7 +18342,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Generating Password-Based Keys Using the GOST Algorithms',
     published: '2022-12-09',
     pages: 14,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 128255,
@@ -18476,7 +18476,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Architectural Principles for a Quantum Internet',
     published: '2023-03-15',
     pages: 37,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 125485,
@@ -19740,7 +19740,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'ICANN Trademark Clearinghouse (TMCH) Functional Specifications',
     published: '2023-03-09',
     pages: 50,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 106940,
@@ -19924,7 +19924,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'IPv6 Wireless Access in Vehicular Environments (IPWAVE): Problem Statement and Use Cases',
     published: '2023-03-15',
     pages: 47,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 111292,
@@ -20007,7 +20007,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'GOST Cipher Suites for Transport Layer Security (TLS) Protocol Version 1.3',
     published: '2023-02-17',
     pages: 71,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 118763,
@@ -20246,7 +20246,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Registration Procedures for Private Enterprise Numbers (PENs)',
     published: '2023-03-01',
     pages: 6,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 108103,
@@ -20291,7 +20291,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'L-Band Digital Aeronautical Communications System (LDACS)',
     published: '2023-03-24',
     pages: 35,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 126285,
@@ -20535,7 +20535,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Applicability of GMPLS for beyond 100 Gbit/s Optical Transport Network',
     published: '2023-03-31',
     pages: 14,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 111881,
@@ -20674,7 +20674,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'In Situ Operations, Administration, and Maintenance (IOAM) Deployment',
     published: '2023-04-26',
     pages: 20,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 106879,
@@ -20736,7 +20736,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Hashing to Elliptic Curves',
     published: '2023-08-11',
     pages: 145,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 125984,
@@ -20805,7 +20805,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Verifiable Random Functions (VRFs)',
     published: '2023-08-23',
     pages: 47,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 109222,
@@ -20867,7 +20867,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'SPAKE2, a Password-Authenticated Key Exchange',
     published: '2023-09-30',
     pages: 17,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 116683,
@@ -20909,7 +20909,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'SPAKE2+, an Augmented Password-Authenticated Key Exchange (PAKE) Protocol',
     published: '2023-09-30',
     pages: 25,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 126569,
@@ -20997,7 +20997,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Using GOST Cryptographic Algorithms in the Internet Key Exchange Protocol Version 2 (IKEv2)',
     published: '2023-05-22',
     pages: 148,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 103686,
@@ -21035,7 +21035,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'IPv6 Deployment Status',
     published: '2023-04-19',
     pages: 37,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 118908,
@@ -21104,7 +21104,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Use Cases for DDoS Open Threat Signaling (DOTS) Telemetry',
     published: '2023-04-20',
     pages: 26,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 124115,
@@ -21354,7 +21354,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Sending RTP Control Protocol (RTCP) Feedback for Congestion Control in Interactive Multimedia Conferences',
     published: '2023-04-26',
     pages: 17,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 20209,
@@ -21616,7 +21616,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Trusted Execution Environment Provisioning (TEEP) Architecture',
     published: '2023-07-21',
     pages: 31,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 107773,
@@ -21811,7 +21811,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Guidelines for the Organization of Fully Online Meetings',
     published: '2023-06-12',
     pages: 10,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 112330,
@@ -21859,7 +21859,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'The Addition of the Death (DTH) Flag to TCP',
     published: '2023-04-01',
     pages: 6,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [],
     group: {
       acronym: 'none',
@@ -21889,7 +21889,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Concat Notation',
     published: '2023-04-01',
     pages: 8,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [],
     group: {
       acronym: 'none',
@@ -22008,7 +22008,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'AI Sarcasm Detection: Insult Your AI without Offending It',
     published: '2023-04-01',
     pages: 5,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [],
     group: {
       acronym: 'none',
@@ -22224,7 +22224,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: "The 'sip-trunking-capability' Link Relation Type",
     published: '2023-07-14',
     pages: 5,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 120483,
@@ -22328,7 +22328,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Benchmarking Methodology for Network Security Device Performance',
     published: '2023-03-09',
     pages: 51,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 124260,
@@ -22424,7 +22424,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Maintaining Robust Protocols',
     published: '2023-06-27',
     pages: 14,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 107131,
@@ -22472,7 +22472,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Unfortunate History of Transient Numeric Identifiers',
     published: '2023-07-21',
     pages: 27,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 147130,
@@ -22520,7 +22520,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'On the Generation of Transient Numeric Identifiers',
     published: '2023-07-21',
     pages: 37,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 147130,
@@ -22617,7 +22617,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Service Assurance for Intent-Based Networking Architecture',
     published: '2023-07-11',
     pages: 23,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 105682,
@@ -22756,7 +22756,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Considerations on Application - Network Collaboration Using Path Signals',
     published: '2023-07-06',
     pages: 15,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 21072,
@@ -22997,7 +22997,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Constrained RESTful Environments (CoRE) Target Attributes Registry',
     published: '2024-04-11',
     pages: 8,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 11843,
@@ -23038,7 +23038,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Indicators of Compromise (IoCs) and Their Role in Attack Defence',
     published: '2023-08-11',
     pages: 24,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 124655,
@@ -23141,7 +23141,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'BATched Sparse (BATS) Coding Scheme for Multi-hop Data Transport',
     published: '2023-07-21',
     pages: 22,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 125193,
@@ -23543,7 +23543,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Segment Routing over IPv6 for the Mobile User Plane',
     published: '2023-07-21',
     pages: 29,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 114978,
@@ -23612,7 +23612,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Drone Remote Identification Protocol (DRIP) Architecture',
     published: '2023-07-17',
     pages: 28,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 125018,
@@ -23682,7 +23682,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Considerations for Assigning a New Recommended Differentiated Services Code Point (DSCP)',
     published: '2023-07-20',
     pages: 23,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 126517,
@@ -24001,7 +24001,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Client-Cert HTTP Header Field',
     published: '2023-07-22',
     pages: 14,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 111622,
@@ -24382,7 +24382,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Reflections on Ten Years Past the Snowden Revelations',
     published: '2023-07-20',
     pages: 29,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 19177,
@@ -24643,7 +24643,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Reliable and Available Wireless (RAW) Use Cases',
     published: '2023-08-23',
     pages: 24,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 106740,
@@ -24797,7 +24797,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Applicability and Use Cases for IPv6 over Networks of Resource-constrained Nodes (6lo)',
     published: '2023-09-21',
     pages: 24,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 105312,
@@ -25718,7 +25718,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Applicability of Ethernet Virtual Private Network (EVPN) to Network Virtualization over Layer 3 (NVO3) Networks',
     published: '2023-09-20',
     pages: 23,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 115629,
@@ -25939,7 +25939,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'A Vocabulary of Path Properties',
     published: '2023-09-13',
     pages: 13,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 123344,
@@ -25987,7 +25987,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'RSA Blind Signatures',
     published: '2023-10-10',
     pages: 27,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 128138,
@@ -26872,7 +26872,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Report from the IAB Workshop on Management Techniques in Encrypted Networks (M-TEN)',
     published: '2024-01-16',
     pages: 15,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 124328,
@@ -27204,7 +27204,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'The ristretto255 and decaf448 Groups',
     published: '2023-12-22',
     pages: 27,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 125451,
@@ -27280,7 +27280,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Oblivious Pseudorandom Functions (OPRFs) Using Prime-Order Groups',
     published: '2023-12-22',
     pages: 61,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 124899,
@@ -27342,7 +27342,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'The GNU Name System',
     published: '2023-11-20',
     pages: 74,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 125902,
@@ -27442,7 +27442,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Standard Public Key Cryptography (PKC) Test Keys',
     published: '2023-12-08',
     pages: 28,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 23200,
@@ -27768,7 +27768,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'A Survey of Worldwide Censorship Techniques',
     published: '2023-11-20',
     pages: 34,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 118393,
@@ -27844,7 +27844,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Explicit Host-to-Network Flow Measurements Techniques',
     published: '2023-10-31',
     pages: 37,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 111092,
@@ -28192,7 +28192,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Attribution of Internet Probes',
     published: '2023-11-28',
     pages: 10,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 105099,
@@ -28247,7 +28247,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'YAML Media Type',
     published: '2024-02-14',
     pages: 13,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 125125,
@@ -28559,7 +28559,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'A URN Namespace for the Data Documentation Initiative (DDI)',
     published: '2024-01-16',
     pages: 18,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 128014,
@@ -28597,7 +28597,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Centralization, Decentralization, and Internet Standards',
     published: '2023-12-18',
     pages: 22,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 103881,
@@ -28801,7 +28801,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Overview and Principles of Internet Traffic Engineering',
     published: '2024-01-28',
     pages: 73,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 104198,
@@ -28843,7 +28843,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'A Secure Selection and Filtering Mechanism for the Network Time Protocol with Khronos',
     published: '2024-02-21',
     pages: 13,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 124816,
@@ -29194,7 +29194,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Traces of Ephemeral Diffie-Hellman Over COSE (EDHOC)',
     published: '2024-03-20',
     pages: 62,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 115503,
@@ -29994,7 +29994,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'A Framework for Network Slices in Networks Built from IETF Technologies',
     published: '2024-03-11',
     pages: 44,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 104198,
@@ -30078,7 +30078,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Precision Availability Metrics (PAMs) for Services Governed by Service Level Objectives (SLOs)',
     published: '2024-03-20',
     pages: 12,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 113047,
@@ -30280,7 +30280,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Report from the IAB Workshop on Environmental Impact of Internet Applications and Systems, 2022',
     published: '2024-02-14',
     pages: 21,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 21072,
@@ -30336,7 +30336,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Generating Transport Key Containers (PFX) Using the GOST Algorithms',
     published: '2024-05-29',
     pages: 24,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 128255,
@@ -30415,7 +30415,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Deterministic Networking (DetNet): Packet Ordering Function',
     published: '2024-03-20',
     pages: 11,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 110053,
@@ -30478,7 +30478,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Framework of Operations, Administration, and Maintenance (OAM) for Deterministic Networking (DetNet)',
     published: '2024-03-11',
     pages: 14,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 113047,
@@ -30740,7 +30740,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Internet of Things (IoT) Edge Challenges and Functions',
     published: '2024-04-11',
     pages: 31,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 117756,
@@ -30867,7 +30867,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Use of GOST 2012 Signature Algorithms in DNSKEY and RRSIG Resource Records for DNSSEC',
     published: '2024-04-11',
     pages: 9,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 132371,
@@ -31127,7 +31127,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'SM2 Digital Signature Algorithm for DNSSEC',
     published: '2024-12-04',
     pages: 9,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 130515,
@@ -31193,7 +31193,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Faster Than Light Speed Protocol (FLIP)',
     published: '2024-04-01',
     pages: 6,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [],
     group: {
       acronym: 'none',
@@ -31266,7 +31266,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Deterministic Networking (DetNet) Packet Replication, Elimination, and Ordering Functions (PREOF) via MPLS over UDP/IP',
     published: '2024-04-26',
     pages: 10,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 110053,
@@ -31877,7 +31877,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'The Privacy Pass Architecture',
     published: '2024-06-13',
     pages: 25,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 124899,
@@ -32050,7 +32050,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Use of Password-Based Message Authentication Code 1 (PBMAC1) in PKCS #12 Syntax',
     published: '2024-05-31',
     pages: 15,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 122718,
@@ -32278,7 +32278,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Application Scenarios for the Quantum Internet',
     published: '2024-06-21',
     pages: 26,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 119019,
@@ -32730,7 +32730,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'The Flexible Round-Optimized Schnorr Threshold (FROST) Protocol for Two-Round Schnorr Signatures',
     published: '2024-06-28',
     pages: 47,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 129653,
@@ -32792,7 +32792,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Retiring the Tao of the IETF',
     published: '2024-06-21',
     pages: 36,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 116736,
@@ -33290,7 +33290,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Segment Routing over IPv6 (SRv6) Segment Identifiers in the IPv6 Addressing Architecture',
     published: '2024-10-21',
     pages: 7,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 106412,
@@ -33936,7 +33936,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Requirements for Solutions that Support MPLS Network Actions (MNAs)',
     published: '2024-08-26',
     pages: 10,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 105786,
@@ -33991,7 +33991,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Partitioning as an Architecture for Privacy',
     published: '2024-07-31',
     pages: 23,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 112330,
@@ -34296,7 +34296,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Guidelines for Human Rights Protocol and Architecture Considerations',
     published: '2024-09-12',
     pages: 29,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 125317,
@@ -34504,7 +34504,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Implementing Interfaces to Transport Services',
     published: '2025-01-22',
     pages: 46,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 114993,
@@ -35240,7 +35240,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Operations, Administration, and Maintenance (OAM) for Deterministic Networking (DetNet) with the IP Data Plane',
     published: '2024-10-28',
     pages: 8,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 113047,
@@ -35395,7 +35395,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Expanding the IPv6 Documentation Space',
     published: '2024-08-27',
     pages: 5,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 106925,
@@ -35444,7 +35444,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Network Virtualization over Layer 3 (NVO3) Encapsulation Considerations',
     published: '2024-09-25',
     pages: 22,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 108236,
@@ -35953,7 +35953,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'WebP Image Format',
     published: '2024-11-18',
     pages: 46,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 128253,
@@ -36381,7 +36381,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Time-Variant Routing (TVR) Use Cases',
     published: '2024-10-08',
     pages: 14,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 115774,
@@ -36519,7 +36519,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Window Sizing for Zstandard Content Encoding',
     published: '2024-09-27',
     pages: 4,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 133599,
@@ -36719,7 +36719,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Using DHCPv6 Prefix Delegation (DHCPv6-PD) to Allocate Unique IPv6 Prefixes per Client in Large Broadcast Networks',
     published: '2024-10-07',
     pages: 19,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 111204,
@@ -37210,7 +37210,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Transferring Opportunistic Wireless Encryption to the IEEE 802.11 Working Group',
     published: '2024-12-28',
     pages: 4,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 111656,
@@ -37344,7 +37344,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Delay-Tolerant Networking Management Architecture (DTNMA)',
     published: '2024-11-07',
     pages: 49,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 115774,
@@ -37399,7 +37399,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'LEX: A Uniform Resource Name (URN) Namespace for Sources of Law',
     published: '2025-05-20',
     pages: 42,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 110807,
@@ -37625,7 +37625,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Antitrust Guidelines for IETF Participants',
     published: '2024-10-30',
     pages: 7,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 3862,
@@ -37795,7 +37795,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Remote Integrity Verification of Network Devices Containing Trusted Platform Modules',
     published: '2024-12-06',
     pages: 36,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 21019,
@@ -38156,7 +38156,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Use Cases for a PCE as a Central Controller (PCECC)',
     published: '2024-12-04',
     pages: 37,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 113589,
@@ -38420,7 +38420,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Benchmarking Methodology for Stateful NATxy Gateways',
     published: '2025-01-10',
     pages: 24,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 120637,
@@ -38558,7 +38558,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Routing in Fat Trees (RIFT) Applicability and Operational Considerations',
     published: '2025-04-03',
     pages: 33,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 124432,
@@ -38725,7 +38725,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Use Case for an Extended Reality Application on Edge Computing Infrastructure',
     published: '2024-12-28',
     pages: 15,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 124675,
@@ -39135,7 +39135,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'TreeDN: Tree-Based Content Delivery Network (CDN) for Live Streaming to Mass Audiences',
     published: '2025-01-17',
     pages: 15,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 104329,
@@ -39191,7 +39191,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Report from the IAB Workshop on Barriers to Internet Access of Services (BIAS)',
     published: '2025-02-26',
     pages: 14,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 112330,
@@ -39597,7 +39597,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'IP Fragmentation Avoidance in DNS over UDP',
     published: '2025-01-27',
     pages: 13,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 9036,
@@ -39715,7 +39715,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'A Routing Architecture for Satellite Networks',
     published: '2025-01-27',
     pages: 17,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 4475,
@@ -39753,7 +39753,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'DNSSEC Trust Anchor Publication for the Root Zone',
     published: '2025-01-24',
     pages: 13,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 105113,
@@ -39884,7 +39884,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'RFC Formats and Versions',
     published: '2025-01-17',
     pages: 8,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 10083,
@@ -40079,7 +40079,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'BGP Colored Prefix Routing (CPR) for Services Based on Segment Routing over IPv6 (SRv6)',
     published: '2025-05-29',
     pages: 13,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 112952,
@@ -40149,7 +40149,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'State of Affairs for Randomized and Changing Media Access Control (MAC) Addresses',
     published: '2025-03-17',
     pages: 17,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 108573,
@@ -40453,7 +40453,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Interworking of GMPLS Control and Centralized Controller Systems',
     published: '2025-03-04',
     pages: 32,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 115934,
@@ -40591,7 +40591,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'A Framework for NRP-Based Enhanced Virtual Private Networks',
     published: '2025-03-27',
     pages: 36,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 110737,
@@ -41572,7 +41572,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'The Messaging Layer Security (MLS) Architecture',
     published: '2025-04-22',
     pages: 41,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 118067,
@@ -42071,7 +42071,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Unified Time Scaling for Temporal Coordination Frameworks',
     published: '2025-04-01',
     pages: 5,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [],
     group: {
       acronym: 'none',
@@ -42626,7 +42626,7 @@ export const testMockAllRfcs: RfcCommon[] = [
       'Properties of Authenticated Encryption with Associated Data (AEAD) Algorithms',
     published: '2025-05-07',
     pages: 25,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 133576,
@@ -42833,7 +42833,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'IRTF Code of Conduct',
     published: '2025-03-18',
     pages: 8,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 20209,
@@ -43241,7 +43241,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: "Arm's Platform Security Architecture (PSA) Attestation Token",
     published: '2025-06-13',
     pages: 36,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 105857,
@@ -43452,7 +43452,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Terminology for Post-Quantum Traditional Hybrid Schemes',
     published: '2025-06-13',
     pages: 15,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 128468,
@@ -43549,7 +43549,7 @@ export const testMockAllRfcs: RfcCommon[] = [
     title: 'Simple Public Key Infrastructure (SPKI) S-Expressions',
     published: '2025-06-17',
     pages: 22,
-    status: { slug: 'fyi', name: 'Informational' },
+    status: { slug: 'informational', name: 'Informational' },
     authors: [
       {
         person: 19822,

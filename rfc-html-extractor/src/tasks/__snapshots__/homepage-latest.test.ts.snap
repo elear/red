@@ -52,7 +52,7 @@ exports[`homepage 3 items 1`] = `
       "published": "2025-06-13",
       "status": {
         "name": "Informational",
-        "slug": "fyi",
+        "slug": "informational",
       },
       "stream": {
         "description": "Internet Engineering Task Force (IETF)",
@@ -153,7 +153,7 @@ Protocol (EPP) that allows EPP clients to manage the Time-to-Live
       "published": "2025-06-17",
       "status": {
         "name": "Informational",
-        "slug": "fyi",
+        "slug": "informational",
       },
       "stream": {
         "description": "Internet Engineering Task Force (IETF)",
