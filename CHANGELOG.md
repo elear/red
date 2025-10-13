@@ -38,7 +38,11 @@ TODO: sample files
 
 In earlier RFC JSON files (approximately RFC1-RFC4039) there's extra whitespace in earlier RFCs. For example, [rfc10.json](https://www.rfc-editor.org/rfc/rfc10.json) has an extra space character before and after the `title`, `abstract`, and `keywords`. This whitespace wasn't present in equivalent APIs like `/rfc-index.xml`, and this whitespace will be removed in the new version of the API. The global API changes apply to this API too. No redirects are expected for this API.
 
-TODO: sample files
+#### `/errata.json`
+
+Leading zeros in RFC ids will be removed.
+
+This route may redirect to a subdomain of rfc-editor.org. Please ensure your client will follow HTTP redirects.
 
 #### HTML pages
 
