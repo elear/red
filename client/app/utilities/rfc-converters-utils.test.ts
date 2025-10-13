@@ -48,18 +48,21 @@ test('parseRfcStatusSlug: good inputs', () => {
     name: 'Historic'
   })
   expect(parseRfcStatusSlug('informational')).toStrictEqual({
-    slug: 'fyi',
+    slug: 'informational',
     name: 'Informational'
   })
   expect(parseRfcStatusSlug('Informational')).toStrictEqual({
-    slug: 'fyi',
+    slug: 'informational',
     name: 'Informational'
   })
   expect(parseRfcStatusSlug('FYI')).toStrictEqual({
     slug: 'fyi',
+    name: 'FYI'
+  })
+  expect(parseRfcStatusSlug('informational')).toStrictEqual({
+    slug: 'informational',
     name: 'Informational'
   })
-
   expect(parseRfcStatusSlug('Not Issued')).toStrictEqual({
     slug: 'not-issued',
     name: 'Not Issued'

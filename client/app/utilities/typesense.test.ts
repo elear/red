@@ -283,7 +283,7 @@ test('typeSenseSearchItemToRFC', () => {
     },
     published: '2019-05-21T18:05:35.000Z',
     status: {
-      slug: 'fyi',
+      slug: 'informational',
       name: 'Informational'
     },
     subseries: undefined,

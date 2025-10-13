@@ -128,8 +128,8 @@ export const formatRfcStatusAsRfcJsonStatus = (
       return 'PROPOSED STANDARD'
     case 'Unknown':
       return 'UNKNOWN'
-      case 'FYI':
-        return 'FOR YOUR INFORMATION'
+    case 'FYI':
+      return 'FOR YOUR INFORMATION'
   }
   assertNever(status)
 }
