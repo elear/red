@@ -13,6 +13,12 @@ export const parseRfcStatusSlug = (
         name: 'Best Current Practice'
       }
 
+    case 'fyi':
+      return {
+        slug: 'fyi',
+        name: 'FYI'
+      }
+
     case 'experimental':
       return {
         slug: 'experimental',
@@ -26,10 +32,9 @@ export const parseRfcStatusSlug = (
         name: 'Historic'
       }
 
-    case 'fyi':
     case 'informational':
       return {
-        slug: 'fyi',
+        slug: 'informational',
         name: 'Informational'
       }
 

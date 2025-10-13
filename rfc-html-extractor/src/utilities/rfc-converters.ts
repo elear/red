@@ -51,7 +51,7 @@ export const rfcToRfcJson = (rfc: RfcCommon): RFCJSON => {
 
 /**
  * RfcMini is a valid subset of RfcCommon.
- * RfcMini is used on RFC index webpages rendered by Nuxt.
+ * RfcMini is used on RFC index webpages ie `/rfc-index/` where we list ALL rfcs.
  * It's a minimal subset without extraneous data to optimise download time.
  */
 export const rfcToRfcMini = (rfc: RfcCommon): RfcMini => {

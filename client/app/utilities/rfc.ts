@@ -118,7 +118,7 @@ export const parseRFCId = (title: string): RFCId => {
 export const getRfcPillText = (rfc: RfcCommon): string[] => {
   const tagText: string[] = []
   if (rfc.status) {
-    tagText.push(rfc.status.slug)
+    tagText.push(rfc.status.name)
   }
   return tagText
 }

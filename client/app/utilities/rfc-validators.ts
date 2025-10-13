@@ -54,6 +54,10 @@ export const RfcCommonStatusSchema = z.union([
     name: z.literal('Best Current Practice')
   }),
   z.object({
+    slug: z.literal('fyi'),
+    name: z.literal('FYI')
+  }),
+  z.object({
     slug: z.literal('experimental'),
     name: z.literal('Experimental')
   }),
@@ -62,7 +66,7 @@ export const RfcCommonStatusSchema = z.union([
     name: z.literal('Historic')
   }),
   z.object({
-    slug: z.literal('fyi'),
+    slug: z.literal('informational'),
     name: z.literal('Informational')
   }),
   z.object({
