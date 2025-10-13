@@ -299,7 +299,8 @@ const RfcJsonStatusSchema = z.union([
   z.literal('INFORMATIONAL'),
   z.literal('NOT ISSUED'),
   z.literal('PROPOSED STANDARD'),
-  z.literal('BEST CURRENT PRACTICE')
+  z.literal('BEST CURRENT PRACTICE'),
+  z.literal('FOR YOUR INFORMATION')
 ])
 
 const RfcJsonFormatSchema = z.union([
