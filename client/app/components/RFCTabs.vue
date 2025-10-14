@@ -104,18 +104,20 @@
 
         <dt class="font-bold mt-2">Working group</dt>
         <dd>
-          <template v-if="props.rfcBucketHtmlDocument.rfc.group?.acronym">
-            {{ props.rfcBucketHtmlDocument.rfc.group.acronym.toUpperCase() }}
-          </template>
           {{ props.rfcBucketHtmlDocument.rfc.group?.name }}
+
+          <template v-if="props.rfcBucketHtmlDocument.rfc.group?.acronym">
+            ({{ props.rfcBucketHtmlDocument.rfc.group.acronym }})
+          </template>
         </dd>
 
         <dt class="font-bold mt-2">Area</dt>
         <dd>
-          <template v-if="props.rfcBucketHtmlDocument.rfc.area?.acronym">
-            {{ props.rfcBucketHtmlDocument.rfc.area.acronym.toUpperCase() }}
-          </template>
           {{ props.rfcBucketHtmlDocument.rfc.area?.name }}
+
+          <template v-if="props.rfcBucketHtmlDocument.rfc.area?.acronym">
+            ({{ props.rfcBucketHtmlDocument.rfc.area.acronym }})
+          </template>
         </dd>
 
         <dt class="font-bold mt-2">Stream</dt>
