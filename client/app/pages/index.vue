@@ -11,7 +11,7 @@
           </Heading>
           <p class="hidden mt-8 lg:block text-base text-grey-800 pl-5">
             Looking for works in progress? Go to
-            <A :href="DATATRACKER_URL" class="text-blue-300 dark:text-blue-100">
+            <A :href="DATATRACKER_URL_ORIGIN" class="text-blue-300 dark:text-blue-100">
               datatracker.ietf.org
             </A>
           </p>
@@ -64,7 +64,7 @@
           Start Participating
         </Heading>
         <div class="md:mx-2 grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card :href="IETF_URL" heading-level="3" has-cover-link>
+          <Card :href="IETF_URL_ORIGIN" heading-level="3" has-cover-link>
             <template #headingTitle>Internet Engineering Task Force</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Protocol standards, best current practices, experimental, and
@@ -72,14 +72,14 @@
             </p>
           </Card>
 
-          <Card :href="IRTF_URL" heading-level="3" has-cover-link>
+          <Card :href="IRTF_URL_ORIGIN" heading-level="3" has-cover-link>
             <template #headingTitle>Internet Research Task Force</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Research issues related to the Internet
             </p>
           </Card>
 
-          <Card :href="IAB_URL" heading-level="3" has-cover-link>
+          <Card :href="IAB_URL_ORIGIN" heading-level="3" has-cover-link>
             <template #headingTitle>Internet Architecture Board</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Long-range technical direction for Internet development
@@ -97,11 +97,11 @@
 import { useRfcEditorHead } from '~/utilities/head'
 import { HomepageLatestSchema } from '~/utilities/rfc-validators'
 import {
-  DATATRACKER_URL,
-  IAB_URL,
-  IETF_URL,
-  IRTF_URL,
-  PUBLIC_SITE,
+  DATATRACKER_URL_ORIGIN,
+  IAB_URL_ORIGIN,
+  IETF_URL_ORIGIN,
+  IRTF_URL_ORIGIN,
+  PUBLIC_SITE_URL_ORIGIN,
   API_HOMEPAGE_LATEST_PATH,
   searchPathBuilder
 } from '~/utilities/url'
@@ -128,7 +128,7 @@ const homepageLatest = computed((): RfcCommon[] => {
 
 useRfcEditorHead({
   title: '',
-  canonicalUrl: PUBLIC_SITE,
+  canonicalUrl: PUBLIC_SITE_URL_ORIGIN,
   description:
     'The official home of RFCs. RFCs outline computer networking and Internet foundations, including Internet Standards and historical or informative content.',
   contentType: 'website'

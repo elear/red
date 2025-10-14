@@ -1,10 +1,10 @@
 import {
   CONTACT_PATH,
-  DATATRACKER_URL,
-  IETF_URL,
-  INTERNET_DRAFT_AUTHOR_RESOURCES_URL,
-  INTERNET_SOCIETY_URL,
-  IRTF_URL
+  DATATRACKER_URL_ORIGIN,
+  IETF_URL_ORIGIN,
+  INTERNET_DRAFT_AUTHOR_RESOURCES_URL_ORIGIN,
+  INTERNET_SOCIETY_URL_ORIGIN,
+  IRTF_URL_ORIGIN
 } from '~/utilities/url'
 
 type MenuItem = {
@@ -16,14 +16,14 @@ export const menuData: MenuItem[] = [
   {
     label: 'Useful links',
     children: [
-      { label: 'IETF.org', href: IETF_URL },
-      { label: 'IRTF.org', href: IRTF_URL },
-      { label: 'Datatracker', href: DATATRACKER_URL },
+      { label: 'IETF.org', href: IETF_URL_ORIGIN },
+      { label: 'IRTF.org', href: IRTF_URL_ORIGIN },
+      { label: 'Datatracker', href: DATATRACKER_URL_ORIGIN },
       {
         label: 'Internet-Draft Author Resources',
-        href: INTERNET_DRAFT_AUTHOR_RESOURCES_URL
+        href: INTERNET_DRAFT_AUTHOR_RESOURCES_URL_ORIGIN
       },
-      { label: 'Internet Society', href: INTERNET_SOCIETY_URL }
+      { label: 'Internet Society', href: INTERNET_SOCIETY_URL_ORIGIN }
     ]
   },
   {

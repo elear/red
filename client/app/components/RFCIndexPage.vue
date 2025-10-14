@@ -59,7 +59,7 @@
         <li>The DOI field gives the Digital Object Identifier.</li>
       </ul>
       <p>
-        See the <A :href="PUBLIC_SITE">RFC Editor Web page</A> for more
+        See the <A :href="PUBLIC_SITE_URL_ORIGIN">RFC Editor Web page</A> for more
         information.
       </p>
       <Alert v-if="rfcMiniIndexError" variant="warning" level="1" heading="Error loading RFCs">
@@ -77,7 +77,7 @@
 import { DateTime } from 'luxon'
 import { rfcToRfcIndexRow } from '~/utilities/rfc-index-html'
 import { RfcMiniIndexSchema } from '~/utilities/rfc-validators'
-import { API_RFC_MINI_INDEX_PATH, PUBLIC_SITE, infoRfcPathBuilder } from '~/utilities/url'
+import { API_RFC_MINI_INDEX_PATH, PUBLIC_SITE_URL_ORIGIN, infoRfcPathBuilder } from '~/utilities/url'
 
 useSeoMeta({
   title: 'RFC Index'

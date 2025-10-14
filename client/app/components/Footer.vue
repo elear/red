@@ -5,23 +5,23 @@
         <p class="text-base pl-3">
           rfc-editor.org is maintained by the
           <A
-            :href="IETF_URL"
+            :href="IETF_URL_ORIGIN"
             class="underline text-blue-100 font-semibold md:text-nowrap"
             >Internet Engineering Task Force</A
           >
           and funded by the
           <A
-            :href="INTERNET_SOCIETY_URL"
+            :href="INTERNET_SOCIETY_URL_ORIGIN"
             class="underline text-blue-100 font-semibold md:text-nowrap"
           >
             Internet Society
           </A>
         </p>
         <div class="flex gap-7 items-center mt-2 pl-3 lg:mt-5">
-          <A :href="IETF_URL">
+          <A :href="IETF_URL_ORIGIN">
             <GraphicsIETFLogo width="105" height="60" />
           </A>
-          <A :href="INTERNET_SOCIETY_URL">
+          <A :href="INTERNET_SOCIETY_URL_ORIGIN">
             <GraphicsInternetSocietyLogo width="112" height="36" />
           </A>
         </div>
@@ -50,6 +50,6 @@
 </template>
 
 <script setup lang="ts">
-import { IETF_URL, INTERNET_SOCIETY_URL } from '../utilities/url'
+import { IETF_URL_ORIGIN, INTERNET_SOCIETY_URL_ORIGIN } from '../utilities/url'
 import { menuData } from './FooterNavData'
 </script>

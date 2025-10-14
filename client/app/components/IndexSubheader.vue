@@ -35,15 +35,15 @@
         <AValidHref href="/standards/">Internet Standards</AValidHref>
         and historical or informative content. They are published by the RFC
         Editor for the
-        <AValidHref :href="IETF_URL">
+        <AValidHref :href="IETF_URL_ORIGIN">
           <abbr title="Internet Engineering Task Force">IETF</abbr>
         </AValidHref>
         ,
-        <AValidHref :href="IRTF_URL">
+        <AValidHref :href="IRTF_URL_ORIGIN">
           <abbr title="Internet Research Task Force">IRTF</abbr>
         </AValidHref>
         ,
-        <AValidHref :href="IAB_URL">
+        <AValidHref :href="IAB_URL_ORIGIN">
           <abbr title="Internet Architecture Board">IAB</abbr>
         </AValidHref>
         , and
@@ -58,5 +58,5 @@
 </template>
 
 <script setup lang="ts">
-import { IAB_URL, IETF_URL, IRTF_URL } from '~/utilities/url'
+import { IAB_URL_ORIGIN, IETF_URL_ORIGIN, IRTF_URL_ORIGIN } from '~/utilities/url'
 </script>

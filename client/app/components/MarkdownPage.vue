@@ -32,7 +32,7 @@ import {
     nuxtContentTocToRfcEditorToc,
     tocKey
 } from '~/utilities/tableOfContents'
-import { PUBLIC_SITE } from '~/utilities/url'
+import { PUBLIC_SITE_URL_ORIGIN } from '~/utilities/url'
 import { useRfcEditorHead } from '~/utilities/head'
 
 const route = useRoute()
@@ -56,7 +56,7 @@ if (error.value || page.value === null) {
 }
 
 const canonicalPath = `/${normalizedSlug}/`
-const canonicalUrl = `${PUBLIC_SITE}${canonicalPath}`
+const canonicalUrl = `${PUBLIC_SITE_URL_ORIGIN}${canonicalPath}`
 
 if (route.fullPath !== canonicalPath) {
     await navigateTo({

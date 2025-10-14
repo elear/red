@@ -26,7 +26,7 @@ import {
   apiRfcBucketDocumentPathBuilder,
   infoRfcPathBuilder,
   rfcFormatPathBuilder,
-  PUBLIC_SITE
+  PUBLIC_SITE_URL_ORIGIN
 } from '~/utilities/url'
 import { useRfcEditorHead } from '~/utilities/head'
 import type { RFCId } from '~/utilities/rfc'
@@ -64,7 +64,7 @@ if (rfcBucketHtmlDocumentError.value) {
   console.error(rfcBucketHtmlDocumentError.value)
   throw createError({
     statusCode: 404,
-    statusMessage: `No ${sanitisedId.value} content found. If this is a new RFC please try again later. Try also ${PUBLIC_SITE}${rfcFormatPathBuilder(sanitisedId.value, 'html')}`,
+    statusMessage: `No ${sanitisedId.value} content found. If this is a new RFC please try again later. Try also ${PUBLIC_SITE_URL_ORIGIN}${rfcFormatPathBuilder(sanitisedId.value, 'html')}`,
     fatal: true
   })
 }

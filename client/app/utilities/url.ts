@@ -42,23 +42,26 @@ export type ValidHrefs =
   | ReturnType<typeof dashboardPathBuilder>
   | ReturnType<typeof apiRfcBucketDocumentPathBuilder>
 
-export const HOME_PATH = '/'
+// url origin ie the part of a URL containing the protocol and hostname (but not the path, search, or hash)
+// per https://developer.mozilla.org/en-US/docs/Web/API/URL/origin
+// so don't have a trailing slash there's no path
+export const PUBLIC_SITE_URL_ORIGIN = 'https://www.rfc-editor.org'
+export const DATATRACKER_URL_ORIGIN = 'https://datatracker.ietf.org'
+export const IETF_URL_ORIGIN = 'https://www.ietf.org'
+export const IRTF_URL_ORIGIN = 'https://www.irtf.org'
+export const IAB_URL_ORIGIN = 'https://www.iab.org'
+export const INTERNET_SOCIETY_URL_ORIGIN = 'https://www.internetsociety.org'
+export const MATERIALS_URL_ORIGIN = 'https://materials.rfc-editor.org'
+export const IAD_URL_ORIGIN = 'https://iad.rfc-editor.org'
+export const DASHBOARD_URL_ORIGIN = 'https://dashboard.rfc-editor.org'
+export const INTERNET_DRAFT_AUTHOR_RESOURCES_URL_ORIGIN = 'https://authors.ietf.org'
 
-export const IETF_PRIVACY_STATEMENT_URL =
-  'https://www.ietf.org/privacy-statement/'
-export const PUBLIC_SITE = 'https://www.rfc-editor.org'
-export const DATATRACKER_URL = 'https://datatracker.ietf.org'
-export const IETF_URL = 'https://www.ietf.org'
-export const IRTF_URL = 'https://www.irtf.org'
-export const IAB_URL = 'https://www.iab.org'
-export const INTERNET_SOCIETY_URL = 'https://www.internetsociety.org'
-export const MATERIALS_URL = 'https://materials.rfc-editor.org'
-export const IAD_URL = 'https://iad.rfc-editor.org'
-export const DASHBOARD_URL = 'https://dashboard.rfc-editor.org'
 export const RFC_EDITOR_ERRATA_SEARCH_URL =
   'https://errata.rfc-editor.org/search/'
-export const INTERNET_DRAFT_AUTHOR_RESOURCES_URL = 'https://authors.ietf.org/'
+export const IETF_PRIVACY_STATEMENT_URL =
+  'https://www.ietf.org/privacy-statement/'
 
+export const HOME_PATH = '/'
 export const CONTACT_PATH = '/about/contact/'
 export const SEARCH_PATH = '/search/'
 
@@ -209,15 +212,15 @@ export const wikiDokuPathBuilder = (wikiPath: string) => {
 }
 
 export const materialsPathBuilder = (materialsPath: string) => {
-  return `${MATERIALS_URL}${materialsPath}` as const
+  return `${MATERIALS_URL_ORIGIN}${materialsPath}` as const
 }
 
 export const iadReportsPathBuilder = (IADPath: string) => {
-  return `${IAD_URL}${IADPath}` as const
+  return `${IAD_URL_ORIGIN}${IADPath}` as const
 }
 
 export const dashboardPathBuilder = (dashboardPath: string) => {
-  return `${DASHBOARD_URL}${dashboardPath}` as const
+  return `${DASHBOARD_URL_ORIGIN}${dashboardPath}` as const
 }
 
 export const mailToBuilder = (email: string) => {
@@ -237,7 +240,7 @@ const httpRegex = /^https?:\/\//
 export const isExternalLink = (href?: string): boolean => {
   if (
     href === undefined
-    // although this scenario isn't an external link we shouldn't treat it as a Vue Router link so we'll call it external
+    // although this scenario isn't an external link we shouldn't treat it as a Vue Router link so we'll consider it external
   ) {
     return true
   }
@@ -275,7 +278,7 @@ export const textToAnchorId = (text: string): string | undefined => {
  */
 const tryParseHrefRelativeToProd = (href: string): URL | undefined => {
   try {
-    return new URL(href, PUBLIC_SITE)
+    return new URL(href, PUBLIC_SITE_URL_ORIGIN)
   } catch (e: unknown) {
     console.info(
       `Failed to parse href ${JSON.stringify(href)} into URL. Error:`,
@@ -307,7 +310,7 @@ export const isRfcEditorSite = (href?: string): boolean => {
     return false
   }
   return (
-    href.startsWith(PUBLIC_SITE) || href.startsWith('/') || href.startsWith('#')
+    href.startsWith(PUBLIC_SITE_URL_ORIGIN) || href.startsWith('/') || href.startsWith('#')
   )
 }
 
@@ -356,13 +359,13 @@ export const parseMaybeRfcLink = (
 export const workingGroupUrlBuilder = (workingGroup: RfcCommon['group']) => {
   if (!workingGroup) return undefined
   // See https://github.com/ietf-tools/red/issues/179
-  return `${DATATRACKER_URL}/wg/${workingGroup.acronym}/about/` as const
+  return `${DATATRACKER_URL_ORIGIN}/wg/${workingGroup.acronym}/about/` as const
 }
 
 export const areaGroupUrlBuilder = (area: RfcCommon['area']) => {
   if (!area) return undefined
   // See https://github.com/ietf-tools/red/issues/179
-  return `${DATATRACKER_URL}/wg/#${area.acronym.toUpperCase()}` as const
+  return `${DATATRACKER_URL_ORIGIN}/wg/#${area.acronym.toUpperCase()}` as const
 }
 
 export const streamUrlBuilder = (stream: RfcCommon['stream']) => {
@@ -370,15 +373,15 @@ export const streamUrlBuilder = (stream: RfcCommon['stream']) => {
   // See https://github.com/ietf-tools/red/issues/179
   switch (stream.slug) {
     case 'IETF':
-      return IETF_URL
+      return IETF_URL_ORIGIN
     case 'IRTF':
-      return IRTF_URL
+      return IRTF_URL_ORIGIN
     case 'IAB':
-      return IAB_URL
+      return IAB_URL_ORIGIN
     case 'INDEPENDENT':
       return '/authors/rfc-independent-submissions/' satisfies ValidHrefs
     case 'Editorial':
-      return `${DATATRACKER_URL}/group/rswg/about/` as const
+      return `${DATATRACKER_URL_ORIGIN}/group/rswg/about/` as const
     case 'Legacy':
       return undefined
   }
