@@ -5,6 +5,8 @@ import type {
 } from '../../shared/utils/meta-preview-images'
 import type { MarkdownValidHrefs } from '../../shared/utils/markdown-valid-hrefs'
 import { parseRFCId } from './rfc'
+import type { RfcCommon } from './rfc-validators'
+import { assertNever } from './typescript'
 /**
  * Represents all known href string patterns
  */
@@ -53,7 +55,8 @@ export const INTERNET_SOCIETY_URL = 'https://www.internetsociety.org'
 export const MATERIALS_URL = 'https://materials.rfc-editor.org'
 export const IAD_URL = 'https://iad.rfc-editor.org'
 export const DASHBOARD_URL = 'https://dashboard.rfc-editor.org'
-export const RFC_EDITOR_ERRATA_SEARCH_URL = 'https://errata.rfc-editor.org/search/'
+export const RFC_EDITOR_ERRATA_SEARCH_URL =
+  'https://errata.rfc-editor.org/search/'
 export const INTERNET_DRAFT_AUTHOR_RESOURCES_URL = 'https://authors.ietf.org/'
 
 export const CONTACT_PATH = '/about/contact/'
@@ -348,6 +351,38 @@ export const parseMaybeRfcLink = (
     return parseRFCId(rfcMatch[0])
   }
   return undefined
+}
+
+export const workingGroupUrlBuilder = (workingGroup: RfcCommon['group']) => {
+  if (!workingGroup) return undefined
+  // See https://github.com/ietf-tools/red/issues/179
+  return `${DATATRACKER_URL}/wg/${workingGroup.acronym}/about/` as const
+}
+
+export const areaGroupUrlBuilder = (area: RfcCommon['area']) => {
+  if (!area) return undefined
+  // See https://github.com/ietf-tools/red/issues/179
+  return `${DATATRACKER_URL}/wg/#${area.acronym.toUpperCase()}` as const
+}
+
+export const streamUrlBuilder = (stream: RfcCommon['stream']) => {
+  if (!stream) return undefined
+  // See https://github.com/ietf-tools/red/issues/179
+  switch (stream.slug) {
+    case 'IETF':
+      return IETF_URL
+    case 'IRTF':
+      return IRTF_URL
+    case 'IAB':
+      return IAB_URL
+    case 'INDEPENDENT':
+      return '/authors/rfc-independent-submissions/' satisfies ValidHrefs
+    case 'Editorial':
+      return `${DATATRACKER_URL}/group/rswg/about/` as const
+    case 'Legacy':
+      return undefined
+  }
+  assertNever(stream.slug)
 }
 
 /**

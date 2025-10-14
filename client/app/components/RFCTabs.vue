@@ -102,26 +102,38 @@
           </ul>
         </dd>
 
-        <dt class="font-bold mt-2">Working group</dt>
-        <dd>
-          {{ props.rfcBucketHtmlDocument.rfc.group?.name }}
+        <template v-if="props.rfcBucketHtmlDocument.rfc.group">
+          <dt class="font-bold mt-2">Working group</dt>
+          <dd>
+            <a :href="workingGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.group)">
+              {{ props.rfcBucketHtmlDocument.rfc.group?.name }}
 
-          <template v-if="props.rfcBucketHtmlDocument.rfc.group?.acronym">
-            ({{ props.rfcBucketHtmlDocument.rfc.group.acronym }})
-          </template>
-        </dd>
+              <template v-if="props.rfcBucketHtmlDocument.rfc.group?.acronym">
+                ({{ props.rfcBucketHtmlDocument.rfc.group.acronym }})
+              </template>
+            </a>
+          </dd>
+        </template>
 
-        <dt class="font-bold mt-2">Area</dt>
-        <dd>
-          {{ props.rfcBucketHtmlDocument.rfc.area?.name }}
+        <template v-if="props.rfcBucketHtmlDocument.rfc.area">
+          <dt class="font-bold mt-2">Area</dt>
+          <dd>
+            <a :href="areaGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.area)">
+              {{ props.rfcBucketHtmlDocument.rfc.area?.name }}
 
-          <template v-if="props.rfcBucketHtmlDocument.rfc.area?.acronym">
-            ({{ props.rfcBucketHtmlDocument.rfc.area.acronym }})
-          </template>
-        </dd>
+              <template v-if="props.rfcBucketHtmlDocument.rfc.area?.acronym">
+                ({{ props.rfcBucketHtmlDocument.rfc.area.acronym }})
+              </template>
+            </a>
+          </dd>
+        </template>
 
         <dt class="font-bold mt-2">Stream</dt>
-        <dd>{{ props.rfcBucketHtmlDocument.rfc.stream.name }}</dd>
+        <dd>
+          <a :href="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)">
+            {{ props.rfcBucketHtmlDocument.rfc.stream.name }}
+          </a>
+        </dd>
 
         <template v-if="props.rfcBucketHtmlDocument.rfc.identifiers">
           <template v-for="(identifier, identifierIndex) in props.rfcBucketHtmlDocument.rfc.identifiers"
@@ -206,7 +218,7 @@ import { formatTitleAsVNode } from '~/utilities/rfc'
 import { formatDatePublished } from '~/utilities/rfc-converters-utils'
 import { COMMA, NONBREAKING_SPACE } from '~/utilities/strings'
 import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme'
-import { infoRfcPathBuilder, mailToBuilder } from '~/utilities/url'
+import { areaGroupUrlBuilder, infoRfcPathBuilder, mailToBuilder, streamUrlBuilder, workingGroupUrlBuilder } from '~/utilities/url'
 import type { RfcBucketHtmlDocument } from '~/utilities/rfc'
 
 type Props = {
