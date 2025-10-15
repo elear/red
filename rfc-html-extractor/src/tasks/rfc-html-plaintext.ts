@@ -136,7 +136,7 @@ export const getPlaintextRfcDocument = (dom: Document): Node[] => {
     if (isHtmlElement(node)) {
       switch(node.nodeName.toLowerCase()) {
         case 'br':
-          // see https://www.rfc-editor.org/rfc/rfc2000.html for <br>s that we want to trim
+          // see https://www.rfc-editor.org/rfc/rfc2000.html for <br>s that we want to trim before <pre> tag
           return !hasPassedPreTag
         case 'span':
           return !node.classList.contains(
