@@ -146,6 +146,7 @@ export const getAllRFCs = async ({
     const response = await api.red.docList(docListArg)
     const rfcCommons = response.results.map(rfcMetadataToRfcCommon)
     rfcs.unshift(...rfcCommons)
+    rfcs.sort((a, b) => a.number - b.number)
 
     if (rfcCommons.length > 0) {
       console.log(
@@ -173,8 +174,6 @@ export const getAllRFCs = async ({
 
     await setTimeoutPromise(DELAY_BETWEEN_REQUESTS_MS)
   }
-
-  rfcs.sort((a, b) => a.number - b.number)
 
   // Attempt to prevent mutation of object (shallow -- not a deep freeze).
   const frozenRfcs = Object.freeze(rfcs)
