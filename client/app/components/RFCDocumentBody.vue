@@ -12,6 +12,7 @@
     class="mb-2 pl-2 xs:px-0 print:mt-5 print:text-lg print:border-b-2 print:border-black print:text-center"
   >
     <component :is="formattedTitle" />
+    <RFCTitleSubseries :rfc="props.rfcBucketHtmlDocument.rfc" />
   </Heading>
 
   <Heading
@@ -88,6 +89,7 @@ import HorizontalScrollable from './HorizontalScrollable.vue'
 import PdfPages from './PdfPages.vue'
 import AbsoluteHorizontalScrollable from './AbsoluteHorizontalScrollable.vue'
 import Fragment from './Fragment.vue'
+import RFCTitleSubseries from './RFCTitleSubseries.vue'
 import {
   formatTitleAsVNode,
   isAprilFoolsRfc,
