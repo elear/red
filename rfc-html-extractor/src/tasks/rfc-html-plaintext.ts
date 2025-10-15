@@ -1,6 +1,9 @@
 import { getInnerText, getDOMParser } from '../utilities/dom.ts'
 import type { RfcAndToc } from './rfc-html.ts'
-import type { MaxPreformattedLineLengthSchemaType, TableOfContents } from '../../../client/app/utilities/rfc-validators.ts'
+import type {
+  MaxPreformattedLineLengthSchemaType,
+  TableOfContents
+} from '../../../client/app/utilities/rfc-validators.ts'
 
 type TocSections = TableOfContents['sections']
 type TocSection = TocSections[number]
@@ -128,7 +131,15 @@ const parsePlaintextToc = (
 }
 
 export const getPlaintextRfcDocument = (dom: Document): Node[] => {
-  return Array.from(dom.body.childNodes)
+  return Array.from(dom.body.childNodes).filter((node) => {
+    if (node instanceof HTMLElement) {
+      return !node.classList.contains(
+        // see https://www.rfc-editor.org/rfc/rfc2000.html for example of docinfo header that we don't want
+        'docinfo'
+      )
+    }
+    return true
+  })
 }
 
 export const getPlaintextMaxLineLength = async (
@@ -153,7 +164,7 @@ export const getPlaintextMaxLineLength = async (
    * in the line so that we can account for Red's use of buttons following
    * links when in responsive/touch mode. We allocate ANCHOR_SUFFIX_CHAR_WIDTH
    * chars per link in a line.
-   * 
+   *
    * This means that the max line length can vary between touch and touchless
    * interfaces.
    */
@@ -170,7 +181,7 @@ export const getPlaintextMaxLineLength = async (
           )
           const innerText = getInnerText(lineDom.documentElement)
           const anchors = lineDom.querySelectorAll('a')
-          return innerText.length + (anchors.length * ANCHOR_SUFFIX_CHAR_WIDTH)
+          return innerText.length + anchors.length * ANCHOR_SUFFIX_CHAR_WIDTH
         })
       ),
     DEFAULT_MAX_LINE_LENGTH
