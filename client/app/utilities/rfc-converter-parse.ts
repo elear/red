@@ -139,10 +139,30 @@ export const parseSubseriesItemType = (
 export const parseSubseriesItemName = (
   name: RfcSubseriesItem['name']
 ): RfcCommonSubseriesItem['number'] => {
-  const num = parseFloat(name)
+  // name should look like "bcp123"
+  const nameParts = name
+    .replace(
+      // remove whitespace including non-breaking-space
+      /\s/g,
+      ''
+    )
+    .match(
+      // contiguous blocks of either letters or numbers
+      /\d+|\D+/g
+    )
+  if (nameParts === null) {
+    throw Error(`Unable to parse name ${JSON.stringify(name)} into parts`)
+  }
+  const potentialNumber = nameParts[1] // index 1 should be the number part
+  if (potentialNumber === undefined) {
+    throw Error(
+      `Unable to parse name ${JSON.stringify(name)} into part with number. Was: ${JSON.stringify(nameParts)}`
+    )
+  }
+  const num = parseFloat(potentialNumber)
   if (Number.isNaN(num)) {
     throw Error(
-      `Unable to parse API rfc subseries type ${JSON.stringify(name)} into number`
+      `Unable to parse API rfc subseries name ${JSON.stringify(name)} to extract a number`
     )
   }
   return num
