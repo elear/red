@@ -131,12 +131,23 @@ const parsePlaintextToc = (
 }
 
 export const getPlaintextRfcDocument = (dom: Document): Node[] => {
-  return Array.from(dom.body.childNodes).filter((node) => {
+  let hasPassedPreTag = false
+  return Array.from(dom.body.childNodes).filter((node, index, arr) => {
     if (isHtmlElement(node)) {
-      return !node.classList.contains(
-        // see https://www.rfc-editor.org/rfc/rfc2000.html for example of docinfo header that we don't want
-        'docinfo'
-      )
+      switch(node.nodeName.toLowerCase()) {
+        case 'br':
+          // see https://www.rfc-editor.org/rfc/rfc2000.html for <br>s that we want to trim
+          return !hasPassedPreTag
+        case 'span':
+          return !node.classList.contains(
+            // see https://www.rfc-editor.org/rfc/rfc2000.html for example of docinfo header that we don't want
+            'docinfo'
+          )
+        case 'pre':
+          hasPassedPreTag = true
+          break
+          // pass
+      }
     }
     return true
   })
