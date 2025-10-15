@@ -1,4 +1,4 @@
-import { getInnerText, getDOMParser } from '../utilities/dom.ts'
+import { getInnerText, getDOMParser, isHtmlElement } from '../utilities/dom.ts'
 import type { RfcAndToc } from './rfc-html.ts'
 import type {
   MaxPreformattedLineLengthSchemaType,
@@ -132,7 +132,7 @@ const parsePlaintextToc = (
 
 export const getPlaintextRfcDocument = (dom: Document): Node[] => {
   return Array.from(dom.body.childNodes).filter((node) => {
-    if (node instanceof HTMLElement) {
+    if (isHtmlElement(node)) {
       return !node.classList.contains(
         // see https://www.rfc-editor.org/rfc/rfc2000.html for example of docinfo header that we don't want
         'docinfo'
