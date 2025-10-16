@@ -154,7 +154,12 @@
               </template>
             </dt>
             <dd>
-              {{ identifier.value }}
+              <a v-if="identifier.type === 'doi'" :href="`https://doi.org/${encodeURI(identifier.value)}`">
+                {{ `https://doi.org/${identifier.value}` }}
+              </a>
+              <template v-else>
+                {{ identifier.value }}
+              </template>
             </dd>
           </template>
         </template>
