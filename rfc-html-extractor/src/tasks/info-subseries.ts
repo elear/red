@@ -3,18 +3,33 @@ import { InfoSubseriesItemSchema } from '../../../client/app/utilities/rfc-valid
 import type { InfoSubseriesItem } from '../../../client/app/utilities/rfc-validators.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
 
+const CONSOLE_PURGE_LENGTH = 10
+
 export const uploadAllSubseries = async (
   allSubseries: Readonly<InfoSubseriesItem[]>
 ): Promise<boolean> => {
   const allSubseriesValidated = await renderAllSubseries(allSubseries)
+  const logItems: string[] = []
   for (let i = 0; i < allSubseriesValidated.length; i++) {
     const subseriesItem = allSubseriesValidated[i]
+    const s3Path = subseriesInfoPathBuilder(subseriesItem.type, subseriesItem.number)
     await saveToS3(
-      subseriesInfoPathBuilder(subseriesItem.type, subseriesItem.number),
+      s3Path,
       JSON.stringify(subseriesItem)
     )
+    logItems.push(s3Path)
+    if (logItems.length > CONSOLE_PURGE_LENGTH) {
+      const logText: string[] = []
+      while (logItems.length > 0) {
+        const logItem = logItems.pop()
+        if (logItem !== undefined) {
+          logText.push(logItem)
+        }
+      }
+      console.log(` - subseries ${logText.join(', ')}.`)
+    }
   }
-  console.log(`Uploaded subseries (${allSubseriesValidated.length} files)`)
+  console.log(` - subseries done (${allSubseriesValidated.length} files)`)
   return true
 }
 

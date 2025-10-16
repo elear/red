@@ -1,4 +1,5 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { InfoSubseriesItem } from '../../../client/app/utilities/rfc-validators.ts'
 
 const s3Cli = new S3Client({
   endpoint: process.env.S3_OUT_ENDPOINT ?? '',
@@ -34,7 +35,7 @@ export const rfcImageFileNameBuilder = (rfcNumber: number, pageNumber: number) =
 
 export const rfcImagePathBuilder = (fileName: string) => `rfc/${fileName}` as const
 
-export const subseriesInfoPathBuilder = (subseriesType: string, subseriesNumber: number) => `subseries/${subseriesType}${subseriesNumber}.json`
+export const subseriesInfoPathBuilder = (subseriesType: InfoSubseriesItem["type"], subseriesNumber: number) => `subseries/${subseriesType}${subseriesNumber}.json` as const
 
 export const HOMEPAGE_LATEST_PATH = `other/homepage-latest.json` as const
 
