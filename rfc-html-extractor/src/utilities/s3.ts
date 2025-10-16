@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
-import { InfoSubseriesItem } from '../../../client/app/utilities/rfc-validators.ts'
+import type { InfoSubseriesItem } from '../../../client/app/utilities/rfc-validators.ts'
 
 const s3Cli = new S3Client({
   endpoint: process.env.S3_OUT_ENDPOINT ?? '',
@@ -12,7 +12,9 @@ const s3Cli = new S3Client({
   responseChecksumValidation: 'WHEN_REQUIRED'
 })
 
-type StreamingBlobPayloadInputTypes = ConstructorParameters<typeof PutObjectCommand>[0]["Body"]
+type StreamingBlobPayloadInputTypes = ConstructorParameters<
+  typeof PutObjectCommand
+>[0]['Body']
 
 export async function saveToS3(
   key: string,
@@ -27,15 +29,24 @@ export async function saveToS3(
   )
 }
 
-export const rfcJsonPathBuilder = (rfcNumber: number) => `rfc-json/${rfcNumber}.json` as const
+export const rfcJsonPathBuilder = (rfcNumber: number) =>
+  `rfc-json/${rfcNumber}.json` as const
 
-export const rfcHtmlJsonPathBuilder = (rfcNumber: number) => `rfc/${rfcNumber}.json` as const
+export const rfcHtmlJsonPathBuilder = (rfcNumber: number) =>
+  `rfc/${rfcNumber}.json` as const
 
-export const rfcImageFileNameBuilder = (rfcNumber: number, pageNumber: number) => `${rfcNumber}-page-${pageNumber}.png` as const
+export const rfcImageFileNameBuilder = (
+  rfcNumber: number,
+  pageNumber: number
+) => `${rfcNumber}-page-${pageNumber}.png` as const
 
-export const rfcImagePathBuilder = (fileName: string) => `rfc/${fileName}` as const
+export const rfcImagePathBuilder = (fileName: string) =>
+  `rfc/${fileName}` as const
 
-export const subseriesInfoPathBuilder = (subseriesType: InfoSubseriesItem["type"], subseriesNumber: number) => `subseries/${subseriesType}${subseriesNumber}.json` as const
+export const subseriesInfoPathBuilder = (
+  subseriesType: InfoSubseriesItem['type'],
+  subseriesNumber: InfoSubseriesItem['number']
+) => `subseries/${subseriesType}${subseriesNumber}.json` as const
 
 export const HOMEPAGE_LATEST_PATH = `other/homepage-latest.json` as const
 
@@ -53,4 +64,5 @@ export const RFC_FEED_ATOM_PATH = 'other/rfcatom.xml' as const
 
 export const IN_NOTES_RFC_REF_DOT_TXT_PATH = 'other/in-notes/rfc-ref.txt'
 
-export const REPORTS_CURRENT_QUEUE_STATS_DOT_TXT_PATH = 'other/reports/CurrQstats.txt'
+export const REPORTS_CURRENT_QUEUE_STATS_DOT_TXT_PATH =
+  'other/reports/CurrQstats.txt'
