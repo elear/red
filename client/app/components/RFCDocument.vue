@@ -117,8 +117,11 @@ const isModalOpen = ref(false)
 
 const canonicalUrl = infoSeriesPathBuilder(sanitisedId.value)
 
+// see https://github.com/ietf-tools/red/issues/196
+const pageTitle = rfcBucketHtmlDocument.value ? `RFC ${rfcBucketHtmlDocument.value.rfc.number}: ${rfcBucketHtmlDocument.value.rfc.title}` : ''
+
 useRfcEditorHead({
-  title: rfcBucketHtmlDocument.value?.rfc.title ?? '',
+  title: pageTitle,
   canonicalUrl,
   description: rfcBucketHtmlDocument.value?.rfc.abstract ?? '',
   modifiedDateTime:

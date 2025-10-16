@@ -10,7 +10,8 @@
 
     <div class="min-h-screen ">
       <div v-if="subseriesDocument" class="md:mx-2 grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <RFCCard v-for="rfc in subseriesDocument.contents" :key="rfc.number" :rfc="rfc" heading-level="3" :show-abstract="true" />
+        <RFCCard v-for="rfc in subseriesDocument.contents" :key="rfc.number" :rfc="rfc" heading-level="3"
+          :show-abstract="true" />
       </div>
     </div>
   </BodyLayoutDocument>
@@ -72,10 +73,15 @@ const lastRfcPublished = computed(() => {
   return DateTime.fromISO(lastRfc.published)
 })
 
+// see https://github.com/ietf-tools/red/issues/196
+const pageTitle = subseriesDocument.value ? `${subseriesDocument.value.type.toUpperCase()} ${subseriesDocument.value.number} subseries contains ${subseriesDocument.value.contents.length} RFC${subseriesDocument.value.contents.length === 1 ? '' : 's'}` : ''
+
+const pageDescription = subseriesDocument.value ? `${subseriesDocument.value.type.toUpperCase()}${subseriesDocument.value.number} contains ${subseriesDocument.value.contents.map(item => `RFC ${item.number}`).join(', ')}.` : ''
+
 useRfcEditorHead({
-  title: subseriesDocument.value ? `${subseriesDocument.value.type.toUpperCase()}${subseriesDocument.value.number} subseries contains ${subseriesDocument.value.contents.length} RFC(s)` : '',
+  title: pageTitle,
   canonicalUrl,
-  description: subseriesDocument.value ? `${subseriesDocument.value.type.toUpperCase()}${subseriesDocument.value.number} contains ${subseriesDocument.value.contents.map(item => `RFC${item.number}`).join(', ')}.` : '',
+  description: pageDescription,
   modifiedDateTime: lastRfcPublished.value !== '' ? lastRfcPublished.value : undefined,
   contentType: 'article'
 })
