@@ -8,7 +8,7 @@ import {
 } from '../utilities/s3.ts'
 import { getRfcCommonCached } from '../utilities/redClientGet.ts'
 import { rfcToRfcJson } from '../utilities/rfc-converters.ts'
-import { RfcCommon, RfcCommonSchema, RfcJsonSchema } from '../../../client/app/utilities/rfc-validators.ts'
+import { RfcCommonSchema, RfcJsonSchema } from '../../../client/app/utilities/rfc-validators.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
 
 export const uploadRfcData = async (rfcNumber: number): Promise<boolean> => {
