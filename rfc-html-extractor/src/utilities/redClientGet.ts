@@ -56,7 +56,6 @@ export const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon> => {
   try {
     const rfc = await api.red.docRetrieve(rfcNumber)
     const rfcCommon = rfcToRfcCommon(rfc)
-    console.log("STATUS COMPARISON:", `from API ${JSON.stringify(rfc.status)}`, `after conversion to common ${JSON.stringify(rfcCommon.status)}`)
     return rfcCommon
   } catch (e) {
     console.error('docRetrieve catch()', e)
