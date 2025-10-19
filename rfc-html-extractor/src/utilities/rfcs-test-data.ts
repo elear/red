@@ -1,5 +1,4 @@
 import type { RfcCommon, InfoSubseriesItem } from '../../../client/app/utilities/rfc-validators.ts'
-import type { SubseriesDoc } from '../../../client/generated/red-client.ts'
 
 export const testMockAllRfcs: RfcCommon[] = [
   {

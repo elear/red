@@ -16,7 +16,7 @@ import {
 } from '../../../client/app/utilities/rfc-validators.ts'
 import { extractHrefRfcPart } from '../utilities/rfc.ts'
 import { assertNever } from '../utilities/typescript.ts'
-import { PUBLIC_SITE } from '../utilities/url.ts'
+import { PUBLIC_SITE_URL_ORIGIN } from '../utilities/url.ts'
 import {
   getPlaintextMaxLineLength,
   getPlaintextRfcDocument,
@@ -33,7 +33,7 @@ import { validateDocument } from '../utilities/validate-zod.ts'
 export const fetchSourceRfcHtml = async (
   rfcNumber: number
 ): Promise<string | null> => {
-  const url = `${PUBLIC_SITE}/rfc/rfc${rfcNumber}.html`
+  const url = `${PUBLIC_SITE_URL_ORIGIN}/rfc/rfc${rfcNumber}.html`
   const response = await fetch(url)
   if (!response.ok) {
     console.warn(
@@ -225,7 +225,7 @@ export const rfcBucketHtmlToRfcDocument = async (
       break
   }
 
-  const baseUrl = new URL(`/rfc/rfc${rfcNumber}.html`, PUBLIC_SITE)
+  const baseUrl = new URL(`/rfc/rfc${rfcNumber}.html`, PUBLIC_SITE_URL_ORIGIN)
 
   convertHrefs(rfcDocument, baseUrl)
   ensureWordBreaks(rfcDocument)
@@ -298,7 +298,7 @@ const sniffRfcBucketHtmlType = (dom: Document): DocumentHtmlType => {
  *
  **/
 const convertHrefs = (rfcDocument: Node[], baseUrl: URL): void => {
-  const publicSiteUrl = new URL(PUBLIC_SITE)
+  const publicSiteUrl = new URL(PUBLIC_SITE_URL_ORIGIN)
   const walk = (node: Node): void => {
     if (isHtmlElement(node)) {
       if (node.nodeName.toLowerCase() === 'a') {

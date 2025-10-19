@@ -1,4 +1,4 @@
-import { apiRfcBucketDocumentURLBuilder, PUBLIC_SITE } from '../utilities/url.ts'
+import { apiRfcBucketDocumentURLBuilder, PUBLIC_SITE_URL_ORIGIN } from '../utilities/url.ts'
 import { gc } from '../utilities/gc.ts'
 import { BLANK_HTML, getDOMParser, rfcDocumentToPojo } from '../utilities/dom.ts'
 import { rfcImageFileNameBuilder } from '../utilities/s3.ts'
@@ -15,7 +15,7 @@ import {
 import { validateDocument } from '../utilities/validate-zod.ts'
 
 export const fetchRfcPDF = async (rfcNumber: number) => {
-  const url = `${PUBLIC_SITE}/rfc/rfc${rfcNumber}.pdf`
+  const url = `${PUBLIC_SITE_URL_ORIGIN}/rfc/rfc${rfcNumber}.pdf`
   const response = await fetch(url)
   if (!response.ok) {
     console.warn(

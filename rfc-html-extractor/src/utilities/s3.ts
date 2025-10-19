@@ -38,6 +38,9 @@ export const rfcCommonPathBuilder = (rfcNumber: number) =>
 export const rfcHtmlJsonPathBuilder = (rfcNumber: number) =>
   `rfc/${rfcNumber}.json` as const
 
+export const rfcRefPathBuilder = (rfcNumber: number) =>
+  `rfc-ref/${rfcNumber}.txt` as const
+
 export const rfcImageFileNameBuilder = (
   rfcNumber: number,
   pageNumber: number

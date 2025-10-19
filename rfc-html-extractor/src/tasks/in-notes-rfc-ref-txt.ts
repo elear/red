@@ -6,7 +6,7 @@ import {
 } from '../utilities/rfc-converters-utils.ts'
 import type { RfcCommon } from '../../../client/app/utilities/rfc-validators.ts'
 import { IN_NOTES_RFC_REF_DOT_TXT_PATH, saveToS3 } from '../utilities/s3.ts'
-import { PUBLIC_SITE } from '../utilities/url.ts'
+import { PUBLIC_SITE_URL_ORIGIN } from '../utilities/url.ts'
 
 export const uploadInNotesRfcRefDotTxt = async (
   allRfcs: Readonly<RfcCommon[]>,
@@ -106,7 +106,7 @@ const stringifyRFC = (rfc: RfcCommon): string => {
       .map((author) => formatAuthor(author, 'reverse'))
       .join(', ')}, "${rfc.title}", ${also}RFC ${rfc.number}, ${doi},${
       rfcdate ? ` ${rfcdate},` : ''
-    } <${PUBLIC_SITE}/info/rfc${rfc.number}/>.`
+    } <${PUBLIC_SITE_URL_ORIGIN}/info/rfc${rfc.number}/>.`
   }
 }
 

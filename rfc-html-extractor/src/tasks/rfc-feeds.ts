@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { Feed } from 'feed'
 import type { FeedOptions } from 'feed'
 import type { RfcCommon } from '../../../client/app/utilities/rfc-validators.ts'
-import { infoRfcPathBuilder, PUBLIC_SITE } from '../utilities/url.ts'
+import { infoRfcPathBuilder, PUBLIC_SITE_URL_ORIGIN } from '../utilities/url.ts'
 import {
   RFC_FEED_ATOM_PATH,
   RFC_FEED_RSS_PATH,
@@ -41,8 +41,8 @@ export const renderFeeds = async (
   const feedOptions: FeedOptions = {
     title: 'Recent RFCs',
     description: 'Recently published RFCs',
-    id: PUBLIC_SITE,
-    link: PUBLIC_SITE,
+    id: PUBLIC_SITE_URL_ORIGIN,
+    link: PUBLIC_SITE_URL_ORIGIN,
     generator: 'https://www.npmjs.com/package/feed',
     language: 'en-us', // optional, used only in RSS 2.0, possible values: http://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
     copyright: '',
@@ -54,7 +54,7 @@ export const renderFeeds = async (
   const feed = new Feed(feedOptions)
 
   feedRfcs.forEach((feedRfc) => {
-    const url = `${PUBLIC_SITE}${infoRfcPathBuilder(feedRfc)}`
+    const url = `${PUBLIC_SITE_URL_ORIGIN}${infoRfcPathBuilder(feedRfc)}`
     feed.addItem({
       title: `RFC ${feedRfc.number}: ${feedRfc.title}`,
       link: url,
