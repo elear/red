@@ -108,10 +108,10 @@ function formatObsoletedBy(
             Anchor,
             {
               href: infoSeriesPathBuilder(`RFC${obsoletedByItem.number}`),
-              title: `${formatTitlePlaintext(obsoletedByItem.title)}`,
+              title: `RFC ${obsoletedByItem.number}: ${formatTitlePlaintext(obsoletedByItem.title)}`,
               class: 'relative underline p-1 -m-1 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-red-200'
             },
-            [h('b', obsoletedByItem)]
+            [h('span', 'RFC '), h('b', obsoletedByItem.number)]
           )
         )
 
