@@ -5,11 +5,9 @@ import {
   parseSubseries,
   parseSubseriesItemType
 } from '../../../client/app/utilities/rfc-converter-parse.ts'
-import { blankRfcCommon } from './rfc.ts'
 import type {
   Rfc,
   RfcMetadata,
-  SubseriesDoc
 } from '../../../client/generated/red-client.ts'
 import type {
   InfoSubseriesItem,
@@ -58,6 +56,7 @@ export const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon> => {
   try {
     const rfc = await api.red.docRetrieve(rfcNumber)
     const rfcCommon = rfcToRfcCommon(rfc)
+    console.log("STATUS COMPARISON:", `from API ${JSON.stringify(rfc.status)}`, `after conversion to common ${JSON.stringify(rfcCommon.status)}`)
     return rfcCommon
   } catch (e) {
     console.error('docRetrieve catch()', e)
@@ -78,7 +77,7 @@ export const getRfcCommonCached = async (
 
 export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
   return {
-    ...structuredClone(blankRfcCommon),
+    formats: rfc.formats,
     subseries: parseSubseries(rfc.subseries),
     number: rfc.number,
     abstract: rfc.abstract,
@@ -102,7 +101,7 @@ export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
 
 export const rfcMetadataToRfcCommon = (rfcMetadata: RfcMetadata): RfcCommon => {
   return {
-    ...structuredClone(blankRfcCommon),
+    formats: rfcMetadata.formats,
     number: rfcMetadata.number,
     abstract: rfcMetadata.abstract,
     published: rfcMetadata.published,

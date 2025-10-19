@@ -110,20 +110,24 @@ test('parseRfcStatusSlug: good inputs', () => {
     name: 'Unknown'
   })
 
+  expect(parseRfcStatusSlug('ps')).toStrictEqual({
+    slug: 'ps',
+    name: 'Proposed Standard'
+  })
   expect(parseRfcStatusSlug('proposed')).toStrictEqual({
-    slug: 'proposed',
+    slug: 'ps',
     name: 'Proposed Standard'
   })
   expect(parseRfcStatusSlug('proposedstandard')).toStrictEqual({
-    slug: 'proposed',
+    slug: 'ps',
     name: 'Proposed Standard'
   })
   expect(parseRfcStatusSlug('proposed-standard')).toStrictEqual({
-    slug: 'proposed',
+    slug: 'ps',
     name: 'Proposed Standard'
   })
   expect(parseRfcStatusSlug('Proposed Standard')).toStrictEqual({
-    slug: 'proposed',
+    slug: 'ps',
     name: 'Proposed Standard'
   })
 

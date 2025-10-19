@@ -60,10 +60,11 @@ export const parseRfcStatusSlug = (
         name: 'Unknown'
       }
 
+    case 'ps':
     case 'proposedstandard':
     case 'proposed':
       return {
-        slug: 'proposed',
+        slug: 'ps',
         name: 'Proposed Standard'
       }
 

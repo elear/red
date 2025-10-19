@@ -38,7 +38,7 @@ const formatSubseriesAsVNode = (
             class:
               'relative z-50 no-underline hover:underline focus:underline px-2 py-3 rounded text-gray-700 dark:text-gray-300',
             title:
-              `RFC${props.rfc.number} is part of ${subseries.type.toUpperCase()}${subseries.number}`
+              `${subseries.type.toUpperCase()} ${subseries.number} contains RFC ${props.rfc.number}`
           },
           () => formatTitleAsVNode(`${subseries.type}${subseries.number}`)
         )

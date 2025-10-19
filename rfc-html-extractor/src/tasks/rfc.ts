@@ -3,17 +3,19 @@ import { rfcBucketPdfToRfcDocument } from './rfc-pdf.ts'
 import {
   rfcHtmlJsonPathBuilder,
   rfcJsonPathBuilder,
+  rfcCommonPathBuilder,
   saveToS3
 } from '../utilities/s3.ts'
 import { getRfcCommonCached } from '../utilities/redClientGet.ts'
 import { rfcToRfcJson } from '../utilities/rfc-converters.ts'
-import { RfcJsonSchema } from '../../../client/app/utilities/rfc-validators.ts'
+import { RfcCommon, RfcCommonSchema, RfcJsonSchema } from '../../../client/app/utilities/rfc-validators.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
 
 export const uploadRfcData = async (rfcNumber: number): Promise<boolean> => {
   const result = await Promise.all([
     uploadRfcHtml(rfcNumber),
-    uploadRfcJson(rfcNumber)
+    uploadRfcJson(rfcNumber),
+    uploadRfcCommonJson(rfcNumber),
   ])
   return result.every((didSucceed) => didSucceed)
 }
@@ -58,5 +60,13 @@ export const uploadRfcJson = async (rfcNumber: number): Promise<boolean> => {
   validateDocument(rfcJSON, RfcJsonSchema)
   const rfcJsonS3Path = rfcJsonPathBuilder(rfcNumber)
   await saveToS3(rfcJsonS3Path, JSON.stringify(rfcJSON))
+  return true
+}
+
+export const uploadRfcCommonJson = async (rfcNumber: number): Promise<boolean> => {
+  const rfc = await getRfcCommonCached(rfcNumber)
+  validateDocument(rfc, RfcCommonSchema)
+  const rfcCommonS3Path = rfcCommonPathBuilder(rfc.number)
+  await saveToS3(rfcCommonS3Path, JSON.stringify(rfc))
   return true
 }

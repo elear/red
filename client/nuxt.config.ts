@@ -93,7 +93,7 @@ export default defineNuxtConfig({
       // 'postcss-nested': {},
       // 'postcss-custom-media': {},
       'postcss-nested-import': {
-        // used to scope RFC generator HTML styles
+        // used to scope RFC HTML styles so external CSS doesn't affect the rest of the site
         // see @nested-import
       }
     }
@@ -123,6 +123,9 @@ export default defineNuxtConfig({
       },
       '/api/v1/info-subseries/**': {
         proxy: 'https://red.staging.rfc-editor.org/api/v1/info-subseries/**'
+      },
+      '/api/v1/rfc-common/**': {
+        proxy: 'https://red.staging.rfc-editor.org/api/v1/rfc-common/**'
       }
     }
   },

@@ -82,7 +82,7 @@ export const RfcCommonStatusSchema = z.union([
     name: z.literal('Unknown')
   }),
   z.object({
-    slug: z.literal('proposed'),
+    slug: z.literal('ps'),
     name: z.literal('Proposed Standard')
   }),
   z.object({

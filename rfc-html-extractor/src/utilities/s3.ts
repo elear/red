@@ -32,6 +32,9 @@ export async function saveToS3(
 export const rfcJsonPathBuilder = (rfcNumber: number) =>
   `rfc-json/${rfcNumber}.json` as const
 
+export const rfcCommonPathBuilder = (rfcNumber: number) =>
+  `rfc-common/${rfcNumber}.json` as const
+
 export const rfcHtmlJsonPathBuilder = (rfcNumber: number) =>
   `rfc/${rfcNumber}.json` as const
 
