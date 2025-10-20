@@ -25,7 +25,7 @@ export const uploadRfcData = async (rfcNumber: number): Promise<boolean> => {
     uploadRfcHtml(rfcNumber),
     uploadRfcJson(rfcNumber),
     uploadRfcCommonJson(rfcNumber),
-    uploadRfcRefs(rfcNumber)
+    uploadRefsRef(rfcNumber)
   ])
   return result.every((didSucceed) => didSucceed)
 }
@@ -83,6 +83,19 @@ export const uploadRfcCommonJson = async (
   return true
 }
 
+
+export const uploadRefsRef = async (rfcNumber: number): Promise<boolean> => {
+  const rfc = await getRfcCommonCached(rfcNumber)
+  const rfcRef = renderRefsRef(rfc)
+  
+  const rfcRefS3Path = rfcRefPathBuilder(rfcNumber)
+  if(rfcNumber === 1) {
+    console.log("refs/ref debug", { rfcRefS3Path, rfcRef }) 
+  }
+  await saveToS3(rfcRefS3Path, rfcRef)
+  return true
+}
+
 /**
  * Renders RFC summary txt. Eg.
  *
@@ -90,15 +103,7 @@ export const uploadRfcCommonJson = async (
  *
  * As used on https://www.rfc-editor.org/refs/ref0001.txt
  */
-export const uploadRfcRefs = async (rfcNumber: number): Promise<boolean> => {
-  const rfc = await getRfcCommonCached(rfcNumber)
-  const rfcRef = renderRfcRef(rfc)
-  const rfcRefS3Path = rfcRefPathBuilder(rfcNumber)
-  await saveToS3(rfcRefS3Path, rfcRef)
-  return true
-}
-
-export const renderRfcRef = (rfc: RfcCommon): string => {
+export const renderRefsRef = (rfc: RfcCommon): string => {
   const { published } = rfc
   if (published === undefined) {
     throw Error(`Unexpected lack of 'published' date`)
