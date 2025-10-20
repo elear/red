@@ -43,7 +43,7 @@ The website depends on APIs in the form of
 
 See `/precomputer/`.
 
-We precompute the result of many APIs used by the website and upload them an S3-like bucket.
+We precompute the result of many APIs used by the website and upload them to an S3-like bucket.
 
 This is done for performance reasons (some these APIs can take minutes to compute) and it improves resilience.
 
