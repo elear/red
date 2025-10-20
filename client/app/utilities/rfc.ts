@@ -10,29 +10,9 @@ import type {
   RfcCommonSubseriesTypeSchema
 } from './rfc-validators'
 
-export const subseriesCommonType: Record<
-  RfcCommonSubseriesType,
-  RfcCommonSubserie
-> = {
-  bcp: {
-    name: 'Best Current Practice',
-    acronym: 'bcp'
-  },
-  fyi: {
-    name: 'Informational',
-    acronym: 'fyi'
-  },
-  std: {
-    name: 'Internet Standard',
-    acronym: 'std'
-  }
-}
-
 export const RFC_TYPE_RFC = 'rfc' as const
 
 export type RfcCommon = z.infer<typeof RfcCommonSchema>
-
-type RfcCommonSubserie = { name: string; acronym: RfcCommonSubseriesType }
 
 export type RfcCommonSubseriesType = z.infer<
   typeof RfcCommonSubseriesTypeSchema
