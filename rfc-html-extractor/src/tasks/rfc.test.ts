@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { test, expect } from 'vitest'
-import { renderRfcRef } from './rfc.ts'
+import { renderRefsRef } from './rfc.ts'
 import { testMockAllRfcs } from '../utilities/rfcs-test-data.ts'
 
 test('renderRfcRef 298', async () => {
@@ -8,7 +8,7 @@ test('renderRfcRef 298', async () => {
   if(rfc298 === undefined) {
     throw Error(`Couldn't find RFC 298 in mock data`)
   }
-  const rfc298Ref = renderRfcRef(rfc298)
+  const rfc298Ref = renderRefsRef(rfc298)
   expect(rfc298Ref).toMatchSnapshot()
 })
 
@@ -17,6 +17,6 @@ test('renderRfcRef 9804', async () => {
   if(rfc9804 === undefined) {
     throw Error(`Couldn't find RFC 9000 in mock data`)
   }
-  const rfc9804Ref = renderRfcRef(rfc9804)
+  const rfc9804Ref = renderRefsRef(rfc9804)
   expect(rfc9804Ref).toMatchSnapshot()
 })
