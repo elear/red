@@ -37,7 +37,7 @@ It's a Nuxt website ([official Nuxt documentation](https://nuxt.com/docs/getting
 
 #### Website content (markdown)
 
-Website content at `/about/*`, `/authors/*` and `/series/*` is managed in markdown files.
+Website content at paths `/about/*`, `/authors/*` and `/series/*` is managed in markdown files.
 
 These markdown files are in `website/content`.
 
