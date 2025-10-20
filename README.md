@@ -36,8 +36,8 @@ See `/website/`.
 It's a Nuxt website ([official Nuxt documentation](https://nuxt.com/docs/getting-started/introduction)).
 
 The website depends on APIs in the form of
-* Search (via typesense)
-* Precomputed API responses
+* Search (via Typesense, managed outside this repository)
+* Precomputed API responses (managed in this repository, in `/precomputer/`)
 
 #### Precomputed API responses
 
