@@ -24,7 +24,7 @@ export const subseriesCommonType: Record<
   },
   std: {
     name: 'Internet Standard',
-    acronym: 'bcp'
+    acronym: 'std'
   }
 }
 
