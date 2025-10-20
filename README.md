@@ -31,11 +31,24 @@ This code repository is under the broader guidance from [IETF CONTRIBUTING.md](h
 
 ### Website
 
-See `/website/`
+See `/website/`.
 
-#### API
+The website uses APIs in the form of
+* Search (via typesense)
+* Precomputed API responses (next)
 
-We precompute the result of many APIs because some calculations can take minutes. This also helps with resilience. See `/precomputer/`.
+#### Precomputed API responses
+
+See `/precomputer/`.
+
+We precompute the result of many APIs used by the website and upload them an S3-like bucket.
+
+This is done for performance reasons (some these APIs can take minutes to compute) and it improves resilience.
+
+The entry point for the precomputer is `precomputer/src` with the 3 items `single.ts`, `all.ts`, and `cron.ts`:
+
+* `single.ts` calculates a single RFC 'info' page API data and RFC-specific APIs such as `/rfc/rfcN.json`. The `all.ts` does the same with batches of specific ranges of RFCs;
+* `cron.ts` handles everything else (all subseries, RFC indexes that list all RFCs, RSS/Atom feeds, website homepage latest 3 RFCs, etc.).
 
 #### Page content documentation (markdown)
 
