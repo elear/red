@@ -35,11 +35,25 @@ See `/website/`.
 
 It's a Nuxt website ([official Nuxt documentation](https://nuxt.com/docs/getting-started/introduction)).
 
-The website depends on APIs in the form of
-* Search (via Typesense, managed outside this repository)
+#### Website content (markdown)
+
+Website content at `/about/*`, `/authors/*` and `/series/*` is managed in markdown files.
+
+These markdown files are in `website/content`.
+
+Markdown Frontmatter (metadata) fields supported are listed in [content.config.js](https://github.com/ietf-tools/red/blob/main/website/content.config.ts#L8).
+
+#### Website testing
+
+In `/website/` run `npm run test`
+
+#### Website APIs
+
+The website depends on APIs in the form of:
+* Search (via Typesense, managed outside of this repository)
 * Precomputed API responses (managed in this repository, in `/precomputer/`)
 
-#### Precomputed API responses
+### Precomputed API responses
 
 See `/precomputer/`.
 
@@ -47,19 +61,16 @@ We precompute the result of many APIs used by the website and upload them to an 
 
 This is done for performance reasons (some these APIs can take minutes to compute) and it improves resilience.
 
+The `/precomputer/` code is intentionally separate from the website/Nuxt. It has its own `package.json` etc.
+
 The entry point for the precomputer is `precomputer/src` with the 3 items `single.ts`, `all.ts`, and `cron.ts`:
 
-* `single.ts` calculates a single RFC 'info' page API data and RFC-specific APIs such as `/rfc/rfcN.json`. The `all.ts` does the same with batches of specific ranges of RFCs;
-* `cron.ts` handles everything else (all subseries, RFC indexes that list all RFCs, RSS/Atom feeds, website homepage latest 3 RFCs, etc.).
+* `single.ts` calculates a single RFC 'info' page API data and RFC-specific APIs such as `/rfc/rfcN.json`. The `all.ts` does the same with batches of specific ranges of RFCs. Currently these scripts are run manually from _Tekton_;
+* `cron.ts` handles everything else (all subseries, RFC indexes that list all RFCs, RSS/Atom feeds, website homepage latest 3 RFCs, etc.). As the name `cron.ts` implies this script is run periodically (every 6 hours), however you can also run it manually from _Rancher_.
 
-#### Page content documentation (markdown)
+#### Precomputer tests
 
-Markdown files are in `website/content`. Markdown Frontmatter (metadata) fields supported are listed in [content.config.js](https://github.com/ietf-tools/red/blob/main/website/content.config.ts#L8).
-
-## Testing
-
-* In `website` run `npm run test`
-* In `precomputer` run `npm run test`
+In `/precomputer/` run `npm run test`.
 
 ## Troubleshooting
 
