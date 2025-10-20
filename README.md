@@ -33,9 +33,11 @@ This code repository is under the broader guidance from [IETF CONTRIBUTING.md](h
 
 See `/website/`.
 
-The website uses APIs in the form of
+It's a Nuxt website ([official Nuxt documentation](https://nuxt.com/docs/getting-started/introduction)).
+
+The website depends on APIs in the form of
 * Search (via typesense)
-* Precomputed API responses (next)
+* Precomputed API responses
 
 #### Precomputed API responses
 
