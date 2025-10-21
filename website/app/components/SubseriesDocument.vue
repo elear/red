@@ -1,5 +1,15 @@
 <template>
   <BodyLayoutDocument>
+    <template #sidebar>
+      <div class="lg:min-w-[300px]" v-if="subseriesDocument">
+        <p v-if="subseriesDocument.type === 'bcp'">
+          STDs are stable identifiers for "Internet Standards." An STD may consist of a single RFC or a group of RFCs related to a specific protocol.
+        </p>
+        <p v-else-if="subseriesDocument.type === 'std'">
+          BCPs are stable identifiers for Best Current Practices. A BCP may consist of a single RFC or a group of RFCs related to a specific IETF process or recommended guidelines.
+        </p>
+      </div>
+    </template>
     <template v-if="subseriesDocumentError">
       <div class="container mx-auto">
         <Alert level="1" variant="warning" heading="Error">
@@ -8,8 +18,8 @@
       </div>
     </template>
 
-    <div class="min-h-screen ">
-      <div v-if="subseriesDocument" class="md:mx-2 grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="min-h-screen">
+      <div v-if="subseriesDocument" class="mt-3 flex flex-col gap-4">
         <RFCCard v-for="rfc in subseriesDocument.contents" :key="rfc.number" :rfc="rfc" heading-level="3"
           :show-abstract="true" />
       </div>

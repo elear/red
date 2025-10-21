@@ -55,7 +55,7 @@ const { data: rfcBucketHtmlDocument, error: rfcBucketHtmlDocumentError } = await
     const { data, error } = RfcBucketHtmlDocumentSchema.safeParse(maybeRfcBucketDocument)
     if (error) {
       console.log('Failed to validate RFC HTML JSON', error, JSON.stringify(maybeRfcBucketDocument, null, 2))
-      throw Error(`Unable to load RFC. See console for more.`)
+      throw Error(`Unable to load RFC (RFC data failed validation). See console for more.`)
     }
     return data
   })
