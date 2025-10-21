@@ -1,7 +1,7 @@
 <template>
   <BodyLayoutDocument>
     <template #sidebar>
-      <div class="lg:min-w-[300px]" v-if="subseriesDocument">
+      <div v-if="subseriesDocument" class="lg:min-w-[300px]">
         <p v-if="subseriesDocument.type === 'bcp'">
           STDs are stable identifiers for "Internet Standards." An STD may consist of a single RFC or a group of RFCs related to a specific protocol.
         </p>

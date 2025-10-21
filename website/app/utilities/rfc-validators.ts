@@ -85,7 +85,7 @@ export const RfcCommonStatusSchema = z.union([
 
 export const RfcCommonSubseriesTypeSchema = z.union([
   z.literal('bcp'),
-  // z.literal('fyi'),
+  z.literal('fyi'),
   z.literal('std')
 ])
 

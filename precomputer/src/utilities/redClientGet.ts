@@ -386,8 +386,8 @@ const parseSubseriesItemType = (
   switch (type) {
     case 'bcp':
       return 'bcp'
-    case 'fyi':
-      return 'fyi'
+    // case 'fyi':
+    //   return 'fyi'
     case 'std':
       return 'std'
   }
