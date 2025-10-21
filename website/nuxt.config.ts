@@ -42,6 +42,10 @@ export default defineNuxtConfig({
     }
   },
   css: ['~/assets/css/tailwind.css'],
+  vitalizer: {
+    disablePrefetchLinks: true,
+    disablePreloadLinks: true
+  },
   vite: {
     plugins: [tailwindcss()],
     build: {
