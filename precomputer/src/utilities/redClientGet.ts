@@ -73,7 +73,7 @@ export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
     number: rfc.number,
     abstract: rfc.abstract,
     published: rfc.published,
-    status: parseStatus(rfc.status),
+    status: parseStatus(rfc.status, rfc.number),
     pages: rfc.pages ?? undefined,
     authors: rfc.authors,
     group: rfc.group,
@@ -102,7 +102,7 @@ export const rfcMetadataToRfcCommon = (rfcMetadata: RfcMetadata): RfcCommon => {
     number: rfcMetadata.number,
     abstract: rfcMetadata.abstract,
     published: rfcMetadata.published,
-    status: parseStatus(rfcMetadata.status),
+    status: parseStatus(rfcMetadata.status, rfcMetadata.number),
     pages: rfcMetadata.pages ?? undefined,
     authors: rfcMetadata.authors,
     group: rfcMetadata.group,
@@ -278,11 +278,22 @@ export const sortInfoSubseriesItem = (
 }
 
 export const parseStatus = (
-  status: Rfc['status'] | RfcMetadata['status']
+  status: Rfc['status'] | RfcMetadata['status'] | undefined,
+  rfcNumber: number
 ): RfcCommon['status'] => {
+  if (
+    // FIXME: when all RFCs have a status remove this
+    status === undefined) {
+    return {
+      slug: 'unknown',
+      name: 'unknown'
+    }
+  }
   const { data, error } = RfcCommonStatusSchema.safeParse(status)
   if (error) {
-    throw Error(`Unable to parse RFC status ${JSON.stringify(status)}").`)
+    throw Error(
+      `Unable to parse RFC ${rfcNumber} status ${JSON.stringify(status)}").`
+    )
   }
   return data
 }
