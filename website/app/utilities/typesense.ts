@@ -1,5 +1,37 @@
 import { z } from 'zod'
 
+// If changing this also consider changing the RfcCommon status parsing code
+export const TypesenseSearchItemStatusSchema = z.union([
+  z.object({
+    slug: z.literal('unknown'),
+    name: z.literal('Unknown')
+  }),
+  z.object({
+    slug: z.literal('bcp'),
+    name: z.literal('Best Current Practice')
+  }),
+  z.object({
+    slug: z.literal('experimental'),
+    name: z.literal('Experimental')
+  }),
+  z.object({
+    slug: z.literal('historic'),
+    name: z.literal('Historic')
+  }),
+  z.object({
+    slug: z.literal('inf'),
+    name: z.literal('Informational')
+  }),
+  z.object({
+    slug: z.literal('not-issued'),
+    name: z.literal('Not Issued')
+  }),
+  z.object({
+    slug: z.literal('ps'),
+    name: z.literal('Proposed Standard')
+  })
+])
+
 // Schema definition https://github.com/ietf-tools/search/blob/main/schemas/docs.md
 export const TypeSenseSearchItemSchema = z.object({
   id: z.string(),
@@ -10,23 +42,7 @@ export const TypeSenseSearchItemSchema = z.object({
 
   title: z.string(),
 
-  status: z
-    .object({
-      name: z
-        .enum([
-          'Internet Standard',
-          'Proposed Standard',
-          'Draft Standard',
-          'Best Current Practice',
-          'Informational',
-          'Experimental',
-          'Historic',
-          'Unknown'
-        ])
-        .optional(),
-      slug: z.string().optional()
-    })
-    .optional(),
+  status: TypesenseSearchItemStatusSchema,
   abstract: z.string(),
 
   adName: z.string().optional(),
@@ -41,11 +57,7 @@ export const TypeSenseSearchItemSchema = z.object({
 
   subseries: z
     .object({
-      acronym: z.enum([
-        'std',
-        'fyi',
-        'bcp'
-      ]).optional(),
+      acronym: z.enum(['std', 'fyi', 'bcp']).optional(),
       number: z.number().optional(),
       total: z.number().optional(),
       bcp: z.string().optional()
