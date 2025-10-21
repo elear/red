@@ -3,10 +3,10 @@
     <template #sidebar>
       <div v-if="subseriesDocument" class="lg:min-w-[300px]">
         <p v-if="subseriesDocument.type === 'bcp'">
-          STDs are stable identifiers for "Internet Standards." An STD may consist of a single RFC or a group of RFCs related to a specific protocol.
+          BCPs are stable identifiers for Best Current Practices. A BCP may consist of a single RFC or a group of RFCs related to a specific IETF process or recommended guidelines.
         </p>
         <p v-else-if="subseriesDocument.type === 'std'">
-          BCPs are stable identifiers for Best Current Practices. A BCP may consist of a single RFC or a group of RFCs related to a specific IETF process or recommended guidelines.
+          STDs are stable identifiers for "Internet Standards." An STD may consist of a single RFC or a group of RFCs related to a specific protocol.
         </p>
       </div>
     </template>
