@@ -18,18 +18,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-08-05',
   devtools: { enabled: false },
   typescript: { strict: true },
-  modules: [
-    // Note: don't use 'Nuxt Device' see note in responsiveMode.ts
-    '@nuxt/content',
-    'reka-ui/nuxt',
-    '@nuxt/test-utils/module',
-    '@nuxt/eslint',
-    '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
-    '@nuxtjs/color-mode',
-    '@nuxt/icon',
-    '@nuxt/fonts'
-  ],
+  modules: [// Note: don't use 'Nuxt Device' see note in responsiveMode.ts
+  '@nuxt/content', 'reka-ui/nuxt', '@nuxt/test-utils/module', '@nuxt/eslint', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', '@nuxtjs/color-mode', '@nuxt/icon', '@nuxt/fonts', 'nuxt-vitalizer'],
   content: {
     build: {
       markdown: {
