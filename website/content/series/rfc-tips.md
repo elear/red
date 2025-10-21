@@ -26,7 +26,7 @@ Other RFC Statuses are:
 
 ## Subseries
 
-There are two subseries within the RFC corpus. Not all RFCs are part of a subseries. Subseries identifiers are intended to be stable identifiers for an RFC or a group of related RFCs. When an RFC is obsoleted, the RFC is dropped from the subseries, but the subseries identifier will remain the same. When a related RFC is published, it may be added to an existing subseries identifier.
+There are two current subseries within the RFC corpus. Not all RFCs are part of a subseries. Subseries identifiers are intended to be stable identifiers for an RFC or a group of related RFCs. When an RFC is obsoleted, the RFC is dropped from the subseries, but the subseries identifier will remain the same. When a related RFC is published, it may be added to an existing subseries identifier.
 
 - **STD**. STDs are stable identifiers for "Internet Standards." An STD may consist of a single RFC or a group of RFCs related to a specific protocol.
 - **BCP**. BCPs are stable identifiers for Best Current Practices. A BCP may consist of a single RFC or a group of RFCs related to a specific IETF process or recommended guidelines.
