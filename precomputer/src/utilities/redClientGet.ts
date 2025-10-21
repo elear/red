@@ -2,6 +2,7 @@ import { ApiClient } from '../../../website/generated/red-client.ts'
 import type { Rfc, RfcMetadata } from '../../../website/generated/red-client.ts'
 import {
   RfcCommonStatusSchema,
+  RfcCommonSubseriesTypeSchema,
   type InfoSubseriesItem,
   type RfcCommon
 } from '../../../website/app/utilities/rfc-validators.ts'
@@ -283,7 +284,8 @@ export const parseStatus = (
 ): RfcCommon['status'] => {
   if (
     // FIXME: when all RFCs have a status remove this
-    status === undefined) {
+    status === undefined
+  ) {
     return {
       slug: 'unknown',
       name: 'unknown'
@@ -382,14 +384,4 @@ type RfcSubseriesItem = NonNullable<Rfc['subseries']>[number]
 
 const parseSubseriesItemType = (
   type: RfcSubseriesItem['type']
-): RfcCommonSubseriesItem['type'] => {
-  switch (type) {
-    case 'bcp':
-      return 'bcp'
-    // case 'fyi':
-    //   return 'fyi'
-    case 'std':
-      return 'std'
-  }
-  throw Error(`Unable to parse API rfc subseries type ${JSON.stringify(type)}`)
-}
+): RfcCommonSubseriesItem['type'] => RfcCommonSubseriesTypeSchema.parse(type)
