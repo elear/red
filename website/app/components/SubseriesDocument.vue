@@ -8,6 +8,9 @@
         <p v-else-if="subseriesDocument.type === 'std'">
           STDs are stable identifiers for "Internet Standards." An STD may consist of a single RFC or a group of RFCs related to a specific protocol.
         </p>
+        <p v-else-if="subseriesDocument.type === 'fyi'">
+          FYIs are stable identifiers for a series of "For Your Information" documents. An FYI consists of a single RFC on general interest topics relating to the Internet. The FYI subseries was retired in 2011.
+        </p>
       </div>
     </template>
     <template v-if="subseriesDocumentError">
