@@ -19,7 +19,7 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   typescript: { strict: true },
   modules: [// Note: don't use 'Nuxt Device' see note in responsiveMode.ts
-  '@nuxt/content', 'reka-ui/nuxt', '@nuxt/test-utils/module', '@nuxt/eslint', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', '@nuxtjs/color-mode', '@nuxt/icon', '@nuxt/fonts', 'nuxt-vitalizer'],
+  '@nuxt/content', 'reka-ui/nuxt', '@nuxt/test-utils/module', '@nuxt/eslint', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', '@nuxtjs/color-mode', '@nuxt/icon', 'nuxt-vitalizer'],
   content: {
     build: {
       markdown: {
@@ -94,6 +94,10 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      link: [
+        { rel: 'preconnect', href: 'https://static.ietf.org' },
+        { rel: 'stylesheet', href: 'https://static.ietf.org/fonts/inter/import.css' }
+      ],
       script: [
         {
           innerHTML: scrollbarWidthInlineJS
