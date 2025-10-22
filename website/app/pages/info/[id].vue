@@ -13,7 +13,7 @@
       <template v-if="seriesId.type === 'rfc'">
         <RFCDocument :rfc-id="seriesId" />
       </template>
-      <template v-if="isSubseries">
+      <template v-else-if="isSubseries">
         <SubseriesDocument :subseries-id="seriesId" />
       </template>
       <template v-else>

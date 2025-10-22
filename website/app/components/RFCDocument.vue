@@ -8,7 +8,7 @@
     <template v-if="rfcBucketHtmlDocumentError">
       <div class="container mx-auto">
         <Alert level="1" variant="warning" heading="Error">
-          {{ rfcBucketHtmlDocumentError }}
+          {{ rfcBucketHtmlDocumentError }} []
         </Alert>
       </div>
     </template>
@@ -110,7 +110,6 @@ function gotoErrata() {
 
 const breadcrumbItems: BreadcrumbItem[] = [
   { url: '/', label: 'Home' },
-  { url: '/info', label: 'Documents' }
 ]
 
 const isModalOpen = ref(false)
