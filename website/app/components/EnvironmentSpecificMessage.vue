@@ -75,7 +75,7 @@ const browserPlatformDetails = ref('')
 onMounted(() => {
     isCopied.value = false
     const userAgent = window.navigator.userAgent ?? '(could not detect user agent)'
-    const browserDimensions = `Browser dimensions ${window.screen.width}×${window.screen.height}\n`;
+    const browserDimensions = `Browser dimensions ${window.screen.width}×${window.screen.height}\n`
     browserPlatformDetails.value = [userAgent, browserDimensions].join("\n")
 })
 
