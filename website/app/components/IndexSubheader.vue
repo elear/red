@@ -14,14 +14,14 @@
       <Heading
         level="1"
         style-level="1"
-        class="w-full mt-4 md:mt-6 xs:mt-12 md:mb-3 px-2 font-bold text-balance"
+        class="w-full mt-4 md:mt-6 xs:mt-12 md:mb-3 px-2 font-semibold text-balance"
       >
         The official home of RFCs
       </Heading>
       <div class="self-end lg:text-right">
         <AValidHref
           href="/series/rfc/"
-          class="rounded text-blue-100 lg:text-white inline-block px-2 md:px-5 py-2 md:py-3 font-bold text-nowrap hover:bg-black"
+          class="rounded text-blue-100 lg:text-white inline-block px-2 md:px-5 py-2 md:py-3 font-semibold text-nowrap hover:bg-black"
         >
           What is an RFC?
           <GraphicsChevron class="-rotate-90 w-[16px] inline-block" />

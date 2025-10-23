@@ -2,7 +2,7 @@
   <ais-refinement-list attribute="status.name" :sort-by="reorderItems">
     <template #default="{ items, refine }">
       <fieldset>
-        <legend class="text-base font-bold text-blue-900 dark:text-slate-300 mb-2">Status</legend>
+        <legend class="text-base font-semibold text-blue-900 dark:text-slate-300 mb-2">Status</legend>
         <ul class="grid grid-cols-1 2xl:grid-cols-2 gap-2">
           <li v-for="item in items" :key="item.value">
             <label class="text-base cursor-pointer">

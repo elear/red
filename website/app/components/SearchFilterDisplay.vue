@@ -1,6 +1,6 @@
 <template>
   <label>
-    <span v-if="props.label" class="text-base font-bold block mb-1">{{ props.label }}</span>
+    <span v-if="props.label" class="text-base font-semibold block mb-1">{{ props.label }}</span>
     <ais-toggle-refinement
       v-for="attr of props.attributes"
       :key="attr.attribute"

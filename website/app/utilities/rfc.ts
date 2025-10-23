@@ -97,7 +97,7 @@ export const formatTitleAsVNode = (rfcId: string): VNode => {
   return h('span', [
     h('span', { class: 'font-normal' }, parts.type.toUpperCase()),
     NONBREAKING_SPACE,
-    h('span', { class: 'font-bold' }, parts.number)
+    h('span', { class: 'font-semibold' }, parts.number)
   ])
 }
 

@@ -2,7 +2,7 @@
   <HoverCardRoot v-model:open="isHoverCardOpen">
     <HoverCardTrigger as-child>
       <button
-        class="mt-10 px-4 -ml-2 py-2 text-sm italic border border-transparent focus:border focus:border-gray-400 rounded-md"
+        class="mt-10 px-4 -ml-2 py-2 text-sm italic border border-transparent focus:border focus:border-gray-400 text-gray-600 dark:text-gray-400 rounded-md"
         @focus="isHoverCardOpen = true"
         @mouseover="isHoverCardOpen = true"
         @blur="isHoverCardOpen = false"
