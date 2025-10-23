@@ -20,7 +20,7 @@
             <DialogOverlay class="bg-black/10 backdrop-blur-xs fixed inset-0 z-30" />
             <DialogContent class="fixed top-0 left-[50%] -ml-[10em] z-100">
                 <div
-                    class="relative bg-white max-w-[20em] mx-auto flex flex-col gap-3 pt-2 pb-3 px-4 rounded-xs shadow-2xl"
+                    class="relative bg-white dark:bg-black text-black dark:text-white max-w-[20em] mx-auto flex flex-col gap-3 pt-2 pb-3 px-4 rounded-xs shadow-2xl"
                 >
                     <DialogClose class="absolute right-3 top-3 cursor-pointer">
                         <GraphicsClose />
@@ -34,22 +34,22 @@
                         </a>
                     </p>
                     <div class="text-sm">
-                        <p>If you're reporting a bug please share your browser/platform details:</p>
-                        <div class="font-mono block bg-gray-100 text-xs p-2 border-1 border-gray-700 no-underline"
+                        <p>If you're reporting a bug please share your browser/platform details, which are:</p>
+                        <div class="font-mono block bg-gray-100 dark:bg-gray-800 text-xs dark:text-white p-2 border-1 border-gray-300 no-underline"
                             rows="4">
                             {{ userAgent }}
                         </div>
                         <button
                             v-if="!isCopied"
-                            class="inline-block text-left border-1 border-gray-700 bg-black text-white border-gray-200 cursor-pointer px-2 py-1 text-sm hover:bg-gray-700 focus:bg-gray-700"
+                            class="inline-block text-left border-1 border-gray-700 bg-black text-white border-gray-200 cursor-pointer px-2 py-1 mb-2 text-sm hover:bg-gray-700 focus:bg-gray-700"
                             @click="handleClipboard"
                         >
                              click to copy
                         </button>
                         <span aria-atomic="true" aria-live="assertive"
-                            :class="isCopied ? 'inline-block rounded-md font-bold p-2 bg-red-200 text-sm my-2' : undefined">
+                            :class="isCopied ? 'block w-full border-1 border-green-300 font-bold px-2 py-1 bg-green-200 dark:bg-green-700 text-sm mb-2' : undefined">
                             <template v-if="isCopied">
-                                copied! <span class="font-normal ml-1">just paste into your email</span>
+                                copied! <span class="font-normal ml-1">please paste into your email</span>
                             </template>
                         </span>
                     </div>
