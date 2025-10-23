@@ -1,21 +1,36 @@
-import { BatchSpanProcessor, WebTracerProvider } from '@opentelemetry/sdk-trace-web'
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto'
-import { defaultResource, resourceFromAttributes } from '@opentelemetry/resources'
-import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic-conventions'
-import { ZoneContextManager } from '@opentelemetry/context-zone'
-import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web'
-import { registerInstrumentations } from '@opentelemetry/instrumentation'
+async function initializeTelemetry() {
+  // See code comment below about why this is a dynamic import
+  const [
+    { BatchSpanProcessor, WebTracerProvider },
+    { OTLPTraceExporter },
+    { defaultResource, resourceFromAttributes },
+    { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION },
+    { ZoneContextManager },
+    { getWebAutoInstrumentations },
+    { registerInstrumentations }
+  ] = await Promise.all([
+    import('@opentelemetry/sdk-trace-web'),
+    import('@opentelemetry/exporter-trace-otlp-proto'),
+    import('@opentelemetry/resources'),
+    import('@opentelemetry/semantic-conventions'),
+    import('@opentelemetry/context-zone'),
+    import('@opentelemetry/auto-instrumentations-web'),
+    import('@opentelemetry/instrumentation')
+  ])
 
-function initializeTelemetry() {
   const provider = new WebTracerProvider({
     resource: defaultResource().merge(
       resourceFromAttributes({
         [ATTR_SERVICE_NAME]: 'red',
-        [ATTR_SERVICE_VERSION]: '0.0.1',
+        [ATTR_SERVICE_VERSION]: '0.0.1'
       })
     ),
     spanProcessors: [
-      new BatchSpanProcessor(new OTLPTraceExporter({ url: 'https://heimdall-otlp.ietf.org/v1/traces' }))
+      new BatchSpanProcessor(
+        new OTLPTraceExporter({
+          url: 'https://heimdall-otlp.ietf.org/v1/traces'
+        })
+      )
     ]
   })
 
@@ -25,16 +40,39 @@ function initializeTelemetry() {
 
   registerInstrumentations({
     instrumentations: getWebAutoInstrumentations({
-      "@opentelemetry/instrumentation-fetch": {
-        propagateTraceHeaderCorsUrls: [new RegExp(`\\/api\\/*`)],
+      '@opentelemetry/instrumentation-fetch': {
+        propagateTraceHeaderCorsUrls: [new RegExp(`\\/api\\/*`)]
       }
     })
   })
 }
 
+const isVitest = typeof import.meta.env.VITEST !== 'undefined'
+
+const name = 'opentelemetry-plugin'
+
 export default defineNuxtPlugin({
-  name: 'opentelemetry-plugin',
+  name,
   async setup() {
+    if (isVitest) {
+      /**
+       * Importing the OTEL `@opentelemetry/*` libraries during a Vitest test fails with an error that looks like,
+       *
+       *   "Cannot find module 'website/node_modules/@opentelemetry/api/build/esm/baggage/utils' imported from website/node_modules/@opentelemetry/api/build/esm/index.js"
+       *
+       * This is seemingly caused by OTEL bundling quirks https://github.com/open-telemetry/opentelemetry-lambda/issues/1715#issuecomment-2685044356
+       * rather than a missing dependency.
+       *
+       * The fix is to,
+       * 1) Use lazy dynamic imports `import('@opentelementry/*')` so that we can conditionally import these libraries that would break Vitest
+       * 2) When Vitest is detected don't call initializeTelemetry().
+       *
+       **/
+      console.info(
+        `${JSON.stringify(name)} is inactive during tests. This is intentional.`
+      )
+      return
+    }
     initializeTelemetry()
   }
 })

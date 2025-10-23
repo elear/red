@@ -1,5 +1,6 @@
 import type { RfcCommon } from "../../../website/app/utilities/rfc-validators.ts"
 
+// Origin per https://developer.mozilla.org/en-US/docs/Glossary/Origin
 export const PUBLIC_SITE_URL_ORIGIN = 'https://www.rfc-editor.org'
 
 export const apiRfcBucketDocumentURLBuilder = (fileName: string) => {
