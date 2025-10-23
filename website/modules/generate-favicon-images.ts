@@ -48,7 +48,7 @@ const regenerateFavIconImages = async (logger?: Logger) => {
         encoding: 'utf8'
       })
       // if you change this sync the changes to url.ts's faviconPathBuilder()
-      const filename = `favicon-${width}x${height}.png`
+      const filename = `favicon-${width}-${height}.png`
       const writableStream = fs.createWriteStream(
         path.resolve(publicPath, filename)
       )
