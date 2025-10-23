@@ -21,21 +21,21 @@
                         />
                         <p class="text-balance">
                             For the definition of <b>Status</b>, see
-                            <A
+                            <Anchor
                                 :href="infoSeriesPathBuilder('rfc2026')"
                                 :class="ANCHOR_TAILWIND_STYLE"
                             >
                                 <component :is="formatTitleAsVNode('rfc2026')" />
-                            </A>.
+                            </Anchor>.
                         </p>
                         <p class="text-balance">
                             For the definition of <b>Stream</b>, see
-                            <A
+                            <Anchor
                                 :href="infoSeriesPathBuilder('rfc8729')"
                                 :class="ANCHOR_TAILWIND_STYLE"
                             >
                                 <component :is="formatTitleAsVNode('rfc8729')" />
-                            </A>.
+                            </Anchor>.
                         </p>
                     </PopoverContent>
                 </PopoverPortal>

@@ -18,6 +18,10 @@ export type MenuItem = {
   hideDropdownIconDesktop?: boolean
   href?: string
   click?: VueClick
+  /**
+   * A function that returns whether the menu item is active
+   * Used for the theme picker
+   */
   isActiveFn?: () => boolean
   activeLabelFn?: () => string
   children?: MenuItem[]

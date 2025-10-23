@@ -14,12 +14,15 @@
           :href="menuItem.href"
           :aria-label="menuItem.label"
           class="hover:bg-blue-400 group flex select-none items-center justify-between gap-[2px] rounded-md px-4 py-3 text-[15px] leading-none outline-none focus:shadow-[0_0_0_2px]"
+          as-child
           @click="menuItem.click"
         >
-          <Icon
-            v-if="menuItem.icon"
-            :name="menuItem.icon"
-          />
+          <Anchor>
+            <Icon
+              v-if="menuItem.icon"
+              :name="menuItem.icon"
+            />
+          </Anchor>
         </NavigationMenuLink>
 
         <NavigationMenuTrigger
@@ -84,13 +87,16 @@
                             v-if="level1.href"
                             :href="level1.href"
                             :class="[MENU_ITEM_CLASS, 'pl-5']"
+                            as-child
                             @click="level1.click"
                           >
-                            <Icon
-                              v-if="level1.icon"
-                              :name="level1.icon"
-                            />
-                            {{ level1.label }}
+                            <Anchor>
+                              <Icon
+                                v-if="level1.icon"
+                                :name="level1.icon"
+                              />
+                              {{ level1.label }}
+                            </Anchor>
                           </NavigationMenuLink>
                         </li>
                       </ul>
@@ -102,7 +108,7 @@
                 v-else
                 as-child
               >
-                <A
+                <Anchor
                   v-if="level0.href"
                   :href="level0.href"
                   :class="MENU_ITEM_CLASS"
@@ -120,7 +126,7 @@
                       class="text-lg absolute ml-1 -mt-1"
                     />
                   </span>
-                </A>
+                </Anchor>
                 <button
                   v-else
                   type="button"

@@ -1,11 +1,11 @@
 <template>
-  <A
+  <Anchor
     :href="SEARCH_PATH"
     class="absolute top-0 right-10 no-underline block px-2 pt-4.25 pb-2 block lg:hidden"
     aria-label="Search"
   >
     <Icon name="fluent:search-12-filled" />
-  </A>
+  </Anchor>
   <DialogRoot v-model:open="isOpen">
     <DialogTrigger
       aria-label="Menu"
@@ -34,7 +34,7 @@
               v-for="(item, index) in menuData"
               :key="index.toString()"
             >
-              <A
+              <Anchor
                 v-if="item.href"
                 :href="item.href"
                 :class="MENU_ITEM_CLASS"
@@ -43,9 +43,9 @@
                 <GraphicsChevron
                   v-if="item.hideDropdownIconDesktop"
                   class="absolute right-0 mt-1 mr-4 size-4 -rotate-90 text-blue-100"
-                />
+                />d
                 {{ item.label }}
-              </A>
+              </Anchor>
               <AccordionItem
                 v-else
                 :id="index.toString()"
@@ -56,14 +56,14 @@
                     v-for="(level0, childIndex) in item.children"
                     :key="childIndex"
                   >
-                    <A
+                    <Anchor
                       v-if="level0.href"
                       :href="level0.href"
                       :class="MENU_ITEM_CLASS"
                       @click="isOpen = false"
                     >
                       {{ level0.label }}
-                    </A>
+                    </Anchor>
                     <button
                       v-else-if="level0.click"
                       type="button"
@@ -105,14 +105,14 @@
                             v-for="(level1, level1Index) in level0.children"
                             :key="level1Index"
                           >
-                            <A
+                            <Anchor
                               v-if="level1.href"
                               :href="level1.href"
                               :class="MENU_ITEM_CLASS"
                               @click="isOpen = false"
                             >
                               {{ level1.label }}
-                            </A>
+                            </Anchor>
                           </li>
                         </ul>
                       </AccordionItem>

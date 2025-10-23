@@ -27,12 +27,12 @@
         :key="rfcRow.number.toString()"
       >
         <td class="text-right align-top p-1">
-          <A
+          <Anchor
             :href="infoSeriesPathBuilder(`rfc${rfcRow.number}`)"
             class="font-mono"
           >
             {{ rfcRow.number }}
-          </A>
+          </Anchor>
         </td>
         <td class="p-1 align-top">
           <p>

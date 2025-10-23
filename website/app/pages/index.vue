@@ -11,9 +11,9 @@
           </Heading>
           <p class="hidden mt-8 lg:block text-base text-grey-800 pl-5">
             Looking for works in progress? Go to
-            <A :href="DATATRACKER_URL_ORIGIN" class="text-blue-300 dark:text-blue-100">
+            <Anchor :href="DATATRACKER_URL_ORIGIN" class="text-blue-300 dark:text-blue-100">
               datatracker.ietf.org
-            </A>
+            </Anchor>
           </p>
         </div>
 

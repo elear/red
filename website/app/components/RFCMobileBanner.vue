@@ -19,10 +19,10 @@
         <ul class="inline">
           <li v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfc.obsoleted_by"
             :key="obsoletedByItemIndex" class="inline">
-            <A :href="infoSeriesPathBuilder(`RFC${obsoletedByItem.number}`)">
+            <Anchor :href="infoSeriesPathBuilder(`RFC${obsoletedByItem.number}`)">
               <component :is="formatTitleAsVNode(`RFC${obsoletedByItem.number}`)" />
               {{ obsoletedByItem.title }}
-            </A>
+            </Anchor>
           </li>
         </ul>
       </div>

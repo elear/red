@@ -2,12 +2,14 @@
   <NuxtLink
     v-if="isInternal && !isHash && !isMailTo"
     v-bind="sanitisedAnchorProps"
+    data-is-nuxt-link
   >
     <slot />
   </NuxtLink>
   <a
     v-else
     v-bind="sanitisedAnchorProps"
+    data-is-hyperlink
   >
     <slot />
   </a>

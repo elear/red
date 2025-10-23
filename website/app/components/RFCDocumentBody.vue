@@ -40,9 +40,9 @@
       For more information, please refer to
       <ul>
         <li v-for="(obsoletedByItem, obsoletedByItemIndex) in obsoletedBy" :key="obsoletedByItemIndex">
-          <A :href="obsoletedByItem.href">
+          <Anchor :href="obsoletedByItem.href">
             <component :is="obsoletedByItem.formattedTitle" />
-          </A>
+          </Anchor>
         </li>
       </ul>
     </div>

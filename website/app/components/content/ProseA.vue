@@ -24,7 +24,7 @@
  * with a fallback to Anchor
  */
 import RFCRouterLink from '../RFCRouterLink.vue'
-import Anchor from '../A.vue'
+import Anchor from '../Anchor.vue'
 import { isInternalLink, parseMaybeRfcLink } from '~/utilities/url'
 import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme'
 

@@ -1,5 +1,5 @@
 <template>
-  <A
+  <Anchor
     href="/"
     :class="[props.class, 'pl-0']"
   >
@@ -17,7 +17,7 @@
       width="183"
       height="37"
     />
-  </A>
+  </Anchor>
   <EnvironmentSpecificMessage />
 </template>
 

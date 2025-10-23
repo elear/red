@@ -48,18 +48,18 @@
         </li>
         <li>
           The Status field gives the document's current status (see
-          <A :href="infoSeriesPathBuilder('RFC2026')">RFC 2026</A> and
-          <A :href="infoSeriesPathBuilder('RFC6410')">RFC 6410</A>).
+          <Anchor :href="infoSeriesPathBuilder('RFC2026')">RFC 2026</Anchor> and
+          <Anchor :href="infoSeriesPathBuilder('RFC6410')">RFC 6410</Anchor>).
         </li>
         <li>
           The Stream field gives the document's stream (see
-          <A :href="infoSeriesPathBuilder('RFC4844')">RFC 4844</A>), followed by
+          <Anchor :href="infoSeriesPathBuilder('RFC4844')">RFC 4844</Anchor>), followed by
           Area and WG when relevant.
         </li>
         <li>The DOI field gives the Digital Object Identifier.</li>
       </ul>
       <p>
-        See the <A :href="PUBLIC_SITE_URL_ORIGIN">RFC Editor Web page</A> for more
+        See the <Anchor :href="PUBLIC_SITE_URL_ORIGIN">RFC Editor Web page</Anchor> for more
         information.
       </p>
       <Alert v-if="rfcMiniIndexError" variant="warning" level="1" heading="Error loading RFCs">

@@ -20,7 +20,7 @@
  * with a fallback to Anchor
  */
 import RFCRouterLink from './RFCRouterLink.vue'
-import Anchor from './A.vue'
+import Anchor from './Anchor.vue'
 import { isRfcEditorSite, parseMaybeRfcLink } from '~/utilities/url'
 
 const props = defineProps<{ href: string; id?: string }>()

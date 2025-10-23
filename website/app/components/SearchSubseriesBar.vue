@@ -7,9 +7,12 @@
       size="1.5em"
       class="text-emerald-100"
     />
-    <a :href="props.href" class="ml-2 no-underline hover:underline">{{
-      props.label
-    }}</a>
+    <Anchor
+      :href="props.href"
+      class="ml-2 no-underline hover:underline"
+    >
+      {{ props.label }}
+    </Anchor>
     <div class="grow"></div>
     <span
       class="bg-emerald-900 rounded-sm text-xs font-normal px-2 uppercase py-1 text-emerald-100"

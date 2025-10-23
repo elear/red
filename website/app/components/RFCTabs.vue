@@ -86,11 +86,11 @@
           <ul class="-mt-1">
             <li v-for="(author, authorIndex) in props.rfcBucketHtmlDocument.rfc.authors" :key="authorIndex"
               class="inline">
-              <A v-if="author.email" :href="mailToBuilder(author.email)"
+              <Anchor v-if="author.email" :href="mailToBuilder(author.email)"
                 class="whitespace-nowrap underline inline-block py-0.5 pr-0.5 mb-0.5">
                 {{ author.name }}
                 <Icon name="fluent:mail-32-regular" class="inline-block h-5 w-2" />
-              </A>
+              </Anchor>
               <span v-else>
                 {{ author.name }}
               </span>
@@ -105,34 +105,34 @@
         <template v-if="props.rfcBucketHtmlDocument.rfc.group">
           <dt class="font-bold mt-2">Working group</dt>
           <dd>
-            <a :href="workingGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.group)">
+            <Anchor :href="workingGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.group)">
               {{ props.rfcBucketHtmlDocument.rfc.group?.name }}
 
               <template v-if="props.rfcBucketHtmlDocument.rfc.group?.acronym">
                 ({{ props.rfcBucketHtmlDocument.rfc.group.acronym }})
               </template>
-            </a>
+            </Anchor>
           </dd>
         </template>
 
         <template v-if="props.rfcBucketHtmlDocument.rfc.area">
           <dt class="font-bold mt-2">Area</dt>
           <dd>
-            <a :href="areaGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.area)">
+            <Anchor :href="areaGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.area)">
               {{ props.rfcBucketHtmlDocument.rfc.area?.name }}
 
               <template v-if="props.rfcBucketHtmlDocument.rfc.area?.acronym">
                 ({{ props.rfcBucketHtmlDocument.rfc.area.acronym }})
               </template>
-            </a>
+            </Anchor>
           </dd>
         </template>
 
         <dt class="font-bold mt-2">Stream</dt>
         <dd>
-          <a :href="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)">
+          <Anchor :href="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)">
             {{ props.rfcBucketHtmlDocument.rfc.stream.name }}
-          </a>
+          </Anchor>
         </dd>
 
         <template v-if="props.rfcBucketHtmlDocument.rfc.identifiers">
@@ -168,9 +168,9 @@
       <!-- <Heading level="3" class="mt-5 mb-2">Cite this RFC</Heading>
           <ul class="text-sm flex flex-col gap-2">
             <li v-for="(citation, citationIndex) in props.rfc.citations" :key="citationIndex">
-              <A :href="citation.url" class="underline block px-2 -ml-2">
+              <Anchor :href="citation.url" class="underline block px-2 -ml-2">
                 {{ citation.title }}
-              </A>
+              </Anchor>
             </li>
           </ul> -->
 
@@ -180,9 +180,9 @@
         </Heading>
         <ul class="text-sm flex flex-col gap-2">
           <li v-for="(format, formatIndex) in props.rfcBucketHtmlDocument.rfc.formats" :key="formatIndex">
-            <A :href="format" class="underline block px-2 -ml-2">
+            <Anchor :href="format" class="underline block px-2 -ml-2">
               {{ format }}
-            </A>
+            </Anchor>
           </li>
         </ul>
       </template>

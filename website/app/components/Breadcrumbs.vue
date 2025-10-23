@@ -5,13 +5,13 @@
       :key="index"
       class="inline-block"
     >
-      <A
+      <Anchor
         v-if="path.url"
         class="inline-block px-2 py-2 underline rounded hover:bg-gray-200 hover:text-blue-800"
         :href="path.url"
       >
         {{ path.label }}
-      </A>
+      </Anchor>
       <b
         v-else
         class="inline-block px-2 py-2 text-gray-700 dark:text-gray-300"
