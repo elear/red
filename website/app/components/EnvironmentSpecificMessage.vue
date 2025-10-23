@@ -20,8 +20,7 @@
             <DialogOverlay class="bg-black/10 backdrop-blur-xs fixed inset-0 z-30" />
             <DialogContent class="fixed top-0 left-[50%] -ml-[10em] z-100">
                 <div
-                    class="relative bg-white dark:bg-black text-black dark:text-white max-w-[20em] mx-auto flex flex-col gap-3 pt-2 pb-3 px-4 rounded-xs shadow-2xl"
-                >
+                    class="relative bg-white dark:bg-black text-black dark:text-white max-w-[20em] mx-auto flex flex-col gap-3 pt-2 pb-3 px-4 rounded-xs shadow-2xl">
                     <DialogClose class="absolute right-3 top-3 cursor-pointer">
                         <GraphicsClose />
                     </DialogClose>
@@ -39,12 +38,10 @@
                             rows="4">
                             {{ browserPlatformDetails }}
                         </div>
-                        <button
-                            v-if="!isCopied"
+                        <button v-if="!isCopied"
                             class="inline-block text-left border-1 border-gray-700 bg-black text-white border-gray-200 dark:border-gray-200 cursor-pointer px-2 py-1 mb-2 text-sm hover:bg-gray-700 focus:bg-gray-700"
-                            @click="handleClipboard"
-                        >
-                             click to copy
+                            @click="handleClipboard">
+                            click to copy
                         </button>
                         <span aria-atomic="true" aria-live="assertive"
                             :class="isCopied ? 'block w-full border-1 border-green-300 font-bold px-2 py-1 bg-green-200 dark:bg-green-700 text-sm mb-2' : undefined">
