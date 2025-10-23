@@ -115,7 +115,7 @@ const {
   data: homepageLatestData,
   status: homepageLatestStatus,
   error: homepageLatestError
-} = await useAsyncData(() => $fetch(API_HOMEPAGE_LATEST_PATH))
+} = await useAsyncData(() => $fetch(API_HOMEPAGE_LATEST_PATH, { credentials: 'same-origin' }))
 
 const homepageLatest = computed((): RfcCommon[] => {
   const { data, error } = HomepageLatestSchema.safeParse(homepageLatestData.value)

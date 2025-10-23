@@ -86,7 +86,9 @@ useSeoMeta({
 const {
   data: rfcMiniIndexData,
   error: rfcMiniIndexError
-} = await useAsyncData(() => $fetch(API_RFC_MINI_INDEX_PATH))
+} = await useAsyncData(() => $fetch(API_RFC_MINI_INDEX_PATH, {
+  credentials: 'same-origin'
+}))
 
 const rfcMiniIndex = computed(
   () => {

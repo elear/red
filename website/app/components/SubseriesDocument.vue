@@ -55,6 +55,7 @@ const { data: subseriesDocument, error: subseriesDocumentError } = await useAsyn
     const url = apiSubseriesPathBuilder(props.subseriesId.type, props.subseriesId.number)
     const maybeRfcBucketDocument = await $fetch(url, {
       method: 'GET',
+      credentials: 'same-origin'
     })
     if (typeof maybeRfcBucketDocument !== 'object') {
       console.log("Unexpected response type. The server Content-Type may be misconfigured so $fetch() doesn't parse as JSON", typeof maybeRfcBucketDocument, maybeRfcBucketDocument)

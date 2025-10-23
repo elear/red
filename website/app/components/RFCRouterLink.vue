@@ -60,7 +60,6 @@ import { computed, onUnmounted, customRef } from 'vue'
 import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
 import { NuxtLink } from '#components'
 import { formatTitleAsVNode, RFC_TYPE_RFC } from '~/utilities/rfc'
-import { fetchRetry } from '~/utilities/network'
 import { parseMaybeRfcLink, rfcCommonPathBuilder } from '~/utilities/url'
 import type { LoadingStatus } from '~/utilities/loading-status'
 import type { VueStyleClass } from '~/utilities/vue'
@@ -143,18 +142,15 @@ const loadRfc = async (): Promise<void> => {
   console.log(`Loading ${rfcPath}`)
 
   try {
-    const response = await fetchRetry(
+    const response = await fetch(
       rfcPath,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        credentials: 'same-origin'
       },
-      {
-        maxRetries: 2,
-        delayBetweenRetriesMs: 50
-      }
     )
     const rfcUnverified = await response.json()
     const rfcValidated = RfcCommonSchema.parse(rfcUnverified)

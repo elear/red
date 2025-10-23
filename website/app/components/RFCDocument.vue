@@ -47,6 +47,7 @@ const { data: rfcBucketHtmlDocument, error: rfcBucketHtmlDocumentError } = await
     const url = apiRfcBucketDocumentPathBuilder(props.rfcId.number)
     const maybeRfcBucketDocument = await $fetch(url, {
       method: 'GET',
+      credentials: 'same-origin'
     })
     if (typeof maybeRfcBucketDocument !== 'object') {
       console.log("Unexpected response type. The server Content-Type may be misconfigured so $fetch() doesn't parse as JSON", typeof maybeRfcBucketDocument, maybeRfcBucketDocument)
