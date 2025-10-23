@@ -4,7 +4,7 @@ import type { RfcCommon } from '../../../website/app/utilities/rfc-validators.ts
 import { assertNever } from './typescript.ts'
 
 /**
-  * Note that RFC JSON is a specific legacy format, not a general idea of RFCs in JSON.
+ * Note that RFC JSON is a specific legacy format, not a general idea of RFCs in JSON.
  */
 
 export const rfcToRfcJson = (rfc: RfcCommon): RFCJSON => {
@@ -106,6 +106,11 @@ const formatRfcStatusAsRfcJsonStatus = (
       return 'PROPOSED STANDARD'
     case 'unknown':
       return 'UNKNOWN'
+    case 'internet standard':
+      return 'INTERNET STANDARD'
+    case 'draft standard':
+      // FIXME: is this an accurate conversion?
+      return 'PROPOSED STANDARD'
   }
   assertNever(status)
 }
@@ -130,19 +135,17 @@ const formatRfcFormatAsRfcJsonFormat = (
   assertNever(format)
 }
 
-export const formatAuthor = (
-  author: RfcCommon["authors"][number],
-): string => {
+export const formatAuthor = (author: RfcCommon['authors'][number]): string => {
   const name = author.name
     .split(/[\s.]/g)
     .filter(Boolean)
     .reduce((acc, item, index, arr) => {
-      const newBit = index === arr.length - 1 ?
-              ` ${item}`
-            : `${item.substring(0, 1).toUpperCase()}.`
-          return `${acc}${newBit}`
+      const newBit =
+        index === arr.length - 1
+          ? ` ${item}`
+          : `${item.substring(0, 1).toUpperCase()}.`
+      return `${acc}${newBit}`
     })
 
   return author.affiliation === 'Editor' ? `${name}, Ed.` : name
 }
-

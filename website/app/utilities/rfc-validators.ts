@@ -80,6 +80,16 @@ export const RfcCommonStatusSchema = z.union([
   z.object({
     slug: z.literal('standard'),
     name: z.literal('standards track')
+  }),
+  z.object({
+    // FIXME: this status isn't available from the current Red API but Typesense returns it
+    slug: z.literal('standard'),
+    name: z.literal('internet standard')
+  }),
+  z.object({
+    // FIXME: this status isn't available from the current Red API but Typesense returns it
+    slug: z.literal('ds'),
+    name: z.literal('draft standard')
   })
 ])
 
