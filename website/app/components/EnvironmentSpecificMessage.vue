@@ -35,13 +35,13 @@
                     </p>
                     <div class="text-sm">
                         <p>If you're reporting a bug please share your browser/platform details, which are:</p>
-                        <div class="font-mono block bg-gray-100 dark:bg-gray-800 text-xs dark:text-white p-2 border-1 border-gray-300 no-underline"
+                        <div class="font-mono block bg-gray-100 dark:bg-gray-800 text-xs dark:text-white p-2 border-1 border-gray-300 dark:border-gray-500  no-underline"
                             rows="4">
-                            {{ userAgent }}
+                            {{ browserPlatformDetails }}
                         </div>
                         <button
                             v-if="!isCopied"
-                            class="inline-block text-left border-1 border-gray-700 bg-black text-white border-gray-200 cursor-pointer px-2 py-1 mb-2 text-sm hover:bg-gray-700 focus:bg-gray-700"
+                            class="inline-block text-left border-1 border-gray-700 bg-black text-white border-gray-200 dark:border-gray-200 cursor-pointer px-2 py-1 mb-2 text-sm hover:bg-gray-700 focus:bg-gray-700"
                             @click="handleClipboard"
                         >
                              click to copy
@@ -73,11 +73,13 @@ import { copyToClipboard } from '~/utilities/clipboard'
 const EMAIL = 'rfc-editor@rfc-editor.org'
 
 const isCopied = ref(false)
-const userAgent = ref('')
+const browserPlatformDetails = ref('')
 
 onMounted(() => {
     isCopied.value = false
-    userAgent.value = window.navigator.userAgent ?? 'could not detect user agent'
+    const userAgent = window.navigator.userAgent ?? '(could not detect user agent)'
+    const browserDimensions = `Browser dimensions ${window.screen.width}×${window.screen.height}\n`;
+    browserPlatformDetails.value = [userAgent, browserDimensions].join("\n")
 })
 
 const isOpen = ref(false)
@@ -87,7 +89,7 @@ watch(isOpen, () => {
 })
 
 const handleClipboard = () => {
-    copyToClipboard(userAgent.value)
+    copyToClipboard(browserPlatformDetails.value)
     isCopied.value = true
 }
 </script>
