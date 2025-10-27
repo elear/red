@@ -1,5 +1,5 @@
 // THIS FILE IS AUTO GENERATED. DO NOT EDIT.
-// Use `npm run regenerate-test-data` to update.
+// Use `npm run generate:test-data` to update.
 
 import type { RfcCommon, SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
 
@@ -685,4 +685,4 @@ export const testMockAllSubseries: SubseriesCommon[] = [
   {"type":"std","number":101,"contents":[{"formats":["xml","txt"],"subseries":[{"type":"std","number":101}],"number":9777,"abstract":"This document specifies the Multicast Listener Discovery version 2 (MLDv2) protocol. MLD is used by an IPv6 router to discover the presence of multicast listeners on directly attached links and to discover which multicast addresses are of interest to those neighboring nodes. MLDv2 is designed to be interoperable with MLDv1. MLDv2 adds the ability for a node to report interest in listening to packets with a particular multicast address only from specific source addresses or from all sources except for specific source addresses.\n\n This document updates RFC 2710 and obsoletes RFC 3810.","published":"2025-03-28","status":{"slug":"std","name":"internet standard"},"pages":56,"authors":[{"person":100664,"name":"Brian Haberman","titlepage_name":"","email":"brian@innovationslab.net","affiliation":"Johns Hopkins University Applied Physics Lab","country":""}],"group":{"acronym":"pim","name":"Protocols for IP Multicast","type":"wg"},"area":{"acronym":"rtg","name":"Routing Area","type":"area"},"stream":{"slug":"IETF","name":"IETF","description":"Internet Engineering Task Force (IETF)"},"identifiers":[{"type":"doi","value":"10.17487/RFC9777"}],"obsoletes":[{"id":125753,"number":3810,"title":"Multicast Listener Discovery Version 2 (MLDv2) for IPv6"}],"obsoleted_by":[],"updates":[{"id":124687,"number":2710,"title":"Multicast Listener Discovery (MLD) for IPv6"}],"updated_by":[],"see_also":[],"keywords":["keyword"],"errata":[],"title":"Multicast Listener Discovery Version 2 (MLDv2) for IPv6"}]}
 ]
 // THIS FILE IS AUTO GENERATED. DO NOT EDIT.
-// Use `npm run regenerate-test-data` to update.
+// Use `npm run generate:test-data` to update.

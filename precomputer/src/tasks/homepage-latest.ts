@@ -18,7 +18,7 @@ type HomepageLatest = z.infer<typeof HomepageLatestSchema>
 export const renderHomepageLatest = async (
   allRfcs: Readonly<RfcCommon[]>
 ): Promise<HomepageLatest> => {
-  const response = { homepageLatest: allRfcs.slice(-3) }
+  const response = { homepageLatest: allRfcs.slice(-3).sort((a, b) => b.number - a.number ) }
   validateDocument(response, HomepageLatestSchema)
   return response
 }

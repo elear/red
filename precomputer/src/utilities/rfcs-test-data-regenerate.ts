@@ -3,9 +3,9 @@ import path from 'node:path'
 import { getAllRFCs, getAllSubseries, getRedClient } from './redClientGet.ts'
 
 /**
- * Nothing is exported from this function because it's a Node script utility that regenerates test data.
- * I thought it better to colocate the file with the data it generates rather than put it in a `scripts`
- * directory so that's why it's here in `utilities`.
+ * Nothing is exported from this file because it's a Node script utility that regenerates test data.
+ * 
+ * I thought it better to colocate the file with the data it generates rather than put it in a `scripts` directory.
  */
 
 const regenerateTestData = async () => {

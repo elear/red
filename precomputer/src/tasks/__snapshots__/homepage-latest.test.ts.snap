@@ -4,6 +4,128 @@ exports[`homepage 3 items 1`] = `
 {
   "homepageLatest": [
     {
+      "abstract": "This memo specifies the data structure representation that was devised to support Simple Public Key Infrastructure (SPKI) certificates, as detailed in RFC 2692, with the intent that it be more widely applicable.  It has been and is being used elsewhere.  There are multiple implementations in a variety of programming languages.  Uses of this representation are referred to in this document as "S-expressions".  This memo makes precise the encodings of these SPKI S-expressions: It gives a "canonical form" for them, describes two "transport" representations, and also describes an "advanced" format for display to people.",
+      "area": {
+        "acronym": "art",
+        "name": "Applications and Real-Time Area",
+        "type": "area",
+      },
+      "authors": [
+        {
+          "affiliation": "MIT CSAIL",
+          "country": "USA",
+          "email": "rivest@mit.edu",
+          "name": "Ronald Rivest",
+          "person": 19822,
+          "titlepage_name": "",
+        },
+        {
+          "affiliation": "Independent",
+          "country": "US",
+          "email": "d3e3e3@gmail.com",
+          "name": "Donald Eastlake",
+          "person": 102391,
+          "titlepage_name": "",
+        },
+      ],
+      "errata": [],
+      "formats": [
+        "xml",
+        "txt",
+      ],
+      "group": {
+        "acronym": "art",
+        "name": "Applications and Real-Time Area",
+        "type": "area",
+      },
+      "identifiers": [
+        {
+          "type": "doi",
+          "value": "10.17487/RFC9804",
+        },
+      ],
+      "keywords": [
+        "keyword",
+      ],
+      "number": 9804,
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "pages": 22,
+      "published": "2025-06-17",
+      "see_also": [],
+      "status": {
+        "name": "informational",
+        "slug": "inf",
+      },
+      "stream": {
+        "description": "Internet Engineering Task Force (IETF)",
+        "name": "IETF",
+        "slug": "IETF",
+      },
+      "subseries": [],
+      "title": "Simple Public Key Infrastructure (SPKI) S-Expressions",
+      "updated_by": [],
+      "updates": [],
+    },
+    {
+      "abstract": "This document is a product of the Path Aware Networking Research Group (PANRG). At the first meeting of the PANRG, the Research Group agreed to catalog and analyze past efforts to develop and deploy Path Aware techniques, most of which were unsuccessful or at most partially successful, in order to extract insights and lessons for Path Aware networking researchers.
+
+ This document contains that catalog and analysis.",
+      "area": {
+        "acronym": "irtf",
+        "name": "IRTF",
+        "type": "irtf",
+      },
+      "authors": [
+        {
+          "affiliation": "Tencent America",
+          "country": "United States of America",
+          "email": "spencerdawkins.ietf@gmail.com",
+          "name": "Spencer Dawkins",
+          "person": 107190,
+          "titlepage_name": "",
+        },
+      ],
+      "errata": [],
+      "formats": [
+        "xml",
+        "txt",
+      ],
+      "group": {
+        "acronym": "panrg",
+        "name": "Path Aware Networking RG",
+        "type": "rg",
+      },
+      "identifiers": [
+        {
+          "type": "doi",
+          "value": "10.17487/RFC9049",
+        },
+      ],
+      "keywords": [
+        "keyword",
+      ],
+      "number": 9049,
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "pages": 36,
+      "published": "2021-06-25",
+      "see_also": [],
+      "status": {
+        "name": "informational",
+        "slug": "inf",
+      },
+      "stream": {
+        "description": "Internet Research Task Force (IRTF)",
+        "name": "IRTF",
+        "slug": "IRTF",
+      },
+      "subseries": [],
+      "title": "Path Aware Networking: Obstacles to Deployment (A Bestiary of Roads Not Taken)",
+      "updated_by": [],
+      "updates": [],
+    },
+    {
       "abstract": "The 3GPP mobile network Authentication and Key Agreement (AKA) is an authentication mechanism for devices wishing to access mobile networks. RFC 4187 (EAP-AKA) made the use of this mechanism possible within the Extensible Authentication Protocol (EAP) framework. RFC 5448 (EAP-AKA') was an improved version of EAP-AKA.
 
  This document is the most recent specification of EAP-AKA', including, for instance, details about and references related to operating EAP-AKA' in 5G networks.
@@ -105,128 +227,6 @@ exports[`homepage 3 items 1`] = `
           "title": "Improved Extensible Authentication Protocol Method for 3rd Generation Authentication and Key Agreement (EAP-AKA')",
         },
       ],
-    },
-    {
-      "abstract": "This document is a product of the Path Aware Networking Research Group (PANRG). At the first meeting of the PANRG, the Research Group agreed to catalog and analyze past efforts to develop and deploy Path Aware techniques, most of which were unsuccessful or at most partially successful, in order to extract insights and lessons for Path Aware networking researchers.
-
- This document contains that catalog and analysis.",
-      "area": {
-        "acronym": "irtf",
-        "name": "IRTF",
-        "type": "irtf",
-      },
-      "authors": [
-        {
-          "affiliation": "Tencent America",
-          "country": "United States of America",
-          "email": "spencerdawkins.ietf@gmail.com",
-          "name": "Spencer Dawkins",
-          "person": 107190,
-          "titlepage_name": "",
-        },
-      ],
-      "errata": [],
-      "formats": [
-        "xml",
-        "txt",
-      ],
-      "group": {
-        "acronym": "panrg",
-        "name": "Path Aware Networking RG",
-        "type": "rg",
-      },
-      "identifiers": [
-        {
-          "type": "doi",
-          "value": "10.17487/RFC9049",
-        },
-      ],
-      "keywords": [
-        "keyword",
-      ],
-      "number": 9049,
-      "obsoleted_by": [],
-      "obsoletes": [],
-      "pages": 36,
-      "published": "2021-06-25",
-      "see_also": [],
-      "status": {
-        "name": "informational",
-        "slug": "inf",
-      },
-      "stream": {
-        "description": "Internet Research Task Force (IRTF)",
-        "name": "IRTF",
-        "slug": "IRTF",
-      },
-      "subseries": [],
-      "title": "Path Aware Networking: Obstacles to Deployment (A Bestiary of Roads Not Taken)",
-      "updated_by": [],
-      "updates": [],
-    },
-    {
-      "abstract": "This memo specifies the data structure representation that was devised to support Simple Public Key Infrastructure (SPKI) certificates, as detailed in RFC 2692, with the intent that it be more widely applicable.  It has been and is being used elsewhere.  There are multiple implementations in a variety of programming languages.  Uses of this representation are referred to in this document as "S-expressions".  This memo makes precise the encodings of these SPKI S-expressions: It gives a "canonical form" for them, describes two "transport" representations, and also describes an "advanced" format for display to people.",
-      "area": {
-        "acronym": "art",
-        "name": "Applications and Real-Time Area",
-        "type": "area",
-      },
-      "authors": [
-        {
-          "affiliation": "MIT CSAIL",
-          "country": "USA",
-          "email": "rivest@mit.edu",
-          "name": "Ronald Rivest",
-          "person": 19822,
-          "titlepage_name": "",
-        },
-        {
-          "affiliation": "Independent",
-          "country": "US",
-          "email": "d3e3e3@gmail.com",
-          "name": "Donald Eastlake",
-          "person": 102391,
-          "titlepage_name": "",
-        },
-      ],
-      "errata": [],
-      "formats": [
-        "xml",
-        "txt",
-      ],
-      "group": {
-        "acronym": "art",
-        "name": "Applications and Real-Time Area",
-        "type": "area",
-      },
-      "identifiers": [
-        {
-          "type": "doi",
-          "value": "10.17487/RFC9804",
-        },
-      ],
-      "keywords": [
-        "keyword",
-      ],
-      "number": 9804,
-      "obsoleted_by": [],
-      "obsoletes": [],
-      "pages": 22,
-      "published": "2025-06-17",
-      "see_also": [],
-      "status": {
-        "name": "informational",
-        "slug": "inf",
-      },
-      "stream": {
-        "description": "Internet Engineering Task Force (IETF)",
-        "name": "IETF",
-        "slug": "IETF",
-      },
-      "subseries": [],
-      "title": "Simple Public Key Infrastructure (SPKI) S-Expressions",
-      "updated_by": [],
-      "updates": [],
     },
   ],
 }
