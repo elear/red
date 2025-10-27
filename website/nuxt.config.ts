@@ -92,6 +92,9 @@ export default defineNuxtConfig({
       }
     }
   },
+  plugins: [
+    // '~/plugins/telemetry/instrumentation'
+  ],
   app: {
     head: {
       link: [
