@@ -54,7 +54,7 @@ jobs:
     - name: Setup Node.js environment
       uses: actions/setup-node@v4
       with:
-        node-version: 24.x
+        node-version: 22.x
 
     - name: Get Next Version
       id: semver
