@@ -54,7 +54,7 @@ jobs:
     - name: Setup Node.js environment
       uses: actions/setup-node@v4
       with:
-        node-version: 22.x
+        node-version: 24.x
 
     - name: Get Next Version
       id: semver
@@ -121,7 +121,7 @@ jobs:
       working-directory: ./
       run: |
         npx apigen-ts ./red-api.yml --inline-enums --parse-dates ./api-client.ts
-        cp api-client.ts ./red/precomputed/generated/
+        cp api-client.ts ./red/precomputer/generated/
 
     - name: Archive red-api client
       uses: actions/upload-artifact@v4
