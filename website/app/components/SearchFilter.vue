@@ -25,7 +25,7 @@
     />
 
     <SearchFilterSelect
-      label="Stream"
+      label="Publication Stream"
       attribute="stream.name"
     />
 
