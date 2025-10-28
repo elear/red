@@ -105,9 +105,9 @@ export type RfcBucketHtmlDocument = z.infer<typeof RfcBucketHtmlDocumentSchema>
 
 export const isAprilFoolsRfc = (rfc: RfcCommon): boolean => {
   if (rfc.published === undefined) return false
-  // FIXME: this should use different logic, checking for date and 'Independent Submission'
   const datetime = DateTime.fromISO(rfc.published)
   return (
+    rfc.stream.slug === 'INDEPENDENT' &&
     datetime.month === 4 && datetime.day === 1 && rfc.group?.acronym === 'none'
   )
 }
