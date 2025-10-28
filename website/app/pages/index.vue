@@ -58,6 +58,10 @@
           </Card>
 
           <MarkdownCard id="/series/rfc-download/" />
+
+          <Card :href="searchPathBuilder({ showObsoleted: '1' })" heading-level="3" has-cover-link>
+            <template #headingTitle>Browse all RFCs</template>
+          </Card>
         </div>
 
         <Heading level="2" has-icon class="md:mx-2 pl-5 mt-10 mb-5 md:p-0">

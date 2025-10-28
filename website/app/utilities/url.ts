@@ -122,6 +122,7 @@ type SearchPathBuilderProps = {
   status: Status[]
   from: string
   to: string
+  showObsoleted?: '1'
 }
 
 export const searchPathBuilder = (
