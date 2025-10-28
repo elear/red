@@ -147,10 +147,12 @@ import type {
 import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
 import { adaptSearchClient } from '~/utilities/search-client-middleware'
 import { useRfcEditorHead } from '~/utilities/head'
-import { searchPathBuilder } from '~/utilities/url'
+import { SEARCH_PATH, searchPathBuilder } from '~/utilities/url'
 
 const route = useRoute()
 const searchStore = useSearchStore()
+
+const router = useRouter()
 
 /**
  * Typesense Search Client
@@ -273,6 +275,12 @@ const routing = {
   router: noOpRouter,
   stateMapping: {
     stateToRoute(uiState: UIState): void {
+      if (
+        // stateToRoute will be called even when leaving search to go to another route eg /info/*
+        // so if it's not on the search page we should leave
+        !router.currentRoute.value.fullPath.startsWith(SEARCH_PATH)) {
+        return
+      }
       const q = uiState[INDEX_NAME].query ?? null
       const status = uiState[INDEX_NAME].refinementList?.['status.name']?.join(',') ?? null
       const stream = uiState[INDEX_NAME].menu?.['stream.name'] ?? null
@@ -300,8 +308,7 @@ const routing = {
         { replace: true }
       )
     },
-    routeToState(routeState: unknown): UIState {
-      console.log('routeToState', routeState, route.query)
+    routeToState(_routeState: unknown): UIState {
       const query = route.query.q?.toString() ?? ''
       const status = route.query.status?.toString().split(',')
       const stream = route.query.stream?.toString() ?? ''
