@@ -47,7 +47,10 @@
           class="data-[motion=from-start]:animate-enterFromLeft data-[motion=from-end]:animate-enterFromRight data-[motion=to-start]:animate-exitToLeft data-[motion=to-end]:animate-exitToRight absolute top-0 left-0 w-full min-w-3xs sm:w-auto py-1"
         >
           <ul class="list-none">
-            <li v-if="menuItem.hideLabelDesktop" class="text-gray-600 dark:text-white border-b-2 border-b-gray-300 dark:border-b-gray-600 mb-1 pt-1 pb-1 pl-4 text-sm font-bold pl-3">
+            <li
+              v-if="menuItem.hideLabelDesktop"
+              class="text-gray-600 dark:text-white border-b-2 border-b-gray-300 dark:border-b-gray-600 mb-1 pt-1 pb-1 pl-4 text-sm font-bold pl-3"
+            >
               {{ menuItem.label }}
             </li>
             <li
@@ -93,13 +96,13 @@
                             as-child
                             @click="level1.click"
                           >
-                            <Anchor>
+                            <a>
                               <Icon
                                 v-if="level1.icon"
                                 :name="level1.icon"
                               />
                               {{ level1.label }}
-                            </Anchor>
+                            </a>
                           </NavigationMenuLink>
                         </li>
                       </ul>

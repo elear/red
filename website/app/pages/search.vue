@@ -100,7 +100,10 @@
                 :href="searchStore.subseriesHref"
               />
 
-            <ais-hits :id="INSTANTSEARCH_HITS_CONTAINER_DOM_ID" class="mt-4">
+              <ais-hits
+                :id="INSTANTSEARCH_HITS_CONTAINER_DOM_ID"
+                class="mt-4"
+              >
                 <template #default="{ items }">
                   <!-- NO RESULTS -->
                   <SearchNoResults v-if="!items.length" />
@@ -269,18 +272,22 @@ const noOpRouter = {
   }
 }
 
+// AIS creates routes without a trailing slash
+const searchWithoutTrailingSlash = SEARCH_PATH.replace(/\/$/, '')
+
 const routing = {
   router: noOpRouter,
   stateMapping: {
-    stateToRoute(uiState: UIState): void {
+    async stateToRoute(uiState: UIState): Promise<void> {
       if (
-        // stateToRoute will be called even when leaving search to go to another route eg /info/*
-        // so if it's not on the search page we should leave
-        !router.currentRoute.value.fullPath.startsWith(SEARCH_PATH)) {
+        // stateToRoute will be called even when leaving search to go to another route eg `/info/*`
+        // so we shouldn't update the route if they're no longer on the search page
+        !router.currentRoute.value.fullPath.startsWith(searchWithoutTrailingSlash)) {
+        // console.info('leaving search page', router.currentRoute.value.fullPath, SEARCH_PATH)
         return
       }
+
       const q = uiState[INDEX_NAME].query ?? null
-      const status = uiState[INDEX_NAME].refinementList?.['status.name']?.join(',') ?? null
       const stream = uiState[INDEX_NAME].menu?.['stream.name'] ?? null
       const area = uiState[INDEX_NAME].menu?.['area.full'] ?? null
       const group = uiState[INDEX_NAME].refinementList?.['group.full']?.join(',') ?? null
@@ -288,8 +295,22 @@ const routing = {
       const pubDate = uiState[INDEX_NAME].range?.['publicationDate'] ?? null
       const showObsoleted = !(uiState[INDEX_NAME].toggle?.['flags.obsoleted'] || false)
       const sort = uiState[INDEX_NAME].sortBy?.substring(10) ?? null
-      // TODO: don't navigateTo when the resulting URL would be the same
-      navigateTo(
+
+      // FIXME
+      // When using the header nav to click on 'The RFC Series / Browse RFCs by Status / any link' the URL should have precedence over uiState
+      // However when changing search filters then uiState should have precedence
+      //
+      // There is no current fix for this, however as a temporary workaround the HeaderNavDesktop.vue and HeaderNavMobile.vue have conventional <a>
+      // links rather than SPA links so that a full page refresh occurs which does behave correctly, albeit with slow full page reloads.
+      // We should address this.
+
+      // const currentRouteStatus = router.currentRoute.value.query.status
+      // const currentRouteStatusValue = currentRouteStatus ? currentRouteStatus.toString() : null
+
+      const uiStateStatus = uiState[INDEX_NAME].refinementList?.['status.name']?.join(',')
+      const status: string | null = uiStateStatus ?? null
+      // TODO: don't navigateTo when the resulting URL would be the same as this creates unnecessary browser history
+      await navigateTo(
         {
           query: {
             ...q && { q },
@@ -307,6 +328,8 @@ const routing = {
       )
     },
     routeToState(_routeState: unknown): UIState {
+      // console.log("new route", _routeState, route.query)
+      // TODO: should we parse/validate any of these params?
       const query = route.query.q?.toString() ?? ''
       const status = route.query.status?.toString().split(',')
       const stream = route.query.stream?.toString() ?? ''

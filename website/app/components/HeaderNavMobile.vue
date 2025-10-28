@@ -105,14 +105,14 @@
                             v-for="(level1, level1Index) in level0.children"
                             :key="level1Index"
                           >
-                            <Anchor
+                            <a
                               v-if="level1.href"
                               :href="level1.href"
                               :class="MENU_ITEM_CLASS"
                               @click="isOpen = false"
                             >
                               {{ level1.label }}
-                            </Anchor>
+                            </a>
                           </li>
                         </ul>
                       </AccordionItem>
