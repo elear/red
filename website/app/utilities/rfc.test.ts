@@ -77,6 +77,7 @@ export const blankRfcCommon: RfcCommon = {
 
 test('isAprilFoolsRfc', () => {
   const aprilFoolsRfc = structuredClone(blankRfcCommon)
+  aprilFoolsRfc.stream.slug = 'INDEPENDENT'
   aprilFoolsRfc.published = '1979-04-01'
   aprilFoolsRfc.group = {
     type: 'area',
