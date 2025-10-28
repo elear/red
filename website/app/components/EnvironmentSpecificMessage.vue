@@ -32,6 +32,14 @@
                             {{ EMAIL }}
                         </a>
                     </p>
+                    <h2 class="text-lg font-bold">Known issues</h2>
+                    <ul class="list-disc ml-5 text-sm">
+                        <li>
+                            Data is pulled from <a :href="DATATRACKER_URL_ORIGIN" class="underline">Datatracker</a> and
+                            during IETF 124 this will be static and stale. This known issue will be fixed before a production release.
+                        </li>
+                        <li>Please feel free to ask if it's a known issue at the RFC Editor desk.</li>
+                    </ul>
                     <div class="text-sm">
                         <p>If you're reporting a bug please share your browser/platform details, which are:</p>
                         <div class="font-mono block bg-gray-100 dark:bg-gray-800 text-xs dark:text-white p-2 border-1 border-gray-300 dark:border-gray-500  no-underline"
@@ -66,6 +74,7 @@ import {
     DialogTrigger
 } from 'reka-ui'
 import { copyToClipboard } from '~/utilities/clipboard'
+import { DATATRACKER_URL_ORIGIN } from '~/utilities/url'
 
 const EMAIL = 'rfc-editor@rfc-editor.org'
 
