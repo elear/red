@@ -30,6 +30,64 @@ import {
 import { chunkString, getAllIndexes } from '../utilities/string.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
 
+export const rfcBucketHtmlToRfcDocument = async (
+  rfcBucketHtml: string,
+  rfcNumber: number,
+  getRfcCommon: (rfcNumber: number) => Promise<RfcCommon>
+): Promise<RfcBucketHtmlDocument> => {
+  const parser = await getDOMParser()
+  const dom = parser.parseFromString(rfcBucketHtml, 'text/html')
+
+  const rfcAndToc: RfcAndToc = {
+    rfc: await getRfcCommon(rfcNumber),
+    tableOfContents: undefined
+  }
+
+  const documentHtmlType = sniffRfcBucketHtmlType(dom)
+
+  let maxPreformattedLineLength: MaxPreformattedLineLengthSchemaType = {
+    max: 80,
+    maxWithAnchorSuffix: 80
+  }
+
+  let rfcDocument: Node[] = []
+
+  switch (documentHtmlType) {
+    case 'plaintext':
+      parsePlaintextBody(dom.body, rfcAndToc)
+      rfcDocument = getPlaintextRfcDocument(dom)
+      maxPreformattedLineLength = await getPlaintextMaxLineLength(dom)
+      break
+    case 'xml2rfc':
+      parseXml2RfcBody(dom.body, rfcAndToc)
+      rfcDocument = getXml2RfcRfcDocument(dom)
+      maxPreformattedLineLength = await getXml2RfcMaxLineLength(dom)
+      break
+    case 'pdf-or-ps':
+      throw Error(`RFC HTML should never be detected as ${documentHtmlType}`)
+    default:
+      assertNever(documentHtmlType)
+      break
+  }
+
+  const baseUrl = new URL(`/rfc/rfc${rfcNumber}.html`, PUBLIC_SITE_URL_ORIGIN)
+
+  convertHrefs(rfcDocument, baseUrl)
+  ensureWordBreaks(rfcDocument)
+
+  const response: RfcBucketHtmlDocument = {
+    rfc: rfcAndToc.rfc,
+    tableOfContents: rfcAndToc.tableOfContents,
+    documentHtmlType,
+    documentHtmlObj: rfcDocumentToPojo(rfcDocument),
+    maxPreformattedLineLength
+  }
+
+  validateDocument(response, RfcBucketHtmlDocumentSchema)
+
+  return response
+}
+
 export const fetchSourceRfcHtml = async (
   rfcNumber: number
 ): Promise<string | null> => {
@@ -183,64 +241,6 @@ export const fetchSourceRfcHtml = async (
 export type RfcAndToc = {
   rfc: RfcCommon
   tableOfContents?: TableOfContents
-}
-
-export const rfcBucketHtmlToRfcDocument = async (
-  rfcBucketHtml: string,
-  rfcNumber: number,
-  getRfcCommon: (rfcNumber: number) => Promise<RfcCommon>
-): Promise<RfcBucketHtmlDocument> => {
-  const parser = await getDOMParser()
-  const dom = parser.parseFromString(rfcBucketHtml, 'text/html')
-
-  const rfcAndToc: RfcAndToc = {
-    rfc: await getRfcCommon(rfcNumber),
-    tableOfContents: undefined
-  }
-
-  const documentHtmlType = sniffRfcBucketHtmlType(dom)
-
-  let maxPreformattedLineLength: MaxPreformattedLineLengthSchemaType = {
-    max: 80,
-    maxWithAnchorSuffix: 80
-  }
-
-  let rfcDocument: Node[] = []
-
-  switch (documentHtmlType) {
-    case 'plaintext':
-      parsePlaintextBody(dom.body, rfcAndToc)
-      rfcDocument = getPlaintextRfcDocument(dom)
-      maxPreformattedLineLength = await getPlaintextMaxLineLength(dom)
-      break
-    case 'xml2rfc':
-      parseXml2RfcBody(dom.body, rfcAndToc)
-      rfcDocument = getXml2RfcRfcDocument(dom)
-      maxPreformattedLineLength = await getXml2RfcMaxLineLength(dom)
-      break
-    case 'pdf-or-ps':
-      throw Error(`RFC HTML should never be detected as ${documentHtmlType}`)
-    default:
-      assertNever(documentHtmlType)
-      break
-  }
-
-  const baseUrl = new URL(`/rfc/rfc${rfcNumber}.html`, PUBLIC_SITE_URL_ORIGIN)
-
-  convertHrefs(rfcDocument, baseUrl)
-  ensureWordBreaks(rfcDocument)
-
-  const response: RfcBucketHtmlDocument = {
-    rfc: rfcAndToc.rfc,
-    tableOfContents: rfcAndToc.tableOfContents,
-    documentHtmlType,
-    documentHtmlObj: rfcDocumentToPojo(rfcDocument),
-    maxPreformattedLineLength
-  }
-
-  validateDocument(response, RfcBucketHtmlDocumentSchema)
-
-  return response
 }
 
 export const rfcBucketHtmlFilenameBuilder = (rfcNumber: number) =>
