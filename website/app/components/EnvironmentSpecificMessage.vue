@@ -26,22 +26,32 @@
         </DialogTrigger>
         <DialogPortal>
             <DialogOverlay class="bg-black/10 backdrop-blur-xs fixed inset-0 z-30" />
-            <DialogContent class="fixed top-0 left-[50%] -ml-[10em] z-100">
+            <DialogContent class="fixed top-0 left-[50%] -ml-[10em] z-100 overflow-y-auto max-h-screen">
                 <div
                     class="relative bg-white dark:bg-black text-black dark:text-white max-w-[20em] mx-auto flex flex-col gap-3 pt-2 pb-3 px-4 rounded-xs shadow-2xl">
                     <DialogClose class="absolute right-3 top-3 cursor-pointer">
                         <GraphicsClose />
                     </DialogClose>
                     <h1 class="text-lg font-bold">Beta feedback</h1>
-                    <p class="m-0">
-                        Please email your feedback to
-                        <a
-                            :href="`mailto:${EMAIL}`"
-                            class="underline whitespace-nowrap font-mono hover:bg-gray-100 focus:bg-gray-100"
-                        >
-                            {{ EMAIL }}
-                        </a>
-                    </p>
+                    <ul class="list-disc ml-5 text-sm flex flex-col gap-2">
+                        <li>
+                            Send email to
+                            <a
+                                :href="`mailto:${EMAIL}`"
+                                class="underline whitespace-nowrap font-mono hover:bg-gray-100 focus:bg-gray-100"
+                            >
+                                {{ EMAIL }}
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                :href="RED_BETA_GITHUB_ISSUES_URL"
+                                class="underline hover:bg-gray-100 focus:bg-gray-100"
+                            >
+                                Report issue via GitHub
+                            </a>
+                        </li>
+                    </ul>
                     <h2 class="text-lg font-bold">Known issues</h2>
                     <ul class="list-disc ml-5 text-sm">
                         <li>
@@ -100,6 +110,7 @@ import { copyToClipboard } from '~/utilities/clipboard'
 import { DATATRACKER_URL_ORIGIN } from '~/utilities/url'
 
 const EMAIL = 'tools-discuss@ietf.org'
+const RED_BETA_GITHUB_ISSUES_URL = 'https://github.com/ietf-tools/red-beta/issues'
 
 const isCopied = ref(false)
 const browserPlatformDetails = ref('')
