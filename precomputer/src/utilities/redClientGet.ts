@@ -4,13 +4,15 @@ import {
   RfcCommonAreaTypeSchema,
   RfcCommonGroupTypeSchema,
   RfcCommonStatusSchema,
-  RfcCommonSubseriesTypeSchema,
+  RfcCommonSubseriesTypeSchema
 } from '../../../website/app/utilities/rfc-validators.ts'
 import type {
   SubseriesCommon,
   RfcCommon
 } from '../../../website/app/utilities/rfc-validators.ts'
 import { assertIsString } from './typescript.ts'
+import { sleep } from './sleep.ts'
+import { warn } from 'console'
 
 export const getRedClient = (): ApiClient => {
   const NUXT_PUBLIC_DATATRACKER_BASE = process.env.NUXT_PUBLIC_DATATRACKER_BASE
@@ -48,11 +50,13 @@ export const getRedClient = (): ApiClient => {
   })
 }
 
-export const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon | null> => {
+export const getRfcCommon = async (
+  rfcNumber: number
+): Promise<RfcCommon | null> => {
   const api = getRedClient()
   try {
     const rfc = await docRetrieve(api, rfcNumber)
-    if(rfc === null) {
+    if (rfc === null) {
       return null
     }
     const rfcCommon = rfcToRfcCommon(rfc)
@@ -63,7 +67,10 @@ export const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon | null>
   }
 }
 
-const _getRfcCommonCache: Record<number, undefined | Promise<RfcCommon | null>> = {}
+const _getRfcCommonCache: Record<
+  number,
+  undefined | Promise<RfcCommon | null>
+> = {}
 
 export const getRfcCommonCached = async (
   rfcNumber: number
@@ -197,30 +204,40 @@ export const getAllRFCs = async ({
 }
 
 /** Safety wrapper around docRetrieve access to catch errors  */
-export const docRetrieve = async (redApi: ApiClient, rfcNumber: number) => {
-  try {
-    return await redApi.red.docRetrieve(rfcNumber)
-  } catch (e: unknown) {
-    // The API client can throw to express 404s... if so, return null
-    if (
-      e &&
-      typeof e === 'object' &&
-      'type' in e &&
-      e.type === 'client_error' &&
-      'errors' in e &&
-      Array.isArray(e.errors) &&
-      e.errors.length > 0
-    ) {
-      const error = e.errors[0]
-      if ('code' in error && error.code === 'not_found') {
-        return null
+export const docRetrieve = async (redApi: ApiClient, rfcNumber: number): Promise<Rfc | null> => {
+  let attemptsRemaining = 3
+  while (attemptsRemaining > 0) {
+    try {
+      return await redApi.red.docRetrieve(rfcNumber)
+    } catch (e: unknown) {
+      if (e && typeof e === 'object' && 'code' in e && e.code === 'ETIMEDOUT') {
+        attemptsRemaining--
+        console.warn(`[RFC ${rfcNumber}] Red API ${e.code}. Retrying soon. ${attemptsRemaining} attempts remaining.`)
+        await sleep(500)        
+      } else {
+        // The API client can throw to indicate 404s... if so, return null
+        if (
+          e &&
+          typeof e === 'object' &&
+          'type' in e &&
+          e.type === 'client_error' &&
+          'errors' in e &&
+          Array.isArray(e.errors) &&
+          e.errors.length > 0
+        ) {
+          const error = e.errors[0]
+          if ('code' in error && error.code === 'not_found') {
+            return null
+          }
+        }
+
+        const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
+        console.error(errorMessage, e)
+        throw Error(`${errorMessage}. See console`)
       }
     }
-
-    const errorMessage = 'Unhandled Red API response'
-    console.error(errorMessage, e)
-    throw Error(`${errorMessage}. See console`)
   }
+  throw Error(`[RFC ${rfcNumber}] Red API docRetrive failure after several retries.`)
 }
 
 export const setTimeoutPromise = (timerMs: number) =>
