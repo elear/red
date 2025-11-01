@@ -48,7 +48,6 @@ export const uploadRfcHtml = async (rfcNumber: number): Promise<boolean> => {
     return true
   }
 
-  console.log(`[RFC ${rfcNumber}] HTML not available, trying PDF instead`)
   // Some RFCs don't have HTML eg RFC418, so try PDF
   // Note that this will upload page images
   const rfcDocFromPdf = await rfcBucketPdfToRfcDocument(
