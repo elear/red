@@ -265,6 +265,7 @@ export const safeDocRetrieve = async (
           unhandled(e)
         }
       } else {
+        unhandled(e)
       }
     }
   }
