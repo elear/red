@@ -251,6 +251,20 @@ export const safeDocRetrieve = async (
     try {
       return await redApi.red.docRetrieve(rfcNumber)
     } catch (e: unknown) {
+      if (
+        e &&
+        typeof e === 'object' &&
+        'type' in e &&
+        e.type === 'client_error' &&
+        'errors' in e &&
+        Array.isArray(e.errors) &&
+        e.errors.length > 0 &&
+        // The API client can throw to indicate 404s... if so, return null
+        e.errors.some((error) => 'code' in error && error.code === 'not_found')
+      ) {
+        return null
+      }
+
       console.log(`[RFC ${rfcNumber}]`, 'debug', e, {
         isAggregateError: isAggregateError(e),
         'e.constructor': e && typeof e === 'object' && 'constructor' in e,
@@ -264,24 +278,7 @@ export const safeDocRetrieve = async (
         'e.name': e.name
       })
 
-      if (e && typeof e === 'object' && 'type' in e) {
-        console.log(`[RFC ${rfcNumber}] error type: ${e.type}`)
-        console.log(`[RFC ${rfcNumber}] error keys: ${Object.keys(e)}`)
-        if (
-          e.type === 'client_error' &&
-          'errors' in e &&
-          Array.isArray(e.errors) &&
-          e.errors.length > 0 &&
-          // The API client can throw to indicate 404s... if so, return null
-          e.errors.some(
-            (error) => 'code' in error && error.code === 'not_found'
-          )
-        ) {
-          return null
-        } else {
-          throwUnhandled(e)
-        }
-      } else if (shouldRetry(e)) {
+      if (shouldRetry(e)) {
         attemptsRemaining--
         console.warn(
           `[RFC ${rfcNumber}] Red API server error. Retrying soon. ${attemptsRemaining} attempts remaining.`
