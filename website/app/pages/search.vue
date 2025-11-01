@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-[100vh]">
-    <noscript> This search requires JavaScript. </noscript>
+    <SafeNoScript>This search requires JavaScript.</SafeNoScript>
     <ais-instant-search
       ref="aisInstantSearchRef"
       :index-name="INDEX_NAME"
@@ -71,7 +71,7 @@
             <template #fallback>
               <p class="w-full text-center">
                 Loading search...
-                <noscript>Please enable JavaScript to use search.</noscript>
+                <SafeNoScript>Please enable JavaScript to use search.</SafeNoScript>
               </p>
             </template>
             <div class="hidden lg:w-1/3 lg:block">
