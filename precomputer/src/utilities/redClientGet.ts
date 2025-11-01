@@ -239,6 +239,9 @@ export const safeDocRetrieve = async (
         }
       } else {
         const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
+        if(e && typeof e === 'object') {
+          console.log(`[RFC ${rfcNumber}] error keys: ${Object.keys(e)}`)
+        }
         console.error(errorMessage, e)
         console.log(
           `[RFC ${rfcNumber}]`,
