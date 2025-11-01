@@ -15,6 +15,7 @@ const main = async (
   }
   const rfcRange = range(minRfcNumber, maxRfcNumber)
 
+  console.log(`Processing ${minRfcNumber}-${maxRfcNumber}. Using ${NUMBER_OF_CONCURRENT_RFC_PROCESSORS} concurrent promises (results will appear out of order)`)
   const { errors } = await PromisePool.for(rfcRange)
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
     .process(async (rfcNumber) => {
@@ -23,7 +24,7 @@ const main = async (
         if (isDone) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)
         } else {
-          console.error(`[RFC ${rfcNumber}] generation failed`)
+          console.error(`[RFC ${rfcNumber}] generation failed. If the RFC number was never issued this isn't an error.`)
         }
       } catch (err) {
         console.warn(
