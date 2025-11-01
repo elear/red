@@ -12,7 +12,6 @@ import type {
 } from '../../../website/app/utilities/rfc-validators.ts'
 import { assertIsString } from './typescript.ts'
 import { sleep } from './sleep.ts'
-import { warn } from 'console'
 
 export const getRedClient = (): ApiClient => {
   const NUXT_PUBLIC_DATATRACKER_BASE = process.env.NUXT_PUBLIC_DATATRACKER_BASE
@@ -55,14 +54,14 @@ export const getRfcCommon = async (
 ): Promise<RfcCommon | null> => {
   const api = getRedClient()
   try {
-    const rfc = await docRetrieve(api, rfcNumber)
+    const rfc = await safeDocRetrieve(api, rfcNumber)
     if (rfc === null) {
       return null
     }
     const rfcCommon = rfcToRfcCommon(rfc)
     return rfcCommon
   } catch (e) {
-    console.error('docRetrieve catch()', e)
+    console.error('safeDocRetrieve catch()', e)
     throw e
   }
 }
@@ -203,42 +202,56 @@ export const getAllRFCs = async ({
   return frozenRfcs
 }
 
-/** Safety wrapper around docRetrieve access to catch errors  */
-export const docRetrieve = async (redApi: ApiClient, rfcNumber: number): Promise<Rfc | null> => {
+/** Safety wrapper around docRetrieve access to catch 404 errors, retry if timeouts etc */
+export const safeDocRetrieve = async (
+  redApi: ApiClient,
+  rfcNumber: number
+): Promise<Rfc | null> => {
   let attemptsRemaining = 3
   while (attemptsRemaining > 0) {
     try {
       return await redApi.red.docRetrieve(rfcNumber)
     } catch (e: unknown) {
-      if (e && typeof e === 'object' && 'code' in e && e.code === 'ETIMEDOUT') {
-        attemptsRemaining--
-        console.warn(`[RFC ${rfcNumber}] Red API ${e.code}. Retrying soon. ${attemptsRemaining} attempts remaining.`)
-        await sleep(500)        
-      } else {
-        // The API client can throw to indicate 404s... if so, return null
+      if (e && typeof e === 'object' && 'type' in e) {
+        console.log(`[RFC ${rfcNumber}] error type: ${e.type}`)
+        console.log(`[RFC ${rfcNumber}] error keys: ${Object.keys(e)}`)
         if (
-          e &&
-          typeof e === 'object' &&
-          'type' in e &&
           e.type === 'client_error' &&
           'errors' in e &&
           Array.isArray(e.errors) &&
-          e.errors.length > 0
+          e.errors.length > 0 &&
+          // The API client can throw to indicate 404s... if so, return null
+          e.errors.some(
+            (error) => 'code' in error && error.code === 'not_found'
+          )
         ) {
-          const error = e.errors[0]
-          if ('code' in error && error.code === 'not_found') {
-            return null
-          }
+          return null
+        } else if ('code' in e && e.code === 'ETIMEDOUT') {
+          attemptsRemaining--
+          console.warn(
+            `[RFC ${rfcNumber}] Red API timeout ${e.code}. Retrying soon. ${attemptsRemaining} attempts remaining.`
+          )
+          await sleep(500)
+        } else {
+          const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
+          console.error(errorMessage, e)
+          throw Error(`${errorMessage}. See console`)
         }
-
+      } else {
         const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
         console.error(errorMessage, e)
-        console.log(JSON.stringify(e, null, 2))
+        console.log(
+          `[RFC ${rfcNumber}]`,
+          'error stringify',
+          JSON.stringify(e, null, 2)
+        )
         throw Error(`${errorMessage}. See console`)
       }
     }
   }
-  throw Error(`[RFC ${rfcNumber}] Red API docRetrive failure after several retries.`)
+  throw Error(
+    `[RFC ${rfcNumber}] Red API docRetrive failure after several retries.`
+  )
 }
 
 export const setTimeoutPromise = (timerMs: number) =>
