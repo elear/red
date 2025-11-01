@@ -24,7 +24,7 @@ const main = async (
         if (isDone) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)
         } else {
-          console.error(`[RFC ${rfcNumber}] generation failed. If the RFC number was never issued this isn't an error.`)
+          console.error(`[RFC ${rfcNumber}] generation failed. If it was NOT_ISSUED this isn't an error.`)
         }
       } catch (err) {
         console.warn(

@@ -202,6 +202,17 @@ export const getAllRFCs = async ({
   return frozenRfcs
 }
 
+const isAggregateError = (e: unknown): e is AggregateError => {
+  return Boolean(
+    e &&
+      typeof e === 'object' &&
+      'message' in e &&
+      'errors' in e &&
+      'name' in e &&
+      e.name === 'AggregateError'
+  )
+}
+
 /** Safety wrapper around docRetrieve access to catch 404 errors, retry if timeouts etc */
 export const safeDocRetrieve = async (
   redApi: ApiClient,
@@ -210,7 +221,9 @@ export const safeDocRetrieve = async (
   const unhandled = (e: unknown) => {
     const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
     console.log(`[RFC ${rfcNumber}]`, 'unhandled', e, {
-      isAggregateError: e instanceof AggregateError
+      isAggregateError: e instanceof AggregateError,
+      // @ts-ignore
+      'AggregateError.name': e.name
     })
     throw Error(`${errorMessage}. See console`)
   }
