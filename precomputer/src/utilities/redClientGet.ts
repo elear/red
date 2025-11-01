@@ -220,6 +220,7 @@ export const safeDocRetrieve = async (
         typeof e === 'object' &&
         'message' in e &&
         'errors' in e &&
+        Array.isArray(e.errors) &&
         'name' in e
     )
   }
