@@ -102,7 +102,7 @@ export const fetchSourceRfcHtml = async (
   const response = await fetch(url)
   if (!response.ok) {
     console.warn(
-      ` - unable to fetch ${rfcNumber} HTML response was ${response.status} ${response.statusText} at ${url}`
+      `[RFC ${rfcNumber}] HTML not available ${response.status} ${response.statusText} at ${url}`
     )
     return null
   }

@@ -20,7 +20,7 @@ export const fetchRfcPDF = async (rfcNumber: number) => {
   const response = await fetch(url)
   if (!response.ok) {
     console.warn(
-      `Unable to fetch ${rfcNumber} PDF response was ${response.status} ${response.statusText} at ${url}`
+      `[RFC ${rfcNumber}] PDF not available ${response.status} ${response.statusText} at ${url}`
     )
     return null
   }
