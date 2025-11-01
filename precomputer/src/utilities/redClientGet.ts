@@ -255,10 +255,8 @@ export const safeDocRetrieve = async (
         isAggregateError: e instanceof AggregateError,
         'e.constructor': e && typeof e === 'object' && 'constructor' in e,
         'e.constructor.name':
-          e &&
-          typeof e === 'object' &&
-          'constructor' in e &&
-          e.constructor.name,
+          // @ts-ignore
+          e?.constructor?.name,
         // @ts-ignore
         'e.name': e.name
       })
