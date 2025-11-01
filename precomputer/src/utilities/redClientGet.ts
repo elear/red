@@ -222,8 +222,12 @@ export const safeDocRetrieve = async (
     const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
     console.log(`[RFC ${rfcNumber}]`, 'unhandled', e, {
       isAggregateError: e instanceof AggregateError,
+      'AggregateError.constructor': e && typeof e === 'object' && 'constructor' in e,
+      'AggregateError.constructor.name': e && typeof e === 'object' && 'constructor' in e && e.constructor.name,
       // @ts-ignore
-      'AggregateError.name': e.name
+      'AggregateError.name': e.name,
+      // @ts-ignore
+      'AggregateError.constructor.name': e?.constructor?.name
     })
     throw Error(`${errorMessage}. See console`)
   }
