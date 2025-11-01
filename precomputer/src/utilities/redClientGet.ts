@@ -209,14 +209,14 @@ export const safeDocRetrieve = async (
 ): Promise<Rfc | null> => {
   const unhandled = (e: unknown) => {
     const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
-    console.log(
-      `[RFC ${rfcNumber}]`,
-      e      
-    )
+    console.log(`[RFC ${rfcNumber}]`, 'unhandled', e, {
+      isAggregateError: e instanceof AggregateError
+    })
     throw Error(`${errorMessage}. See console`)
   }
 
   let attemptsRemaining = 3
+
   while (attemptsRemaining > 0) {
     try {
       return await redApi.red.docRetrieve(rfcNumber)
@@ -238,7 +238,16 @@ export const safeDocRetrieve = async (
         } else {
           unhandled(e)
         }
-      } else if (e instanceof AggregateError) {
+      } else if (
+        e instanceof AggregateError &&
+        e.errors.some(
+          (error) =>
+            error &&
+            typeof error === 'object' &&
+            'code' in error &&
+            error.code === 'ETIMEDOUT'
+        )
+      ) {
         console.log(
           `[RFC ${rfcNumber}]`,
           'aggregateerror',
@@ -247,28 +256,17 @@ export const safeDocRetrieve = async (
           e.message,
           e.errors
         )
-        if (
-          e.errors.some(
-            (error) =>
-              error &&
-              typeof error === 'object' &&
-              'code' in error &&
-              error.code === 'ETIMEDOUT'
-          )
-        ) {
-          attemptsRemaining--
-          console.warn(
-            `[RFC ${rfcNumber}] Red API timeout. Retrying soon. ${attemptsRemaining} attempts remaining.`
-          )
-          await sleep(500)
-        } else {
-          unhandled(e)
-        }
+        attemptsRemaining--
+        console.warn(
+          `[RFC ${rfcNumber}] Red API timeout. Retrying soon. ${attemptsRemaining} attempts remaining.`
+        )
+        await sleep(500)
       } else {
         unhandled(e)
       }
     }
   }
+
   throw Error(
     `[RFC ${rfcNumber}] Red API docRetrive failure after several retries.`
   )
