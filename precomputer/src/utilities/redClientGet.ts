@@ -202,34 +202,47 @@ export const getAllRFCs = async ({
   return frozenRfcs
 }
 
-const isAggregateError = (e: unknown): e is AggregateError => {
-  return Boolean(
-    e &&
-      typeof e === 'object' &&
-      'message' in e &&
-      'errors' in e &&
-      'name' in e &&
-      e.name === 'AggregateError'
-  )
-}
-
 /** Safety wrapper around docRetrieve access to catch 404 errors, retry if timeouts etc */
 export const safeDocRetrieve = async (
   redApi: ApiClient,
   rfcNumber: number
 ): Promise<Rfc | null> => {
-  const unhandled = (e: unknown) => {
+  const throwUnhandled = (e: unknown) => {
     const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
-    console.log(`[RFC ${rfcNumber}]`, 'unhandled', e, {
-      isAggregateError: e instanceof AggregateError,
-      'AggregateError.constructor': e && typeof e === 'object' && 'constructor' in e,
-      'AggregateError.constructor.name': e && typeof e === 'object' && 'constructor' in e && e.constructor.name,
-      // @ts-ignore
-      'AggregateError.name': e.name,
-      // @ts-ignore
-      'AggregateError.constructor.name': e?.constructor?.name
-    })
     throw Error(`${errorMessage}. See console`)
+  }
+
+  const isAggregateError = (e: unknown): e is AggregateError => {
+    // Node 24 uses an internal AggregateError that fails a `e instanceof AggregateError` check
+    // so we have to a manual refinement of the type
+    return Boolean(
+      e &&
+        typeof e === 'object' &&
+        'message' in e &&
+        'errors' in e &&
+        'name' in e &&
+        e.constructor.name === 'AggregateError'
+    )
+  }
+
+  const shouldRetry = (e: unknown): boolean => {
+    if (e instanceof Response && e.status === 500) {
+      // a server error is usually intermitant, so we should retry
+      return true
+    }
+    if (
+      isAggregateError(e) &&
+      e.errors.some(
+        (error) =>
+          error &&
+          typeof error === 'object' &&
+          'code' in error &&
+          error.code === 'ETIMEDOUT'
+      )
+    ) {
+      return true
+    }
+    return false
   }
 
   let attemptsRemaining = 3
@@ -238,6 +251,18 @@ export const safeDocRetrieve = async (
     try {
       return await redApi.red.docRetrieve(rfcNumber)
     } catch (e: unknown) {
+      console.log(`[RFC ${rfcNumber}]`, 'debug', e, {
+        isAggregateError: e instanceof AggregateError,
+        'e.constructor': e && typeof e === 'object' && 'constructor' in e,
+        'e.constructor.name':
+          e &&
+          typeof e === 'object' &&
+          'constructor' in e &&
+          e.constructor.name,
+        // @ts-ignore
+        'e.name': e.name
+      })
+
       if (e && typeof e === 'object' && 'type' in e) {
         console.log(`[RFC ${rfcNumber}] error type: ${e.type}`)
         console.log(`[RFC ${rfcNumber}] error keys: ${Object.keys(e)}`)
@@ -253,33 +278,16 @@ export const safeDocRetrieve = async (
         ) {
           return null
         } else {
-          unhandled(e)
+          throwUnhandled(e)
         }
-      } else if (
-        e instanceof AggregateError &&
-        e.errors.some(
-          (error) =>
-            error &&
-            typeof error === 'object' &&
-            'code' in error &&
-            error.code === 'ETIMEDOUT'
-        )
-      ) {
-        console.log(
-          `[RFC ${rfcNumber}]`,
-          'aggregateerror',
-          'cause',
-          e.cause,
-          e.message,
-          e.errors
-        )
+      } else if (shouldRetry(e)) {
         attemptsRemaining--
         console.warn(
-          `[RFC ${rfcNumber}] Red API timeout. Retrying soon. ${attemptsRemaining} attempts remaining.`
+          `[RFC ${rfcNumber}] Red API server error. Retrying soon. ${attemptsRemaining} attempts remaining.`
         )
         await sleep(500)
       } else {
-        unhandled(e)
+        throwUnhandled(e)
       }
     }
   }
