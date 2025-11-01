@@ -207,6 +207,15 @@ export const safeDocRetrieve = async (
   redApi: ApiClient,
   rfcNumber: number
 ): Promise<Rfc | null> => {
+  const unhandled = (e: unknown) => {
+    const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
+    console.log(
+      `[RFC ${rfcNumber}]`,
+      e      
+    )
+    throw Error(`${errorMessage}. See console`)
+  }
+
   let attemptsRemaining = 3
   while (attemptsRemaining > 0) {
     try {
@@ -226,29 +235,36 @@ export const safeDocRetrieve = async (
           )
         ) {
           return null
-        } else if ('code' in e && e.code === 'ETIMEDOUT') {
+        } else {
+          unhandled(e)
+        }
+      } else if (e instanceof AggregateError) {
+        console.log(
+          `[RFC ${rfcNumber}]`,
+          'aggregateerror',
+          'cause',
+          e.cause,
+          e.message,
+          e.errors
+        )
+        if (
+          e.errors.some(
+            (error) =>
+              error &&
+              typeof error === 'object' &&
+              'code' in error &&
+              error.code === 'ETIMEDOUT'
+          )
+        ) {
           attemptsRemaining--
           console.warn(
-            `[RFC ${rfcNumber}] Red API timeout ${e.code}. Retrying soon. ${attemptsRemaining} attempts remaining.`
+            `[RFC ${rfcNumber}] Red API timeout. Retrying soon. ${attemptsRemaining} attempts remaining.`
           )
           await sleep(500)
         } else {
-          const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
-          console.error(errorMessage, e)
-          throw Error(`${errorMessage}. See console`)
+          unhandled(e)
         }
       } else {
-        const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
-        if(e && typeof e === 'object') {
-          console.log(`[RFC ${rfcNumber}] error keys: ${Object.keys(e)}`)
-        }
-        console.error(errorMessage, e)
-        console.log(
-          `[RFC ${rfcNumber}]`,
-          'error stringify',
-          JSON.stringify(e, null, 2)
-        )
-        throw Error(`${errorMessage}. See console`)
       }
     }
   }
