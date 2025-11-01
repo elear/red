@@ -17,24 +17,25 @@ const main = async (
 
   const { errors } = await PromisePool.for(rfcRange)
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
-    .process(async (rfcNumber, i) => {
+    .process(async (rfcNumber) => {
       console.log(`Processing RFC ${rfcNumber}...`)
       try {
         const isDone = await uploadRfcData(rfcNumber)
         if (isDone) {
-          console.log(`Pushed RFC ${rfcNumber} to bucket successfully.`)
+          console.log(`[RFC ${rfcNumber}] upload succeeded`)
         } else {
-          console.error(`Unable to process RFC ${rfcNumber}`)
+          console.error(`[RFC ${rfcNumber}] generation failed`)
         }
       } catch (err) {
         console.warn(
-          `Failed to process ${rfcNumber}: ${(err as Error).message}`
+          `[RFC ${rfcNumber}] threw exception: ${(err as Error).message}`
         )
         throw err
       }
     })
 
     if(errors.length > 0) {
+      console.log("all.ts finished with error(s)")
       console.error(errors)
       process.exit(1)
     } else {
