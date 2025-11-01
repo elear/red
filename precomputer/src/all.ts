@@ -18,7 +18,6 @@ const main = async (
   const { errors } = await PromisePool.for(rfcRange)
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
     .process(async (rfcNumber) => {
-      console.log(`Processing RFC ${rfcNumber}...`)
       try {
         const isDone = await uploadRfcData(rfcNumber)
         if (isDone) {

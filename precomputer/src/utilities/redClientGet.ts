@@ -48,10 +48,13 @@ export const getRedClient = (): ApiClient => {
   })
 }
 
-export const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon> => {
+export const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon | null> => {
   const api = getRedClient()
   try {
-    const rfc = await api.red.docRetrieve(rfcNumber)
+    const rfc = await docRetrieve(api, rfcNumber)
+    if(rfc === null) {
+      return null
+    }
     const rfcCommon = rfcToRfcCommon(rfc)
     return rfcCommon
   } catch (e) {
@@ -60,11 +63,11 @@ export const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon> => {
   }
 }
 
-const _getRfcCommonCache: Record<number, undefined | Promise<RfcCommon>> = {}
+const _getRfcCommonCache: Record<number, undefined | Promise<RfcCommon | null>> = {}
 
 export const getRfcCommonCached = async (
   rfcNumber: number
-): Promise<RfcCommon> => {
+): Promise<RfcCommon | null> => {
   if (!_getRfcCommonCache[rfcNumber]) {
     _getRfcCommonCache[rfcNumber] = getRfcCommon(rfcNumber)
   }

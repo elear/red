@@ -38,6 +38,9 @@ export const uploadRfcHtml = async (rfcNumber: number): Promise<boolean> => {
       rfcNumber,
       getRfcCommonCached
     )
+    if (rfcDocFromHtml === null) {
+      return false
+    }
     await saveToS3(
       rfcHtmlJsonPathBuilder(rfcNumber),
       JSON.stringify(rfcDocFromHtml)
@@ -45,7 +48,7 @@ export const uploadRfcHtml = async (rfcNumber: number): Promise<boolean> => {
     return true
   }
 
-  console.log(' - trying PDF instead')
+  console.log(`[RFC ${rfcNumber}] - trying PDF instead`)
   // Some RFCs don't have HTML eg RFC418, so try PDF
   // Note that this will upload page images
   const rfcDocFromPdf = await rfcBucketPdfToRfcDocument(
@@ -53,19 +56,19 @@ export const uploadRfcHtml = async (rfcNumber: number): Promise<boolean> => {
     true,
     getRfcCommonCached
   )
-  console.log(' - received doc', rfcDocFromPdf?.documentHtmlType)
-  if (rfcDocFromPdf) {
-    const rfcDocS3Path = rfcHtmlJsonPathBuilder(rfcNumber)
-    await saveToS3(rfcDocS3Path, JSON.stringify(rfcDocFromPdf))
-    console.log(` - uploaded rfcDoc for ${rfcDocS3Path}`)
-    return true
+  if (rfcDocFromPdf === null) {
+    return false
   }
-  console.error(` - nothing else to try after PDF for RFC ${rfcNumber}`)
-  return false
+  const rfcDocS3Path = rfcHtmlJsonPathBuilder(rfcNumber)
+  await saveToS3(rfcDocS3Path, JSON.stringify(rfcDocFromPdf))
+  return true
 }
 
 export const uploadRfcJson = async (rfcNumber: number): Promise<boolean> => {
   const rfc = await getRfcCommonCached(rfcNumber)
+  if (rfc === null) {
+    return false
+  }
   const rfcJSON = rfcToRfcJson(rfc)
   validateDocument(rfcJSON, RfcJsonSchema)
   const rfcJsonS3Path = rfcJsonPathBuilder(rfcNumber)
@@ -77,6 +80,9 @@ export const uploadRfcCommonJson = async (
   rfcNumber: number
 ): Promise<boolean> => {
   const rfc = await getRfcCommonCached(rfcNumber)
+  if (rfc === null) {
+    return false
+  }
   validateDocument(rfc, RfcCommonSchema)
   const rfcCommonS3Path = rfcCommonPathBuilder(rfc.number)
   await saveToS3(rfcCommonS3Path, JSON.stringify(rfc))
@@ -85,20 +91,20 @@ export const uploadRfcCommonJson = async (
 
 export const uploadRefsRef = async (rfcNumber: number): Promise<boolean> => {
   const rfc = await getRfcCommonCached(rfcNumber)
-  const rfcRef = renderRefsRef(rfc)
-  
-  const rfcRefS3Path = rfcRefPathBuilder(rfcNumber)
-  if(rfcNumber === 1) {
-    console.log("refs/ref debug", { rfcRefS3Path, rfcRef }) 
+  if (rfc === null) {
+    return false
   }
+  const rfcRef = renderRefsRef(rfc)
+  const rfcRefS3Path = rfcRefPathBuilder(rfcNumber)
   await saveToS3(rfcRefS3Path, rfcRef)
   return true
 }
 
 /**
  * Renders RFC summary txt. Eg.
- *
+ * ```txt
  * Crocker, S., "Host Software", RFC 1, DOI 10.17487/RFC0001, April 1969, <https://www.rfc-editor.org/info/rfc1>.
+ * ```
  *
  * As used on https://www.rfc-editor.org/refs/ref0001.txt
  */

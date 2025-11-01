@@ -34,13 +34,18 @@ import { validateDocument } from '../utilities/validate-zod.ts'
 export const rfcBucketHtmlToRfcDocument = async (
   rfcBucketHtml: string,
   rfcNumber: number,
-  getRfcCommon: (rfcNumber: number) => Promise<RfcCommon>
-): Promise<RfcBucketHtmlDocument> => {
+  getRfcCommon: (rfcNumber: number) => Promise<RfcCommon | null>
+): Promise<RfcBucketHtmlDocument | null> => {
   const parser = await getDOMParser()
   const dom = parser.parseFromString(rfcBucketHtml, 'text/html')
 
+  const rfc = await getRfcCommon(rfcNumber)
+  if(rfc === null) {
+    return null
+  }
+
   const rfcAndToc: RfcAndToc = {
-    rfc: await getRfcCommon(rfcNumber),
+    rfc,
     tableOfContents: undefined
   }
 

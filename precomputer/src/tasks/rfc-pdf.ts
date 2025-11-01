@@ -35,7 +35,7 @@ export const fetchRfcPDF = async (rfcNumber: number) => {
 export const rfcBucketPdfToRfcDocument = async (
   rfcNumber: number,
   shouldUploadPageImagesToS3: boolean,
-  getRfcCommon: (rfcNumber: number) => Promise<RfcCommon>
+  getRfcCommon: (rfcNumber: number) => Promise<RfcCommon | null>
 ): Promise<RfcBucketHtmlDocument | null> => {
   const base64 = await fetchRfcPDF(rfcNumber)
 
@@ -116,8 +116,14 @@ export const rfcBucketPdfToRfcDocument = async (
     pdfPages.append(pageNode)
   }
 
+  const rfc = await getRfcCommon(rfcNumber)
+
+  if(rfc === null) {
+    return null
+  }
+
   const response: RfcBucketHtmlDocument = {
-    rfc: await getRfcCommon(rfcNumber),
+    rfc,
     tableOfContents,
     documentHtmlType: 'pdf-or-ps',
     documentHtmlObj: rfcDocumentToPojo(Array.from(dom.body.childNodes)),
