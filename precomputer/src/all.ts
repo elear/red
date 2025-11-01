@@ -2,7 +2,7 @@ import { PromisePool } from '@supercharge/promise-pool'
 import { range } from 'lodash-es'
 import { uploadRfcData } from './tasks/rfc.ts'
 
-const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
+const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 4
 
 const main = async (
   minRfcNumber: number,
