@@ -233,6 +233,7 @@ export const docRetrieve = async (redApi: ApiClient, rfcNumber: number): Promise
 
         const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
         console.error(errorMessage, e)
+        console.log(JSON.stringify(e, null, 2))
         throw Error(`${errorMessage}. See console`)
       }
     }
