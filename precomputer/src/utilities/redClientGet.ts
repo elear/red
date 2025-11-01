@@ -220,8 +220,7 @@ export const safeDocRetrieve = async (
         typeof e === 'object' &&
         'message' in e &&
         'errors' in e &&
-        'name' in e &&
-        e.constructor.name === 'AggregateError'
+        'name' in e
     )
   }
 
@@ -240,6 +239,7 @@ export const safeDocRetrieve = async (
           error.code === 'ETIMEDOUT'
       )
     ) {
+      // a timeout usually means the server was overwhelmed, so we should retry
       return true
     }
     return false
@@ -252,11 +252,14 @@ export const safeDocRetrieve = async (
       return await redApi.red.docRetrieve(rfcNumber)
     } catch (e: unknown) {
       console.log(`[RFC ${rfcNumber}]`, 'debug', e, {
-        isAggregateError: e instanceof AggregateError,
+        isAggregateError: isAggregateError(e),
         'e.constructor': e && typeof e === 'object' && 'constructor' in e,
         'e.constructor.name':
           // @ts-ignore
           e?.constructor?.name,
+        'e.prototype.name':
+          // @ts-ignore
+          e?.prototype?.name,
         // @ts-ignore
         'e.name': e.name
       })
