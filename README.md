@@ -37,9 +37,7 @@ It's a Nuxt website ([official Nuxt documentation](https://nuxt.com/docs/getting
 
 #### Website content (markdown)
 
-Website content at paths `/about/*`, `/authors/*` and `/series/*` is managed in markdown files.
-
-These markdown files are in `/website/content/`.
+Website content from markdown files can be found in `/website/content/`.
 
 Markdown Frontmatter (metadata) fields supported are listed in [content.config.js](https://github.com/ietf-tools/red/blob/main/website/content.config.ts#L8).
 
