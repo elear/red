@@ -213,8 +213,21 @@ export const safeDocRetrieve = async (
   }
 
   const isAggregateError = (e: unknown): e is AggregateError => {
-    // Node 24 uses an internal AggregateError that fails a `e instanceof AggregateError` check
-    // so we have to a manual refinement of the type
+    // When the Red API client fetch has a timeout error `ETIMEDOUT` it
+    // throws an `AggregateError` https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AggregateError
+    // However this seems to be an internal Node type that doesn't match
+    // `e instanceof AggregateError`, so we have to manually  a manual refinement of the type
+
+    console.log(`[RFC ${rfcNumber}]`, 'isAggregateError debug', {
+      e: Boolean(e),
+      isObject: typeof e === 'object',
+      messageIn: e && typeof e === 'object' && 'message' in e,
+      errorsIn: e && typeof e === 'object' && 'errors' in e,
+      errorsIsArray:
+        e && typeof e === 'object' && 'errors' in e && Array.isArray(e.errors),
+      nameIn: e && typeof e === 'object' && 'name' in e
+    })
+
     return Boolean(
       e &&
         typeof e === 'object' &&
@@ -260,23 +273,19 @@ export const safeDocRetrieve = async (
         'errors' in e &&
         Array.isArray(e.errors) &&
         e.errors.length > 0 &&
-        // The API client can throw to indicate 404s... if so, return null
-        e.errors.some((error) => 'code' in error && error.code === 'not_found')
+        e.errors.some(
+          (error) =>
+            'code' in error &&
+            // The API client can throw to indicate 404s... if so, return null
+            error.code === 'not_found'
+        )
       ) {
         return null
       }
 
       console.log(`[RFC ${rfcNumber}]`, 'debug', e, {
-        isAggregateError: isAggregateError(e),
-        'e.constructor': e && typeof e === 'object' && 'constructor' in e,
-        'e.constructor.name':
-          // @ts-ignore
-          e?.constructor?.name,
-        'e.prototype.name':
-          // @ts-ignore
-          e?.prototype?.name,
-        // @ts-ignore
-        'e.name': e.name
+        isTypeError: e instanceof TypeError,
+        isAggregateError: isAggregateError(e)
       })
 
       if (shouldRetry(e)) {
