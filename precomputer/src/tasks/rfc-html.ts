@@ -304,37 +304,45 @@ const sniffRfcBucketHtmlType = (dom: Document): DocumentHtmlType => {
  *    always browse the original HTML if they wish.
  *
  **/
-const convertHrefs = (rfcDocument: Node[], baseUrl: URL, rfcNumberForDebug: number): void => {
+const convertHrefs = (
+  rfcDocument: Node[],
+  baseUrl: URL,
+  rfcNumberForDebug: number
+): void => {
   const publicSiteUrl = new URL(PUBLIC_SITE_URL_ORIGIN)
 
   const safeParseUrl = (
     href: string,
     baseUrl: URL | string,
     rfcNumberForDebug: number
-  ): URL => {
+  ): URL | null => {
+    const isInvalidUrl = (error: unknown): boolean => {
+      return Boolean(
+        error &&
+          typeof error === 'object' &&
+          'code' in error &&
+          error.code === 'ERR_INVALID_URL'
+      )
+    }
+
     try {
       // URL() will throw `ERR_INVALID_URL` error if the protocol is different
       // between `href` and `baseUrl` so some errors are to be expected.
-      // Eg parsing 'http://...' or `ftp:` with a baseUrl of 'https://...'
+      // Eg parsing `http:...` or `ftp:` with a baseUrl of `https://...`
       return new URL(href, baseUrl)
     } catch (error) {
-      if (
-        error &&
-        typeof error === 'object' &&
-        'code' in error &&
-        error.code === 'ERR_INVALID_URL'
-      ) {
+      if (isInvalidUrl(error)) {
         try {
-          // Try to parse `href` without `baseUrl` in case that will work
+          // Try to parse `href` without `baseUrl` because perhaps the protocol is different
           return new URL(href)
         } catch (error2) {
-          console.log(
-            `[RFC ${rfcNumberForDebug}] Failed to parse URL ${JSON.stringify(href)}`
+          console.warn(
+            `[RFC ${rfcNumberForDebug}] Failed to parse URL ${JSON.stringify(href)}.`
           )
-          throw error2
+          return null
         }
       }
-      throw error
+      return null
     }
   }
 
@@ -351,29 +359,31 @@ const convertHrefs = (rfcDocument: Node[], baseUrl: URL, rfcNumberForDebug: numb
         ) {
           const url = safeParseUrl(href, baseUrl, rfcNumberForDebug)
 
-          if (
-            url.protocol === publicSiteUrl.protocol &&
-            url.host === publicSiteUrl.host
-          ) {
-            // see (1) and (2) above
-            href = `${url.pathname}${url.search}${url.hash}`
-          }
-
-          if (href.startsWith('/rfc/') && !href.endsWith('.pdf')) {
-            const rfcPart = extractHrefRfcPart(href)
-            if (rfcPart) {
-              // see (3) above
-              href = `/info/${rfcPart}/${url.search}${url.hash}`
+          if (url) {
+            if (
+              ['https', 'http'].includes(url.protocol) &&
+              url.host === publicSiteUrl.host
+            ) {
+              // see (1) and (2) above
+              href = `${url.pathname}${url.search}${url.hash}`
             }
-          }
 
-          if (href !== originalHref) {
-            // console.log(
-            //   ' - replace href',
-            //   JSON.stringify(originalHref),
-            //   JSON.stringify(href)
-            // )
-            node.setAttribute('href', href)
+            if (href.startsWith('/rfc/') && !href.endsWith('.pdf')) {
+              const rfcPart = extractHrefRfcPart(href)
+              if (rfcPart) {
+                // see (3) above
+                href = `/info/${rfcPart}/${url.search}${url.hash}`
+              }
+            }
+
+            if (href !== originalHref) {
+              // console.log(
+              //   ' - replace href',
+              //   JSON.stringify(originalHref),
+              //   JSON.stringify(href)
+              // )
+              node.setAttribute('href', href)
+            }
           }
         }
       }
