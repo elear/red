@@ -340,9 +340,6 @@ const convertHrefs = (
           // Try to parse `href` without `baseUrl` because perhaps the protocol is different
           return new URL(href)
         } catch (error2) {
-          console.warn(
-            `[RFC ${rfcNumberForDebug}] Failed to parse URL ${JSON.stringify(href)}.`
-          )
           return null
         }
       }
@@ -394,10 +391,11 @@ const convertHrefs = (
               // )
               node.setAttribute('href', href)
             } else {
-
             }
           } else {
-            console.log(`[RFC ${rfcNumberForDebug}] can't parse ${JSON.stringify(href)}`)
+            console.warn(
+              `[RFC ${rfcNumberForDebug}] Info: failed to parse URL ${JSON.stringify(href)} so this href won't be converted (made relative).`
+            )
           }
         }
       }
