@@ -16,7 +16,8 @@ export const fetchRetry = async (
     } catch (e) {
       console.log({
         isTypeError: e instanceof TypeError,
-        causeisAggregateError: e instanceof TypeError && e.cause instanceof AggregateError,
+        causeisAggregateError:
+          e instanceof TypeError && e.cause instanceof AggregateError,
         isApiTimeoutError: isApiTimeoutError(e)
       })
       console.error(`[RFC ${rfcNumberForDebug}]`, e)
@@ -27,7 +28,9 @@ export const fetchRetry = async (
         )
         await sleep(DELAY_BETWEEN_REQUESTS_MS)
       } else {
-        throw e
+        const errorMessage = `[RFC ${rfcNumberForDebug}] fetchRetry unhandled API response`
+        console.error(e)
+        throw Error(`${errorMessage}. See console`)
       }
     }
   }

@@ -97,6 +97,7 @@ export const safeDocRetrieve = async (
         await sleep(DELAY_BETWEEN_REQUESTS_MS)
       } else {
         const errorMessage = `[RFC ${rfcNumber}] unhandled API response`
+        console.error(e)
         throw Error(`${errorMessage}. See console`)
       }
     }
@@ -125,7 +126,9 @@ export const safeSubseriesList = async (api: ApiClient) => {
         )
         await sleep(DELAY_BETWEEN_REQUESTS_MS)
       } else {
-        throw e
+        const errorMessage = `[SubseriesList] unhandled API response`
+        console.error(e)
+        throw Error(`${errorMessage}. See console`)
       }
     }
   }
@@ -151,7 +154,9 @@ export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
         )
         await sleep(DELAY_BETWEEN_REQUESTS_MS)
       } else {
-        throw e
+        const errorMessage = `[DocList] unhandled API response`
+        console.error(e)
+        throw Error(`${errorMessage}. See console`)
       }
     }
   }
