@@ -311,6 +311,9 @@ const convertHrefs = (
 ): void => {
   const publicSiteUrl = new URL(PUBLIC_SITE_URL_ORIGIN)
 
+  const httpUrl = new URL('http://example.com/')
+  const httpsUrl = new URL('https://example.com/')
+
   const safeParseUrl = (
     href: string,
     baseUrl: URL | string,
@@ -361,7 +364,7 @@ const convertHrefs = (
 
           if (url) {
             if (
-              ['https', 'http'].includes(url.protocol) &&
+              [httpUrl.protocol, httpsUrl.protocol].includes(url.protocol) &&
               url.host === publicSiteUrl.host
             ) {
               // see (1) and (2) above
@@ -376,6 +379,12 @@ const convertHrefs = (
               }
             }
 
+            // console.log(
+            //   `[RFC ${rfcNumberForDebug}] replace href?`,
+            //   JSON.stringify(originalHref),
+            //   JSON.stringify(href)
+            // )
+
             if (href !== originalHref) {
               // console.log(
               //   ' - replace href',
@@ -383,7 +392,11 @@ const convertHrefs = (
               //   JSON.stringify(href)
               // )
               node.setAttribute('href', href)
+            } else {
+
             }
+          } else {
+            console.log(`[RFC ${rfcNumberForDebug}] can't parse ${JSON.stringify(href)}`)
           }
         }
       }
