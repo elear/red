@@ -78,7 +78,7 @@ export const rfcBucketHtmlToRfcDocument = async (
 
   const baseUrl = new URL(`/rfc/rfc${rfcNumber}.html`, PUBLIC_SITE_URL_ORIGIN)
 
-  convertHrefs(rfcDocument, baseUrl)
+  convertHrefs(rfcDocument, baseUrl, rfcNumber)
   ensureWordBreaks(rfcDocument)
 
   const response: RfcBucketHtmlDocument = {
@@ -304,10 +304,14 @@ const sniffRfcBucketHtmlType = (dom: Document): DocumentHtmlType => {
  *    always browse the original HTML if they wish.
  *
  **/
-const convertHrefs = (rfcDocument: Node[], baseUrl: URL): void => {
+const convertHrefs = (rfcDocument: Node[], baseUrl: URL, rfcNumberForDebug: number): void => {
   const publicSiteUrl = new URL(PUBLIC_SITE_URL_ORIGIN)
 
-  const safeParseUrl = (href: string, baseUrl: URL | string): URL => {
+  const safeParseUrl = (
+    href: string,
+    baseUrl: URL | string,
+    rfcNumberForDebug: number
+  ): URL => {
     try {
       // URL() will throw `ERR_INVALID_URL` error if the protocol is different
       // between `href` and `baseUrl` so some errors are to be expected.
@@ -324,6 +328,9 @@ const convertHrefs = (rfcDocument: Node[], baseUrl: URL): void => {
           // Try to parse `href` without `baseUrl` in case that will work
           return new URL(href)
         } catch (error2) {
+          console.log(
+            `[RFC ${rfcNumberForDebug}] Failed to parse URL ${JSON.stringify(href)}`
+          )
           throw error2
         }
       }
@@ -342,7 +349,7 @@ const convertHrefs = (rfcDocument: Node[], baseUrl: URL): void => {
           // eg './rfcN.html#section' or './rfcN' etc
           !href.startsWith('#')
         ) {
-          const url = safeParseUrl(href, baseUrl)
+          const url = safeParseUrl(href, baseUrl, rfcNumberForDebug)
 
           if (
             url.protocol === publicSiteUrl.protocol &&
