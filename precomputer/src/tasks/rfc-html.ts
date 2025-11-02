@@ -40,7 +40,7 @@ export const rfcBucketHtmlToRfcDocument = async (
   const dom = parser.parseFromString(rfcBucketHtml, 'text/html')
 
   const rfc = await getRfcCommon(rfcNumber)
-  if(rfc === null) {
+  if (rfc === null) {
     return null
   }
 
@@ -306,6 +306,31 @@ const sniffRfcBucketHtmlType = (dom: Document): DocumentHtmlType => {
  **/
 const convertHrefs = (rfcDocument: Node[], baseUrl: URL): void => {
   const publicSiteUrl = new URL(PUBLIC_SITE_URL_ORIGIN)
+
+  const safeParseUrl = (href: string, baseUrl: URL | string): URL => {
+    try {
+      // URL() will throw `ERR_INVALID_URL` error if the protocol is different
+      // between `href` and `baseUrl` so some errors are to be expected.
+      // Eg parsing 'http://...' or `ftp:` with a baseUrl of 'https://...'
+      return new URL(href, baseUrl)
+    } catch (error) {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'code' in error &&
+        error.code === 'ERR_INVALID_URL'
+      ) {
+        try {
+          // Try to parse `href` without `baseUrl` in case that will work
+          return new URL(href)
+        } catch (error2) {
+          throw error2
+        }
+      }
+      throw error
+    }
+  }
+
   const walk = (node: Node): void => {
     if (isHtmlElement(node)) {
       if (node.nodeName.toLowerCase() === 'a') {
@@ -317,7 +342,7 @@ const convertHrefs = (rfcDocument: Node[], baseUrl: URL): void => {
           // eg './rfcN.html#section' or './rfcN' etc
           !href.startsWith('#')
         ) {
-          const url = new URL(href, baseUrl)
+          const url = safeParseUrl(href, baseUrl)
 
           if (
             url.protocol === publicSiteUrl.protocol &&

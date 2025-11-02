@@ -13,7 +13,13 @@ import type {
 import { assertIsString } from './typescript.ts'
 import { sleep } from './sleep.ts'
 
-export const getRedClient = (): ApiClient => {
+type Api = InstanceType<typeof ApiClient>
+type RedApi = Api['red']
+type DocListOptions = Parameters<RedApi['docList']>[0]
+
+const NUMBER_OF_API_RETRIES = 3
+
+export const getApiClient = (): ApiClient => {
   const NUXT_PUBLIC_DATATRACKER_BASE = process.env.NUXT_PUBLIC_DATATRACKER_BASE
   const NUXT_CF_SERVICE_TOKEN_ID = process.env.NUXT_CF_SERVICE_TOKEN_ID
   const NUXT_CF_SERVICE_TOKEN_SECRET = process.env.NUXT_CF_SERVICE_TOKEN_SECRET
@@ -49,10 +55,114 @@ export const getRedClient = (): ApiClient => {
   })
 }
 
+/**
+ * Safety wrapper around docRetrieve access to catch 404 errors, retry if timeouts etc
+ * Currently the API fails about 1/2000 uses
+ */
+export const safeDocRetrieve = async (
+  api: ApiClient,
+  rfcNumber: number
+): Promise<Rfc | null> => {
+  const isDocRetrieveNotFoundError = (e: unknown) => {
+    return (
+      e &&
+      typeof e === 'object' &&
+      'type' in e &&
+      e.type === 'client_error' &&
+      'errors' in e &&
+      Array.isArray(e.errors) &&
+      e.errors.length > 0 &&
+      e.errors.some(
+        (error) =>
+          'code' in error &&
+          // The API client can throw to indicate 404s... if so, return null
+          error.code === 'not_found'
+      )
+    )
+  }
+
+  let attemptsRemaining = NUMBER_OF_API_RETRIES
+
+  while (attemptsRemaining > 0) {
+    try {
+      return await api.red.docRetrieve(rfcNumber)
+    } catch (e: unknown) {
+      if (isDocRetrieveNotFoundError(e)) {
+        return null
+      } else if (isApiTimeoutError(e)) {
+        attemptsRemaining--
+        console.warn(
+          `[RFC ${rfcNumber}] API timeout. ${attemptsRemaining} attempts remaining.`
+        )
+        await sleep(DELAY_BETWEEN_REQUESTS_MS)
+      } else {
+        const errorMessage = `[RFC ${rfcNumber}] unhandled API response`
+        throw Error(`${errorMessage}. See console`)
+      }
+    }
+  }
+
+  throw Error(
+    `[RFC ${rfcNumber}] Red API docRetrive failure after ${NUMBER_OF_API_RETRIES} retries.`
+  )
+}
+
+/**
+ * Safety wrapper around subseriesList access to retry on timeouts
+ * Currently the API fails about 1/2000 uses
+ */
+export const safeSubseriesList = async (api: ApiClient) => {
+  let attemptsRemaining = NUMBER_OF_API_RETRIES
+
+  while (attemptsRemaining > 0) {
+    try {
+      return await api.red.subseriesList({})
+    } catch (e: unknown) {
+      if (isApiTimeoutError(e)) {
+        attemptsRemaining--
+        console.warn(
+          `[SubseriesList] Red API timeout. ${attemptsRemaining} attempts remaining.`
+        )
+        await sleep(DELAY_BETWEEN_REQUESTS_MS)
+      } else {
+        throw e
+      }
+    }
+  }
+
+  throw new Error(`[SubseriesList] Unable to access subseriesList`)
+}
+
+/**
+ * Safety wrapper around docList access to retry on timeouts
+ * Currently the API fails about 1/2000 uses
+ */
+export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
+  let attemptsRemaining = NUMBER_OF_API_RETRIES
+
+  while (attemptsRemaining > 0) {
+    try {
+      return await api.red.docList(options)
+    } catch (e: unknown) {
+      if (isApiTimeoutError(e)) {
+        attemptsRemaining--
+        console.warn(
+          `[DocList] API timeout. ${attemptsRemaining} attempts remaining.`
+        )
+        await sleep(DELAY_BETWEEN_REQUESTS_MS)
+      } else {
+        throw e
+      }
+    }
+  }
+
+  throw new Error(`[DocList] Unable to access docList`)
+}
+
 export const getRfcCommon = async (
   rfcNumber: number
 ): Promise<RfcCommon | null> => {
-  const api = getRedClient()
+  const api = getApiClient()
   try {
     const rfc = await safeDocRetrieve(api, rfcNumber)
     if (rfc === null) {
@@ -80,6 +190,7 @@ export const getRfcCommonCached = async (
   return _getRfcCommonCache[rfcNumber]
 }
 
+/** Convert `Rfc` to `RfcCommon` */
 export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
   return {
     formats: rfc.formats,
@@ -110,6 +221,7 @@ export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
   }
 }
 
+/** Convert `RfcMetadata` to `RfcCommon` */
 export const rfcMetadataToRfcCommon = (rfcMetadata: RfcMetadata): RfcCommon => {
   return {
     formats: rfcMetadata.formats,
@@ -140,8 +252,6 @@ export const rfcMetadataToRfcCommon = (rfcMetadata: RfcMetadata): RfcCommon => {
   }
 }
 
-export type DocListArg = Parameters<ApiClient['red']['docList']>[0]
-
 type Props = {
   api: ApiClient
   delayBetweenRequestsMs?: number
@@ -157,14 +267,14 @@ export const getAllRFCs = async ({
   console.log('Downloading metadata for ALL rfcs:')
   const rfcs: RfcCommon[] = []
 
-  const docListArg: DocListArg = {}
-  docListArg.sort = ['-number'] // we start at the most recent RFC and walk back to RFC 1
+  const docListOptions: DocListOptions = {}
+  docListOptions.sort = ['-number'] // we start at the most recent RFC and walk back to RFC 1
   let offset = 0 // offset is API database row offset, not an RFC number offset
 
   while (true) {
-    docListArg.offset = offset
-    docListArg.limit = MAX_LIMIT_PER_REQUEST
-    const response = await safeDocList(api, docListArg)
+    docListOptions.offset = offset
+    docListOptions.limit = MAX_LIMIT_PER_REQUEST
+    const response = await safeDocList(api, docListOptions)
     const rfcCommons = response.results.map(rfcMetadataToRfcCommon)
     rfcs.unshift(...rfcCommons)
     rfcs.sort((a, b) => a.number - b.number)
@@ -193,7 +303,7 @@ export const getAllRFCs = async ({
 
     offset += rfcCommons.length
 
-    await setTimeoutPromise(DELAY_BETWEEN_REQUESTS_MS)
+    await sleep(DELAY_BETWEEN_REQUESTS_MS)
   }
 
   // Attempt to prevent mutation of object (shallow -- not a deep freeze).
@@ -202,125 +312,15 @@ export const getAllRFCs = async ({
   return frozenRfcs
 }
 
-const isTimeout = (e: unknown) => {
+const isApiTimeoutError = (error: unknown) => {
   return (
-    e instanceof TypeError &&
-    e.cause instanceof AggregateError &&
-    e.cause.errors.some(
+    error instanceof TypeError &&
+    error.cause instanceof AggregateError &&
+    error.cause.errors.some(
       (error) => 'code' in error && error.code === 'ETIMEDOUT'
     )
   )
 }
-
-const isDocRetrieveNotFoundError = (e: unknown) => {
-  return (
-    e &&
-    typeof e === 'object' &&
-    'type' in e &&
-    e.type === 'client_error' &&
-    'errors' in e &&
-    Array.isArray(e.errors) &&
-    e.errors.length > 0 &&
-    e.errors.some(
-      (error) =>
-        'code' in error &&
-        // The API client can throw to indicate 404s... if so, return null
-        error.code === 'not_found'
-    )
-  )
-}
-
-/**
- * Safety wrapper around subseriesList access to retry on timeouts
- */
-export const safeSubseriesList = async (api: ApiClient) => {
-  let attemptsRemaining = 3
-
-  while (attemptsRemaining > 0) {
-    try {
-      return await api.red.subseriesList({})
-    } catch (e: unknown) {
-      if (isTimeout(e)) {
-        attemptsRemaining--
-        console.warn(
-          `[SubseriesList] Red API timeout. ${attemptsRemaining} attempts remaining.`
-        )
-        await sleep(500)
-      } else {
-        throw e
-      }
-    }
-  }
-
-  throw new Error(`[SubseriesList] Unable to access subseriesList`)
-}
-
-type RedApi = InstanceType<typeof ApiClient>['red']
-type DocListOptions = Parameters<RedApi['docList']>[0]
-/**
- * Safety wrapper around docRetrieve access to retry on timeouts
- */
-export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
-  let attemptsRemaining = 3
-
-  while (attemptsRemaining > 0) {
-    try {
-      return await api.red.docList(options)
-    } catch (e: unknown) {
-      if (isTimeout(e)) {
-        attemptsRemaining--
-        console.warn(
-          `[DocList] Red API timeout. ${attemptsRemaining} attempts remaining.`
-        )
-        await sleep(500)
-      } else {
-        throw e
-      }
-    }
-  }
-
-  throw new Error(`[SubseriesList] Unable to access subseriesList`)
-}
-
-/**
- * Safety wrapper around docRetrieve access to catch 404 errors, retry if timeouts etc
- */
-export const safeDocRetrieve = async (
-  api: ApiClient,
-  rfcNumber: number
-): Promise<Rfc | null> => {
-  const throwUnhandled = (e: unknown) => {
-    const errorMessage = `[RFC ${rfcNumber}] unhandled Red API response`
-    throw Error(`${errorMessage}. See console`)
-  }
-
-  let attemptsRemaining = 3
-
-  while (attemptsRemaining > 0) {
-    try {
-      return await api.red.docRetrieve(rfcNumber)
-    } catch (e: unknown) {
-      if (isDocRetrieveNotFoundError(e)) {
-        return null
-      } else if (isTimeout(e)) {
-        attemptsRemaining--
-        console.warn(
-          `[RFC ${rfcNumber}] Red API timeout. ${attemptsRemaining} attempts remaining.`
-        )
-        await sleep(500)
-      } else {
-        throwUnhandled(e)
-      }
-    }
-  }
-
-  throw Error(
-    `[RFC ${rfcNumber}] Red API docRetrive failure after several retries.`
-  )
-}
-
-export const setTimeoutPromise = (timerMs: number) =>
-  new Promise((resolve) => setTimeout(resolve, timerMs))
 
 export const getAllSubseries = async ({
   api
@@ -380,6 +380,10 @@ export const sortSubseriesCommon = (
   }
   return a.number - b.number
 }
+
+/**
+ * Parsers for parts of RFC/subseries documents 
+ */
 
 export const parseStatus = (
   status: Rfc['status'] | RfcMetadata['status'] | undefined,

@@ -9,14 +9,14 @@ import { uploadAllSubseries } from './tasks/info-subseries.ts'
 import {
   getAllRFCs,
   getAllSubseries,
-  getRedClient
+  getApiClient
 } from './utilities/redClientGet.ts'
 
 const RFC_NUMBER_MINIMUM_CHAR_WIDTH = 5 // for Red the default width is 5 chars to handle eg RFC10000 (aka the RFC10k problem).
 
 export const main = async (): Promise<void> => {
   console.log('Processing cron jobs')
-  const api = getRedClient()
+  const api = getApiClient()
   const [allRfcs, allSubseries] = await Promise.all([
     getAllRFCs({ api }),
     getAllSubseries({ api })

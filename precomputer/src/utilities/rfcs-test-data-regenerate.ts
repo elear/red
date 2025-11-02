@@ -1,6 +1,6 @@
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
-import { getAllRFCs, getAllSubseries, getRedClient } from './redClientGet.ts'
+import { getAllRFCs, getAllSubseries, getApiClient } from './redClientGet.ts'
 
 /**
  * Nothing is exported from this file because it's a Node script utility that regenerates test data.
@@ -9,7 +9,7 @@ import { getAllRFCs, getAllSubseries, getRedClient } from './redClientGet.ts'
  */
 
 const regenerateTestData = async () => {
-  const api = getRedClient()
+  const api = getApiClient()
   const [allRfcs, allSubseries] = await Promise.all([
     getAllRFCs({ api }),
     getAllSubseries({ api })

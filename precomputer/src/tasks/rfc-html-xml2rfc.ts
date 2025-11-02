@@ -368,14 +368,14 @@ const wrapSvg = (svg: HTMLElement): HTMLElement => {
         svg.parentElement.classList.remove(RIGHT)
         hs2.classList.add(RIGHT)
       }
-      console.log(' - horizontalscrollable ', hs2.className)
+      // console.log(' - horizontalscrollable ', hs2.className)
     }
     hs2.appendChild(svg)
-    console.log(' - big SVG', widthPx, heightPx)
+    // console.log(' - big SVG', widthPx, heightPx)
     return hs2
   }
 
-  console.log(' - small SVG', widthPx, heightPx)
+  // console.log(' - small SVG', widthPx, heightPx)
   const newChildren3 = Array.from(svg.childNodes).flatMap((node) =>
     fixNodeForMobile(node, false)
   )
