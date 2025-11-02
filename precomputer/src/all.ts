@@ -2,7 +2,7 @@ import { PromisePool } from '@supercharge/promise-pool'
 import { range } from 'lodash-es'
 import { uploadRfcData } from './tasks/rfc.ts'
 
-const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
+const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 16
 
 const main = async (
   minRfcNumber: number,
@@ -24,7 +24,7 @@ const main = async (
         if (isDone) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)
         } else {
-          console.error(`[RFC ${rfcNumber}] generation failed. If it was NOT_ISSUED this isn't an error.`)
+          console.error(`[RFC ${rfcNumber}] generation failed. If the RFC was NOT_ISSUED this isn't an error.`)
         }
       } catch (err) {
         console.warn(
