@@ -159,7 +159,7 @@ export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
   throw new Error(`[DocList] Unable to access docList`)
 }
 
-export const getRfcCommon = async (
+const getRfcCommon = async (
   rfcNumber: number
 ): Promise<RfcCommon | null> => {
   const api = getApiClient()

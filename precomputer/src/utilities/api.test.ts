@@ -1,8 +1,7 @@
 // @vitest-environment node
 import { test, expect } from 'vitest'
-import { sortSubseriesCommon } from './redClientGet'
+import { parseStatus, sortSubseriesCommon } from './api'
 import { testMockAllSubseries } from './rfcs-test-data'
-import { parseStatus } from './redClientGet'
 
 test('sortSubseriesCommon', () => {
   expect(

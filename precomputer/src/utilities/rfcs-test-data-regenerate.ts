@@ -1,6 +1,6 @@
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
-import { getAllRFCs, getAllSubseries, getApiClient } from './redClientGet.ts'
+import { getAllRFCs, getAllSubseries, getApiClient } from './api.ts'
 
 /**
  * Nothing is exported from this file because it's a Node script utility that regenerates test data.

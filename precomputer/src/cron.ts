@@ -10,7 +10,7 @@ import {
   getAllRFCs,
   getAllSubseries,
   getApiClient
-} from './utilities/redClientGet.ts'
+} from './utilities/api.ts'
 
 const RFC_NUMBER_MINIMUM_CHAR_WIDTH = 5 // for Red the default width is 5 chars to handle eg RFC10000 (aka the RFC10k problem).
 

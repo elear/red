@@ -8,7 +8,7 @@ import {
   rfcRefPathBuilder,
   saveToS3
 } from '../utilities/s3.ts'
-import { getRfcCommonCached } from '../utilities/redClientGet.ts'
+import { getRfcCommonCached } from '../utilities/api.ts'
 import { rfcToRfcJson } from '../utilities/rfc-json.ts'
 import { RfcCommonSchema } from '../../../website/app/utilities/rfc-validators.ts'
 import type { RfcCommon } from '../../../website/app/utilities/rfc-validators.ts'
