@@ -164,7 +164,7 @@ export const getAllRFCs = async ({
   while (true) {
     docListArg.offset = offset
     docListArg.limit = MAX_LIMIT_PER_REQUEST
-    const response = await api.red.docList(docListArg)
+    const response = await safeDocList(api, docListArg)
     const rfcCommons = response.results.map(rfcMetadataToRfcCommon)
     rfcs.unshift(...rfcCommons)
     rfcs.sort((a, b) => a.number - b.number)
@@ -202,9 +202,91 @@ export const getAllRFCs = async ({
   return frozenRfcs
 }
 
-/** Safety wrapper around docRetrieve access to catch 404 errors, retry if timeouts etc */
+const isTimeout = (e: unknown) => {
+  return (
+    e instanceof TypeError &&
+    e.cause instanceof AggregateError &&
+    e.cause.errors.some(
+      (error) => 'code' in error && error.code === 'ETIMEDOUT'
+    )
+  )
+}
+
+const isDocRetrieveNotFoundError = (e: unknown) => {
+  return (
+    e &&
+    typeof e === 'object' &&
+    'type' in e &&
+    e.type === 'client_error' &&
+    'errors' in e &&
+    Array.isArray(e.errors) &&
+    e.errors.length > 0 &&
+    e.errors.some(
+      (error) =>
+        'code' in error &&
+        // The API client can throw to indicate 404s... if so, return null
+        error.code === 'not_found'
+    )
+  )
+}
+
+/**
+ * Safety wrapper around subseriesList access to retry on timeouts
+ */
+export const safeSubseriesList = async (api: ApiClient) => {
+  let attemptsRemaining = 3
+
+  while (attemptsRemaining > 0) {
+    try {
+      return await api.red.subseriesList({})
+    } catch (e: unknown) {
+      if (isTimeout(e)) {
+        attemptsRemaining--
+        console.warn(
+          `[SubseriesList] Red API timeout. ${attemptsRemaining} attempts remaining.`
+        )
+        await sleep(500)
+      } else {
+        throw e
+      }
+    }
+  }
+
+  throw new Error(`[SubseriesList] Unable to access subseriesList`)
+}
+
+type RedApi = InstanceType<typeof ApiClient>['red']
+type DocListOptions = Parameters<RedApi['docList']>[0]
+/**
+ * Safety wrapper around docRetrieve access to retry on timeouts
+ */
+export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
+  let attemptsRemaining = 3
+
+  while (attemptsRemaining > 0) {
+    try {
+      return await api.red.docList(options)
+    } catch (e: unknown) {
+      if (isTimeout(e)) {
+        attemptsRemaining--
+        console.warn(
+          `[DocList] Red API timeout. ${attemptsRemaining} attempts remaining.`
+        )
+        await sleep(500)
+      } else {
+        throw e
+      }
+    }
+  }
+
+  throw new Error(`[SubseriesList] Unable to access subseriesList`)
+}
+
+/**
+ * Safety wrapper around docRetrieve access to catch 404 errors, retry if timeouts etc
+ */
 export const safeDocRetrieve = async (
-  redApi: ApiClient,
+  api: ApiClient,
   rfcNumber: number
 ): Promise<Rfc | null> => {
   const throwUnhandled = (e: unknown) => {
@@ -216,33 +298,11 @@ export const safeDocRetrieve = async (
 
   while (attemptsRemaining > 0) {
     try {
-      return await redApi.red.docRetrieve(rfcNumber)
+      return await api.red.docRetrieve(rfcNumber)
     } catch (e: unknown) {
-      if (
-        // rfc not found
-        e &&
-        typeof e === 'object' &&
-        'type' in e &&
-        e.type === 'client_error' &&
-        'errors' in e &&
-        Array.isArray(e.errors) &&
-        e.errors.length > 0 &&
-        e.errors.some(
-          (error) =>
-            'code' in error &&
-            // The API client can throw to indicate 404s... if so, return null
-            error.code === 'not_found'
-        )
-      ) {
+      if (isDocRetrieveNotFoundError(e)) {
         return null
-      } else if (
-        // timeout
-        e instanceof TypeError &&
-        e.cause instanceof AggregateError &&
-        e.cause.errors.some(
-          (error) => 'code' in error && error.code === 'ETIMEDOUT'
-        )
-      ) {
+      } else if (isTimeout(e)) {
         attemptsRemaining--
         console.warn(
           `[RFC ${rfcNumber}] Red API timeout. ${attemptsRemaining} attempts remaining.`
@@ -289,7 +349,7 @@ export const getAllSubseries = async ({
     }
   }
 
-  const subseries = await api.red.subseriesList({})
+  const subseries = await safeSubseriesList(api)
   const sortedSubseries = subseries
     .map((subseriesDoc): SubseriesCommon => {
       const parts = parseSubseriesName(subseriesDoc.name)
