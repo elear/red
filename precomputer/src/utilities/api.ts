@@ -159,9 +159,7 @@ export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
   throw new Error(`[DocList] Unable to access docList`)
 }
 
-const getRfcCommon = async (
-  rfcNumber: number
-): Promise<RfcCommon | null> => {
+const getRfcCommon = async (rfcNumber: number): Promise<RfcCommon | null> => {
   const api = getApiClient()
   try {
     const rfc = await safeDocRetrieve(api, rfcNumber)
@@ -382,7 +380,7 @@ export const sortSubseriesCommon = (
 }
 
 /**
- * Parsers for parts of RFC/subseries documents 
+ * Parsers for parts of RFC/subseries documents
  */
 
 export const parseStatus = (
