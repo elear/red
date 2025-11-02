@@ -219,6 +219,7 @@ export const safeDocRetrieve = async (
       return await redApi.red.docRetrieve(rfcNumber)
     } catch (e: unknown) {
       if (
+        // rfc not found
         e &&
         typeof e === 'object' &&
         'type' in e &&
@@ -234,29 +235,17 @@ export const safeDocRetrieve = async (
         )
       ) {
         return null
-      }
-
-      console.log(`[RFC ${rfcNumber}]`, 'debug', e, {
-        isTypeError: e instanceof TypeError,
-        typeErrorCause: e instanceof TypeError ? e.cause : undefined,
-        isTypeErrorAggregateError:
-          e instanceof TypeError && e.cause instanceof AggregateError
-      })
-
-      if (
+      } else if (
+        // timeout
         e instanceof TypeError &&
         e.cause instanceof AggregateError &&
-        e.cause.errors.some((error) => {
-          if (!('code' in error)) {
-            return false
-          }
-          console.log('error', error.code, Object.keys(error))
-          return error.code === 'ETIMEDOUT'
-        })
+        e.cause.errors.some(
+          (error) => 'code' in error && error.code === 'ETIMEDOUT'
+        )
       ) {
         attemptsRemaining--
         console.warn(
-          `[RFC ${rfcNumber}] Red API server error. Retrying soon. ${attemptsRemaining} attempts remaining.`
+          `[RFC ${rfcNumber}] Red API timeout. ${attemptsRemaining} attempts remaining.`
         )
         await sleep(500)
       } else {
