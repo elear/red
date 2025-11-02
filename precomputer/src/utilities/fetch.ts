@@ -1,17 +1,38 @@
-const NUMBER_OF_FETCH_RETRIES = 3
+import { isApiTimeoutError } from './api.ts'
+import { sleep } from './sleep.ts'
 
-export const fetchRetry = async (url: string, rfcNumberForDebug: number): Promise<Response> => {
+const NUMBER_OF_FETCH_RETRIES = 3
+const DELAY_BETWEEN_REQUESTS_MS = 500
+
+export const fetchRetry = async (
+  url: string,
+  rfcNumberForDebug: number
+): Promise<Response> => {
   let attemptsRemaining = NUMBER_OF_FETCH_RETRIES
 
   while (attemptsRemaining > 0) {
     try {
       return await fetch(url)
     } catch (e) {
-        console.error(e)
-        // attemptsRemaining --
+      console.log({
+        isTypeError: e instanceof TypeError,
+        isAggregateError: e instanceof AggregateError,
+        isApiTimeoutError: isApiTimeoutError(e)
+      })
+      console.error(`[RFC ${rfcNumberForDebug}]`, e)
+      if (isApiTimeoutError(e)) {
+        attemptsRemaining--
+        console.warn(
+          `[RFC ${rfcNumberForDebug}] fetchRetry API timeout. ${attemptsRemaining} attempts remaining.`
+        )
+        await sleep(DELAY_BETWEEN_REQUESTS_MS)
+      } else {
         throw e
+      }
     }
   }
 
-  throw Error(`[RFC ${rfcNumberForDebug}] fetch failed after ${NUMBER_OF_FETCH_RETRIES} retries.`)
+  throw Error(
+    `[RFC ${rfcNumberForDebug}] fetch failed after ${NUMBER_OF_FETCH_RETRIES} retries.`
+  )
 }

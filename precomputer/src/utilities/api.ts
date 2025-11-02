@@ -310,7 +310,7 @@ export const getAllRFCs = async ({
   return frozenRfcs
 }
 
-const isApiTimeoutError = (error: unknown) => {
+export const isApiTimeoutError = (error: unknown) => {
   return (
     error instanceof TypeError &&
     error.cause instanceof AggregateError &&
