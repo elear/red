@@ -16,7 +16,7 @@ export const fetchRetry = async (
     } catch (e) {
       console.log({
         isTypeError: e instanceof TypeError,
-        isAggregateError: e instanceof AggregateError,
+        causeisAggregateError: e instanceof TypeError && e.cause instanceof AggregateError,
         isApiTimeoutError: isApiTimeoutError(e)
       })
       console.error(`[RFC ${rfcNumberForDebug}]`, e)
