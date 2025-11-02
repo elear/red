@@ -212,53 +212,6 @@ export const safeDocRetrieve = async (
     throw Error(`${errorMessage}. See console`)
   }
 
-  const isAggregateError = (e: unknown): e is AggregateError => {
-    // When the Red API client fetch has a timeout error `ETIMEDOUT` it
-    // throws an `AggregateError` https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AggregateError
-    // However this seems to be an internal Node type that doesn't match
-    // `e instanceof AggregateError`, so we have to manually  a manual refinement of the type
-
-    console.log(`[RFC ${rfcNumber}]`, 'isAggregateError debug', {
-      e: Boolean(e),
-      isObject: typeof e === 'object',
-      messageIn: e && typeof e === 'object' && 'message' in e,
-      errorsIn: e && typeof e === 'object' && 'errors' in e,
-      errorsIsArray:
-        e && typeof e === 'object' && 'errors' in e && Array.isArray(e.errors),
-      nameIn: e && typeof e === 'object' && 'name' in e
-    })
-
-    return Boolean(
-      e &&
-        typeof e === 'object' &&
-        'message' in e &&
-        'errors' in e &&
-        Array.isArray(e.errors) &&
-        'name' in e
-    )
-  }
-
-  const shouldRetry = (e: unknown): boolean => {
-    if (e instanceof Response && e.status === 500) {
-      // a server error is usually intermitant, so we should retry
-      return true
-    }
-    if (
-      isAggregateError(e) &&
-      e.errors.some(
-        (error) =>
-          error &&
-          typeof error === 'object' &&
-          'code' in error &&
-          error.code === 'ETIMEDOUT'
-      )
-    ) {
-      // a timeout usually means the server was overwhelmed, so we should retry
-      return true
-    }
-    return false
-  }
-
   let attemptsRemaining = 3
 
   while (attemptsRemaining > 0) {
@@ -285,10 +238,22 @@ export const safeDocRetrieve = async (
 
       console.log(`[RFC ${rfcNumber}]`, 'debug', e, {
         isTypeError: e instanceof TypeError,
-        isAggregateError: isAggregateError(e)
+        typeErrorCause: e instanceof TypeError ? e.cause : undefined,
+        isTypeErrorAggregateError:
+          e instanceof TypeError && e.cause instanceof AggregateError
       })
 
-      if (shouldRetry(e)) {
+      if (
+        e instanceof TypeError &&
+        e.cause instanceof AggregateError &&
+        e.cause.errors.some((error) => {
+          if (!('code' in error)) {
+            return false
+          }
+          console.log('error', error.code, Object.keys(error))
+          return error.code === 'ETIMEDOUT'
+        })
+      ) {
         attemptsRemaining--
         console.warn(
           `[RFC ${rfcNumber}] Red API server error. Retrying soon. ${attemptsRemaining} attempts remaining.`
