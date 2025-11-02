@@ -14,13 +14,6 @@ export const fetchRetry = async (
     try {
       return await fetch(url)
     } catch (e) {
-      console.log({
-        isTypeError: e instanceof TypeError,
-        causeisAggregateError:
-          e instanceof TypeError && e.cause instanceof AggregateError,
-        isApiTimeoutError: isApiTimeoutError(e)
-      })
-      console.error(`[RFC ${rfcNumberForDebug}]`, e)
       if (isApiTimeoutError(e)) {
         attemptsRemaining--
         console.warn(
