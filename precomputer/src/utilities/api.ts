@@ -12,6 +12,7 @@ import type {
 } from '../../../website/app/utilities/rfc-validators.ts'
 import { assertIsString } from './typescript.ts'
 import { sleep } from './sleep.ts'
+import { isFetchTimeoutError } from './fetch.ts'
 
 type Api = InstanceType<typeof ApiClient>
 type RedApi = Api['red']
@@ -89,12 +90,15 @@ export const safeDocRetrieve = async (
     } catch (e: unknown) {
       if (isDocRetrieveNotFoundError(e)) {
         return null
-      } else if (isApiTimeoutError(e)) {
+      } else if (isFetchTimeoutError(e)) {
         attemptsRemaining--
         console.warn(
           `[RFC ${rfcNumber}] API timeout. ${attemptsRemaining} attempts remaining.`
         )
-        await sleep(DELAY_BETWEEN_REQUESTS_MS)
+        const stepOffMs =
+          (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
+          MINIMUM_DELAY_BETWEEN_REQUESTS_MS
+        await sleep(stepOffMs)
       } else {
         const errorMessage = `[RFC ${rfcNumber}] unhandled API response`
         console.error(e)
@@ -119,12 +123,15 @@ export const safeSubseriesList = async (api: ApiClient) => {
     try {
       return await api.red.subseriesList({})
     } catch (e: unknown) {
-      if (isApiTimeoutError(e)) {
+      if (isFetchTimeoutError(e)) {
         attemptsRemaining--
         console.warn(
           `[SubseriesList] Red API timeout. ${attemptsRemaining} attempts remaining.`
         )
-        await sleep(DELAY_BETWEEN_REQUESTS_MS)
+        const stepOffMs =
+          (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
+          MINIMUM_DELAY_BETWEEN_REQUESTS_MS
+        await sleep(stepOffMs)
       } else {
         const errorMessage = `[SubseriesList] unhandled API response`
         console.error(e)
@@ -147,12 +154,15 @@ export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
     try {
       return await api.red.docList(options)
     } catch (e: unknown) {
-      if (isApiTimeoutError(e)) {
+      if (isFetchTimeoutError(e)) {
         attemptsRemaining--
         console.warn(
           `[DocList] API timeout. ${attemptsRemaining} attempts remaining.`
         )
-        await sleep(DELAY_BETWEEN_REQUESTS_MS)
+        const stepOffMs =
+          (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
+          MINIMUM_DELAY_BETWEEN_REQUESTS_MS
+        await sleep(stepOffMs)
       } else {
         const errorMessage = `[DocList] unhandled API response`
         console.error(e)
@@ -261,7 +271,7 @@ type Props = {
 }
 
 const FIRST_RFC_NUMBER = 1
-const DELAY_BETWEEN_REQUESTS_MS = 50
+const MINIMUM_DELAY_BETWEEN_REQUESTS_MS = 500
 const MAX_LIMIT_PER_REQUEST = 1000
 
 export const getAllRFCs = async ({
@@ -306,23 +316,13 @@ export const getAllRFCs = async ({
 
     offset += rfcCommons.length
 
-    await sleep(DELAY_BETWEEN_REQUESTS_MS)
+    await sleep(MINIMUM_DELAY_BETWEEN_REQUESTS_MS)
   }
 
   // Attempt to prevent mutation of object (shallow -- not a deep freeze).
   const frozenRfcs = Object.freeze(rfcs)
 
   return frozenRfcs
-}
-
-export const isApiTimeoutError = (error: unknown) => {
-  return (
-    error instanceof TypeError &&
-    error.cause instanceof AggregateError &&
-    error.cause.errors.some(
-      (error) => 'code' in error && error.code === 'ETIMEDOUT'
-    )
-  )
 }
 
 export const getAllSubseries = async ({
