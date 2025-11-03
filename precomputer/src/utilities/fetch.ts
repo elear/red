@@ -15,13 +15,13 @@ export const fetchRetry = async (
       return await fetch(url)
     } catch (e) {
       errors.push(e)
-      if (isFetchTimeoutError(e)) {
+      if (isFetchConnectionError(e)) {
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_FETCH_RETRIES + 1) *
           MINIMUM_DELAY_BETWEEN_REQUESTS_MS
         console.warn(
-          `[RFC ${rfcNumberForDebug}] fetchRetry API timeout. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
+          `[RFC ${rfcNumberForDebug}] fetchRetry connection problem. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
         )
         await sleep(stepOffMs)
       } else {
@@ -38,12 +38,15 @@ export const fetchRetry = async (
   )
 }
 
-export const isFetchTimeoutError = (error: unknown) => {
+/**
+ * Tests whether an error thrown by fetch() is a timeout or a connection failure
+ */
+export const isFetchConnectionError = (error: unknown) => {
   return (
     error instanceof TypeError &&
     error.cause instanceof AggregateError &&
     error.cause.errors.some(
-      (error) => 'code' in error && error.code === 'ETIMEDOUT'
+      (error) => 'code' in error && (error.code === 'ETIMEDOUT' || error.code === 'ECONNRESET')
     )
   )
 }

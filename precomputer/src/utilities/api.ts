@@ -12,7 +12,7 @@ import type {
 } from '../../../website/app/utilities/rfc-validators.ts'
 import { assertIsString } from './typescript.ts'
 import { sleep } from './sleep.ts'
-import { isFetchTimeoutError } from './fetch.ts'
+import { isFetchConnectionError } from './fetch.ts'
 
 type Api = InstanceType<typeof ApiClient>
 type RedApi = Api['red']
@@ -92,14 +92,14 @@ export const safeDocRetrieve = async (
     } catch (e: unknown) {
       if (isDocRetrieveNotFoundError(e)) {
         return null
-      } else if (isFetchTimeoutError(e)) {
+      } else if (isFetchConnectionError(e)) {
         errors.push(e)
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
           MINIMUM_DELAY_BETWEEN_REQUESTS_MS
         console.warn(
-          `[RFC ${rfcNumber}] API timeout. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
+          `[RFC ${rfcNumber}] API connection problem. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
         )
         await sleep(stepOffMs)
       } else {
@@ -129,13 +129,13 @@ export const safeSubseriesList = async (api: ApiClient) => {
       return await api.red.subseriesList({})
     } catch (e: unknown) {
       errors.push(e)
-      if (isFetchTimeoutError(e)) {
+      if (isFetchConnectionError(e)) {
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
           MINIMUM_DELAY_BETWEEN_REQUESTS_MS
         console.warn(
-          `[SubseriesList] Red API timeout. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
+          `[SubseriesList] API connection problem. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
         )        
         await sleep(stepOffMs)
       } else {
@@ -163,13 +163,13 @@ export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
       return await api.red.docList(options)
     } catch (e: unknown) {
       errors.push(e)
-      if (isFetchTimeoutError(e)) {
+      if (isFetchConnectionError(e)) {
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
           MINIMUM_DELAY_BETWEEN_REQUESTS_MS
         console.warn(
-          `[DocList] API timeout. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
+          `[DocList] API connection problem. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
         )        
         await sleep(stepOffMs)
       } else {
