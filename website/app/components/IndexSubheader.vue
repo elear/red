@@ -21,7 +21,7 @@
       <div class="self-end lg:text-right">
         <AValidHref
           href="/series/rfc/"
-          class="rounded text-blue-100 lg:text-white inline-block px-2 md:px-5 py-2 md:py-3 font-semibold text-nowrap hover:bg-black"
+          class="rounded text-blue-100 lg:text-white inline-block px-2 md:px-5 py-2 md:py-3 font-semibold whitespace-nowrap hover:bg-black"
         >
           What is an RFC?
           <GraphicsChevron class="-rotate-90 w-[16px] inline-block" />

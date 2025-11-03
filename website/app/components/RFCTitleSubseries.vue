@@ -1,8 +1,8 @@
 <template>
-    <span v-if="props.rfc.subseries && props.rfc.subseries.length > 0">
-        <span>: </span>
-        <component :is="subseriesVNode" />
-    </span>
+  <span v-if="props.rfc.subseries && props.rfc.subseries.length > 0">
+    <span>: </span>
+    <component :is="subseriesVNode" />
+  </span>
 </template>
 
 <script setup lang="ts">
@@ -36,7 +36,7 @@ const formatSubseriesAsVNode = (
               `${subseries.type.toLowerCase()}${subseries.number}`
             ),
             class:
-              'relative z-50 no-underline hover:underline focus:underline px-2 py-3 rounded text-gray-700 dark:text-gray-300',
+              'relative z-50 no-underline hover:underline focus:underline px-2 py-3 rounded text-gray-800 dark:text-gray-300',
             title:
               `${subseries.type.toUpperCase()} ${subseries.number} contains RFC ${props.rfc.number}`
           },
