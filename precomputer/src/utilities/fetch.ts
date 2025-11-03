@@ -1,6 +1,6 @@
 import { sleep } from './sleep.ts'
 
-const NUMBER_OF_FETCH_RETRIES = 3
+const NUMBER_OF_FETCH_RETRIES = 5
 const MINIMUM_DELAY_BETWEEN_REQUESTS_MS = 1000
 
 export const fetchRetry = async (

@@ -18,7 +18,8 @@ type Api = InstanceType<typeof ApiClient>
 type RedApi = Api['red']
 type DocListOptions = Parameters<RedApi['docList']>[0]
 
-const NUMBER_OF_API_RETRIES = 3
+const NUMBER_OF_API_RETRIES = 5
+const MINIMUM_DELAY_BETWEEN_REQUESTS_MS = 1000
 
 export const getApiClient = (): ApiClient => {
   const NUXT_PUBLIC_DATATRACKER_BASE = process.env.NUXT_PUBLIC_DATATRACKER_BASE
@@ -279,14 +280,13 @@ type Props = {
   delayBetweenRequestsMs?: number
 }
 
-const FIRST_RFC_NUMBER = 1
-const MINIMUM_DELAY_BETWEEN_REQUESTS_MS = 1000
-const MAX_LIMIT_PER_REQUEST = 1000
 
 export const getAllRFCs = async ({
   api
 }: Props): Promise<Readonly<RfcCommon[]>> => {
   console.log('Downloading metadata for ALL rfcs:')
+  const FIRST_RFC_NUMBER = 1
+  const MAX_LIMIT_PER_REQUEST = 1000
   const rfcs: RfcCommon[] = []
 
   const docListOptions: DocListOptions = {}
