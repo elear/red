@@ -2,31 +2,22 @@
     <div class="min-h-[100vh]">
         <BodyLayoutDocument :class="{ 'lg:pr-[300px]': !showToc }">
             <template #sidebar>
-                <TableOfContentsMarkdownDesktop
-                    v-if="showToc && toc"
-                    :toc="toc"
-                />
+                <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
             </template>
             <div class="wrap-anywhere">
                 <Breadcrumbs :breadcrumb-items="breadcrumbItems" />
-                <ContentRenderer
-                    v-if="page"
-                    :value="page"
-                />
+                <ContentRenderer v-if="page" :value="page" />
             </div>
-            <ContentDocModifiedDateTime
-                v-if="modifiedDateTime"
-                :modified-date-time="modifiedDateTime"
-            />
+            <ContentDocModifiedDateTime v-if="modifiedDateTime" :modified-date-time="modifiedDateTime" />
         </BodyLayoutDocument>
     </div>
 </template>
 
 <script setup lang="ts">
+import { z } from 'zod'
 import { provide } from 'vue'
 import { DateTime } from 'luxon'
 import _contentMetadata from '../../generated/content-metadata.json'
-import type { ContentMetadata } from '../../modules/generate-content-metadata'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 import {
     nuxtContentTocToRfcEditorToc,
@@ -42,6 +33,22 @@ const slug = route.path
 const normalizedSlug = slug.replace(/^\//, '').replace(/\/$/, '')
 
 const markdownPath = `/${normalizedSlug}`
+
+// Changing this schema? Be sure to copy changes to generate-content-metadata.ts
+const ContentMetadataSchema = z.record(
+    /**
+     * path within content directory
+     */
+    z.string(),
+    z
+        .object({
+            /**
+             * timestamp ISO 8601
+             */
+            mtime: z.string()
+        })
+        .optional()
+)
 
 const { error, data: page } = await useAsyncData(markdownPath, () =>
     queryCollection('content').path(markdownPath).first()
@@ -82,7 +89,7 @@ const toc =
  */
 provide(tocKey, { showToc, toc })
 
-const contentMetadata: ContentMetadata = _contentMetadata
+const contentMetadata = ContentMetadataSchema.parse(_contentMetadata)
 const thisRouteContentMetadata = contentMetadata[route.path]
 
 let modifiedDateTime: DateTime | undefined = undefined

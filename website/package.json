@@ -11,7 +11,7 @@
     "dev": "npm run dev:nuxt",
     "dev:nuxt": "nuxt dev",
     "cleanup": "nuxt cleanup",
-    "preview": " npm run build:nuxt && nuxt preview",
+    "preview": "npm run build:nuxt && nuxt preview",
     "preview:dev": " npm run build:nuxt:dev && nuxt preview",
     "postinstall": "nuxt prepare",
     "test": "TZ=UTC npm run test:unittests && npm run test:types && npm run test:lint",
@@ -19,7 +19,8 @@
     "test:lint:fix": "eslint . --fix",
     "test:types": "nuxt prepare && vue-tsc -b --noEmit",
     "test:unittests": "TZ=UTC vitest run",
-    "test:unittests:watch": "TZ=UTC vitest"
+    "test:unittests:watch": "TZ=UTC vitest",
+    "generate:content-metadata": "node ./scripts/generate-content-metadata.ts"
   },
   "dependencies": {
     "@internationalized/date": "3.8.1",

@@ -247,8 +247,6 @@ How frequently terms should be linked is circumstantial depending on context and
 - Links should not be distracting. At most, link every few paragraphs; perhaps once per section depending the length of the section. Links to the same term should not appear more than once per sentence, bullet, or paragraph. Linking to the same term repetitively frustrates the reader.
 - It should be clear to the reader where the link goes (i.e., the link text should be descriptive).
 
-Last updated 20 February 2024
-
 ## RFC Headers and Boilerplate
 
 Per [RFC 9280](/info/rfc9280/), the RFC Production Center (RPC) is now maintaining the RFC boilerplates as part of the RFC Style Guide. Therefore, this page provides instructions for constructing header and boilerplate text for RFCs, as specified by [RFC 7841](/info/rfc7841/). The boilerplate may be updated per the process described in [RFC 9280](/info/rfc9280/).
