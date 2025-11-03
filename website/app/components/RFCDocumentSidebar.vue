@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full print:block">
+  <div class="h-full flex-1 print:block">
     <DialogRoot
       v-model:open="isModalOpen"
       @close="isModalOpen = false"
@@ -36,7 +36,7 @@
       </DialogPortal>
     </DialogRoot>
 
-    <div class="sticky top-0 h-[calc(100vh)] flex flex-col">
+    <div class="sticky top-0 h-[calc(100vh)] w-[300px] flex flex-col">
       <RFCTabs
         v-model="selectedTab"
         :is-mobile="false"

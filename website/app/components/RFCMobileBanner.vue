@@ -5,20 +5,35 @@
   ]">
     <div :class="[
       'xs:leading-5 sm:leading-6',
-      props.isFixed && 'container mx-auto px-3',
+      props.isFixed && 'container mx-auto px-5',
       !props.isFixed && 'p-2'
     ]">
-      <component :is="formatTitleAsVNode(`${rfcId.type}${rfcId.number}`)" v-if="rfcId" />
-      <div v-if="pillText.length > 0" class="text-gray-400">
-        <span v-for="(pillTextItem, pillTextItemIndex) in pillText" :key="pillTextItemIndex">
+      <component
+        :is="formatTitleAsVNode(`${rfcId.type}${rfcId.number}`)"
+        v-if="rfcId"
+      />
+      <div
+        v-if="pillText.length > 0"
+        class="text-gray-400"
+      >
+        <span
+          v-for="(pillTextItem, pillTextItemIndex) in pillText"
+          :key="pillTextItemIndex"
+        >
           {{ pillTextItem }}
         </span>
       </div>
-      <div v-if="props.rfc.obsoleted_by && props.rfc.obsoleted_by.length > 0" class="text-red-400">
+      <div
+        v-if="props.rfc.obsoleted_by && props.rfc.obsoleted_by.length > 0"
+        class="text-red-400"
+      >
         Obsoleted by
         <ul class="inline">
-          <li v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfc.obsoleted_by"
-            :key="obsoletedByItemIndex" class="inline">
+          <li
+            v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfc.obsoleted_by"
+            :key="obsoletedByItemIndex"
+            class="inline"
+          >
             <Anchor :href="infoSeriesPathBuilder(`RFC${obsoletedByItem.number}`)">
               <component :is="formatTitleAsVNode(`RFC${obsoletedByItem.number}`)" />
               {{ obsoletedByItem.title }}

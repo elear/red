@@ -1,6 +1,6 @@
 <template>
   <div class="w-full container m-auto flex flex-row-reverse justify-between lg:gap-5">
-    <div :class="['flex p-3 hidden w-[330px] lg:block', props.sidebarClass]">
+    <div :class="['flex p-3 hidden w-[350px] lg:block', props.sidebarClass]">
       <slot name="sidebar" />
     </div>
     <div class="flex-auto">
