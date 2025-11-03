@@ -15,7 +15,7 @@ export const fetchRetry = async (
       return await fetch(url)
     } catch (e) {
       errors.push(e)
-      if (isFetchConnectionError(e)) {
+      if (isRecovereableFetchError(e)) {
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_FETCH_RETRIES + 1) *
@@ -32,21 +32,33 @@ export const fetchRetry = async (
     }
   }
 
-  console.log(`[RFC ${rfcNumberForDebug}] no fetch attempts remaining. Errors were`, ...errors)
+  console.log(
+    `[RFC ${rfcNumberForDebug}] no fetch attempts remaining. Errors were`,
+    ...errors
+  )
   throw Error(
     `[RFC ${rfcNumberForDebug}] fetch failed after ${NUMBER_OF_FETCH_RETRIES} retries.`
   )
 }
 
 /**
- * Tests whether an error thrown by fetch() is a timeout or a connection failure
+ * Tests whether an error thrown by fetch() is a temporary glitch that will likely
+ * succeed if tried again
  */
-export const isFetchConnectionError = (error: unknown) => {
-  return (
+export const isRecovereableFetchError = (error: unknown): boolean => {
+  if (
     error instanceof TypeError &&
     error.cause instanceof AggregateError &&
     error.cause.errors.some(
-      (error) => 'code' in error && (error.code === 'ETIMEDOUT' || error.code === 'ECONNRESET')
+      (error) =>
+        'code' in error &&
+        (error.code === 'ETIMEDOUT' || error.code === 'ECONNRESET')
     )
-  )
+  ) {
+    return true
+  }
+  if (error instanceof Response && error.status === 500) {
+    return true
+  }
+  return false
 }

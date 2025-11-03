@@ -12,7 +12,7 @@ import type {
 } from '../../../website/app/utilities/rfc-validators.ts'
 import { assertIsString } from './typescript.ts'
 import { sleep } from './sleep.ts'
-import { isFetchConnectionError } from './fetch.ts'
+import { isRecovereableFetchError } from './fetch.ts'
 
 type Api = InstanceType<typeof ApiClient>
 type RedApi = Api['red']
@@ -92,7 +92,7 @@ export const safeDocRetrieve = async (
     } catch (e: unknown) {
       if (isDocRetrieveNotFoundError(e)) {
         return null
-      } else if (isFetchConnectionError(e)) {
+      } else if (isRecovereableFetchError(e)) {
         errors.push(e)
         attemptsRemaining--
         const stepOffMs =
@@ -129,14 +129,14 @@ export const safeSubseriesList = async (api: ApiClient) => {
       return await api.red.subseriesList({})
     } catch (e: unknown) {
       errors.push(e)
-      if (isFetchConnectionError(e)) {
+      if (isRecovereableFetchError(e)) {
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
           MINIMUM_DELAY_BETWEEN_REQUESTS_MS
         console.warn(
           `[SubseriesList] API connection problem. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
-        )        
+        )
         await sleep(stepOffMs)
       } else {
         const errorMessage = `[SubseriesList] unhandled API response`
@@ -163,14 +163,14 @@ export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
       return await api.red.docList(options)
     } catch (e: unknown) {
       errors.push(e)
-      if (isFetchConnectionError(e)) {
+      if (isRecovereableFetchError(e)) {
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
           MINIMUM_DELAY_BETWEEN_REQUESTS_MS
         console.warn(
           `[DocList] API connection problem. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
-        )        
+        )
         await sleep(stepOffMs)
       } else {
         const errorMessage = `[DocList] unhandled API response`
@@ -279,7 +279,6 @@ type Props = {
   api: ApiClient
   delayBetweenRequestsMs?: number
 }
-
 
 export const getAllRFCs = async ({
   api
