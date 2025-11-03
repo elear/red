@@ -83,6 +83,7 @@ export const safeDocRetrieve = async (
   }
 
   let attemptsRemaining = NUMBER_OF_API_RETRIES
+  const errors: unknown[] = []
 
   while (attemptsRemaining > 0) {
     try {
@@ -91,13 +92,14 @@ export const safeDocRetrieve = async (
       if (isDocRetrieveNotFoundError(e)) {
         return null
       } else if (isFetchTimeoutError(e)) {
+        errors.push(e)
         attemptsRemaining--
-        console.warn(
-          `[RFC ${rfcNumber}] API timeout. ${attemptsRemaining} attempts remaining.`
-        )
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
           MINIMUM_DELAY_BETWEEN_REQUESTS_MS
+        console.warn(
+          `[RFC ${rfcNumber}] API timeout. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
+        )
         await sleep(stepOffMs)
       } else {
         const errorMessage = `[RFC ${rfcNumber}] unhandled API response`
@@ -107,6 +109,7 @@ export const safeDocRetrieve = async (
     }
   }
 
+  console.log('[DocRetrieve] No attempts remaining. Errors were', ...errors)
   throw Error(
     `[RFC ${rfcNumber}] Red API docRetrive failure after ${NUMBER_OF_API_RETRIES} retries.`
   )
@@ -119,18 +122,20 @@ export const safeDocRetrieve = async (
 export const safeSubseriesList = async (api: ApiClient) => {
   let attemptsRemaining = NUMBER_OF_API_RETRIES
 
+  const errors: unknown[] = []
   while (attemptsRemaining > 0) {
     try {
       return await api.red.subseriesList({})
     } catch (e: unknown) {
+      errors.push(e)
       if (isFetchTimeoutError(e)) {
         attemptsRemaining--
-        console.warn(
-          `[SubseriesList] Red API timeout. ${attemptsRemaining} attempts remaining.`
-        )
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
           MINIMUM_DELAY_BETWEEN_REQUESTS_MS
+        console.warn(
+          `[SubseriesList] Red API timeout. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
+        )        
         await sleep(stepOffMs)
       } else {
         const errorMessage = `[SubseriesList] unhandled API response`
@@ -140,6 +145,7 @@ export const safeSubseriesList = async (api: ApiClient) => {
     }
   }
 
+  console.log('[SubseriesList] No attempts remaining. Errors were', ...errors)
   throw new Error(`[SubseriesList] Unable to access subseriesList`)
 }
 
@@ -150,18 +156,20 @@ export const safeSubseriesList = async (api: ApiClient) => {
 export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
   let attemptsRemaining = NUMBER_OF_API_RETRIES
 
+  const errors: unknown[] = []
   while (attemptsRemaining > 0) {
     try {
       return await api.red.docList(options)
     } catch (e: unknown) {
+      errors.push(e)
       if (isFetchTimeoutError(e)) {
         attemptsRemaining--
-        console.warn(
-          `[DocList] API timeout. ${attemptsRemaining} attempts remaining.`
-        )
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
           MINIMUM_DELAY_BETWEEN_REQUESTS_MS
+        console.warn(
+          `[DocList] API timeout. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
+        )        
         await sleep(stepOffMs)
       } else {
         const errorMessage = `[DocList] unhandled API response`
@@ -171,6 +179,7 @@ export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
     }
   }
 
+  console.log('[DocList] No attempts remaining. Errors were', ...errors)
   throw new Error(`[DocList] Unable to access docList`)
 }
 
@@ -271,7 +280,7 @@ type Props = {
 }
 
 const FIRST_RFC_NUMBER = 1
-const MINIMUM_DELAY_BETWEEN_REQUESTS_MS = 500
+const MINIMUM_DELAY_BETWEEN_REQUESTS_MS = 1000
 const MAX_LIMIT_PER_REQUEST = 1000
 
 export const getAllRFCs = async ({
