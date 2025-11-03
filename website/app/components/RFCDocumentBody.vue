@@ -54,6 +54,10 @@
     <component :is="enrichedDocument" />
   </div>
 
+  <div class="text-blue-300 dark:text-blue-100">
+    <!-- FIXME: this is to ensure tailwind includes these colors so we can use css color vars, but there must be a better way of doing this -->
+  </div>
+
   <RFCMobileBanner :rfc="rfcBucketHtmlDocument.rfc" :is-fixed="true" />
 </template>
 
@@ -252,6 +256,7 @@ const isAprilFool = computed(() => isAprilFoolsRfc(props.rfcBucketHtmlDocument.r
 }
 
 html.dark .rfc-content-type-xml2rfc {
+  /* Using postcss-nested-import scope these imported styles */
   @nested-import "../assets/css/xml2rfc-darkmode-patches.css"
 }
 
@@ -266,6 +271,11 @@ html.dark .rfc-content-type-xml2rfc {
 
   /* Using postcss-nested-import scope these imported styles */
   @nested-import "../assets/css/rfc-plaintext.css";
+}
+
+html.dark .rfc-content-type-plaintext {
+  /* Using postcss-nested-import scope these imported styles */
+  @nested-import "../assets/css/rfc-plaintext-darkmode-patches.css"
 }
 
 .rfc-content-padding-left {
