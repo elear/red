@@ -60,20 +60,23 @@ export const isRecovereableFetchError = (
   ) {
     return true
   }
-  if (error instanceof Response && error.status === 500) {
+  if (
+    error instanceof TypeError &&
+    error.cause &&
+    typeof error.cause === 'object' &&
+    'code' in error.cause &&
+    (error.cause.code === 'ETIMEDOUT' || error.cause.code === 'ECONNRESET')
+  ) {
     return true
   }
-  if (error instanceof Response) {
-    const statusHundredsSeries = parseFloat(
-      // the first digit of the hundreds
-      error.status.toString().substring(0, 1)
-    )
-    const HTTP_408_TIMEOUT_STATUS_CODE = 408
-
-    if (error.status === HTTP_408_TIMEOUT_STATUS_CODE || statusHundredsSeries === 5) {
-      console.log(`${debugPrefix} ${error.status}: ${error.statusText}`)
-      return true
-    }
+  const HTTP_408_TIMEOUT_STATUS_CODE = 408
+  if (
+    error instanceof Response &&
+    (error.status === HTTP_408_TIMEOUT_STATUS_CODE ||
+      error.status.toString().startsWith('5'))
+  ) {
+    console.log(`${debugPrefix} ${error.status}: ${error.statusText}`)
+    return true
   }
   return false
 }
