@@ -15,13 +15,13 @@ export const fetchRfcRetry = async (
       return await fetch(url)
     } catch (e) {
       errors.push(e)
-      if (isRecovereableFetchError(e, `[RFC ${rfcNumberForDebug}]`)) {
+      if (isRecovereableFetchError(e)) {
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_FETCH_RETRIES + 1) *
           MINIMUM_DELAY_BETWEEN_REQUESTS_MS
         console.warn(
-          `[RFC ${rfcNumberForDebug}] fetchRfcRetry connection problem. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
+          `[RFC ${rfcNumberForDebug}] fetchRfcRetry network or server problem. ${attemptsRemaining} attempts remaining. Retrying in ${stepOffMs}ms`
         )
         await sleep(stepOffMs)
       } else {
@@ -45,10 +45,7 @@ export const fetchRfcRetry = async (
  * Tests whether an error thrown by fetch() is a temporary glitch that will likely
  * succeed if tried again
  */
-export const isRecovereableFetchError = (
-  error: unknown,
-  debugPrefix: string
-): boolean => {
+export const isRecovereableFetchError = (error: unknown): boolean => {
   if (
     error instanceof TypeError &&
     error.cause instanceof AggregateError &&
@@ -75,7 +72,6 @@ export const isRecovereableFetchError = (
     (error.status === HTTP_408_TIMEOUT_STATUS_CODE ||
       error.status.toString().startsWith('5'))
   ) {
-    console.log(`${debugPrefix} ${error.status}: ${error.statusText}`)
     return true
   }
   return false

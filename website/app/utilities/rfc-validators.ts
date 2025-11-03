@@ -309,7 +309,7 @@ export const RfcBucketHtmlDocumentSchema = z.object({
   documentHtmlType: DocumentHtmlTypeSchema,
   documentHtmlObj: z.array(NodePojoSchema),
   maxPreformattedLineLength: MaxPreformattedLineLengthSchema,
-  timestampIso: z.string() // not using `z.coerce.date()` because we'll manually parse into a Luxon DateTime rather than a standard JS Date
+  timestampIso: z.string() // ISO 8601 date. Note that the schema isn't using `z.coerce.date()` because we'll manually parse into a Luxon DateTime rather than a standard JS Date
 })
 
 export type RfcBucketHtmlDocument = z.infer<typeof RfcBucketHtmlDocumentSchema>

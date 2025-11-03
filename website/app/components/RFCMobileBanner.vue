@@ -5,7 +5,7 @@
   ]">
     <div :class="[
       'xs:leading-5 sm:leading-6',
-      props.isFixed && 'container mx-auto px-2',
+      props.isFixed && 'container mx-auto px-3',
       !props.isFixed && 'p-2'
     ]">
       <component :is="formatTitleAsVNode(`${rfcId.type}${rfcId.number}`)" v-if="rfcId" />
