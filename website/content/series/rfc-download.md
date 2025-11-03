@@ -41,9 +41,3 @@ in-notes/std/\*.txt
 type `rsync \-avz \--delete rsync.rfc-editor.org::rfcs-text-only my-rfc-mirror`
 
 (The `\--delete` option is useful for removing local copies of files that have been deleted from the repository as well as expired Internet-Drafts.)
-
-## Download RFCs in TAR or ZIP Files
-
-RFCs are available in three file formats: TXT, PDF, and XML. The XML format is only available for RFC 8650 and later.
-
-FIXME: generate a download table
