@@ -14,11 +14,11 @@ import {
   takeScreenshotOfPage
 } from '../utilities/unpdf-parent.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
-import { fetchRetry } from '../utilities/fetch.ts'
+import { fetchRfcRetry } from '../utilities/fetch.ts'
 
 export const fetchRfcPDF = async (rfcNumber: number) => {
   const url = `${PUBLIC_SITE_URL_ORIGIN}/rfc/rfc${rfcNumber}.pdf`
-  const response = await fetchRetry(url, rfcNumber)
+  const response = await fetchRfcRetry(url, rfcNumber)
   if (!response.ok) {
     console.warn(
       `[RFC ${rfcNumber}] PDF not available ${response.status} ${response.statusText} at ${url}`

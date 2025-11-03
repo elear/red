@@ -92,7 +92,7 @@ export const safeDocRetrieve = async (
     } catch (e: unknown) {
       if (isDocRetrieveNotFoundError(e)) {
         return null
-      } else if (isRecovereableFetchError(e)) {
+      } else if (isRecovereableFetchError(e, `[RFC ${rfcNumber}]`)) {
         errors.push(e)
         attemptsRemaining--
         const stepOffMs =
@@ -129,7 +129,7 @@ export const safeSubseriesList = async (api: ApiClient) => {
       return await api.red.subseriesList({})
     } catch (e: unknown) {
       errors.push(e)
-      if (isRecovereableFetchError(e)) {
+      if (isRecovereableFetchError(e, `[SubseriesList]`)) {
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
@@ -163,7 +163,7 @@ export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
       return await api.red.docList(options)
     } catch (e: unknown) {
       errors.push(e)
-      if (isRecovereableFetchError(e)) {
+      if (isRecovereableFetchError(e, '[DocList]')) {
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_API_RETRIES + 1) *
