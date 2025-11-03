@@ -6,9 +6,9 @@ https://github.com/ietf-tools/datatracker/blob/2bf633bf70c40b9cb6baf428901615a04
 
 */
 pre {
-    white-space: pre-wrap;
+  white-space: pre-wrap;
 
-    /**
+  /**
     Changing font size for plaintext RFCs? Here are some notes from a previous dev. Please feel free
     to update.
 
@@ -179,39 +179,40 @@ pre {
 
     */
 
-    /* Default font size for browsers that don't support cqi container units */
-    font-size: 16px;
-    --magic-scaling-number: 163;
+  /* Default font size for browsers that don't support cqi container units */
+  font-size: 16px;
+  --magic-scaling-number: 160;
 
-    /* the basic responsive font-size
+  /* the basic responsive font-size
     calc() supported in chrome 26/firefox 16, and CSS variables in chrome 49/firefox 31,
     so this is 2014 era CSS
      */
-    --responsive-font-size: calc((var(--magic-scaling-number) / var(--preformatted-max-line-length)) * 1cqi);
+  --responsive-font-size: calc(
+    (var(--magic-scaling-number) / var(--preformatted-max-line-length)) * 1cqi
+  );
 
-    /*
+  /*
     set the font-size in several ways for different browser support
     ===============================================================
     */
-    /*
+  /*
     var() supported in chrome 49/firefox 31,
     so this is 2014 era CSS
     */
-    font-size: var(--responsive-font-size);
-    /*
+  font-size: var(--responsive-font-size);
+  /*
     min() supported in Chrome 96/Firefox 75
     so this is 2020 era CSS that supporting browsers will use instead of the previous one
     */
-    font-size: min(
-        var(--responsive-font-size),
-        /* max font-size on desktop */
-        1rem
-    );
+  font-size: min(
+    var(--responsive-font-size),
+    /* max font-size on desktop */ 1rem
+  );
 }
 
 @media only screen {
-    .newpage {    
-        /** upstream CSS was:
+  .newpage {
+    /** upstream CSS was:
 
               margin-top: -1.25em; 
 
@@ -219,17 +220,17 @@ pre {
             most RFCs have trailing/leading whitespace between pages, but RFC708 (and
             perhaps others?) don't, so we'll disable it for now.
         **/
-    }
+  }
 }
 
 .newpage {
-    page-break-before: always;
+  page-break-before: always;
 }
 
 a {
-    color: var(--color-blue-700, #050)
+  color: var(--color-blue-700, #050);
 }
 
 html.dark a {
-    color: var(--color-blue-300, #050)
+  color: var(--color-blue-300, #050);
 }
