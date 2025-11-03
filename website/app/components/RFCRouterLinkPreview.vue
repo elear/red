@@ -76,7 +76,7 @@ function formatAuthors(authors: RfcCommon['authors']): string {
     return `${authors[0]}`
   }
 
-  return authors.map(author => author.name ?? author.titlepage_name) .join(', ')
+  return authors.map(author => author.name ?? author.titlepage_name).join(', ')
 }
 
 function formatStreamAndArea(rfc: RfcCommon): string[] {
