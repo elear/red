@@ -28,7 +28,6 @@
         {{ COMMA }}
         {{ NONBREAKING_SPACE }}
       </template>
-      <template v-else>.</template>
     </li>
   </ul>
 
