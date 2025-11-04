@@ -1,12 +1,12 @@
 <template>
-  <RFCRouterLink
+  <AMaybeRFCLink
     v-if="isInternal && isRfcLink"
     :id="props.id"
     :href="props.href!"
     :class="ANCHOR_TAILWIND_STYLE"
   >
     <slot />
-  </RFCRouterLink>
+  </AMaybeRFCLink>
   <Anchor
     v-else
     :id="props.id"
