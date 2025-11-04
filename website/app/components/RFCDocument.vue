@@ -1,21 +1,36 @@
 <template>
   <BodyLayoutDocument>
     <template #sidebar>
-      <RFCDocumentSidebar v-if="rfcBucketHtmlDocument" v-model:selected-tab="selectedTab"
-        v-model:is-modal-open="isModalOpen" :rfc-bucket-html-document="rfcBucketHtmlDocument"
-        :has-table-of-contents="hasToc" :goto-errata="gotoErrata" :change-tab="changeTab" />
+      <RFCDocumentSidebar
+        v-if="rfcBucketHtmlDocument"
+        v-model:selected-tab="selectedTab"
+        v-model:is-modal-open="isModalOpen"
+        :rfc-bucket-html-document="rfcBucketHtmlDocument"
+        :has-table-of-contents="hasToc"
+        :goto-errata="gotoErrata"
+        :change-tab="changeTab"
+      />
     </template>
     <template v-if="rfcBucketHtmlDocumentError">
       <div class="container mx-auto">
-        <Alert level="1" variant="warning" heading="Error">
+        <Alert
+          level="1"
+          variant="warning"
+          heading="Error"
+        >
           {{ rfcBucketHtmlDocumentError }} []
         </Alert>
       </div>
     </template>
 
-    <RFCDocumentBody v-if="rfcBucketHtmlDocument" v-model:is-modal-open="isModalOpen"
-      :rfc-bucket-html-document="rfcBucketHtmlDocument" :breadcrumb-items="breadcrumbItems" :goto-errata="gotoErrata"
-      :change-tab="changeTab" />
+    <RFCDocumentBody
+      v-if="rfcBucketHtmlDocument"
+      v-model:is-modal-open="isModalOpen"
+      :rfc-bucket-html-document="rfcBucketHtmlDocument"
+      :breadcrumb-items="breadcrumbItems"
+      :goto-errata="gotoErrata"
+      :change-tab="changeTab"
+    />
   </BodyLayoutDocument>
 </template>
 
@@ -120,6 +135,8 @@ const canonicalUrl = infoSeriesPathBuilder(sanitisedId.value)
 // see https://github.com/ietf-tools/red/issues/196
 const pageTitle = rfcBucketHtmlDocument.value ? `RFC ${rfcBucketHtmlDocument.value.rfc.number}: ${rfcBucketHtmlDocument.value.rfc.title}` : ''
 
+const resourceTimestampDatetime = rfcBucketHtmlDocument.value ? DateTime.fromISO(rfcBucketHtmlDocument.value.timestampIso) : undefined
+
 useRfcEditorHead({
   title: pageTitle,
   canonicalUrl,
@@ -128,6 +145,7 @@ useRfcEditorHead({
     rfcBucketHtmlDocument.value?.rfc.published ?
       DateTime.fromISO(rfcBucketHtmlDocument.value?.rfc.published)
       : undefined,
-  contentType: 'article'
+  contentType: 'article',
+  resourceTimestamps: resourceTimestampDatetime ? [{ name: `info-${sanitisedId.value}`, timestamp: resourceTimestampDatetime }] : undefined
 })
 </script>

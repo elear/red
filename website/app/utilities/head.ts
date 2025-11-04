@@ -11,6 +11,11 @@ const IMAGE_PREVIEW_ALT_TEXT = 'RFC-Editor: Official home of RFCs'
 
 type WidthHeight = (typeof imagePreviewDimensions)[number]
 
+type ResourceTimestamp = {
+  name: string
+  timestamp: DateTime
+}
+
 const SITE_NAME = 'RFC Editor'
 
 type UseRfcEditorProps = {
@@ -25,6 +30,7 @@ type UseRfcEditorProps = {
   modifiedDateTime?: DateTime
   publishedDateTime?: DateTime
   keywords?: string[]
+  resourceTimestamps?: ResourceTimestamp[]
 }
 
 export const useRfcEditorHead = (props: UseRfcEditorProps) => {
@@ -36,7 +42,8 @@ export const useRfcEditorHead = (props: UseRfcEditorProps) => {
     meta: [
       ...buildGenericMetaTags(newProps),
       ...buildOpenGraphMetaTags(newProps),
-      ...buildTwitterMetaTags(newProps)
+      ...buildTwitterMetaTags(newProps),
+      ...buildResourceTimestamps(newProps)
     ],
     link: [
       { rel: 'canonical', href: props.canonicalUrl },
@@ -86,7 +93,7 @@ type MetaTag = {
   content: string
 }
 
-const buildOpenGraphMetaTags = (props: UseRfcEditorProps) => {
+const buildOpenGraphMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
   const linkPreviewImage = linkPreviewImageBuilder('opengraph')
   const metaTags: MetaTag[] = [
     {
@@ -166,7 +173,7 @@ const buildOpenGraphMetaTags = (props: UseRfcEditorProps) => {
   return metaTags
 }
 
-const buildTwitterMetaTags = (props: UseRfcEditorProps) => {
+const buildTwitterMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
   const linkPreviewImage = linkPreviewImageBuilder('twitter')
   const metaTags: MetaTag[] = [
     {
@@ -201,7 +208,7 @@ const buildTwitterMetaTags = (props: UseRfcEditorProps) => {
   return metaTags
 }
 
-const buildGenericMetaTags = (props: UseRfcEditorProps) => {
+const buildGenericMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
   const metaTags: MetaTag[] = [
     {
       property: 'generator',
@@ -234,6 +241,17 @@ const buildGenericMetaTags = (props: UseRfcEditorProps) => {
   return metaTags
 }
 
+const buildResourceTimestamps = (props: UseRfcEditorProps): MetaTag[] => {
+  return (
+    props.resourceTimestamps?.map((resourceTimestamp): MetaTag => {
+      return {
+        property: `resource-timestamp:${resourceTimestamp.name}`,
+        content: resourceTimestamp.timestamp.toISO() ?? '(null)'
+      }
+    }) ?? []
+  )
+}
+
 const FAVICON_DIMENSIONS: [number, number][] = [
   [16, 16],
   [32, 32],
@@ -253,10 +271,12 @@ type LinkTag = {
 }
 
 const buildFaviconLinks = (): LinkTag[] => {
-  return FAVICON_DIMENSIONS.map(([widthPx, heightPx]): LinkTag => ({
-    rel: 'icon',
-    type: 'image/png',
-    sizes: `${widthPx}x${heightPx}`,
-    href: faviconPathBuilder(widthPx, heightPx)
-  }))
+  return FAVICON_DIMENSIONS.map(
+    ([widthPx, heightPx]): LinkTag => ({
+      rel: 'icon',
+      type: 'image/png',
+      sizes: `${widthPx}x${heightPx}`,
+      href: faviconPathBuilder(widthPx, heightPx)
+    })
+  )
 }
