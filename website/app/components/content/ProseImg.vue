@@ -1,7 +1,7 @@
 <template>
   <img
     v-bind="$attrs"
-    class="dark:invert"
+    class="dark:invert my-5"
   >
 </template>
 

@@ -4,7 +4,7 @@
             <template #sidebar>
                 <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
             </template>
-            <div class="wrap-anywhere">
+            <div class="wrap-anywhere leading-[1.75]">
                 <Breadcrumbs :breadcrumb-items="breadcrumbItems" />
                 <ContentRenderer v-if="page" :value="page" />
             </div>
