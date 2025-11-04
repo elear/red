@@ -15,7 +15,7 @@ export const fetchRfcRetry = async (
       return await fetch(url)
     } catch (e) {
       errors.push(e)
-      if (isRecovereableFetchError(e)) {
+      if (await isRecovereableFetchError(e)) {
         attemptsRemaining--
         const stepOffMs =
           (-attemptsRemaining + NUMBER_OF_FETCH_RETRIES + 1) *
@@ -45,7 +45,7 @@ export const fetchRfcRetry = async (
  * Tests whether an error thrown by fetch() is a temporary glitch that will likely
  * succeed if tried again
  */
-export const isRecovereableFetchError = (error: unknown): boolean => {
+export const isRecovereableFetchError = async (error: unknown): Promise<boolean> => {
   if (
     error instanceof TypeError &&
     error.cause instanceof AggregateError &&
@@ -64,6 +64,12 @@ export const isRecovereableFetchError = (error: unknown): boolean => {
     'code' in error.cause &&
     (error.cause.code === 'ETIMEDOUT' || error.cause.code === 'ECONNRESET')
   ) {
+    return true
+  }
+  const HTTP_502_BAD_GATEWAY = 502
+  if(error instanceof Response && error.status === HTTP_502_BAD_GATEWAY) {
+    // Bad gateway errors seem to typically take longer to recover from, so we'll sleep for a bit
+    await sleep(10000)
     return true
   }
   const HTTP_408_TIMEOUT_STATUS_CODE = 408
