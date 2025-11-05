@@ -1,26 +1,43 @@
 <template>
   <div class="flex flex-col px-3">
-    <Breadcrumbs :breadcrumb-items="breadcrumbItems" class="flex-1" />
+    <Breadcrumbs
+      :breadcrumb-items="breadcrumbItems"
+      class="flex-1"
+    />
     <RFCDocumentMobileInfoButton @click="isModalOpen = true">Info</RFCDocumentMobileInfoButton>
   </div>
 
-  <Heading level="1"
-    class="mb-2 ml-2 px-3 xs:px-0 print:mt-5 print:text-lg print:border-b-2 print:border-black print:text-center">
-    <component :is="formattedTitle" />
+  <Heading
+    level="1"
+    class="mb-2 ml-2 px-3 xs:px-0 print:mt-5 print:text-lg print:border-b-2 print:border-black print:text-center"
+  >
+    <RFCTitle
+      :rfc="props.rfcBucketHtmlDocument.rfc"
+      hide-title
+    />
     <RFCTitleSubseries :rfc="props.rfcBucketHtmlDocument.rfc" />
   </Heading>
 
-  <Heading level="2" class="mb-2 ml-2 px-3 xs:px-0 print:text-center">
+  <Heading
+    level="2"
+    class="mb-2 ml-2 px-3 xs:px-0 print:text-center"
+  >
     {{ props.rfcBucketHtmlDocument.rfc.title }}
 
-    <span v-if="isAprilFool" class="inline pr-2">
+    <span
+      v-if="isAprilFool"
+      class="inline pr-2"
+    >
       <AprilFools />
     </span>
   </Heading>
 
   <ul class="block px-3 ml-2 print:text-center">
-    <li v-for="(author, authorIndex) in props.rfcBucketHtmlDocument.rfc.authors" :key="authorIndex"
-      class="inline-block">
+    <li
+      v-for="(author, authorIndex) in props.rfcBucketHtmlDocument.rfc.authors"
+      :key="authorIndex"
+      class="inline-block"
+    >
       <span>
         {{
           // titlepage_name might be an empty string, so don't use ?? as fallback, use ||
@@ -35,21 +52,27 @@
 
   <RFCDocumentBodyPill :rfc="props.rfcBucketHtmlDocument.rfc" />
 
-  <Alert v-if="props.rfcBucketHtmlDocument.rfc.obsoleted_by?.length" variant="warning"
-    heading="This RFC is now obsolete">
+  <Alert
+    v-if="props.rfcBucketHtmlDocument.rfc.obsoleted_by?.length"
+    variant="warning"
+    heading="This RFC is now obsolete"
+  >
     <div class="text-base">
       For more information, please refer to
       <ul>
-        <li v-for="(obsoletedByItem, obsoletedByItemIndex) in obsoletedBy" :key="obsoletedByItemIndex">
-          <Anchor :href="obsoletedByItem.href">
-            <component :is="obsoletedByItem.formattedTitle" />
+        <li
+          v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfcBucketHtmlDocument.rfc.obsoleted_by"
+          :key="obsoletedByItemIndex"
+        >
+          <Anchor :href="infoSeriesPathBuilder(`RFC${obsoletedByItem.number}`)">
+            <RFCTitle :rfc="obsoletedByItem" />
           </Anchor>
         </li>
       </ul>
     </div>
   </Alert>
 
-  <div :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDocument.documentHtmlType} relative mt-5 ml-2 sm:text-base lg:text-base px-3 ${
+  <div :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDocument.documentHtmlType} relative mt-5 sm:text-base lg:text-base px-3 ${
     //
     ' leading-[1.75] ' // WCAG requires 1.5 minimum
     }`">
@@ -60,7 +83,10 @@
     <!-- FIXME: this is to ensure tailwind includes these colors so we can use css color vars in plaintext CSS, but there must be a better way of doing this -->
   </div>
 
-  <RFCMobileBanner :rfc="rfcBucketHtmlDocument.rfc" :is-fixed="true" />
+  <RFCMobileBanner
+    :rfc="rfcBucketHtmlDocument.rfc"
+    :is-fixed="true"
+  />
 </template>
 
 <script setup lang="ts">
@@ -72,11 +98,7 @@ import PdfPages from './PdfPages.vue'
 import AbsoluteHorizontalScrollable from './AbsoluteHorizontalScrollable.vue'
 import Fragment from './Fragment.vue'
 import RFCTitleSubseries from './RFCTitleSubseries.vue'
-import {
-  formatTitleAsVNode,
-  isAprilFoolsRfc,
-  parseSeriesId,
-} from '~/utilities/rfc'
+import { isAprilFoolsRfc } from '~/utilities/rfc'
 import { infoSeriesPathBuilder } from '~/utilities/url'
 import { COMMA, NONBREAKING_SPACE } from '~/utilities/strings'
 import { nodePojoWalker } from '~/utilities/dom'
@@ -94,19 +116,6 @@ type Props = {
 const props = defineProps<Props>()
 
 const isModalOpen = defineModel<boolean>('isModalOpen')
-
-const rfcId = computed(() => parseSeriesId(`rfc${props.rfcBucketHtmlDocument.rfc.number}`))
-
-const formattedTitle = computed(() => rfcId.value ? formatTitleAsVNode(`${rfcId.value.type}${rfcId.value.number}`) : h('span'))
-
-const obsoletedBy = computed(() => props.rfcBucketHtmlDocument.rfc.obsoleted_by?.map(obsoletedByItem => ({
-  href: infoSeriesPathBuilder(`RFC${obsoletedByItem.number}`),
-  formattedTitle: h('span', [
-    formatTitleAsVNode(`RFC${obsoletedByItem.number}`),
-    ' ',
-    obsoletedByItem.title
-  ])
-})))
 
 const enrichedDocument = computed<VNode>(() =>
   renderDocumentPojo(props.rfcBucketHtmlDocument.documentHtmlObj)
@@ -268,6 +277,7 @@ html.dark .rfc-content-type-xml2rfc {
   */
   padding-left: var(--layout-bleed-left);
   padding-right: var(--layout-bleed-right);
+  margin-left: calc(var(--spacing) * 2);
   container-type: inline-size;
   --preformatted-max-line-length: v-bind(maxPreformattedLineLength);
 

@@ -1,5 +1,5 @@
 <template>
-    <component :is="formattedTitle" />: {{ props.rfc.title }}
+    <component :is="formattedTitle" /><template v-if="!props.hideTitle">: {{ props.rfc.title }}</template>
 </template>
 
 <script setup lang="ts">
@@ -10,6 +10,7 @@ type Props = {
         number: number
         title: string
     }
+    hideTitle?: boolean
 }
 
 const props = defineProps<Props>()
