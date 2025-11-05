@@ -105,14 +105,24 @@
                             v-for="(level1, level1Index) in level0.children"
                             :key="level1Index"
                           >
-                            <a
-                              v-if="level1.href"
-                              :href="level1.href"
-                              :class="MENU_ITEM_CLASS"
-                              @click="isOpen = false"
-                            >
-                              {{ level1.label }}
-                            </a>
+                            <template v-if="level1.href">
+                              <Anchor
+                                v-if="!level1.noSpaLink"
+                                :href="level1.href"
+                                :class="MENU_ITEM_CLASS"
+                                @click="isOpen = false"
+                              >
+                                {{ level1.label }}
+                              </Anchor>
+                              <a
+                                v-else-if="level1.noSpaLink"
+                                :href="level1.href"
+                                :class="MENU_ITEM_CLASS"
+                                @click="isOpen = false"
+                              >
+                                {{ level1.label }}
+                              </a>
+                            </template>
                           </li>
                         </ul>
                       </AccordionItem>

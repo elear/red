@@ -96,7 +96,14 @@
                             as-child
                             @click="level1.click"
                           >
-                            <a>
+                            <Anchor v-if="!level1.noSpaLink">
+                              <Icon
+                                v-if="level1.icon"
+                                :name="level1.icon"
+                              />
+                              {{ level1.label }}
+                            </Anchor>
+                            <a v-else>
                               <Icon
                                 v-if="level1.icon"
                                 :name="level1.icon"

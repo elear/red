@@ -8,7 +8,7 @@
       <DialogPortal>
         <DialogOverlay />
         <DialogContent :class="// needs overflow-y-scroll to force scrollbars, to ensure same page width as the main view
-          'fixed inset-0 z-50 bg-blue-900 text-white dark:bg-blue-950 dark:text-white overflow-y-scroll h-full'">
+          'fixed inset-0 z-50 bg-blue-900 dark:bg-blue-950 overflow-y-scroll h-full'">
           <DialogTitle />
 
           <RFCMobileBanner
@@ -26,7 +26,7 @@
           <div class="bg-white dark:bg-blue-900">
             <RFCTabs
               v-model="selectedTab"
-              :is-mobile="true"
+              mode="mobile"
               :rfc-bucket-html-document="props.rfcBucketHtmlDocument"
               :has-table-of-contents="props.hasTableOfContents"
             />
@@ -39,7 +39,7 @@
     <div class="sticky top-0 h-[calc(100vh)] w-[300px] flex flex-col">
       <RFCTabs
         v-model="selectedTab"
-        :is-mobile="false"
+        mode="desktop"
         :rfc-bucket-html-document="props.rfcBucketHtmlDocument"
         :has-table-of-contents="props.hasTableOfContents"
       />

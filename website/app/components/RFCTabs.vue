@@ -1,13 +1,13 @@
 <template>
   <TabsRoot
     v-model="selectedTab"
-    :class="['min-h-0 flex flex-col',]"
+    class="min-h-0 flex flex-col"
     @change="changeTab"
   >
     <TabsList class="border-b-2 border-gray-400">
       <HorizontalScrollable :inner-class="[
         'flex flex-row gap-5',
-        { 'px-2': props.isMobile }
+        { 'px-2': props.mode === 'mobile' }
       ]">
         <TabsIndicator class="absolute" />
         <TabsTrigger
@@ -58,11 +58,11 @@
       v-if="props.hasTableOfContents && props.rfcBucketHtmlDocument.tableOfContents"
       :value="0"
       :class="[TAB_CONTENT_CLASS, {
-        'px-4': props.isMobile,
+        'px-4': props.mode === 'mobile',
       }]"
     >
       <TableOfContentsHighlight
-        v-if="props.isMobile === false"
+        v-if="props.mode === 'desktop'"
         :toc="props.rfcBucketHtmlDocument.tableOfContents"
         list-type="ordered"
         wrapper-class="min-h-0 pt-4 pb-2 px-4"
@@ -82,7 +82,7 @@
         </Heading>
       </TableOfContentsHighlight>
       <TableOfContents
-        v-else-if="props.isMobile === true"
+        v-else-if="props.mode === 'mobile'"
         :toc="props.rfcBucketHtmlDocument.tableOfContents"
         list-type="ordered"
         wrapper-class="flex flex-col min-h-0 pt-4 pb-2 px-4"
@@ -105,7 +105,7 @@
     <TabsContent
       :value="1"
       :class="[TAB_CONTENT_CLASS, {
-        'px-4': props.isMobile,
+        'px-4': props.mode === 'mobile',
       }]"
     >
       <Heading
@@ -137,26 +137,33 @@
         <template v-if="props.rfcBucketHtmlDocument.rfc.authors.length > 0">
           <dt class="font-bold mt-2">Authors</dt>
           <dd>
-            <ul class="-mt-1">
+            <ul class="-mt-1 leading-[1.75]">
               <li
                 v-for="(author, authorIndex) in props.rfcBucketHtmlDocument.rfc.authors"
                 :key="authorIndex"
                 class="inline"
               >
-                <a
-                  v-if="author.email"
-                  :href="rfcAuthorUrlBuilder(author.email)"
-                  class="whitespace-nowrap underline inline-block py-0.5 pr-0.5 mb-0.5"
-                >
-                  {{ author.name }}
-                </a>
-                <span v-else>
-                  {{ author.name }}
+                <span class="whitespace-nowrap">
+                  <a
+                    v-if="author.email"
+                    :href="rfcAuthorUrlBuilder(author.email)"
+                    :class="[ANCHOR_TAILWIND_STYLE, ' py-0.5 pr-0.5 mb-0.5']"
+                  >
+                    {{
+                    // author.titlepage_name might be an empty string, so don't use ?? as fallback, use ||
+                    author.titlepage_name || author.name }}<Icon
+                      name="fluent:window-new-20-regular"
+                      class="text-lg align-middle ml-1"
+                    />
+                  </a>
+                  <span v-else>
+                    {{ author.name }}
+                  </span>
+                  <template v-if="authorIndex < props.rfcBucketHtmlDocument.rfc.authors.length - 1">
+                    {{ COMMA }} {{ NONBREAKING_SPACE }}
+                  </template>
                 </span>
-                <template v-if="authorIndex < props.rfcBucketHtmlDocument.rfc.authors.length - 1">
-                  {{ COMMA }}
-                  {{ NONBREAKING_SPACE }}
-                </template>
+                {{ SPACE }}
               </li>
             </ul>
           </dd>
@@ -171,7 +178,10 @@
             <template v-else>Working group</template>
           </dt>
           <dd>
-            <Anchor :href="workingGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.group)">
+            <Anchor
+              :href="workingGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.group)"
+              :class="ANCHOR_TAILWIND_STYLE"
+            >
               {{ props.rfcBucketHtmlDocument.rfc.group?.name }}
 
               <template v-if="props.rfcBucketHtmlDocument.rfc.group?.acronym">
@@ -184,7 +194,10 @@
         <template v-if="shouldShowArea(props.rfcBucketHtmlDocument.rfc)">
           <dt class="font-bold mt-2">Area</dt>
           <dd>
-            <Anchor :href="areaGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.area)">
+            <Anchor
+              :href="areaGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.area)"
+              :class="ANCHOR_TAILWIND_STYLE"
+            >
               {{ props.rfcBucketHtmlDocument.rfc.area?.name }}
 
               <template v-if="props.rfcBucketHtmlDocument.rfc.area?.acronym">
@@ -197,7 +210,10 @@
         <dt class="font-bold mt-2">Publication Stream</dt>
         <dd>
           <template v-if="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)">
-            <Anchor :href="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)">
+            <Anchor
+              :href="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)"
+              :class="ANCHOR_TAILWIND_STYLE"
+            >
               {{ props.rfcBucketHtmlDocument.rfc.stream.name }}
             </Anchor>
           </template>
@@ -236,6 +252,7 @@
               <a
                 v-if="identifier.type === 'doi'"
                 :href="`https://doi.org/${encodeURI(identifier.value)}`"
+                :class="ANCHOR_TAILWIND_STYLE"
               >
                 {{ `https://doi.org/${identifier.value}` }}
               </a>
@@ -276,7 +293,7 @@
     <TabsContent
       :value="2"
       :class="[TAB_CONTENT_CLASS, {
-        'px-4': props.isMobile,
+        'px-4': props.mode === 'mobile',
       }]"
     >
       <p class="border-b-1 border-gray-200 py-6">
@@ -320,7 +337,7 @@ import {
 } from 'reka-ui'
 import { formatTitleAsVNode } from '~/utilities/rfc'
 import { formatDatePublished } from '~/utilities/rfc-converters-utils'
-import { COMMA, NONBREAKING_SPACE } from '~/utilities/strings'
+import { COMMA, NONBREAKING_SPACE, SPACE } from '~/utilities/strings'
 import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme'
 import { areaGroupUrlBuilder, infoSeriesPathBuilder, rfcAuthorUrlBuilder, streamUrlBuilder, workingGroupUrlBuilder } from '~/utilities/url'
 import type { RfcBucketHtmlDocument } from '~/utilities/rfc'
@@ -329,7 +346,7 @@ import type { RfcCommon } from '~/utilities/rfc-validators'
 type Props = {
   rfcBucketHtmlDocument: RfcBucketHtmlDocument
   hasTableOfContents: boolean
-  isMobile: boolean
+  mode: "desktop" | "mobile"
 }
 
 const props = defineProps<Props>()
@@ -371,7 +388,7 @@ const shouldShowGroup = (rfc: RfcCommon): boolean => {
   return true
 }
 
-const TAB_CONTENT_CLASS = 'flex flex-col min-h-0'
+const TAB_CONTENT_CLASS = 'flex flex-col min-h-0 text-black dark:text-white'
 const DEFAULT_CLASS = 'py-4 whitespace-nowrap border-b-2 hover:bg-gray-100 dark:hover:bg-gray-900 text-sm md:text-md cursor-pointer'
 const SELECTED_CLASS = 'text-shadow-bold text-gray-900 dark:text-gray-100 border-b-blue-900 dark:border-b-white font-medium'
 const UNSELECTED_CLASS = 'border-b-transparent text-gray-800 dark:text-gray-300'

@@ -300,12 +300,9 @@ const routing = {
       // When using the header nav to click on 'The RFC Series / Browse RFCs by Status / any link' the URL should have precedence over uiState
       // However when changing search filters then uiState should have precedence
       //
-      // There is no current fix for this, however as a temporary workaround the HeaderNavDesktop.vue and HeaderNavMobile.vue have conventional <a>
-      // links rather than SPA links so that a full page refresh occurs which does behave correctly, albeit with slow full page reloads.
-      // We should address this.
-
-      // const currentRouteStatus = router.currentRoute.value.query.status
-      // const currentRouteStatusValue = currentRouteStatus ? currentRouteStatus.toString() : null
+      // There is no current fix for this, however as a temporary workaround the HeaderNavData.ts has config to prefer conventional <a>
+      // links rather than SPA links so that a full page refresh occurs which does make it behave correctly, albeit with slow full page
+      // reloads. We should address this.
 
       const uiStateStatus = uiState[INDEX_NAME].refinementList?.['status.name']?.join(',')
       const status: string | null = uiStateStatus ?? null

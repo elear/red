@@ -23,7 +23,7 @@
       class="inline-block">
       <span>
         {{
-          // titlepage_name might be an empty string, so don't use ?? as fallback, use || 
+          // titlepage_name might be an empty string, so don't use ?? as fallback, use ||
           author.titlepage_name || author.name }}
       </span>
       <template v-if="authorIndex < props.rfcBucketHtmlDocument.rfc.authors.length - 1">
@@ -49,7 +49,7 @@
     </div>
   </Alert>
 
-  <div :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDocument.documentHtmlType} relative mt-5 sm:text-base lg:text-base px-3 ${
+  <div :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDocument.documentHtmlType} relative mt-5 ml-2 sm:text-base lg:text-base px-3 ${
     //
     ' leading-[1.75] ' // WCAG requires 1.5 minimum
     }`">
@@ -57,7 +57,7 @@
   </div>
 
   <div class="text-blue-300 dark:text-blue-100">
-    <!-- FIXME: this is to ensure tailwind includes these colors so we can use css color vars, but there must be a better way of doing this -->
+    <!-- FIXME: this is to ensure tailwind includes these colors so we can use css color vars in plaintext CSS, but there must be a better way of doing this -->
   </div>
 
   <RFCMobileBanner :rfc="rfcBucketHtmlDocument.rfc" :is-fixed="true" />
