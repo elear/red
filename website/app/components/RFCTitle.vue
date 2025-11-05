@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatTitleAsVNode } from '~/utilities/rfc';
+import { formatTitleAsVNode } from '~/utilities/rfc'
 
 type Props = {
     rfc: {

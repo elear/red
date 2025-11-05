@@ -347,7 +347,6 @@ import {
   TabsRoot,
   TabsTrigger
 } from 'reka-ui'
-import { formatTitleAsVNode } from '~/utilities/rfc'
 import { formatDatePublished } from '~/utilities/rfc-converters-utils'
 import { COMMA, NONBREAKING_SPACE, SPACE } from '~/utilities/strings'
 import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme'
@@ -368,8 +367,6 @@ const selectedTab = defineModel<number>()
 function changeTab(index: number) {
   selectedTab.value = index
 }
-
-const formattedTitle = computed(() => formatTitleAsVNode(`rfc${props.rfcBucketHtmlDocument.rfc.number}`))
 
 const formattedPublished = computed(() => {
   if (!props.rfcBucketHtmlDocument.rfc.published) return
