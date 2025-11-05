@@ -11,14 +11,12 @@
   </p>
   <ul v-if="list1" class="text-base text-blue-900 dark:text-white">
     <li v-for="(part, index) in list1" :key="index" class="inline">
-      <GraphicsDiamond v-if="index > 0" />
-      {{ part }}
+      <GraphicsDiamond v-if="index > 0" />{{ part }}
     </li>
   </ul>
   <ul v-if="list2" class="text-base text-gray-800 mt-1 dark:text-white">
     <li v-for="(part, index) in list2" :key="index" class="inline">
-      <GraphicsDiamond v-if="index > 0" class="align-middle" />
-      {{ part }}
+      <GraphicsDiamond v-if="index > 0" class="align-middle" />{{ part }}
     </li>
   </ul>
   <p v-if="obsoletedBy" :class="[
@@ -72,7 +70,9 @@ function formatAuthors(authors: RfcCommon['authors']): string {
   if (authors.length === 0) {
     return ''
   }
-  return authors.map(author => author.name ?? author.titlepage_name).join(', ')
+  return authors.map(author =>
+    // titlepage_author might be an empty string, so don't use ?? to fallback, instead use ||
+    author.titlepage_name || author.name).join(', ')
 }
 
 function formatStreamAndArea(rfc: RfcCommon): string[] {
