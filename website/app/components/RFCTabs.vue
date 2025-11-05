@@ -123,9 +123,21 @@
               v-for="(update, updateIndex) in props.rfcBucketHtmlDocument.rfc.updates"
               :key="updateIndex"
             >
-              <RFCRouterLink :href="infoSeriesPathBuilder(`rfc${update.number}`)">
-                <component :is="formattedTitle" />:
-                {{ update.title }}
+              <RFCRouterLink :href="infoSeriesPathBuilder(`rfc${update.number}`)" :class="ANCHOR_TAILWIND_STYLE">
+                <RFCTitle :rfc="update" />
+              </RFCRouterLink>
+            </span>
+          </dd>
+        </template>
+                <template v-if="props.rfcBucketHtmlDocument.rfc.updated_by && props.rfcBucketHtmlDocument.rfc.updated_by.length > 0">
+          <dt class="font-bold mt-2">Updated by ({{ props.rfcBucketHtmlDocument.rfc.updated_by.length }})</dt>
+          <dd>
+            <span
+              v-for="(updated_by, updateIndex) in props.rfcBucketHtmlDocument.rfc.updated_by"
+              :key="updateIndex"
+            >
+              <RFCRouterLink :href="infoSeriesPathBuilder(`rfc${updated_by.number}`)" :class="ANCHOR_TAILWIND_STYLE">
+                <RFCTitle :rfc="updated_by" />
               </RFCRouterLink>
             </span>
           </dd>
