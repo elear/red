@@ -72,10 +72,6 @@ function formatAuthors(authors: RfcCommon['authors']): string {
   if (authors.length === 0) {
     return ''
   }
-  if (authors.length === 1) {
-    return `${authors[0]}`
-  }
-
   return authors.map(author => author.name ?? author.titlepage_name).join(', ')
 }
 
