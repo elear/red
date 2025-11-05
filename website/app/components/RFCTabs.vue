@@ -119,27 +119,31 @@
         <template v-if="props.rfcBucketHtmlDocument.rfc.updates && props.rfcBucketHtmlDocument.rfc.updates.length > 0">
           <dt class="font-bold mt-2">Updates ({{ props.rfcBucketHtmlDocument.rfc.updates.length }})</dt>
           <dd>
-            <span
-              v-for="(update, updateIndex) in props.rfcBucketHtmlDocument.rfc.updates"
-              :key="updateIndex"
-            >
-              <RFCRouterLink :href="infoSeriesPathBuilder(`rfc${update.number}`)" :class="ANCHOR_TAILWIND_STYLE">
-                <RFCTitle :rfc="update" />
-              </RFCRouterLink>
-            </span>
+            <RFCTabsReferences :rfcs="props.rfcBucketHtmlDocument.rfc.updates" />
           </dd>
         </template>
-        <template v-if="props.rfcBucketHtmlDocument.rfc.updated_by && props.rfcBucketHtmlDocument.rfc.updated_by.length > 0">
+        <template
+          v-if="props.rfcBucketHtmlDocument.rfc.updated_by && props.rfcBucketHtmlDocument.rfc.updated_by.length > 0"
+        >
           <dt class="font-bold mt-2">Updated by ({{ props.rfcBucketHtmlDocument.rfc.updated_by.length }})</dt>
           <dd>
-            <span
-              v-for="(updated_by, updateIndex) in props.rfcBucketHtmlDocument.rfc.updated_by"
-              :key="updateIndex"
-            >
-              <RFCRouterLink :href="infoSeriesPathBuilder(`rfc${updated_by.number}`)" :class="ANCHOR_TAILWIND_STYLE">
-                <RFCTitle :rfc="updated_by" />
-              </RFCRouterLink>
-            </span>
+            <RFCTabsReferences :rfcs="props.rfcBucketHtmlDocument.rfc.updated_by" />
+          </dd>
+        </template>
+        <template
+          v-if="props.rfcBucketHtmlDocument.rfc.obsoletes && props.rfcBucketHtmlDocument.rfc.obsoletes.length > 0"
+        >
+          <dt class="font-bold mt-2">Obsoletes ({{ props.rfcBucketHtmlDocument.rfc.obsoletes.length }})</dt>
+          <dd>
+            <RFCTabsReferences :rfcs="props.rfcBucketHtmlDocument.rfc.obsoletes" />
+          </dd>
+        </template>
+        <template
+          v-if="props.rfcBucketHtmlDocument.rfc.obsoleted_by && props.rfcBucketHtmlDocument.rfc.obsoleted_by.length > 0"
+        >
+          <dt class="font-bold mt-2">Obsoleted by ({{ props.rfcBucketHtmlDocument.rfc.obsoleted_by.length }})</dt>
+          <dd>
+            <RFCTabsReferences :rfcs="props.rfcBucketHtmlDocument.rfc.obsoleted_by" />
           </dd>
         </template>
 
@@ -162,8 +166,9 @@
                     :class="[ANCHOR_TAILWIND_STYLE, ' py-0.5 pr-0.5 mb-0.5']"
                   >
                     {{
-                    // author.titlepage_name might be an empty string, so don't use ?? as fallback, use ||
-                    author.titlepage_name || author.name }}<Icon
+                      // author.titlepage_name might be an empty string, so don't use ?? as fallback, use ||
+                      author.titlepage_name || author.name }}
+                    <Icon
                       name="fluent:window-new-20-regular"
                       class="text-lg align-middle ml-1"
                     />
@@ -350,7 +355,7 @@ import {
 import { formatDatePublished } from '~/utilities/rfc-converters-utils'
 import { COMMA, NONBREAKING_SPACE, SPACE } from '~/utilities/strings'
 import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme'
-import { areaGroupUrlBuilder, infoSeriesPathBuilder, rfcAuthorUrlBuilder, streamUrlBuilder, workingGroupUrlBuilder } from '~/utilities/url'
+import { areaGroupUrlBuilder, rfcAuthorUrlBuilder, streamUrlBuilder, workingGroupUrlBuilder } from '~/utilities/url'
 import type { RfcBucketHtmlDocument } from '~/utilities/rfc'
 import type { RfcCommon } from '~/utilities/rfc-validators'
 
