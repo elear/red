@@ -22,7 +22,9 @@
     <li v-for="(author, authorIndex) in props.rfcBucketHtmlDocument.rfc.authors" :key="authorIndex"
       class="inline-block">
       <span>
-        {{ author.name }}
+        {{
+          // titlepage_name might be an empty string, so don't use ?? as fallback, use || 
+          author.titlepage_name || author.name }}
       </span>
       <template v-if="authorIndex < props.rfcBucketHtmlDocument.rfc.authors.length - 1">
         {{ COMMA }}
