@@ -14,7 +14,7 @@
     <Separator orientation="horizontal" decorative class="bg-gray-300 dark:bg-gray-700 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full" />
 
     <SearchFilterDisplay
-      :attributes="[{ attribute: 'flags.obsoleted', label: 'obsoleted' }]"
+      :attributes="[{ attribute: 'flags.hiddenDefault', label: 'obsoleted / historic' }]"
     />
 
     <Separator orientation="horizontal" decorative class="bg-gray-300 dark:bg-gray-700 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full" />

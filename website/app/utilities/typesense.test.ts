@@ -1092,7 +1092,7 @@ const typesenseSearchResponse: TypesenseSearchResponse = {
               value: 'false'
             }
           ],
-          field_name: 'flags.obsoleted',
+          field_name: 'flags.hiddenDefault',
           sampled: false,
           stats: {
             total_values: 1
@@ -3049,7 +3049,7 @@ const typesenseSearchResponse: TypesenseSearchResponse = {
               value: 'true'
             }
           ],
-          field_name: 'flags.obsoleted',
+          field_name: 'flags.hiddenDefault',
           sampled: false,
           stats: {
             total_values: 2

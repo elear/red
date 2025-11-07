@@ -1,5 +1,5 @@
 <template>
-  <ais-clear-refinements :excluded-attributes="['type', 'flags.obsoleted', 'flags.updated']">
+  <ais-clear-refinements :excluded-attributes="['type', 'flags.hiddenDefault', 'flags.updated']">
     <template #default="{ canRefine, refine }">
       <button
         v-show="canRefine"

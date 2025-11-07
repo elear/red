@@ -246,7 +246,7 @@ type UIState = {
     }
     sortBy?: string
     toggle?: {
-      'flags.obsoleted': boolean
+      'flags.hiddenDefault': boolean
     }
   }
 }
@@ -293,7 +293,7 @@ const routing = {
       const group = uiState[INDEX_NAME].refinementList?.['group.full']?.join(',') ?? null
       const authors = uiState[INDEX_NAME].refinementList?.['authors.name']?.join(',') ?? null
       const pubDate = uiState[INDEX_NAME].range?.['publicationDate'] ?? null
-      const showObsoleted = !(uiState[INDEX_NAME].toggle?.['flags.obsoleted'] || false)
+      const showObsoleted = !(uiState[INDEX_NAME].toggle?.['flags.hiddenDefault'] || false)
       const sort = uiState[INDEX_NAME].sortBy?.substring(10) ?? null
 
       // FIXME
@@ -356,7 +356,7 @@ const routing = {
             sortBy: `docs/sort/${sortBy}`
           },
           toggle: {
-            'flags.obsoleted': !showObsoleted
+            'flags.hiddenDefault': !showObsoleted
           }
         }
       }
