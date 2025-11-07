@@ -1,8 +1,8 @@
 <template>
     <div class="min-h-[100vh]">
-        <BodyLayoutDocument :class="{ 'lg:pr-[300px]': !showToc }">
+        <BodyLayoutDocument :class="{ 'lg:pr-[300px]': !showTocFrontmatter }">
             <template #sidebar>
-                <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
+                <TableOfContentsMarkdownDesktop v-if="showTocFrontmatter && toc" :toc="toc" />
             </template>
             <div class="wrap-anywhere leading-[1.75]">
                 <Breadcrumbs :breadcrumb-items="breadcrumbItems" />
@@ -78,10 +78,14 @@ const breadcrumbItems = computed((): BreadcrumbItem[] => {
     ]
 })
 
-const showToc = Boolean(page.value?.showToc)
+const showTocFrontmatter = page.value?.showToc ?? 'auto'
 
 const toc =
     page.value?.body.toc && nuxtContentTocToRfcEditorToc(page.value.body.toc)
+
+const showToc = showTocFrontmatter === 'auto' ?
+    toc ? toc.sections.length > 1 : false
+    : showTocFrontmatter
 
 /**
  * We want the mobile TOC to appear inline below the <h1> which is rendered in markdown by

@@ -30,7 +30,7 @@ export const nuxtContentTocToRfcEditorToc = (
 }
 
 export const tocKey = Symbol() as InjectionKey<{
-  showToc?: boolean
+  showToc: boolean
   toc?: RfcEditorToc
 }>
 

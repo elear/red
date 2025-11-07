@@ -6,7 +6,7 @@ export default defineContentConfig({
       type: 'page',
       source: '**/*.md',
       schema: z.object({
-        showToc: z.boolean(),
+        showToc: z.union([z.boolean(), z.literal('auto')]),
         description: z.string()
       })
     })
