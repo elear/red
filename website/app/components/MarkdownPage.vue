@@ -1,8 +1,8 @@
 <template>
     <div class="min-h-[100vh]">
-        <BodyLayoutDocument :class="{ 'lg:pr-[300px]': !showTocFrontmatter }">
+        <BodyLayoutDocument :class="{ 'lg:pr-[300px]': !showToc }">
             <template #sidebar>
-                <TableOfContentsMarkdownDesktop v-if="showTocFrontmatter && toc" :toc="toc" />
+                <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
             </template>
             <div class="wrap-anywhere leading-[1.75]">
                 <Breadcrumbs :breadcrumb-items="breadcrumbItems" />
