@@ -15,12 +15,11 @@
 
 <script setup lang="ts">
 import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme'
-import { isHashLink, isInternalLink, isMailToLink } from '~/utilities/url';
+import { isHashLink, isInternalLink, isMailToLink } from '~/utilities/url'
 
 const props = defineProps<{ href?: string; id?: string }>()
 
 const isInternal = computed(() => isInternalLink(props.href))
 const isMailTo = computed(() => isMailToLink(props.href))
 const isHash = computed(() => isHashLink(props.href))
-
 </script>
