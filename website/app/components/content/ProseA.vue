@@ -10,6 +10,11 @@
       name="fluent:window-new-20-regular"
       class="text-lg align-middle ml-1"
     />
+    <Icon
+      v-if="isMailTo"
+      name="fluent:mail-all-20-regular"
+      class="text-lg align-middle ml-1"
+    />
   </AMaybeRFCLink>
 </template>
 
