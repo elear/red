@@ -1,25 +1,40 @@
 <template>
-  <Card :href="infoSeriesPathBuilder(`RFC${props.rfc.number}`)" :heading-level="props.headingLevel" has-cover-link
+  <Card
+    :href="infoSeriesPathBuilder(`RFC${props.rfc.number}`)"
+    :heading-level="props.headingLevel"
+    has-cover-link
     :chevron-position="props.rfc.abstract && responsiveModeStore.responsiveMode === 'Desktop' ?
-        'center'
-        : 'end'
-      " :class="props.showAbstract && props.rfc.abstract ? 'lg:flex' : undefined" :default-slot-class="props.showAbstract && props.rfc.abstract ?
-        'lg:w-1/2 xl:w-2/5 pr-4'
-        : undefined
-      " :aside-slot-class="props.showAbstract && props.rfc.abstract ?
-        'lg:w-1/2 xl:w-3/5 border-l pl-12 pr-4'
-        : undefined
-      ">
+      'center'
+      : 'end'
+      "
+    :class="props.showAbstract && props.rfc.abstract ? 'lg:flex' : undefined"
+    :default-slot-class="props.showAbstract && props.rfc.abstract ?
+      'lg:w-1/2 xl:w-2/5 pr-4'
+      : undefined
+      "
+    :aside-slot-class="props.showAbstract && props.rfc.abstract ?
+      'lg:w-1/2 xl:w-3/5 border-l pl-12 pr-4'
+      : undefined
+      "
+    heading-class="text-gray-800 dark:text-gray-200"
+  >
     <template #headingTitle>
       <component :is="formattedTitle" />
     </template>
     <template #afterHeadingTitle>
       {{ SPACE }}
-      <RFCTitleSubseries :rfc="props.rfc" has-trailing-colon />
+      <RFCTitleSubseries
+        :rfc="props.rfc"
+        has-trailing-colon
+      />
       <span class="font-normal">{{ SPACE }}{{ props.rfc.title }}</span>
     </template>
     <template #default>
-      <RFCCardBody :rfc="props.rfc" :show-abstract="props.showAbstract" :show-tag-date="props.showTagDate" />
+      <RFCCardBody
+        :rfc="props.rfc"
+        :show-abstract="props.showAbstract"
+        :show-tag-date="props.showTagDate"
+      />
     </template>
   </Card>
 </template>

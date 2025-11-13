@@ -9,7 +9,7 @@
       "
     class="flex flex-row items-center"
     container-class="flex"
-    :heading-class="`flex flex-col justify-center md:flex-row md:justify-start grow-0 shrink-0 ${TEMPLATE_STRING_PLACEHOLDER_FOR_CODE_COMMENT
+    :heading-class="`flex flex-col justify-center md:flex-row md:justify-start text-gray-800 dark:text-gray-200 grow-0 shrink-0 ${TEMPLATE_STRING_PLACEHOLDER_FOR_CODE_COMMENT
       // converting char length to width in a non-monospace/variable-width font isn't exact so this should er on the side of wider numbers
       // Be sure to test with search for BCP finding result RFC 8996: BCP 195 for a near worst case width
       // and test responsive modes

@@ -10,13 +10,17 @@
       'flex-1 lg:w-1/2 xl:w-3/5 border-l pl-12 pr-4'
       : undefined
       "
+    heading-class="text-gray-800 dark:text-gray-200"
   >
     <template #headingTitle>
       <component :is="formattedTitle" />
     </template>
     <template #afterHeadingTitle>
       {{ SPACE }}
-      <RFCTitleSubseries :rfc="props.rfc" has-trailing-colon />
+      <RFCTitleSubseries
+        :rfc="props.rfc"
+        has-trailing-colon
+      />
       <span class="font-normal">{{ SPACE }}{{ props.rfc.title }}</span>
     </template>
     <template #default>
