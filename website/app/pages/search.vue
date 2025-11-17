@@ -89,7 +89,7 @@ const router = useRouter()
 
 const typesenseAdapter = new TypesenseInstantSearchAdapter({
   server: {
-    apiKey: 'j2ZodfQTgoa4Vn5BCOdvKJe7fWmcqYhH', // Be sure to use an API key that only allows search operations
+    apiKey: 'c3RrrCrdRXGkFyS8CL8VPg1N8j5kwbVa', // Be sure to use an API key that only allows search operations
     nodes: [
       {
         host: 'typesense.ietf.org',
