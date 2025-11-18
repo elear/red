@@ -278,6 +278,10 @@ export const isInternalLink = (href?: string): boolean => !isExternalLink(href)
 
 export const isHashLink = (href?: string): boolean => !!href?.startsWith('#')
 
+export const isRSSLink = (href?: string): boolean => !!href?.endsWith(RSS_PATH)
+
+export const isAtomLink = (href?: string): boolean => !!href?.endsWith(ATOM_PATH)
+
 /**
  * Converts arbitrary text into a custom id that is DOMId compliant (ie no whitespace)
  *
