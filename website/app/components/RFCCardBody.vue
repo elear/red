@@ -10,7 +10,7 @@
       <li v-if="isAprilFool" class="inline pr-2">
         <AprilFools />
       </li>
-      <li v-for="(part, index) in list2" :key="index" class="inline">
+      <li v-for="(part, index) in list2" :key="index" class="inline text-slate-600 dark:text-slate-300 text-[0.9rem]">
         <GraphicsDiamond v-if="index > 0" class="align-middle" />{{ part }}
       </li>
     </ul>
@@ -139,7 +139,7 @@ const list2 = computed(
   () =>
     [
       props.rfc.published ? formatDate(props.rfc.published) : undefined,
-      props.rfc.stream?.name,
+      props.rfc.stream?.name && `${props.rfc.stream?.name} publication`,
       props.rfc.area?.name
     ].filter(Boolean) as string[]
 )
