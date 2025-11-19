@@ -10,7 +10,7 @@ These changes apply to **all** APIs (_global API changes_):
 
 1. **5 digit RFC numbers** (AKA the RFC10k issue). Due to this RFC ids in API responses no longer have leading zeros (eg RFC0500 becomes RFC500), except for DOI ids which remain unchanged. Software parsing should expect 1-5+ digits and not assume that RFCs have 4 digits.
 2. **Trailing slash URL changes.** URLs in API responses that link to HTML pages will have trailing slashes (if they didn't already). For example https://www.rfc-editor.org/info/rfc9000 becomes https://www.rfc-editor.org/info/rfc9000/ (note the trailing slash), and https://www.rfc-editor.org/rfc-index.html becomes https://www.rfc-editor.org/rfc-index/ . This has been done for consistency.
-3. **Redirects** generally speaking we don't want to change URLs, but if the URL for a resource changes there will be HTTP redirects to the new URL. Consumers of our APIs should ensure their HTTP client is configured to follow redirects. For example, by default `wget` follows redirects but `curl` does not. These redirects _may_ go offsite to another subdomain of `rfc-editor.org`.
+3. **Redirects** generally speaking we don't want to change URLs, but if the URL for a resource changes there will be HTTP redirects to the new URL. Consumers of our APIs should ensure their HTTP client is configured to follow redirects. For example, by default `wget` follows redirects but `curl` does not. These redirects _may_ go offsite to another subdomain of `rfc-editor.org` eg `/queue2.xml` may redirect to `queue.rfc-editor.org/queue2.xml`.
 
 #### `/rfc-index.txt`
 
@@ -44,6 +44,10 @@ Leading zeros in RFC ids will be removed.
 
 This route may redirect to a subdomain of rfc-editor.org. Please ensure your client will follow HTTP redirects.
 
+### `/in-notes/tar/*.tar.gz` and `/in-notes/tar/*.zip`
+
+These files will no longer be served. Instead, use rsync.
+
 #### HTML pages
 
 Developers who scrape rfc-editor.org HTML pages should expect a different HTML structure when the new site is released. This is necessary for the new graphic design. No guarantees about maintaining HTML structure can be made and further changes may occur after the release of the site. We recommend that software migrate to JSON or XML APIs instead of scraping HTML as this will be more resilient against these design changes.
@@ -52,3 +56,4 @@ Developers who scrape rfc-editor.org HTML pages should expect a different HTML s
 
 * `/rfc-index2.html` (RFC index in descending order)
 * `/rfc-index-100a.html` and `/rfc-index-100d.html` (a range of RFCs in ascending and descending order respectively)
+
