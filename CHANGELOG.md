@@ -30,8 +30,6 @@ The schema previously required 4 digit RFC numbers (with leading zeroes as paddi
 
 The generated feeds aren't identical as the new feed generator uses `<![CDATA[]]>` escaping but compliant RSS/ATOM clients should handle this. For the developer details see [#27](https://github.com/ietf-tools/rfced-www/pull/27). The global API changes apply to this API too. No redirects are expected.
 
-TODO: sample files
-
 #### `/rfc/rfc*.json`
 
 (where \* is a valid RFC number. For example, [rfc9000.json](https://www.rfc-editor.org/rfc/rfc9000.json))
@@ -43,6 +41,13 @@ In earlier RFC JSON files (approximately RFC1-RFC4039) there's extra whitespace 
 Leading zeros in RFC ids will be removed.
 
 This route may redirect to a subdomain of rfc-editor.org. Please ensure your client will follow HTTP redirects.
+
+
+#### `/queue.xml` and `/queue2.xml`
+
+Leading zeros in RFC ids will be removed.
+
+This route may redirect to a subdomain of rfc-editor.org such as queue.rfc-editor.org. Please ensure your client will follow HTTP redirects.
 
 ### `/in-notes/tar/*.tar.gz` and `/in-notes/tar/*.zip`
 
@@ -56,4 +61,4 @@ Developers who scrape rfc-editor.org HTML pages should expect a different HTML s
 
 * `/rfc-index2.html` (RFC index in descending order)
 * `/rfc-index-100a.html` and `/rfc-index-100d.html` (a range of RFCs in ascending and descending order respectively)
-
+* `/in-notes/tar/*.tar.gz` and `/in-notes/tar/*.zip`
