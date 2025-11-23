@@ -40,7 +40,6 @@
                             name="eos-icons:loading"
                             size="2em"
                         />
-                        <div class="bg-red-500 w-5 h-5"></div>
                     </template>
                 </ais-search-box>
             </div>
