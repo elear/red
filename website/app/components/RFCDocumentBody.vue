@@ -44,7 +44,7 @@
     >
       <span>
         {{
-          // titlepage_name might be an empty string, so don't use ?? as fallback, use ||
+          // titlepage_name might be an empty string, so don't use `??` as fallback, use `||`
           author.titlepage_name || author.name }}
       </span>
       <template v-if="authorIndex < props.rfcBucketHtmlDocument.rfc.authors.length - 1">
@@ -85,7 +85,7 @@
   </div>
 
   <div class="text-blue-300 dark:text-blue-100">
-    <!-- FIXME: this is to ensure tailwind includes these colors so we can use css color vars in plaintext CSS, but there must be a better way of doing this -->
+    <!-- FIXME: this is to ensure tailwind includes these CSS classes and their CSS --variables for color which we'll use in `rfc-plaintext.css`, but there must be a better way of doing this -->
   </div>
 
   <RFCMobileBanner
@@ -265,7 +265,7 @@ const isAprilFool = computed(() => isAprilFoolsRfc(props.rfcBucketHtmlDocument.r
 
 .rfc-content-type-xml2rfc {
   /* Using postcss-nested-import to scope these imported styles,
-     so that we can sandbox them and use them safely without major changes,
+     so that we can scope/sandbox CSS styles so CSS selectors don't leak out and affect the rest of the page,
      to reduce maintenance burden.
   */
   @nested-import "../assets/css/upstream-xml2rfc.css"
@@ -291,7 +291,7 @@ html.dark .rfc-content-type-xml2rfc {
 }
 
 html.dark .rfc-content-type-plaintext {
-  /* Using postcss-nested-import scope these imported styles */
+  /* Using postcss-nested-import to scope/sandbox these imported styles so style rules don't leak out to the rest of the page */
   @nested-import "../assets/css/rfc-plaintext-darkmode-patches.css"
 }
 
