@@ -12,6 +12,7 @@ export const getVNodeText = (vnode: unknown): string => {
   }
 
   if (vnode && typeof vnode === 'object' && 'children' in vnode) {
+    console.log("Is an object", vnode)
     const { children } = vnode
     if (typeof children === 'string') {
       return children
@@ -30,6 +31,8 @@ export const getVNodeText = (vnode: unknown): string => {
         .join('')
     }
   }
+
+  console.warn("Don't know how to extract text from ", vnode)
 
   return ''
 }
