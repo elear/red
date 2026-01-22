@@ -46,7 +46,6 @@ export const elementAttributesToObject = (
   attributes: NamedNodeMap
 ): Record<string, string> =>
   Array.from(attributes).reduce((acc, attribute) => {
-    console.log({ source: 'elementAttributesToObject', nameKey: 'name' in attribute, valueKey: 'value' in attribute, attribute })
     acc[attribute.name] = attribute.value
     return acc
   }, {} as Record<string, string>)

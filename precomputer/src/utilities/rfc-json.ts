@@ -14,8 +14,6 @@ export const rfcToRfcJson = (rfc: RfcCommon): RFCJSON => {
 
   const doi = rfc.identifiers?.find((identifier) => identifier.type === 'doi')
 
-  console.log({ source: 'rfcToRfcJson', doi, rfc_identifiers: rfc.identifiers })
-
   return {
     draft: rfc.draft?.slug ?? '',
     doc_id: `RFC${rfc.number}`,
