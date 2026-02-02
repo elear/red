@@ -111,25 +111,25 @@ export default defineNuxtConfig({
   $development: {
     routeRules: {
       /**
-       * API data comes from either a local dev api or some
+       * In development mode (`npm run dev`) the website fetches API data from either a local dev api or some
        * staging / prod environment.
        * Uncomment/comment out the lines to adjust the config.
        */
       '/api/v1/homepage-latest.json': {
-        // proxy: 'https://red.staging.rfc-editor.org/api/v1/homepage-latest.json'
-        proxy: 'http://localhost:3001/api/v1/homepage-latest.json'
+        proxy: 'https://red.staging.rfc-editor.org/api/v1/homepage-latest.json'
+        // proxy: 'http://localhost:3001/api/v1/homepage-latest.json'
       },
       '/api/v1/rfc-html/**': {
-        // proxy: 'https://red.staging.rfc-editor.org/api/v1/rfc-html/**'
-        proxy: 'http://localhost:3001/api/v1/rfc-html/**'
+        proxy: 'https://red.staging.rfc-editor.org/api/v1/rfc-html/**'
+        // proxy: 'http://localhost:3001/api/v1/rfc-html/**'
       },
       '/api/v1/info-subseries/**': {
-        // proxy: 'https://red.staging.rfc-editor.org/api/v1/info-subseries/**'
-        proxy: 'http://localhost:3001/api/v1/info-subseries/**'
+        proxy: 'https://red.staging.rfc-editor.org/api/v1/info-subseries/**'
+        // proxy: 'http://localhost:3001/api/v1/info-subseries/**'
       },
       '/api/v1/rfc-common/**': {
-        // proxy: 'https://red.staging.rfc-editor.org/api/v1/rfc-common/**'
-        proxy: 'http://localhost:3001/api/v1/rfc-common/**'
+        proxy: 'https://red.staging.rfc-editor.org/api/v1/rfc-common/**'
+        // proxy: 'http://localhost:3001/api/v1/rfc-common/**'
       }
     }
   },
