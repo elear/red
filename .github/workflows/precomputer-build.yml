@@ -2,6 +2,8 @@ name: Build Precomputer Docker Image
 
 on:
   push:
+    branches:
+      - main
     paths:
       - precomputer/src/**
       - precomputer/package.json
