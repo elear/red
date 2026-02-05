@@ -1,27 +1,52 @@
 import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3'
 import type { SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
+import { assertIsString } from './typescript.ts'
 
-const s3InCli = new S3Client({
-  endpoint: process.env.S3_IN_ENDPOINT ?? '',
-  region: 'auto',
-  credentials: {
-    accessKeyId: process.env.S3_IN_ACCESS_ID ?? '',
-    secretAccessKey: process.env.S3_IN_ACCESS_KEY ?? ''
-  },
-  requestChecksumCalculation: 'WHEN_REQUIRED',
-  responseChecksumValidation: 'WHEN_REQUIRED'
-})
+let s3Ref: undefined | { s3InCli: S3Client, s3OutCli: S3Client } = undefined
 
-const s3OutCli = new S3Client({
-  endpoint: process.env.S3_OUT_ENDPOINT ?? '',
-  region: 'auto',
-  credentials: {
-    accessKeyId: process.env.S3_OUT_ACCESS_ID ?? '',
-    secretAccessKey: process.env.S3_OUT_ACCESS_KEY ?? ''
-  },
-  requestChecksumCalculation: 'WHEN_REQUIRED',
-  responseChecksumValidation: 'WHEN_REQUIRED'
-})
+const getS3Singleton = () => {
+  if (!s3Ref) {
+    const S3_IN_ENDPOINT = process.env.S3_IN_ENDPOINT
+    const S3_IN_ACCESS_ID = process.env.S3_IN_ACCESS_ID
+    const S3_IN_ACCESS_KEY = process.env.S3_IN_ACCESS_KEY
+    assertIsString(S3_IN_ENDPOINT, `process.env.S3_IN_ENDPOINT wasn't a string. Was ${typeof S3_IN_ENDPOINT}`)
+    assertIsString(S3_IN_ACCESS_ID, `process.env.S3_IN_ACCESS_ID wasn't a string. Was ${typeof S3_IN_ACCESS_ID}`)
+    assertIsString(S3_IN_ACCESS_KEY, `process.env.S3_IN_ACCESS_KEY wasn't a string. Was ${typeof S3_IN_ACCESS_KEY}`)
+
+    const s3InCli = new S3Client({
+      endpoint: S3_IN_ENDPOINT,
+      region: 'auto',
+      credentials: {
+        accessKeyId: S3_IN_ACCESS_ID,
+        secretAccessKey: S3_IN_ACCESS_KEY ?? ''
+      },
+      requestChecksumCalculation: 'WHEN_REQUIRED',
+      responseChecksumValidation: 'WHEN_REQUIRED'
+    })
+
+    const S3_OUT_ENDPOINT = process.env.S3_OUT_ENDPOINT
+    const S3_OUT_ACCESS_ID = process.env.S3_OUT_ACCESS_ID
+    const S3_OUT_ACCESS_KEY = process.env.S3_OUT_ACCESS_KEY
+    assertIsString(S3_OUT_ENDPOINT, `process.env.S3_OUT_ENDPOINT wasn't a string. Was ${typeof S3_OUT_ENDPOINT}`)
+    assertIsString(S3_OUT_ACCESS_ID, `process.env.S3_OUT_ACCESS_ID wasn't a string. Was ${typeof S3_OUT_ACCESS_ID}`)
+    assertIsString(S3_OUT_ACCESS_KEY, `process.env.S3_OUT_ACCESS_KEY wasn't a string. Was ${typeof S3_OUT_ACCESS_KEY}`)
+
+    const s3OutCli = new S3Client({
+      endpoint: S3_OUT_ENDPOINT,
+      region: 'auto',
+      credentials: {
+        accessKeyId: S3_OUT_ACCESS_ID,
+        secretAccessKey: S3_OUT_ACCESS_KEY
+      },
+      requestChecksumCalculation: 'WHEN_REQUIRED',
+      responseChecksumValidation: 'WHEN_REQUIRED'
+    })
+
+    s3Ref = { s3InCli, s3OutCli }
+  }
+
+  return s3Ref
+}
 
 type S3OutputType = 'default' | 'base64'
 
@@ -29,10 +54,18 @@ export async function getFromS3(
   key: string,
   outputType?: S3OutputType
 ): Promise<string | Uint8Array | null> {
+  const S3_IN_BUCKET = process.env.S3_IN_BUCKET
+  assertIsString(
+    S3_IN_BUCKET,
+    `process.env.S3_IN_BUCKET wasn't a string. Was ${typeof S3_IN_BUCKET}`
+  )
+
+  const { s3InCli } = getS3Singleton()
+
   try {
     const resp = await s3InCli.send(
       new GetObjectCommand({
-        Bucket: process.env.S3_IN_BUCKET,
+        Bucket: S3_IN_BUCKET,
         Key: key
       })
     )
@@ -45,7 +78,7 @@ export async function getFromS3(
       }
     }
   } catch (err) {
-    throw new Error(`Failed to fetch ${key} from ${process.env.S3_IN_BUCKET} bucket.`)
+    throw new Error(`Failed to fetch ${key} from ${S3_IN_BUCKET} bucket.`)
   }
 }
 
@@ -57,6 +90,12 @@ export async function saveToS3(
   key: string,
   contents: StreamingBlobPayloadInputTypes
 ): Promise<void> {
+  const S3_OUT_BUCKET = process.env.S3_OUT_BUCKET
+  assertIsString(
+    S3_OUT_BUCKET,
+    `process.env.S3_OUT_BUCKET wasn't a string. Was ${typeof S3_OUT_BUCKET}`
+  )
+  const { s3OutCli } = getS3Singleton()
   await s3OutCli.send(
     new PutObjectCommand({
       Bucket: process.env.S3_OUT_BUCKET,
