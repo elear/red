@@ -98,7 +98,7 @@ export async function saveToS3(
   const { s3OutCli } = getS3Singleton()
   await s3OutCli.send(
     new PutObjectCommand({
-      Bucket: process.env.S3_OUT_BUCKET,
+      Bucket: S3_OUT_BUCKET,
       Key: key,
       Body: contents
     })
