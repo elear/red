@@ -1,4 +1,4 @@
-import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3'
 import type { SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
 import { assertIsString } from './typescript.ts'
 
@@ -63,6 +63,13 @@ export async function getFromS3(
   const { s3InCli } = getS3Singleton()
 
   try {
+    const list = await s3InCli.send(
+      new ListObjectsV2Command({
+        Bucket: S3_IN_BUCKET,
+      })
+    )
+    console.log(list.Contents?.map(file => file.Key) ?? '(no s3 list contents)')
+
     const resp = await s3InCli.send(
       new GetObjectCommand({
         Bucket: S3_IN_BUCKET,
