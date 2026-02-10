@@ -100,17 +100,17 @@ export const fetchSourceRfcHtml = async (
   rfcNumber: number,
   getRfcHtml: typeof getFromS3
 ): Promise<string | null> => {
-  const key =`html/rfc${rfcNumber}.html`
+  const key = `html/rfc${rfcNumber}.html`
   const dirtyHtml = await getRfcHtml(key)
   if (!dirtyHtml) {
     console.warn(
-      `[RFC ${rfcNumber}] HTML from '${key}' not available`
+      `[RFC ${rfcNumber}] HTML from ${JSON.stringify(key)} not available`
     )
     return null
   }
 
   const dirtyHtmlString = (dirtyHtml instanceof Uint8Array) ? new TextDecoder().decode(dirtyHtml) : dirtyHtml
-  
+
   // Sanitise HTML before returning it
 
   const SVG_STYLE_ATTRIBUTES = [
@@ -325,9 +325,9 @@ const convertHrefs = (
     const isInvalidUrl = (error: unknown): boolean => {
       return Boolean(
         error &&
-          typeof error === 'object' &&
-          'code' in error &&
-          error.code === 'ERR_INVALID_URL'
+        typeof error === 'object' &&
+        'code' in error &&
+        error.code === 'ERR_INVALID_URL'
       )
     }
 
@@ -489,9 +489,8 @@ export const ensureWordBreaks = (rfcDocument: Node[]): void => {
                 // because after splitting on words
                 // there will be a lot of contiguous
                 // text nodes
-                lastNode.textContent = `${
-                  lastNode.textContent ?? ''
-                }${textContent}`
+                lastNode.textContent = `${lastNode.textContent ?? ''
+                  }${textContent}`
               } else {
                 acc.push(node)
               }
