@@ -46,6 +46,10 @@ export const rfcBucketPdfToRfcDocument = async (
     return null
   }
 
+  console.log(
+    `[RFC ${rfcNumber}] Found rfc${rfcNumber}.pdf`
+  )
+
   await gc() // attempt to free memory after fetch()
 
   const domParser = await getDOMParser()
@@ -124,6 +128,10 @@ export const rfcBucketPdfToRfcDocument = async (
   if (rfc === null) {
     return null
   }
+
+  console.log(
+    `[RFC ${rfcNumber}] uploaded ${textDetails.text.totalPages} pages of a PDF`
+  )
 
   const response: RfcBucketHtmlDocument = {
     rfc,
