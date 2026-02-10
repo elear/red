@@ -78,7 +78,7 @@ export async function getFromS3(
       }
     }
   } catch (err) {
-    const errorHeader = `Failed to fetch ${key} from ${S3_IN_BUCKET} bucket.`
+    const errorHeader = `Failed to fetch ${JSON.stringify(key)} from ${JSON.stringify(S3_IN_BUCKET)} bucket.`
     console.error(errorHeader, err)
     throw new Error(errorHeader)
   }
