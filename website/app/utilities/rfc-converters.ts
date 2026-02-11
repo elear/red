@@ -3,7 +3,8 @@ import type { RfcCommon } from './rfc'
 import {
   RfcCommonStatusSchema,
   RfcCommonAreaSchema,
-  RfcCommonGroupSchema
+  RfcCommonGroupSchema,
+  type RfcCommonAuthor
 } from './rfc-validators'
 import {
   isTypesenseSubseriesWithValues,
@@ -141,11 +142,11 @@ export const typeSenseSearchItemToRFCCommon = (
     return parsedGroup
   }
 
-  const published = new Date(item.publicationDate * 1000).toISOString()
-  const authors =
+  const published: RfcCommon["published"] = new Date(item.publicationDate * 1000).toISOString()
+  const authors: RfcCommonAuthor[] =
     item.authors?.map((author, index) => ({
       person: index,
-      name: author.name
+      titlepage_name: author.name,
     })) ?? []
 
   return {
@@ -164,5 +165,5 @@ export const typeSenseSearchItemToRFCCommon = (
     },
     text: '',
     title: item.title
-  }
+  } satisfies RfcCommon
 }

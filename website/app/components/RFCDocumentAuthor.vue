@@ -19,7 +19,7 @@ const formattedAuthor = computed(() => {
     // or 'name, Ed., name, name' NOT 'name , Ed., name , name '
     const normalised_titlepage_name = props.author.titlepage_name?.trim()
 
-    return h('span', [
+    return h('span', { 'class': 'whitespace-nowrap' }, [
         // titlepage_name might be an empty string, so don't use `??` as fallback, use `||`
         `${normalised_titlepage_name || '(unnamed)'}`,
         ...[
