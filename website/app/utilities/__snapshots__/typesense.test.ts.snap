@@ -10,12 +10,12 @@ exports[`typeSenseSearchItemToRFC 1`] = `
   },
   "authors": [
     {
-      "name": "Peter Gutmann",
       "person": 0,
+      "titlepage_name": "Peter Gutmann",
     },
     {
-      "name": "Corey Bonnell",
       "person": 1,
+      "titlepage_name": "Corey Bonnell",
     },
   ],
   "formats": [],
