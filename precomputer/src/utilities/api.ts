@@ -231,7 +231,7 @@ export const getRfcCommonCached = async (
 /** Convert `Rfc` to `RfcCommon` */
 export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
   return {
-    formats: rfc.formats?.map((format): RfcCommon["formats"][number] => format.fmt) ?? [],
+    formats: rfc.formats?.map((format): RfcCommon["formats"][number] => ({ format: format.fmt, path: format.name })) ?? [],
     subseries: parseSubseries(rfc.subseries),
     number: rfc.number,
     abstract: rfc.abstract,
@@ -262,7 +262,7 @@ export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
 /** Convert `RfcMetadata` to `RfcCommon` */
 export const rfcMetadataToRfcCommon = (rfcMetadata: RfcMetadata): RfcCommon => {
   return {
-    formats: rfcMetadata.formats?.map((format): RfcCommon["formats"][number] => format.fmt) ?? [],
+    formats: rfcMetadata.formats?.map((format): RfcCommon["formats"][number] => ({ format: format.fmt, path: format.name })) ?? [],
     number: rfcMetadata.number,
     abstract: rfcMetadata.abstract,
     published: rfcMetadata.published,

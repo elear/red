@@ -97,7 +97,7 @@ export const RfcCommonSubseriesTypeSchema = z.union([
   z.literal('std')
 ])
 
-export const RfcCommonFormatSchema = z.union([
+export const RfcCommonFormatNameSchema = z.union([
   z.literal('xml'),
   z.literal('txt'),
   z.literal('html'),
@@ -106,6 +106,11 @@ export const RfcCommonFormatSchema = z.union([
   z.literal('json'),
   z.literal('notprepped')
 ])
+
+export const RfcCommonFormatSchema = z.object({
+  format: RfcCommonFormatNameSchema,
+  path: z.string().optional()
+})
 
 const RfcCommonIdentifierSchema = z.object({
   type: z.union([z.literal('doi'), z.literal('issn')]),

@@ -8,7 +8,7 @@ export const rfcToRfcIndexRow = (rfc: RfcCommon) => {
   const maybeDateParts =
     rfc.published ?
       DateTime.fromISO(rfc.published).toFormat('LLLL yyyy').split(' ')
-    : undefined
+      : undefined
   const formattedDate =
     maybeDateParts ? ` [ ${maybeDateParts[0]} ${maybeDateParts[1]} ] ` : ''
 
@@ -18,23 +18,23 @@ export const rfcToRfcIndexRow = (rfc: RfcCommon) => {
     ...rfc.authors.map((author) => formatAuthor(author, 'regular')),
     formattedDate,
     rfc.formats ?
-      `(${rfc.formats.map((format) => format.toUpperCase()).join(', ')})`
-    : '',
+      `(${rfc.formats.map((format) => format.format.toUpperCase()).join(', ')})`
+      : '',
     ...(rfc.obsoletes && rfc.obsoletes.length > 0 ?
       [' (Obsoletes ', ...rfcCommaList(rfc.obsoletes), ' )']
-    : []),
+      : []),
     ...(rfc.obsoleted_by && rfc.obsoleted_by.length > 0 ?
       [' (Obsoleted-By ', ...rfcCommaList(rfc.obsoleted_by), ' )']
-    : []),
+      : []),
     ...(rfc.updated_by && rfc.updated_by.length > 0 ?
       [' (Updated-By ', ...rfcCommaList(rfc.updated_by), ' )']
-    : []),
+      : []),
     ` (Status: ${rfc.status.slug.toUpperCase()})`,
     ` (Stream: ${rfc.stream.name})`,
     ' ',
     rfc.identifiers ?
       `(${rfc.identifiers.map((identifier) => `${identifier.type.toUpperCase()}: ${identifier.value}`)})`
-    : ''
+      : ''
   ])
 
   return {
@@ -63,4 +63,4 @@ export const rfcCommaList = (rfcs?: { number: number }[]) =>
         },
         [] as (VNode | string)[]
       )
-  : []
+    : []

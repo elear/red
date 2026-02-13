@@ -30,11 +30,7 @@ exports[`homepage latest RFCs 1`] = `
           "titlepage_name": "Donald Eastlake",
         },
       ],
-      "errata": [],
-      "formats": [
-        "xml",
-        "txt",
-      ],
+      "formats": [],
       "group": {
         "acronym": "art",
         "name": "Applications and Real-Time Area",
@@ -54,7 +50,6 @@ exports[`homepage latest RFCs 1`] = `
       "obsoletes": [],
       "pages": 22,
       "published": "2025-06-17",
-      "see_also": [],
       "status": {
         "name": "informational",
         "slug": "inf",
@@ -89,11 +84,7 @@ exports[`homepage latest RFCs 1`] = `
           "titlepage_name": "Spencer Dawkins",
         },
       ],
-      "errata": [],
-      "formats": [
-        "xml",
-        "txt",
-      ],
+      "formats": [],
       "group": {
         "acronym": "panrg",
         "name": "Path Aware Networking RG",
@@ -113,7 +104,6 @@ exports[`homepage latest RFCs 1`] = `
       "obsoletes": [],
       "pages": 36,
       "published": "2021-06-25",
-      "see_also": [],
       "status": {
         "name": "informational",
         "slug": "inf",
@@ -179,11 +169,7 @@ exports[`homepage latest RFCs 1`] = `
           "titlepage_name": "Pasi Eronen",
         },
       ],
-      "errata": [],
-      "formats": [
-        "xml",
-        "txt",
-      ],
+      "formats": [],
       "group": {
         "acronym": "emu",
         "name": "EAP Method Update",
@@ -203,7 +189,6 @@ exports[`homepage latest RFCs 1`] = `
       "obsoletes": [],
       "pages": 40,
       "published": "2021-10-29",
-      "see_also": [],
       "status": {
         "name": "proposed standard",
         "slug": "ps",

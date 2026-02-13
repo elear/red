@@ -699,11 +699,7 @@ emp ir i ca ll y de t e rm in e a v ali d se t o f par ame t e r s i s in t o l 
         "titlepage_name": "Donald Eastlake",
       },
     ],
-    "errata": [],
-    "formats": [
-      "xml",
-      "txt",
-    ],
+    "formats": [],
     "group": {
       "acronym": "art",
       "name": "Applications and Real-Time Area",
@@ -723,7 +719,6 @@ emp ir i ca ll y de t e rm in e a v ali d se t o f par ame t e r s i s in t o l 
     "obsoletes": [],
     "pages": 22,
     "published": "2025-06-17",
-    "see_also": [],
     "status": {
       "name": "informational",
       "slug": "inf",

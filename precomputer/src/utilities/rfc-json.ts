@@ -120,7 +120,7 @@ const formatRfcStatusAsRfcJsonStatus = (
 const formatRfcFormatAsRfcJsonFormat = (
   format: RfcCommon['formats'][number]
 ): RFCJSON['format'][number] => {
-  switch (format) {
+  switch (format.format) {
     case 'txt':
       return 'TEXT'
     case 'xml':
@@ -136,7 +136,7 @@ const formatRfcFormatAsRfcJsonFormat = (
     case 'notprepped':
       return 'NOTPREPPED'
   }
-  assertNever(format)
+  assertNever(format.format)
 }
 
 export const formatAuthor = (author: RfcCommon['authors'][number]): string => {

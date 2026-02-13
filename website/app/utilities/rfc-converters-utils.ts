@@ -63,7 +63,8 @@ export const formatAuthor = (
   return author.affiliation === 'Editor' ? `${name}, Ed.` : name
 }
 
-type UppercaseFormats = Uppercase<RfcCommon['formats'][number]> | 'ASCII'
+type FormatName = RfcCommon['formats'][number]["format"]
+type UppercaseFormats = Uppercase<FormatName> | 'ASCII'
 
 export const formatFormat = (
   format: string,
@@ -104,21 +105,21 @@ export const parseRfcFormat = (
 ): RfcCommon['formats'][number] => {
   switch (format.toLowerCase()) {
     case 'xml':
-      return 'xml'
+      return { format: 'xml' }
     case 'ascii':
-      return 'txt'
+      return { format: 'txt' }
     case 'txt':
-      return 'txt'
+      return { format: 'txt' }
     case 'html':
-      return 'html'
+      return { format: 'html' }
     case 'pdf':
-      return 'pdf'
+      return { format: 'pdf' }
     case 'ps':
-      return 'ps'
+      return { format: 'ps' }
     case 'json':
-      return 'json'
+      return { format: 'json' }
     case 'notprepped':
-      return 'notprepped'
+      return { format: 'notprepped' }
   }
   throw Error(`Unable to parse RFC format "${format}"`)
 }

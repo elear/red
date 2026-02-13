@@ -204,7 +204,7 @@ const stringifyRFC = (rfc: RfcCommon): string => {
     rfcformat =
       rfc.formats && rfc.formats.length > 0
         ? `Format: ${rfc.formats
-            .map((format) => format.toUpperCase())
+            .map((format) => format.format.toUpperCase())
             .join(', ')}`
         : ''
 

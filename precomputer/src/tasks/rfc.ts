@@ -83,6 +83,18 @@ export const uploadRfcJson = async (rfcNumber: number): Promise<boolean> => {
   return true
 }
 
+const redactRfc = (rfc: RfcCommon): RfcCommon => {
+  return {
+    ...rfc,
+    formats: rfc.formats.map(format => {
+      return {
+        format: format.format
+        // omit `format.path`, that's an internal implementation detail that doesn't need to be public and isn't required by the schema
+      }
+    })
+  }
+}
+
 export const uploadRfcCommonJson = async (
   rfcNumber: number
 ): Promise<boolean> => {
@@ -90,6 +102,7 @@ export const uploadRfcCommonJson = async (
   if (rfc === null) {
     return false
   }
+  const redactedRfc = redactRfc(rfc)
   validateDocument(rfc, RfcCommonSchema)
   const rfcCommonS3Path = rfcCommonPathBuilder(rfc.number)
   await saveToS3(rfcCommonS3Path, JSON.stringify(rfc))

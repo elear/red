@@ -71,7 +71,8 @@ export const formatIdentifiers = (
   )
 }
 
-type UppercaseFormats = Uppercase<RfcCommon['formats'][number]> | 'ASCII'
+type FormatNames = RfcCommon['formats'][number]["format"]
+type UppercaseFormats = Uppercase<FormatNames> | 'ASCII'
 
 export const formatFormat = (
   format: string,
