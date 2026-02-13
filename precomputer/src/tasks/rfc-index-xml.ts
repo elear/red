@@ -146,31 +146,34 @@ const renderRFCs = async (allRfcs: Readonly<RfcCommon[]>): Promise<string> => {
       rfcEntry.appendChild(dateElement)
     }
 
-    // The XSD doesn't support the same formats
+    // The XSD supports these formats.. this should be kept in sync with the XSD as the source of truth
     type XSD_XML_Format = 'ASCII' | 'PS' | 'PDF' | 'TGZ' | 'HTML' | 'XML' | 'TEXT'
+    const RFC_INDEX_XML_UNSUPPORTED_FORMATS: RfcCommon["formats"] = ['json', 'notprepped']
 
     rfcEntry.appendChild(
       createElementListNS(
         'format',
         'file-format',
-        rfc.formats.map((format): XSD_XML_Format => {
-          switch (format) {
-            case 'html':
-              return 'HTML'
-            case 'json':
-              return 'TEXT' // FIXME: should XSD schema be updated?
-            case 'notprepped':
-              return 'TEXT' // FIXME: should XSD schema be updated?
-            case 'pdf':
-              return 'PDF'
-            case 'ps':
-              return 'PS'
-            case 'txt':
-              return 'ASCII'
-            case 'xml':
-              return 'XML'
-          }
-        })
+        rfc.formats
+          .filter(format => {
+            return !RFC_INDEX_XML_UNSUPPORTED_FORMATS.includes(format)
+          })
+          .map((format): XSD_XML_Format => {
+            switch (format) {
+              case 'html':
+                return 'HTML'
+              case 'pdf':
+                return 'PDF'
+              case 'ps':
+                return 'PS'
+              case 'txt':
+                return 'ASCII'
+              case 'xml':
+                return 'XML'
+              default:
+                throw Error(`Format ${JSON.stringify(format)} is not supported in rfc-index.xml`)
+            }
+          })
       )
     )
 
