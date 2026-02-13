@@ -6,10 +6,7 @@ import {
   XmlValidateError
 } from 'libxml2-wasm'
 import { DateTime } from 'luxon'
-import {
-  formatAuthor,
-  formatFormat
-} from '../utilities/rfc-converters-utils.ts'
+import { formatAuthor } from '../utilities/rfc-converters-utils.ts'
 import type { SubseriesCommon, RfcCommon } from '../../../website/app/utilities/rfc-validators.ts'
 import {
   RFC_INDEX_XML_PATH,
@@ -81,14 +78,14 @@ export const renderRfcIndexXml = async (
 
 const createElementNSFactory =
   (doc: Document) =>
-  (nodeName: string, text?: string): Element => {
-    const element = doc.createElementNS(RPC_NAMESPACE, nodeName)
-    if (text) {
-      const textNode = doc.createTextNode(text)
-      element.append(textNode)
+    (nodeName: string, text?: string): Element => {
+      const element = doc.createElementNS(RPC_NAMESPACE, nodeName)
+      if (text) {
+        const textNode = doc.createTextNode(text)
+        element.append(textNode)
+      }
+      return element
     }
-    return element
-  }
 
 const createElementListNSFactory = (doc: Document) => {
   const createElementNS = createElementNSFactory(doc)
@@ -149,17 +146,31 @@ const renderRFCs = async (allRfcs: Readonly<RfcCommon[]>): Promise<string> => {
       rfcEntry.appendChild(dateElement)
     }
 
+    // The XSD doesn't support the same formats
+    type XSD_XML_Format = 'ASCII' | 'PS' | 'PDF' | 'TGZ' | 'HTML' | 'XML' | 'TEXT'
+
     rfcEntry.appendChild(
       createElementListNS(
         'format',
         'file-format',
-        rfc.formats.map((format) =>
-          formatFormat(
-            format,
-            // FIXME: get info on whether it's a pre-V3 rfc.... or ensure API will return ASCII
-            true
-          )
-        )
+        rfc.formats.map((format): XSD_XML_Format => {
+          switch (format) {
+            case 'html':
+              return 'HTML'
+            case 'json':
+              return 'TEXT' // FIXME: should XSD schema be updated?
+            case 'notprepped':
+              return 'TEXT' // FIXME: should XSD schema be updated?
+            case 'pdf':
+              return 'PDF'
+            case 'ps':
+              return 'PS'
+            case 'txt':
+              return 'ASCII'
+            case 'xml':
+              return 'XML'
+          }
+        })
       )
     )
 
