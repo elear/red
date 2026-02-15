@@ -61,10 +61,11 @@ This is done for performance reasons (some these APIs can take minutes to comput
 
 The `/precomputer/` code is intentionally separate from the website/Nuxt. It has its own `package.json` etc.
 
-The entry point for the precomputer is `precomputer/src` with the 3 items `single.ts`, `all.ts`, and `cron.ts`:
+The entry point for the precomputer is `precomputer/src` with the items `single.ts`, `all.ts`, `multiple.ts`, and `cron.ts`:
 
-* `single.ts` calculates a single RFC 'info' page API data and RFC-specific APIs such as `/rfc/rfcN.json`. The `all.ts` does the same with batches of specific ranges of RFCs. Currently these scripts are run manually from _Tekton_;
-* `cron.ts` handles everything else (all subseries, RFC indexes that list all RFCs, RSS/Atom feeds, website homepage latest 3 RFCs, etc.). As the name `cron.ts` implies this script is run periodically (every 6 hours), however you can also run it manually from _Rancher_.
+* `single.ts` calculates a single RFC 'info' page API data and RFC-specific APIs such as `/rfc/rfcN.json`.
+  * `all.ts` does the same with ranges of RFCs. `multiple.ts` handles a comma-separated list of RFC numbers.
+* `cron.ts` handles indices (all subseries, RFC indexes like on the homepage that list all RFCs, RSS/Atom feeds, etc.). As the name `cron.ts` implies this script is run periodically.
 
 #### Precomputer tests
 
