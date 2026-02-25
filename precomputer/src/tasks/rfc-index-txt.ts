@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { padStart } from 'lodash-es'
+import { padStart } from 'es-toolkit/compat'
 import {
   formatAuthor,
   formatIdentifiers

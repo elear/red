@@ -103,9 +103,9 @@ export const uploadRfcCommonJson = async (
     return false
   }
   const redactedRfc = redactRfc(rfc)
-  validateDocument(rfc, RfcCommonSchema)
-  const rfcCommonS3Path = rfcCommonPathBuilder(rfc.number)
-  await saveToS3(rfcCommonS3Path, JSON.stringify(rfc))
+  validateDocument(redactedRfc, RfcCommonSchema)
+  const rfcCommonS3Path = rfcCommonPathBuilder(redactedRfc.number)
+  await saveToS3(rfcCommonS3Path, JSON.stringify(redactedRfc))
   return true
 }
 

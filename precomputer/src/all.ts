@@ -1,5 +1,5 @@
 import { PromisePool } from '@supercharge/promise-pool'
-import { range } from 'lodash-es'
+import { range } from 'es-toolkit'
 import { uploadRfcData } from './tasks/rfc.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8

@@ -1,4 +1,4 @@
-import { uniq } from 'lodash-es'
+import { uniq } from 'es-toolkit'
 
 const COLONSLASHSLASH = '://'
 

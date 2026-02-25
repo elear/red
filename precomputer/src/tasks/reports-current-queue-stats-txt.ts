@@ -1,4 +1,4 @@
-import { padStart } from 'lodash-es'
+import { padStart } from 'es-toolkit/compat'
 import {
   REPORTS_CURRENT_QUEUE_STATS_DOT_TXT_PATH,
   saveToS3
