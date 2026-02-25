@@ -3,7 +3,7 @@
  */
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
-import { camelCase } from 'lodash-es'
+import { camelCase } from 'es-toolkit'
 import { defineNuxtModule, useLogger } from 'nuxt/kit'
 import redirects from '../redirects.json'
 
@@ -26,6 +26,10 @@ const regenerateRedirectLinks = async (logger?: Logger) => {
     generatedAllRedirectPaths,
     `${generatedFileWarningHeader}// Compares redirect destinations against type ValidHrefs\nimport type { ValidHrefs } from '../utilities/url'\n\n${redirects.redirects
       .map(([_fromPath, toPathOrUrl], index) => {
+        if (typeof toPathOrUrl !== 'string') {
+          console.error({ toPathOrUrl })
+          throw Error(`Expected toPathOrUrl to be string but was ${typeof toPathOrUrl}. See console.`)
+        }
         return `const _${camelCase(toPathOrUrl)}${index + 1}: ValidHrefs = ${JSON.stringify(toPathOrUrl)} // if there is a TS error fix redirects.json or ValidHrefs`
       })
       .join('\n')}`

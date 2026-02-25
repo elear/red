@@ -1,4 +1,4 @@
-import { kebabCase } from 'lodash-es'
+import { kebabCase } from 'es-toolkit'
 import type {
   ImagePreviewHorizontalDimensions,
   ImagePreviewVerticalDimensions
@@ -129,8 +129,7 @@ export const searchPathBuilder = (
   searchParams: Partial<SearchPathBuilderProps>
 ): `${typeof SEARCH_PATH}${string}` => {
   const hasParams = Object.values(searchParams).join('').trim().length > 0
-  return `${SEARCH_PATH}${hasParams ? '?' : ''}${
-    hasParams ?
+  return `${SEARCH_PATH}${hasParams ? '?' : ''}${hasParams ?
       Object.keys(searchParams)
         .sort() // normalize order
         .map((searchKey) => {
@@ -139,15 +138,15 @@ export const searchPathBuilder = (
             searchParams[searchKey as keyof SearchPathBuilderProps]
 
           return searchValue ?
-              `${encodeURIComponent(typesenseSearchKey)}=${typeSenseEncodeUriComponent(
-                Array.isArray(searchValue) ? searchValue.join(',') : searchValue
-              )}`
+            `${encodeURIComponent(typesenseSearchKey)}=${typeSenseEncodeUriComponent(
+              Array.isArray(searchValue) ? searchValue.join(',') : searchValue
+            )}`
             : ''
         })
         .filter(Boolean)
         .join('&')
-    : ''
-  }`
+      : ''
+    }`
 }
 
 export const refsRefTxtPathBuilder = (rfcId: string) => {

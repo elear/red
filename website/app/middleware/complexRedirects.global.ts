@@ -1,4 +1,4 @@
-import { escapeRegExp } from 'lodash-es'
+import { escapeRegExp } from 'es-toolkit'
 import redirects from '../../redirects.json'
 import { isMiddlewareRedirect } from '~/utilities/redirects'
 import { assertIsDefined, assertIsString } from '~/utilities/typescript'
@@ -13,6 +13,9 @@ const middlewareRedirects = redirects.redirects
     // eg ["/rfc/rfc*.json", "/api/v1/rfc/rfc$1.json"]
     // becomes [new RegExp('^/rfc/rfc(.*?)\.json$'), '/api/v1/rfc/rfc$1.json']
 
+    assertIsString(redirect[0])
+    assertIsString(redirect[1])
+
     const escapedPattern = escapeRegExp(redirect[0])
 
     // Convert `*` to a regex pattern
@@ -21,7 +24,6 @@ const middlewareRedirects = redirects.redirects
       '(.*?)'
     )
     const regex = new RegExp(`^${regexForPath}$`)
-    assertIsString(redirect[1])
     return [regex, redirect[1]]
   })
 

@@ -1,5 +1,5 @@
 import { watch } from 'vue'
-import { throttle, clamp } from 'lodash-es'
+import { throttle, clamp } from 'es-toolkit'
 import { watchDebounced } from '@vueuse/core'
 import { prefersReducedMotion } from './accessibility'
 import { isProd } from './url'
@@ -155,7 +155,7 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
       // if overshooting
       direction === 1 && newActiveIdIndex > targetIdIndex ?
         targetIdIndex
-      : ids.value.length
+        : ids.value.length
     )
 
     // slow it down
@@ -215,7 +215,7 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
 
   const throttledHandleScroll = throttle(handleScroll, 1000 / SCROLL_FPS, {
     // leading because we want this to fire as early as possible but not again for FPS
-    leading: true
+    edges: ["leading"]
   })
 
   const throttledHandleResize = throttle(
@@ -224,7 +224,7 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
       handleScroll()
     },
     100,
-    { leading: true }
+    { edges: ["leading"] }
   )
 
   onMounted(() => {
@@ -343,8 +343,8 @@ export const useScrollTocContainer = ({
         const previousTocLinkRect = previousTocLink.getBoundingClientRect()
         const direction =
           previousTocLinkRect.top === tocLinkRect.top ? 0
-          : previousTocLinkRect.top > tocLinkRect.top ? 1
-          : -1
+            : previousTocLinkRect.top > tocLinkRect.top ? 1
+              : -1
         /**
          * The simplest way to bring a TOC item into view is to scroll it into the middle.
          *

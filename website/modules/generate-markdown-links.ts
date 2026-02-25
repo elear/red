@@ -5,7 +5,7 @@ import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import { parseMarkdown } from '@nuxtjs/mdc/runtime'
 import { globby } from 'globby'
-import { camelCase, kebabCase } from 'lodash-es'
+import { camelCase, kebabCase } from 'es-toolkit'
 import { XMLParser } from 'fast-xml-parser'
 import type { X2jOptions } from 'fast-xml-parser'
 import { defineNuxtModule, useLogger } from 'nuxt/kit'
@@ -206,13 +206,12 @@ const mdcParserResultToHtml = (mdcParserResult: MdcParserResult): string => {
         ) {
           return `<${node.tag}>`
         }
-        return `<${node.tag}${
-          node.props ?
-            Object.entries(node.props)
-              .map(([key, value]) => ` ${key}="${value}"`)
-              .join('')
+        return `<${node.tag}${node.props ?
+          Object.entries(node.props)
+            .map(([key, value]) => ` ${key}="${value}"`)
+            .join('')
           : ''
-        }>${node.children.map(walk).join('')}</${node.tag}>`
+          }>${node.children.map(walk).join('')}</${node.tag}>`
       case 'comment':
         return ''
     }
@@ -351,12 +350,12 @@ const regenerateValidMarkdownLinks = async (logger?: Logger) => {
         )
       })
       .join('\n  | ')}\n\n${markdownsValidHrefs
-      .map((markdownValidHrefs) => {
-        return `export type ${markdownFileInternalLinksTypeBuilder(markdownValidHrefs.markdownPath)} =\n  | ${markdownValidHrefs.validInternalLinks
-          .map((validInternalLink) => JSON.stringify(validInternalLink))
-          .join('\n  | ')}`
-      })
-      .join('\n\n')}\n`
+        .map((markdownValidHrefs) => {
+          return `export type ${markdownFileInternalLinksTypeBuilder(markdownValidHrefs.markdownPath)} =\n  | ${markdownValidHrefs.validInternalLinks
+            .map((validInternalLink) => JSON.stringify(validInternalLink))
+            .join('\n  | ')}`
+        })
+        .join('\n\n')}\n`
   )
 
   logger?.info(` - regenerated ${path.basename(generatedMarkdownValidHrefs)}`)

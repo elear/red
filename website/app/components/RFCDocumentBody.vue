@@ -89,7 +89,6 @@
 
 <script setup lang="ts">
 import { createTextVNode } from 'vue'
-import { pickBy } from 'lodash-es'
 import AMaybeRFCLink from './AMaybeRFCLink.vue'
 import HorizontalScrollable from './HorizontalScrollable.vue'
 import PdfPages from './PdfPages.vue'
@@ -170,8 +169,12 @@ const renderDocumentPojo = (nodes: DocumentPojo): VNode => {
             const ATTR_ABSOLUTE_CHILDHEIGHT = 'data-component-childheight'
             const childHeightAttr = node.attributes[ATTR_ABSOLUTE_CHILDHEIGHT]
             if (childWidthAttr && childHeightAttr) {
-              const deleteDataAttributes = (attributes: ElementPojo["attributes"]): ElementPojo["attributes"] =>
-                pickBy(attributes, (_value, key) => !key.startsWith('data-'))
+              const deleteDataAttributes = (attributes: ElementPojo["attributes"]): ElementPojo["attributes"] => {
+                const entries = Object.entries(attributes)
+                const filteredEntries = entries.filter(([key]) => !key.startsWith('data-'))
+                const filteredAttributes = Object.fromEntries(filteredEntries)
+                return filteredAttributes
+              }
               return h(
                 AbsoluteHorizontalScrollable,
                 {

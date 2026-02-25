@@ -6,7 +6,7 @@ import type {
   RfcCommonStatusSchema,
   RfcCommonSubseriesTypeSchema
 } from './rfc-validators'
-import { startCase } from 'lodash-es'
+import { startCase } from 'es-toolkit'
 
 export const RFC_TYPE_RFC = 'rfc' as const
 

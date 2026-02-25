@@ -196,7 +196,7 @@ import {
   type AcceptableValue,
 } from 'reka-ui'
 import { DateTime, Info } from 'luxon'
-import { times } from 'lodash-es'
+import { times } from 'es-toolkit/compat'
 
 type Props = {
   label: string

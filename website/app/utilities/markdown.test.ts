@@ -2,7 +2,7 @@
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import { test, expect } from 'vitest'
-import { escapeRegExp } from 'lodash-es'
+import { escapeRegExp } from 'es-toolkit'
 import { micromark } from 'micromark'
 import { globby } from 'globby'
 import { fileExists } from './test-utils/fs-test-util'

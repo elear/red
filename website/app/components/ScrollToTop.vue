@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { throttle } from 'lodash-es'
+import { throttle } from 'es-toolkit'
 import { debouncedRef } from '@vueuse/core'
 
 const isVisible = ref(false)
