@@ -23,7 +23,7 @@ const main = async (
   const rfcRange = range(minRfcNumber, maxRfcNumber)
 
   console.log(
-    `Processing ${minRfcNumber}-${maxRfcNumber}. Using ${NUMBER_OF_CONCURRENT_RFC_PROCESSORS} concurrent promises (results will appear out of order)`
+    `Processing ${minRfcNumber}-${maxRfcNumber}. Using ${NUMBER_OF_CONCURRENT_RFC_PROCESSORS} concurrent promises (results may appear out of order)`
   )
   const { errors } = await PromisePool.for(rfcRange)
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
