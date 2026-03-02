@@ -21,6 +21,7 @@
       type="submit"
       name="search"
       class="bg-blue-200 px-2 flex items-center"
+      aria-label="Submit search"
     >
       <Icon
         name="fluent:search-12-filled"
