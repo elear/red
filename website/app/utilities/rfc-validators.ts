@@ -160,18 +160,10 @@ const RfcCommonDraftSchema = z.object({
   slug: z.string()
 })
 
-export const RfcCommonAreaTypeSchema = z.union([
-  z.literal('area'),
-  z.literal('irtf'),
-  z.literal('ietf'),
-  z.literal('rfcedtyp'),
-  z.literal('rtg')
-])
-
 export const RfcCommonAreaSchema = z.object({
   acronym: z.string(),
   name: z.string(),
-  type: RfcCommonAreaTypeSchema
+  type: z.string().optional()
 })
 
 export const RfcCommonGroupTypeSchema = z.union([

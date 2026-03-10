@@ -1,7 +1,6 @@
 import { ApiClient } from '../../generated/api-client.ts'
 import type { Rfc, RfcMetadata } from '../../generated/api-client.ts'
 import {
-  RfcCommonAreaTypeSchema,
   RfcCommonGroupTypeSchema,
   RfcCommonStatusSchema,
   RfcCommonSubseriesTypeSchema
@@ -468,23 +467,14 @@ const parseStreamSlug = (streamSlug?: string): RfcCommon['stream']['slug'] => {
 
 const parseArea = (
   area: Rfc['area'] | RfcMetadata['area'],
-  rfcNumberForDebug?: number
 ): RfcCommon['area'] => {
   if (!area) return undefined
-  const fromRfcErrorSuffix =
-    rfcNumberForDebug !== undefined ? ` from RFC ${rfcNumberForDebug}` : ''
   const { acronym, name, type } = area
-  const { data: parsedType, error } = RfcCommonAreaTypeSchema.safeParse(type)
-  if (error) {
-    console.error(error)
-    throw Error(
-      `Problem parsing area type ${JSON.stringify(area)}${fromRfcErrorSuffix}`
-    )
-  }
+
   return {
     acronym,
     name,
-    type: parsedType
+    type: type ?? undefined,
   }
 }
 
