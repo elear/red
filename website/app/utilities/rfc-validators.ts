@@ -164,7 +164,8 @@ export const RfcCommonAreaTypeSchema = z.union([
   z.literal('area'),
   z.literal('irtf'),
   z.literal('ietf'),
-  z.literal('rfcedtyp')
+  z.literal('rfcedtyp'),
+  z.literal('rtg')
 ])
 
 export const RfcCommonAreaSchema = z.object({
