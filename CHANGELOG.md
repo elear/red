@@ -9,7 +9,7 @@ Great care has been taken to ensure consistency with previous API formats where 
 These changes apply to **all** APIs (_global API changes_):
 
 1. **5 digit RFC numbers** (AKA the RFC10k issue). Due to this RFC ids in API responses no longer have leading zeros (eg RFC0500 becomes RFC500), except for DOI ids which remain unchanged. Software parsing should expect 1-5+ digits and not assume that RFCs have 4 digits.
-2. **Trailing slash URL changes.** URLs in API responses that link to HTML pages will have trailing slashes (if they didn't already). For example https://www.rfc-editor.org/info/rfc9000 becomes https://www.rfc-editor.org/info/rfc9000/ (note the trailing slash), and https://www.rfc-editor.org/rfc-index.html becomes https://www.rfc-editor.org/rfc-index/ . This has been done for consistency.
+2. **Trailing slash URL changes.** URLs in API responses that link to HTML pages will have trailing slashes (if they didn't already). For example https://www.rfc-editor.org/info/rfc9000 becomes https://www.rfc-editor.org/info/rfc9000/ (note the trailing slash). This has been done for consistency.
 3. **Redirects** generally speaking we don't want to change URLs, but if the URL for a resource changes there will be HTTP redirects to the new URL. Consumers of our APIs should ensure their HTTP client is configured to follow redirects. For example, by default `wget` follows redirects but `curl` does not. These redirects _may_ go offsite to another subdomain of `rfc-editor.org` eg `/queue2.xml` may redirect to `queue.rfc-editor.org/queue2.xml`.
 
 #### `/rfc-index.txt`
@@ -59,6 +59,7 @@ Developers who scrape rfc-editor.org HTML pages should expect a different HTML s
 
 ##### Pages that will be removed
 
-* `/rfc-index2.html` (RFC index in descending order)
+*  `/rfc-index.html` (RFC index in ascending order). Instead use the search. 
+* `/rfc-index2.html` (RFC index in descending order). Instead use the search.
 * `/rfc-index-100a.html` and `/rfc-index-100d.html` (a range of RFCs in ascending and descending order respectively)
 * `/in-notes/tar/*.tar.gz` and `/in-notes/tar/*.zip`
