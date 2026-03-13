@@ -14,7 +14,7 @@ These changes apply to **all** APIs (_global API changes_):
 
 #### `/rfc-index.txt`
 
-The global changes, and the table layout of this file must change to make space for 5 digit RFCs. Here's [a sample file of the new `rfc-index.txt` (truncated to RFC19)](https://github.com/ietf-tools/rfced-www/blob/main/website/utilities/rfc-5digit-index.txt) (compare against [the 4 digit](https://github.com/ietf-tools/rfced-www/blob/main/website/utilities/rfc-4digit-index.txt) which has a narrower column). No redirect is expected.
+The global changes, and the table layout of this file must change to make space for 5 digit RFCs. No redirect is expected.
 
 #### `/rfc-index.xml`
 
@@ -42,7 +42,6 @@ Leading zeros in RFC ids will be removed.
 
 This route may redirect to a subdomain of rfc-editor.org. Please ensure your client will follow HTTP redirects.
 
-
 #### `/queue.xml` and `/queue2.xml`
 
 Leading zeros in RFC ids will be removed.
@@ -59,7 +58,7 @@ Developers who scrape rfc-editor.org HTML pages should expect a different HTML s
 
 ##### Pages that will be removed
 
-*  `/rfc-index.html` (RFC index in ascending order). Instead use the search. 
+* `/rfc-index.html` (RFC index in ascending order). Instead use the search. 
 * `/rfc-index2.html` (RFC index in descending order). Instead use the search.
 * `/rfc-index-100a.html` and `/rfc-index-100d.html` (a range of RFCs in ascending and descending order respectively)
 * `/in-notes/tar/*.tar.gz` and `/in-notes/tar/*.zip`
