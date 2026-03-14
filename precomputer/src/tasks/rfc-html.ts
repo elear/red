@@ -13,8 +13,8 @@ import {
   type MaxPreformattedLineLengthSchemaType,
   type DocumentHtmlType,
   type TableOfContents,
-  RfcBucketHtmlDocumentSchema,
-  ErrataList
+  type ErrataList,
+  RfcBucketHtmlDocumentSchema
 } from '../../../website/app/utilities/rfc-validators.ts'
 import { extractHrefRfcPart } from '../utilities/rfc.ts'
 import { assertNever } from '../utilities/typescript.ts'
