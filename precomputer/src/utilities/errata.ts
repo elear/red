@@ -16,10 +16,6 @@ export const getAllErrataCached = async () => {
     }
     const errataUnverified = JSON.parse(data)
     _errataListCache = ErrataListSchema.parse(errataUnverified)
-
-    console.log(`[${ERRATA_JSON_PATH}] cache miss :(`)
-  } else {
-    console.log(`[${ERRATA_JSON_PATH}] cache hit!`)
   }
 
   return _errataListCache
