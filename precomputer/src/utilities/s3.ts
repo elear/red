@@ -125,7 +125,7 @@ export async function saveToS3(
     S3_RED_BUCKET,
     `process.env.S3_RED_BUCKET wasn't a string. Was ${typeof S3_RED_BUCKET}`
   )
-  console.log(`[${S3_RED_BUCKET}] saving ${key}`)
+  console.log(`[${S3_RED_BUCKET}] saving ${key}`, ' with contents ', contents)
   const { s3RedCli } = getS3Singleton()
   await s3RedCli.send(
     new PutObjectCommand({
