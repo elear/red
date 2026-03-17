@@ -80,16 +80,25 @@ const normalizedSection = computed(() => {
   if (!section) {
     return null
   }
-  // rfc3261 has errataItem.section value of 'Section 25.1'
+  // rfc3261 has errataItem.section value of 'In Section 25.1: '
   return section
     .trim()
+    .replace(/^in section/i, '')
     .replace(/^section/i, '')
+    .replace(/:$/, '')
     .trim()
 })
 
 const label = computed(() => {
-  if (normalizedSection.value === null) {
+  const { section } = props.errataItem
+  if (!section || normalizedSection.value === null) {
     return `Errata ${props.errataIndex + 1}`
+  }
+  // although the normalized section removed any unnecessary 'section'-like prefix
+  // there can be values like 'Table 2' (see rfc3261) that we should use as-is.
+  // We'll sniff these by looking for alphabet chars in the string
+  if (normalizedSection.value.match(/[a-z]/i)) {
+    return section
   }
   return `Section ${normalizedSection.value}`
 })
