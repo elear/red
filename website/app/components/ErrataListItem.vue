@@ -11,9 +11,9 @@
       </span>
     </summary>
 
-    <div class="flex flex-col gap-2 px-2 pb-4 mb-4 text-sm">
-      <p>
-        <a v-if="hashLink" :href="hashLink" :class="ANCHOR_TAILWIND_STYLE">
+    <div class="flex flex-col gap-2 px-2 pt-2 pb-4 mb-4 text-sm">
+      <p v-if="hashLink">
+        <a :href="hashLink" :class="ANCHOR_TAILWIND_STYLE">
           Scroll to {{ label }}
         </a>
       </p>
