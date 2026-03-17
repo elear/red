@@ -1,5 +1,5 @@
 <template>
-  <div class="pl-1 pb-3">
+  <div class="pl-1 pb-6">
     <form v-if="props.errataList && props.errataList.length > 0">
       <label class="text-sm">
         <span class="inline-block font-bold mb-2">Show only</span><br />
