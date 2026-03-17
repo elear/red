@@ -1,9 +1,9 @@
 <template>
   <details
-    class="details-open-style -ml-1 open:bg-gray-200 dark:open:bg-gray-800 rounded"
+    class="details-open-style -ml-1 open:bg-[rgba(30,30,30,0.07)] dark:open:bg-[rgba(255,255,255,0.1)] rounded"
   >
     <summary
-      class="flex justify-between hover:bg-gray-200 focus:bg-gray-200 dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded pl-1 pr-2 py-2 cursor-pointer"
+      class="flex justify-between hover:bg-[rgba(30,30,30,0.07)] focus:bg-[rgba(30,30,30,0.07)] dark:hover:bg-[rgba(255,255,255,0.1)] dark:focus:bg-[rgba(255,255,255,0.1)] rounded pl-1 pr-2 py-2 cursor-pointer"
     >
       <span class="font-bold">
         <GraphicsDiamond class="align-middle" color="yellow" size="10px" />
@@ -96,7 +96,9 @@ const label = computed(() => {
   }
   // although the normalized section removed any unnecessary 'section'-like prefix
   // there can be values like 'Table 2' (see rfc3261) that we should use as-is.
-  // We'll sniff these by looking for alphabet chars in the string
+  // We'll sniff these by looking for alphabet chars that remain in the string.
+  // The section links won't have these as the string will look like "2" or "3.2.1"
+  // and not have alphabet chars.
   if (normalizedSection.value.match(/[a-z]/i)) {
     return section
   }

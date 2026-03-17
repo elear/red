@@ -1,6 +1,6 @@
 <template>
-  <div v-if="props.errataList && props.errataList.length > 0">
-    <form class="pl-1">
+  <div class="pl-1 pb-3">
+    <form v-if="props.errataList && props.errataList.length > 0">
       <label class="text-sm">
         <span class="inline-block font-bold mb-2">Show only</span><br />
         <SelectNeue
@@ -47,8 +47,8 @@
         No errata match the filter {{ JSON.stringify(selectedStatusType) }}
       </p>
     </form>
+    <p v-else class="text-sm italic mt-3">No errata</p>
   </div>
-  <div v-else class="text-sm italic mt-3">No errata</div>
 </template>
 
 <script setup lang="ts">
