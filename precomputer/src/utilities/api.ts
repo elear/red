@@ -58,14 +58,13 @@ export const getApiClient = (): ApiClient => {
   const localServer = 'http://localhost:8000'
   console.log('Using local API', localServer)
 
-
   const headers: ApiClient['Config']['headers'] = {
     'X-Api-Key': 'redtoken' // FIXME: hardcoded extremely secure token
   }
 
   return new ApiClient({
     baseUrl: localServer,
-    headers,
+    headers
   })
 }
 
@@ -132,7 +131,10 @@ export const safeDocRetrieve = async (
  * Safety wrapper around subseriesList access to retry on timeouts
  * Currently the API fails about 1/2000 uses on Tekton
  */
-export const safeSubseriesList = async (api: ApiClient, subseriesType?: SubseriesCommon["type"]) => {
+export const safeSubseriesList = async (
+  api: ApiClient,
+  subseriesType?: SubseriesCommon['type']
+) => {
   let attemptsRemaining = NUMBER_OF_API_RETRIES
 
   const errors: unknown[] = []
@@ -230,7 +232,11 @@ export const getRfcCommonCached = async (
 /** Convert `Rfc` to `RfcCommon` */
 export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
   return {
-    formats: rfc.formats?.map((format): RfcCommon["formats"][number] => ({ format: format.fmt, path: format.name })) ?? [],
+    formats:
+      rfc.formats?.map((format): RfcCommon['formats'][number] => ({
+        format: format.fmt,
+        path: format.name
+      })) ?? [],
     subseries: parseSubseries(rfc.subseries),
     number: rfc.number,
     abstract: rfc.abstract,
@@ -250,10 +256,8 @@ export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
     obsoleted_by: rfc.obsoleted_by,
     updates: rfc.updates,
     updated_by: rfc.updated_by,
-    see_also: undefined,
     draft: parseDraft(rfc.draft),
     keywords: rfc.keywords,
-    errata: undefined,
     title: rfc.title
   }
 }
@@ -261,7 +265,11 @@ export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
 /** Convert `RfcMetadata` to `RfcCommon` */
 export const rfcMetadataToRfcCommon = (rfcMetadata: RfcMetadata): RfcCommon => {
   return {
-    formats: rfcMetadata.formats?.map((format): RfcCommon["formats"][number] => ({ format: format.fmt, path: format.name })) ?? [],
+    formats:
+      rfcMetadata.formats?.map((format): RfcCommon['formats'][number] => ({
+        format: format.fmt,
+        path: format.name
+      })) ?? [],
     number: rfcMetadata.number,
     abstract: rfcMetadata.abstract,
     published: rfcMetadata.published,
@@ -281,10 +289,8 @@ export const rfcMetadataToRfcCommon = (rfcMetadata: RfcMetadata): RfcCommon => {
     updated_by: rfcMetadata.updated_by,
     subseries: parseSubseries(rfcMetadata.subseries),
     draft: parseDraft(rfcMetadata.draft),
-    see_also: undefined,
     updates: rfcMetadata.updates,
     keywords: rfcMetadata.keywords,
-    errata: undefined,
     title: rfcMetadata.title
   }
 }
@@ -298,7 +304,9 @@ export const getAllRFCs = async ({
   api,
   limit
 }: GetAllRFCsProps): Promise<Readonly<RfcCommon[]>> => {
-  console.log(`Downloading metadata for ${limit === undefined ? 'ALL' : limit} rfcs:`)
+  console.log(
+    `Downloading metadata for ${limit === undefined ? 'ALL' : limit} rfcs:`
+  )
   const FIRST_RFC_NUMBER = 1
   const MAX_LIMIT_PER_REQUEST = 1000
   const rfcs: RfcCommon[] = []
@@ -317,7 +325,8 @@ export const getAllRFCs = async ({
 
     if (rfcCommons.length > 0) {
       console.log(
-        ` - rfc ${rfcCommons[rfcCommons.length - 1].number}-${rfcCommons[0].number
+        ` - rfc ${rfcCommons[rfcCommons.length - 1].number}-${
+          rfcCommons[0].number
         }`
       )
     }
@@ -328,10 +337,11 @@ export const getAllRFCs = async ({
       // or if we've reached RFC 1
       rfcCommons.some((rfc) => rfc.number === FIRST_RFC_NUMBER) ||
       // or if we've reached a limit of RFCs
-      limit !== undefined && rfcs.length >= limit
+      (limit !== undefined && rfcs.length >= limit)
     ) {
       console.log(
-        `Finished downloading metadata for ${limit === undefined ? 'ALL' : limit} rfcs (${rfcs[0].number}-${rfcs[rfcs.length - 1].number
+        `Finished downloading metadata for ${limit === undefined ? 'ALL' : limit} rfcs (${rfcs[0].number}-${
+          rfcs[rfcs.length - 1].number
         })`
       )
       break
@@ -347,7 +357,6 @@ export const getAllRFCs = async ({
 
   return frozenRfcs
 }
-
 
 export const parseSubseriesName = (name: string) => {
   const nameParts = name.match(
@@ -376,7 +385,10 @@ type GetAllSubseriesProps = {
   type?: SubseriesCommon['type']
 }
 
-export const getAllSubseries = async ({ api, type }: GetAllSubseriesProps): Promise<Readonly<SubseriesCommon[]>> => {
+export const getAllSubseries = async ({
+  api,
+  type
+}: GetAllSubseriesProps): Promise<Readonly<SubseriesCommon[]>> => {
   const subseries = await safeSubseriesList(api, type)
   const sortedSubseries = subseries
     .map((subseriesDoc): SubseriesCommon => {
@@ -429,7 +441,8 @@ export const parseStatus = (
   const { data, error } = RfcCommonStatusSchema.safeParse(status)
   if (error) {
     throw Error(
-      `Unable to parse${rfcNumberForDebug !== undefined ? ` RFC ${rfcNumberForDebug}` : ''
+      `Unable to parse${
+        rfcNumberForDebug !== undefined ? ` RFC ${rfcNumberForDebug}` : ''
       } status ${JSON.stringify(status)}").`
     )
   }
@@ -466,7 +479,7 @@ const parseStreamSlug = (streamSlug?: string): RfcCommon['stream']['slug'] => {
 }
 
 const parseArea = (
-  area: Rfc['area'] | RfcMetadata['area'],
+  area: Rfc['area'] | RfcMetadata['area']
 ): RfcCommon['area'] => {
   if (!area) return undefined
   const { acronym, name, type } = area
@@ -474,7 +487,7 @@ const parseArea = (
   return {
     acronym,
     name,
-    type: type ?? undefined,
+    type: type ?? undefined
   }
 }
 
@@ -487,7 +500,8 @@ const parseGroup = (
   if (error) {
     console.error(error)
     throw Error(
-      `Problem parsing group type ${JSON.stringify(group)} ${rfcNumberForDebug !== undefined ? `from RFC ${rfcNumberForDebug}` : ''
+      `Problem parsing group type ${JSON.stringify(group)} ${
+        rfcNumberForDebug !== undefined ? `from RFC ${rfcNumberForDebug}` : ''
       }`
     )
   }
@@ -555,17 +569,20 @@ const parseSubseriesItemType = (
   type: RfcSubseriesItem['type']
 ): RfcCommonSubseriesItem['type'] => RfcCommonSubseriesTypeSchema.parse(type)
 
-
-const parseAuthors = (authors: Rfc["authors"] | RfcMetadata["authors"]): RfcCommon["authors"] => {
-  return authors ? authors.map((author): RfcCommon["authors"][number] => {
-    return {
-      titlepage_name: author.titlepage_name,
-      is_editor: author.is_editor,
-      person: author.person ?? undefined,
-      email: author.email ?? undefined,
-      affiliation: author.affiliation,
-      country: author.country,
-      datatracker_person_path: author.datatracker_person_path,
-    }
-  }) : []
-} 
+const parseAuthors = (
+  authors: Rfc['authors'] | RfcMetadata['authors']
+): RfcCommon['authors'] => {
+  return authors ?
+      authors.map((author): RfcCommon['authors'][number] => {
+        return {
+          titlepage_name: author.titlepage_name,
+          is_editor: author.is_editor,
+          person: author.person ?? undefined,
+          email: author.email ?? undefined,
+          affiliation: author.affiliation,
+          country: author.country,
+          datatracker_person_path: author.datatracker_person_path
+        }
+      })
+    : []
+}

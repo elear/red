@@ -21,8 +21,6 @@ export const uploadInNotesRfcRefDotTxt = async (
   return true
 }
 
-const COLUMN_PADDING = 1
-
 export const renderInNotesRfcRefDotTxt = async (
   allRfcs: Readonly<RfcCommon[]>,
   rfcNumberColumnMinimumCharWidth: number
@@ -88,13 +86,11 @@ const stringifyRFC = (rfc: RfcCommon): string => {
   if (rfc.title === 'Not Issued') {
     return 'Not Issued.'
   } else {
-    rfcdate = rfc.published
-      ? DateTime.fromISO(rfc.published).toFormat('LLLL yyyy')
-      : ''
+    rfcdate =
+      rfc.published ? DateTime.fromISO(rfc.published).toFormat('LLLL yyyy') : ''
 
     const alsolist = [
-      ...(rfc.is_also && rfc.is_also.length > 0 ? rfc.is_also : []),
-      ...(rfc.see_also && rfc.see_also.length > 0 ? rfc.see_also : [])
+      ...(rfc.is_also && rfc.is_also.length > 0 ? rfc.is_also : [])
     ]
     if (alsolist.length > 0) {
       also = `${alsolist.map((rfcId) => `RFC ${rfc.number}`).join(', ')}, `

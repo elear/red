@@ -36,9 +36,7 @@ export const rfcToRfcJson = (rfc: RfcCommon): RFCJSON => {
       rfc.updated_by?.map(
         (updated_by_item) => `RFC${updated_by_item.number}`
       ) ?? [],
-    see_also: rfc.see_also ?? [],
-    doi: doi ? doi?.value : null,
-    errata_url: rfc.errata?.[0] ?? null
+    doi: doi ? doi?.value : null
   }
 }
 
@@ -83,9 +81,7 @@ export const RfcJsonSchema = z.object({
   obsoleted_by: z.array(z.string()),
   updates: z.array(z.string()),
   updated_by: z.array(z.string()),
-  see_also: z.array(z.string()),
-  doi: z.string().nullable(),
-  errata_url: z.string().nullable()
+  doi: z.string().nullable()
 })
 
 export type RFCJSON = z.infer<typeof RfcJsonSchema>
@@ -147,9 +143,9 @@ export const formatAuthor = (author: RfcCommon['authors'][number]): string => {
     .filter(Boolean)
     .reduce((acc, item, index, arr) => {
       const newBit =
-        index === arr.length - 1
-          ? ` ${item}`
-          : `${item.substring(0, 1).toUpperCase()}.`
+        index === arr.length - 1 ?
+          ` ${item}`
+        : `${item.substring(0, 1).toUpperCase()}.`
       return `${acc}${newBit}`
     })
 
