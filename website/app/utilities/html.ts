@@ -33,11 +33,12 @@ export const parseHeadingLevel = (headingLevel: string): HeadingLevel => {
 }
 
 export const preformattedTextToHtml = (
-  preText: string
+  preText: string,
+  wrapAnywhere?: boolean
 ): ReturnType<typeof h> => {
   return h(
     'span',
-    { class: 'font-mono wrap-anywhere' },
+    { class: ['font-mono', wrapAnywhere ? 'wrap-anywhere' : undefined] },
     preText.split('\n').flatMap((line) => {
       return [line, h('br')]
     })
