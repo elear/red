@@ -7,15 +7,14 @@
     >
       <span class="font-bold">
         <GraphicsDiamond class="align-middle" color="yellow" size="10px" />
-        Section
-        {{ props.errataItem.section }}
+        {{ label }}
       </span>
     </summary>
 
     <div class="flex flex-col gap-2 px-2 pb-4 mb-4 text-sm">
       <p>
-        <a v-if="hashLink" :href="hashLink">
-          Scroll to Section {{ props.errataItem.section }}
+        <a v-if="hashLink" :href="hashLink" :class="ANCHOR_TAILWIND_STYLE">
+          Scroll to {{ label }}
         </a>
       </p>
       <p>
@@ -47,11 +46,13 @@
 </template>
 
 <script setup lang="ts">
+import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme'
 import { preformattedTextToHtml } from '~/utilities/html'
 import type { ErrataItem } from '~/utilities/rfc-validators'
 
 type Props = {
   errataItem: ErrataItem
+  errataIndex: number
 }
 
 const props = defineProps<Props>()
@@ -74,19 +75,43 @@ const notes_nodes = computed(() =>
   : undefined
 )
 
+const normalizedSection = computed(() => {
+  const { section } = props.errataItem
+  if (!section) {
+    return null
+  }
+  // rfc3261 has errataItem.section value of 'Section 25.1'
+  return section
+    .trim()
+    .replace(/^section/i, '')
+    .trim()
+})
+
+const label = computed(() => {
+  if (normalizedSection.value === null) {
+    return `Errata ${props.errataIndex + 1}`
+  }
+  return `Section ${normalizedSection.value}`
+})
+
 const hashLink = ref<string | undefined>()
 
 onMounted(() => {
-  if (!props.errataItem.section) {
+  if (!normalizedSection.value) {
     return
   }
-  const maybeDomId = `section-${props.errataItem.section}`
-  const target = document.getElementById(maybeDomId)
-  if (!target) {
-    console.warn("Couldn't find errata section link of ", maybeDomId)
-    return
+  const maybeDomId = `section-${normalizedSection.value.replace(/\s/g, '')}`
+  try {
+    // it's possible that maybeDomId is an invalid DOM id so this might throw
+    const target = document.getElementById(maybeDomId)
+    if (!target) {
+      console.warn("Couldn't find errata section link of ", maybeDomId)
+      return
+    }
+    hashLink.value = `#${maybeDomId}`
+  } catch (e) {
+    console.warn('Unable to getElementById', maybeDomId, e)
   }
-  hashLink.value = `#${maybeDomId}`
 })
 </script>
 

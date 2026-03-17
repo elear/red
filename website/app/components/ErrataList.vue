@@ -34,10 +34,13 @@
         class="mt-3 mr-2 flex flex-col gap-2"
       >
         <li
-          v-for="errataItem in filteredErrataList"
+          v-for="(errataItem, errataIndex) in filteredErrataList"
           :key="errataItem.errata_id"
         >
-          <ErrataListItem :errata-item="errataItem" />
+          <ErrataListItem
+            :errata-item="errataItem"
+            :errata-index="errataIndex"
+          />
         </li>
       </ul>
       <p v-else class="text-sm italic mt-3">
