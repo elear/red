@@ -37,7 +37,7 @@ export const preformattedTextToHtml = (
 ): ReturnType<typeof h> => {
   return h(
     'span',
-    { class: 'font-mono' },
+    { class: 'font-mono wrap-anywhere' },
     preText.split('\n').flatMap((line) => {
       return [line, h('br')]
     })

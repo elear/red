@@ -59,19 +59,19 @@ const props = defineProps<Props>()
 
 const orig_text_nodes = computed(() =>
   props.errataItem.orig_text ?
-    preformattedTextToHtml(props.errataItem.orig_text)
+    preformattedTextToHtml(props.errataItem.orig_text, true)
   : undefined
 )
 
 const correct_text_nodes = computed(() =>
   props.errataItem.correct_text ?
-    preformattedTextToHtml(props.errataItem.correct_text)
+    preformattedTextToHtml(props.errataItem.correct_text, true)
   : undefined
 )
 
 const notes_nodes = computed(() =>
   props.errataItem.notes ?
-    preformattedTextToHtml(props.errataItem.notes)
+    preformattedTextToHtml(props.errataItem.notes, true)
   : undefined
 )
 
