@@ -111,7 +111,7 @@
     >
       <VerticalScrollable>
         <Heading level="3" style-level="4" class="mt-4"> Details </Heading>
-        <dl class="text-sm">
+        <dl class="text-sm pb-6">
           <template
             v-if="
               props.rfcBucketHtmlDocument.rfc.updates &&
@@ -344,7 +344,7 @@
           </template>
 
           <template v-if="props.rfcBucketHtmlDocument.rfc.formats?.length > 0">
-            <dt class="font-bold mt-2">Area</dt>
+            <dt class="font-bold mt-2">Formats</dt>
             <dd>
               <ul class="text-sm">
                 <li
