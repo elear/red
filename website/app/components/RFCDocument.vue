@@ -59,12 +59,9 @@ const { data: rfcBucketHtmlDocument, error: rfcBucketHtmlDocumentError } =
     asyncRfcBucketHtmlDocumentKey,
     async () => {
       const path = apiRfcBucketDocumentPathBuilder(props.rfcId.number)
-      const maybeRfcBucketDocument = await $fetch(
-        `https://red.staging.rfc-editor.org${path}`,
-        {
-          method: 'GET'
-        }
-      )
+      const maybeRfcBucketDocument = await $fetch(path, {
+        method: 'GET'
+      })
       if (typeof maybeRfcBucketDocument !== 'object') {
         console.log(
           "Unexpected response type. The server Content-Type may be misconfigured so $fetch() doesn't parse as JSON",
@@ -77,13 +74,13 @@ const { data: rfcBucketHtmlDocument, error: rfcBucketHtmlDocumentError } =
         maybeRfcBucketDocument
       )
       if (error) {
-        console.log(
+        console.error(
           'Failed to validate RFC HTML JSON',
           error,
           JSON.stringify(maybeRfcBucketDocument, null, 2)
         )
         throw Error(
-          `Unable to load RFC (RFC data failed validation). See console for more.`
+          `Unable to load RFC (RFC data failed validation). See console for more. ${JSON.stringify(error)}`
         )
       }
       return data

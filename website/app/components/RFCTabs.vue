@@ -234,10 +234,28 @@
               >
                 Research group
               </template>
+              <template
+                v-else-if="
+                  props.rfcBucketHtmlDocument.rfc.group?.type === 'individ'
+                "
+              >
+                Source
+              </template>
               <template v-else>Working group</template>
             </dt>
             <dd>
+              <template
+                v-if="
+                  props.rfcBucketHtmlDocument.rfc.group?.type === 'individ'
+                  // Note that `rfcBucketHtmlDocument.rfc.group.name` is plural, which is unwanted,
+                  // so that's why it's written as singular below
+                  // also we don't want it linked, unlike other groups
+                "
+              >
+                Individual Submission
+              </template>
               <Anchor
+                v-else
                 :href="
                   workingGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.group)
                 "
@@ -355,7 +373,9 @@
                 >
                   <a
                     :href="
-                      // This needs to be <a> not <Anchor> because it's outside the Nuxt app but is on the same domain
+                      // This needs to be <a> not <Anchor> because it's outside the Nuxt app
+                      // (served direct from blob storage) but is on the same domain
+                      // so we can't SPA navigate to it
                       rfcFormatPathBuilder(
                         `rfc${props.rfcBucketHtmlDocument.rfc.number}`,
                         formatItem.format
@@ -363,7 +383,7 @@
                     "
                     :class="ANCHOR_TAILWIND_STYLE"
                   >
-                    {{ formatItem.format }}
+                    {{ formatItem.format.toUpperCase() }}
                   </a>
                   <template
                     v-if="
