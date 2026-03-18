@@ -362,7 +362,14 @@
           </template>
 
           <template v-if="props.rfcBucketHtmlDocument.rfc.formats?.length > 0">
-            <dt class="font-bold mt-2">Formats</dt>
+            <dt class="font-bold mt-2">
+              <template
+                v-if="props.rfcBucketHtmlDocument.rfc.formats.length === 1"
+              >
+                Format
+              </template>
+              <template v-else> Formats </template>
+            </dt>
             <dd>
               <ul class="text-sm">
                 <li
@@ -373,7 +380,7 @@
                 >
                   <a
                     :href="
-                      // This needs to be <a> not <Anchor> because it's outside the Nuxt app
+                      // This needs to be <a> not <Anchor> because the path is outside the Nuxt app
                       // (served direct from blob storage) but is on the same domain
                       // so we can't SPA navigate to it
                       rfcFormatPathBuilder(
