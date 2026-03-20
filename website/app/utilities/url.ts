@@ -397,7 +397,7 @@ export const workingGroupUrlBuilder = (workingGroup: RfcCommon['group']) => {
 }
 
 export const errataUrlBuilder = (errataId: string) => {
-  return `${ERRATA_URL_ORIGIN}/${errataId}/` as const
+  return `${ERRATA_URL_ORIGIN}/${errataId}/` as const // FIXME: it's likely that this URL is wrong. The errataId is a string that looks like "1234", not "EID1234". Fix before launch.
 }
 
 export const areaGroupUrlBuilder = (area: RfcCommon['area']) => {
