@@ -30,17 +30,14 @@
         </SelectNeue>
       </label>
       <ul
-        v-if="filteredErrataList.length > 0"
+        v-if="filteredErrataList && filteredErrataList.length > 0"
         class="mt-3 mr-2 flex flex-col gap-2"
       >
         <li
-          v-for="(errataItem, errataIndex) in filteredErrataList"
-          :key="errataItem.errata_id"
+          v-for="errataItemForTab in filteredErrataList"
+          :key="errataItemForTab.errata_id"
         >
-          <ErrataListItem
-            :errata-item="errataItem"
-            :errata-index="errataIndex"
-          />
+          <ErrataListItem :errata-item-for-tab="errataItemForTab" />
         </li>
       </ul>
       <p v-else class="text-sm italic mt-3">
@@ -55,10 +52,14 @@
 import { countBy } from 'es-toolkit'
 import { isSelectElement } from '~/utilities/dom'
 import {
+  errataItemToErrataItemForTab,
+  sortErrataItemForTab,
+  type ErrataItemForTab
+} from '~/utilities/errata'
+import {
   ErrataStatusSchema,
   type ErrataStatus,
-  type ErrataList,
-  type ErrataItem
+  type ErrataList
 } from '~/utilities/rfc-validators'
 
 type Props = {
@@ -97,11 +98,65 @@ const selectedStatusType = ref(
   : (allStatusTypes.value[0] as ErrataStatus)
 )
 
-const filteredErrataList = computed<ErrataItem[]>(() => {
-  return (
-    props.errataList?.filter(
-      (errataItem) => errataItem.errata_status_code === selectedStatusType.value
-    ) ?? []
+const errataItemsForTab = ref<ErrataItemForTab[] | undefined>(
+  props.errataList?.map(errataItemToErrataItemForTab)
+)
+
+const orderedErrataItemsForTab = ref(errataItemsForTab.value)
+
+const filteredErrataList = computed(() => {
+  return orderedErrataItemsForTab.value?.filter(
+    (errataItem) => errataItem.errata_status_code === selectedStatusType.value
   )
+})
+
+onMounted(() => {
+  if (!errataItemsForTab.value) {
+    return
+  }
+
+  orderedErrataItemsForTab.value = errataItemsForTab.value
+    .map((errataItemForTab) => {
+      if (!errataItemForTab.domId) {
+        return errataItemForTab
+      }
+
+      try {
+        // because we derive domId from `section` it's quite possible that domId
+        // has invalid syntax for a DOM id (it might have whitespace), and
+        // getElementById() might throw
+        const target = document.getElementById(errataItemForTab.domId)
+        if (target) {
+          // then it's a valid domId with a target so keep the domId
+          // and add the element
+          return {
+            ...errataItemForTab,
+            domTarget: target
+          }
+        } else {
+          console.warn(
+            "Couldn't find errata domId of ",
+            errataItemForTab.domId,
+            '. This is expected for some `section` values and this error can be ignored. Original `section` was ',
+            errataItemForTab.section
+          )
+        }
+      } catch (e) {
+        console.warn(
+          `Unable to getElementById(${errataItemForTab.domId}). This is probably an invalid DOM id.`,
+          'This is expected for some `section` values and can be ignored. Original `section` was ',
+          errataItemForTab.section,
+          e
+        )
+      }
+
+      // then it's not valid DOM Id syntax or the target wasn't found,
+      // so remove the domId
+      return {
+        ...errataItemForTab,
+        domId: undefined
+      }
+    })
+    .sort(sortErrataItemForTab)
 })
 </script>
