@@ -43,7 +43,7 @@
           ]"
           :value="2"
         >
-          Erratum
+          Errata
           <DiamondText
             v-if="
               props.rfcBucketHtmlDocument.errataList &&
