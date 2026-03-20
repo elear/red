@@ -73,9 +73,14 @@ export const sortErrataItemForTab = (
   // anywhere in the RFC.
   //
   // Because of this our sorting strategy is to look for DOM elements and sort
-  // by DOM position, and then fallback to extracting numbers in the string.
+  // by DOM position, and then fallback to extracting numbers in the string,
+  // and then errata id.
   //
-  // If the domId is undefined it's sorted to the end.
+  // If the domId is undefined then it's sorted to the end.
+
+  const errataIdSort =
+    parseFloat(a.errata_id.replace(/[^0-9]/g, '')) -
+    parseFloat(b.errata_id.replace(/[^0-9]/g, ''))
 
   if (a.domId && b.domId) {
     if (!a.domTarget || !b.domTarget) {
@@ -105,13 +110,16 @@ export const sortErrataItemForTab = (
       ) {
         return -1
       } else if (order === 0) {
-        return 0
+        return errataIdSort
       }
     }
 
     if (a.domId.startsWith('section') && b.domId.startsWith('section')) {
-      const domIdSort = sortSectionIds(a.domId, b.domId)
-      console.log('Sorting by domId', domIdSort)
+      const sectionIdSort = sortSectionIds(a.domId, b.domId)
+      if (sectionIdSort === 0) {
+        return errataIdSort
+      }
+      return sectionIdSort
     }
 
     if (a.domId.startsWith('section')) {
@@ -131,7 +139,7 @@ export const sortErrataItemForTab = (
     return 1
   }
 
-  return 0
+  return errataIdSort
 }
 
 export const sortSectionIds = (a: string, b: string): number => {
