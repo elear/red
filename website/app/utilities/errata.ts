@@ -17,7 +17,7 @@ export const errataItemToErrataItemForTab = (
     // domIds that don't exist.
     domId = section
       .trim()
-      // rfc3261 has errataItem.section value of 'In Section 25.1: '
+      // eg RFC3261 has errataItem.section value of 'In Section 25.1: '
       .replace(/^in section/i, '')
       .replace(/^section/i, '')
       .trim()
@@ -25,7 +25,7 @@ export const errataItemToErrataItemForTab = (
       .trim()
   }
 
-  let label: ErrataItemForTab['label'] = `${errataItem.errata_id}`
+  let label: ErrataItemForTab['label'] = `EID ${errataItem.errata_id}`
 
   if (domId) {
     label = domId
