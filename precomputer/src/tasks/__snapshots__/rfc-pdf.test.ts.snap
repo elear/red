@@ -694,23 +694,7 @@ emp ir i ca ll y de t e rm in e a v ali d se t o f par ame t e r s i s in t o l 
         "titlepage_name": "Donald Eastlake",
       },
     ],
-    "formats": [
-      {
-        "format": "txt",
-      },
-      {
-        "format": "html",
-      },
-      {
-        "format": "xml",
-      },
-      {
-        "format": "pdf",
-      },
-      {
-        "format": "json",
-      },
-    ],
+    "formats": [],
     "group": {
       "acronym": "art",
       "name": "Applications and Real-Time Area",
@@ -722,9 +706,7 @@ emp ir i ca ll y de t e rm in e a v ali d se t o f par ame t e r s i s in t o l 
         "value": "10.17487/RFC9804",
       },
     ],
-    "keywords": [
-      "keyword",
-    ],
+    "keywords": [],
     "number": 9804,
     "obsoleted_by": [],
     "obsoletes": [],

@@ -25,23 +25,7 @@ exports[`homepage latest RFCs 1`] = `
           "titlepage_name": "Donald Eastlake",
         },
       ],
-      "formats": [
-        {
-          "format": "txt",
-        },
-        {
-          "format": "html",
-        },
-        {
-          "format": "xml",
-        },
-        {
-          "format": "pdf",
-        },
-        {
-          "format": "json",
-        },
-      ],
+      "formats": [],
       "group": {
         "acronym": "art",
         "name": "Applications and Real-Time Area",
@@ -53,9 +37,7 @@ exports[`homepage latest RFCs 1`] = `
           "value": "10.17487/RFC9804",
         },
       ],
-      "keywords": [
-        "keyword",
-      ],
+      "keywords": [],
       "number": 9804,
       "obsoleted_by": [],
       "obsoletes": [],
@@ -90,23 +72,7 @@ exports[`homepage latest RFCs 1`] = `
           "titlepage_name": "Spencer Dawkins",
         },
       ],
-      "formats": [
-        {
-          "format": "txt",
-        },
-        {
-          "format": "html",
-        },
-        {
-          "format": "xml",
-        },
-        {
-          "format": "pdf",
-        },
-        {
-          "format": "json",
-        },
-      ],
+      "formats": [],
       "group": {
         "acronym": "panrg",
         "name": "Path Aware Networking RG",
@@ -118,9 +84,7 @@ exports[`homepage latest RFCs 1`] = `
           "value": "10.17487/RFC9049",
         },
       ],
-      "keywords": [
-        "keyword",
-      ],
+      "keywords": [],
       "number": 9049,
       "obsoleted_by": [],
       "obsoletes": [],
@@ -190,23 +154,7 @@ exports[`homepage latest RFCs 1`] = `
           "titlepage_name": "Pasi Eronen",
         },
       ],
-      "formats": [
-        {
-          "format": "txt",
-        },
-        {
-          "format": "html",
-        },
-        {
-          "format": "xml",
-        },
-        {
-          "format": "pdf",
-        },
-        {
-          "format": "json",
-        },
-      ],
+      "formats": [],
       "group": {
         "acronym": "emu",
         "name": "EAP Method Update",
@@ -218,9 +166,7 @@ exports[`homepage latest RFCs 1`] = `
           "value": "10.17487/RFC9048",
         },
       ],
-      "keywords": [
-        "keyword",
-      ],
+      "keywords": [],
       "number": 9048,
       "obsoleted_by": [],
       "obsoletes": [],

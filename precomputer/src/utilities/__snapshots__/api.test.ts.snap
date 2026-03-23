@@ -185,7 +185,5 @@ exports[`sortSubseriesCommon 1`] = `
   "std94",
   "std100",
   "std101",
-  "std102",
-  "std103",
 ]
 `;
