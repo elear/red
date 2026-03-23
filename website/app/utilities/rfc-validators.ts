@@ -331,9 +331,6 @@ export const ErrataItemSchema = z.object({
   correct_text: z.string().nullable(), // eg "   S: 220 smtp.example.com ESMTP Server",
   notes: z.string().nullable(), // "There are 3 instances of this (one on p. 7 and two on p. 8). \n",
   submit_date: z.string(), // eg "2007-07-19",
-  submitter_name: z.string().nullable(), // eg "Rob Siemborski",
-  verifier_id: z.string(), // eg "99",
-  verifier_name: z.string().nullable(),
   update_date: z.string().nullable() // eg "2019-09-10 09:09:03"
 })
 
