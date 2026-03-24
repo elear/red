@@ -130,25 +130,24 @@ export const searchPathBuilder = (
   searchParams: Partial<SearchPathBuilderProps>
 ): `${typeof SEARCH_PATH}${string}` => {
   const hasParams = Object.values(searchParams).join('').trim().length > 0
-  return `${SEARCH_PATH}${hasParams ? '?' : ''}${
-    hasParams ?
-      Object.keys(searchParams)
-        .sort() // normalize order
-        .map((searchKey) => {
-          const typesenseSearchKey = searchKey
-          const searchValue =
-            searchParams[searchKey as keyof SearchPathBuilderProps]
+  return `${SEARCH_PATH}${hasParams ? '?' : ''}${hasParams ?
+    Object.keys(searchParams)
+      .sort() // normalize order
+      .map((searchKey) => {
+        const typesenseSearchKey = searchKey
+        const searchValue =
+          searchParams[searchKey as keyof SearchPathBuilderProps]
 
-          return searchValue ?
-              `${encodeURIComponent(typesenseSearchKey)}=${typeSenseEncodeUriComponent(
-                Array.isArray(searchValue) ? searchValue.join(',') : searchValue
-              )}`
-            : ''
-        })
-        .filter(Boolean)
-        .join('&')
+        return searchValue ?
+          `${encodeURIComponent(typesenseSearchKey)}=${typeSenseEncodeUriComponent(
+            Array.isArray(searchValue) ? searchValue.join(',') : searchValue
+          )}`
+          : ''
+      })
+      .filter(Boolean)
+      .join('&')
     : ''
-  }`
+    }`
 }
 
 export const refsRefTxtPathBuilder = (rfcId: string) => {
@@ -396,8 +395,10 @@ export const workingGroupUrlBuilder = (workingGroup: RfcCommon['group']) => {
   return `${DATATRACKER_URL_ORIGIN}/wg/${workingGroup.acronym}/about/` as const
 }
 
-export const errataUrlBuilder = (errataId: string) => {
-  return `${ERRATA_URL_ORIGIN}/${errataId}/` as const // FIXME: it's likely that this URL is wrong. The errataId is a string that looks like "1234", not "EID1234". Fix before launch.
+export const errataUrlBuilder = (errataId: string
+  // errataId looks like '1234' (not 'eid1234') so we'll need to add the 'eid' prefix
+) => {
+  return `${ERRATA_URL_ORIGIN}/eid${errataId}/` as const
 }
 
 export const areaGroupUrlBuilder = (area: RfcCommon['area']) => {
