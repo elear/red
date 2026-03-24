@@ -25,7 +25,7 @@ test('sortSectionIds: complex', () => {
 })
 
 // TODO... support generating links to as many of these 'section's as reasonably possible
-const rfcSections = [
+const _rfcSections = [
   ["RFC Number\n(Errata ID)", "Section"],
   ["RFC0005 (582)", "-"],
   ["RFC0005 (5296)", "GLOBAL"],
@@ -3677,4 +3677,4 @@ const rfcSections = [
   ["RFC9881 (8700)", "Appendix A"],
   ["RFC9883 (8687)", "3"],
   ["RFC9915 (8821)", "18.2.7"],
-];
+]
