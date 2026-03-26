@@ -94,6 +94,9 @@ const getMime = (url: string) => {
 type MetaTag = {
   property: string
   content: string
+} | {
+  name: string
+  content: string
 }
 
 const buildOpenGraphMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
@@ -180,30 +183,30 @@ const buildTwitterMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
   const linkPreviewImage = linkPreviewImageBuilder('twitter')
   const metaTags: MetaTag[] = [
     {
-      property: 'twitter:title',
+      name: 'twitter:title',
       content: props.title
     },
     {
-      property: 'twitter:image',
+      name: 'twitter:image',
       content: linkPreviewImage.url
     },
     {
-      property: 'twitter:image:alt',
+      name: 'twitter:image:alt',
       content: IMAGE_PREVIEW_ALT_TEXT
     },
     {
-      property: 'twitter:image:width',
+      name: 'twitter:image:width',
       content: linkPreviewImage.widthHeight[0]?.toString() ?? '1024'
     },
     {
-      property: 'twitter:image:height',
+      name: 'twitter:image:height',
       content: linkPreviewImage.widthHeight[1]?.toString() ?? '1024'
     }
   ]
 
   if (props.description) {
     metaTags.push({
-      property: 'twitter:description',
+      name: 'twitter:description',
       content: props.description
     })
   }
@@ -214,7 +217,7 @@ const buildTwitterMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
 const buildGenericMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
   const metaTags: MetaTag[] = [
     {
-      property: 'generator',
+      name: 'generator',
       content: 'Nuxt'
     }
   ]
@@ -222,7 +225,7 @@ const buildGenericMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
   if (props.authors) {
     props.authors.forEach(author => {
       metaTags.push({
-        property: 'author',
+        name: 'author',
         content: author
       })
     })
@@ -230,7 +233,7 @@ const buildGenericMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
 
   if (props.description) {
     metaTags.push({
-      property: 'description',
+      name: 'description',
       content: props.description
     })
   }
@@ -239,7 +242,7 @@ const buildGenericMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
   if (props.keywords) {
     props.keywords.forEach(keyword => {
       metaTags.push({
-        property: 'keyword',
+        name: 'keyword',
         content: keyword
       })
     })
@@ -252,7 +255,7 @@ const buildResourceTimestamps = (props: UseRfcEditorProps): MetaTag[] => {
   return (
     props.resourceTimestamps?.map((resourceTimestamp): MetaTag => {
       return {
-        property: `resource-timestamp:${resourceTimestamp.name}`,
+        name: `resource-timestamp:${resourceTimestamp.name}`,
         content: resourceTimestamp.timestamp.toISO() ?? '(null)'
       }
     }) ?? []
@@ -299,46 +302,46 @@ const buildGoogleScholarMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
 
   googleScholarMetadata.citation_author.forEach(author => {
     metaTags.push({
-      property: 'citation_author',
+      name: 'citation_author',
       content: author
     })
   })
 
   if (googleScholarMetadata.citation_doi) {
     metaTags.push({
-      property: 'citation_doi',
+      name: 'citation_doi',
       content: googleScholarMetadata.citation_doi
     })
   }
 
   if (googleScholarMetadata.citation_issn) {
     metaTags.push({
-      property: 'citation_issn',
+      name: 'citation_issn',
       content: googleScholarMetadata.citation_issn
     })
   }
 
   if (googleScholarMetadata.citation_pdf_url) {
     metaTags.push({
-      property: 'citation_pdf_url',
+      name: 'citation_pdf_url',
       content: googleScholarMetadata.citation_pdf_url
     })
   }
 
   if (googleScholarMetadata.citation_publication_date) {
     metaTags.push({
-      property: 'citation_publication_date',
+      name: 'citation_publication_date',
       content: googleScholarMetadata.citation_publication_date
     })
   }
 
   metaTags.push({
-    property: 'citation_technical_report_number',
+    name: 'citation_technical_report_number',
     content: googleScholarMetadata.citation_technical_report_number
   })
 
   metaTags.push({
-    property: 'citation_title',
+    name: 'citation_title',
     content: googleScholarMetadata.citation_title
   })
 
