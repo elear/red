@@ -395,7 +395,7 @@ export const rfcCommonToGoogleScholar = (rfc: RfcCommon): GoogleScholarMetadata 
 /**
  * useHead requires a `key` per meta tag or it will deduplicate
  * based on name/property.
- * See https://github.com/nuxt/nuxt/discussions/32212 * 
+ * See https://github.com/nuxt/nuxt/discussions/32212
  */
 const allowDuplicateNames = (metaTag: MetaTag): MetaTag => {
   return {
