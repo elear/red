@@ -47,7 +47,7 @@ export const useRfcEditorHead = (props: UseRfcEditorProps) => {
       ...buildTwitterMetaTags(newProps),
       ...buildResourceTimestamps(newProps),
       ...buildGoogleScholarMetaTags(newProps)
-    ],
+    ].map(allowDuplicateNames),
     link: [
       { rel: 'canonical', href: props.canonicalUrl },
       ...buildFaviconLinks()
@@ -92,11 +92,10 @@ const getMime = (url: string) => {
 }
 
 type MetaTag = {
-  property: string
+  name?: string
+  property?: string
   content: string
-} | {
-  name: string
-  content: string
+  key?: string
 }
 
 const buildOpenGraphMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
@@ -390,5 +389,17 @@ export const rfcCommonToGoogleScholar = (rfc: RfcCommon): GoogleScholarMetadata 
     citation_issn: identifierIssn?.value,
     citation_technical_report_number: `rfc${rfc.number}`,
     citation_pdf_url,
+  }
+}
+
+/**
+ * useHead requires a `key` per meta tag or it will deduplicate
+ * based on name/property.
+ * See https://github.com/nuxt/nuxt/discussions/32212 * 
+ */
+const allowDuplicateNames = (metaTag: MetaTag): MetaTag => {
+  return {
+    ...metaTag,
+    key: `${metaTag.name ?? ''}${metaTag.property ?? ''}${metaTag.content}`
   }
 }
