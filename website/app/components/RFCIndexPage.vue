@@ -1,7 +1,10 @@
 <template>
   <div>
     <SectionHeader>
-      <Heading level="1" class="w-full mt-0 mb-4 pl-5 md:p-0 text-balance">
+      <Heading
+        level="1"
+        class="w-full mt-0 mb-4 pl-5 md:p-0 text-balance"
+      >
         RFC Index
       </Heading>
       <p class="leading-6 mb-2 pl-5 md:p-0 md:w-1/2">
@@ -13,12 +16,20 @@
         This file contains entries for all RFCs in numeric order.
         RFC entries appear in this format:
       </p>
-      <RFCIndexTable :rfc-rows="exampleRfcInformations" is-example />
+      <RFCIndexTable
+        :rfc-rows="exampleRfcInformations"
+        is-example
+      />
 
       <p>For example:</p>
       <RFCIndexTable :rfc-rows="exampleRfcInformations" />
 
-      <Heading level="2" class="mt-4 mb-2">Key to Entries</Heading>
+      <Heading
+        level="2"
+        class="mt-4 mb-2"
+      >
+        Key to Entries
+      </Heading>
       <ul class="list-disc ml-6">
         <li>#### is the RFC number.</li>
         <li>
@@ -59,16 +70,29 @@
         <li>The DOI field gives the Digital Object Identifier.</li>
       </ul>
       <p>
-        See the <Anchor :href="PUBLIC_SITE_URL_ORIGIN">RFC Editor Web page</Anchor> for more
+        See the <Anchor :href="HOME_PATH">RFC Editor Web page</Anchor> for more
         information.
       </p>
-      <Alert v-if="rfcMiniIndexError" variant="warning" level="1" heading="Error loading RFCs">
+      <Alert
+        v-if="rfcMiniIndexError"
+        variant="warning"
+        level="1"
+        heading="Error loading RFCs"
+      >
         {{ rfcMiniIndexError }}
       </Alert>
-      <Heading v-if="rfcRows.length > 0" level="2" style-level="1" class="mt-6 mb-3">
+      <Heading
+        v-if="rfcRows.length > 0"
+        level="2"
+        style-level="1"
+        class="mt-6 mb-3"
+      >
         RFC Index
       </Heading>
-      <RFCIndexTable v-if="rfcRows" :rfc-rows="rfcRows" />
+      <RFCIndexTable
+        v-if="rfcRows"
+        :rfc-rows="rfcRows"
+      />
     </div>
   </div>
 </template>
@@ -77,7 +101,7 @@
 import { DateTime } from 'luxon'
 import { rfcToRfcIndexRow } from '~/utilities/rfc-index-html'
 import { RfcMiniIndexSchema } from '~/utilities/rfc-validators'
-import { API_RFC_MINI_INDEX_PATH, PUBLIC_SITE_URL_ORIGIN, infoSeriesPathBuilder } from '~/utilities/url'
+import { API_RFC_MINI_INDEX_PATH, HOME_PATH, infoSeriesPathBuilder } from '~/utilities/url'
 
 useSeoMeta({
   title: 'RFC Index'

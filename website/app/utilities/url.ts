@@ -43,11 +43,11 @@ export type ValidHrefs =
   | ReturnType<typeof dashboardPathBuilder>
   | ReturnType<typeof apiRfcBucketDocumentPathBuilder>
 
-const isDevEnvironment = Boolean(!process.env.NUXT_PUBLIC_SITE_BASE)
+const isDevEnvironment = process.env.NUXT_PUBLIC_SITE_BASE === undefined
 
 const getEnvOrFallback = <FallbackConst extends string>(env: string | undefined, fallback: FallbackConst): FallbackConst => {
   if (!isDevEnvironment) {
-    // Require env vars on any deployed environment, just not for local dev
+    // Require env vars on any non-dev environment
     assertIsString(env)
   }
   return (env ?? fallback) as FallbackConst // for TS purposes we'll type the response as the fallback
@@ -56,11 +56,9 @@ const getEnvOrFallback = <FallbackConst extends string>(env: string | undefined,
 // url origin ie the part of a URL containing the protocol and hostname (but not the path, search, or hash)
 // per https://developer.mozilla.org/en-US/docs/Web/API/URL/origin
 // so don't have a trailing slash there's no path
-export const THIS_SITE_URL_ORIGIN = getEnvOrFallback(process.env.NUXT_PUBLIC_SITE_BASE, 'http://localhost:3000')
 export const PUBLIC_SITE_URL_ORIGIN = getEnvOrFallback(process.env.NUXT_PUBLIC_SITE_BASE, 'https://www.rfc-editor.org')
 export const ERRATA_URL_ORIGIN = getEnvOrFallback(process.env.NUXT_PUBLIC_ERRATA_BASE, 'https://errata.rfc-editor.org')
 export const QUEUE_URL_ORIGIN = getEnvOrFallback(process.env.NUXT_PUBLIC_QUEUE_BASE, 'https://queue.rfc-editor.org')
-
 export const DATATRACKER_URL_ORIGIN = getEnvOrFallback(process.env.NUXT_PUBLIC_DATATRACKER_BASE, 'https://datatracker.ietf.org')
 export const MATERIALS_URL_ORIGIN = getEnvOrFallback(process.env.NUXT_PUBLIC_MATERIALS_BASE, 'https://materials.rfc-editor.org')
 export const IAD_URL_ORIGIN = getEnvOrFallback(process.env.NUXT_PUBLIC_IAD_BASE, 'https://iad.rfc-editor.org')
