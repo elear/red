@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { fetchSourceRfcHtml, rfcBucketHtmlToRfcDocument, getRfcHtmlMetaScreenshot as getRfcHtmlMetaThumbnail } from './rfc-html.ts'
-import { fetchRfcPDF, rfcBucketPdfToRfcDocument, getRfcPdfMetaScreenshot as getRfcPdfMetaThumbnail } from './rfc-pdf.ts'
+import { fetchRfcPDF, rfcBucketPdfToRfcDocument } from './rfc-pdf.ts'
 import {
   rfcHtmlJsonPathBuilder,
   rfcJsonPathBuilder,
@@ -103,11 +103,17 @@ type RfcMetaScreenshotProps = {
   fetchRfcPDF: typeof fetchRfcPDF
 }
 
-export const getRfcMetaThumbnail = async ({ rfcNumber, getRfcCommon, fetchRfcPDF }: RfcMetaScreenshotProps): Promise<Buffer | undefined> => {
-  const pdfScreenshot = await getRfcPdfMetaThumbnail(rfcNumber, fetchRfcPDF)
-  if (pdfScreenshot) {
-    return pdfScreenshot
-  }
+export const getRfcMetaThumbnail = async ({ rfcNumber, getRfcCommon }: RfcMetaScreenshotProps): Promise<Buffer | undefined> => {
+  // Don't use PDF for thumbnails. It's too inconsistant and
+  // is usually illegible when thumbnail is shrunk to fit a
+  // social media card. Instead use HTML version which has
+  // very large text for this purpose.
+  //
+  // const pdfScreenshot = await getRfcPdfMetaThumbnail(rfcNumber, fetchRfcPDF)
+  // if (pdfScreenshot) {
+  //   return pdfScreenshot
+  // }
+
   const htmlScreenshot = await getRfcHtmlMetaThumbnail(rfcNumber, getRfcCommon)
   if (htmlScreenshot) {
     return htmlScreenshot

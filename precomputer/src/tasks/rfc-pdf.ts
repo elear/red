@@ -59,7 +59,7 @@ export const rfcBucketPdfToRfcDocument = async (
 
   console.log(`[RFC ${rfcNumber}] Found rfc${rfcNumber}.pdf`)
 
-  await gc() // attempt to free memory after fetch()
+  await gc()
 
   const domParser = await getDOMParser()
   const dom = domParser.parseFromString(BLANK_HTML, 'text/html')
@@ -86,7 +86,7 @@ export const rfcBucketPdfToRfcDocument = async (
   ) {
     const fileName = rfcImageFileNameBuilder(rfcNumber, pageNumber)
 
-    await gc() // attempt to free bytes from fork
+    await gc() // attempt to free memory from fork in unpdf-parent/child
     const screenshot = await takeScreenshotOfPage({
       base64Pdf,
       pageNumber,
@@ -164,13 +164,22 @@ export const rfcBucketPdfToRfcDocument = async (
 }
 
 export const getRfcPdfMetaScreenshot = async (rfcNumber: number, getRfcPDF: typeof fetchRfcPDF): Promise<Buffer | undefined> => {
+  // Don't use PDF for thumbnails. It's too inconsistant and
+  // is usually illegible when thumbnail is shrunk to fit a
+  // social media card. Instead use HTML version which has
+  // very large text for this purpose.
+
+  // this code may be deleted and is currently (2026) here
+  // if we decide to use use PDFs despite their faults, or
+  // perhaps as part of a screenshot in a thumbnail etc
+
   const base64Pdf = await getRfcPDF(rfcNumber)
 
   if (base64Pdf === null) {
     return undefined
   }
 
-  await gc() // attempt to free memory after fetch()
+  await gc()
 
   const result = await getMetaScreenshotOfPage({
     base64Pdf,
