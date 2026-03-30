@@ -1,5 +1,5 @@
 name: Deploy Worker
-run-name: ${{ inputs.deploy == 'Staging Only' && '[Staging]' || '[Staging + Production]' }} Deployment ${{ github.run_number }} of branch ${{ github.ref_name }} by @${{ github.actor }}
+run-name: ${{ inputs.deploy == 'Staging Only' && '[Staging]' || '[Staging + Production]' }} Worker deployment ${{ github.run_number }} of branch ${{ github.ref_name }} by @${{ github.actor }}
 
 on:
   workflow_dispatch:
