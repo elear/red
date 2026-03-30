@@ -28,7 +28,7 @@ export async function blobs(request, env) {
     const objectPath = normalizedPath.substring(RFC_PREFIX.length)
 
     // -> Fetch R2 object
-    if (['.html', '.json', '.pdf', '.txt', '.pdf'].some(ft => objectPath.endsWith(ft))) {
+    if (['.html', '.json', '.pdf', '.txt', '.xml'].some(ft => objectPath.endsWith(ft))) {
       const fileType = objectPath.split('.').at(-1)
       const object = await env.RFC_BUCKET.get(`${fileType}/${objectPath}`)
       if (object) {
