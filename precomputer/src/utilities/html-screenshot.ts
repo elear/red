@@ -63,11 +63,12 @@ export const renderHtmlToImage = async (htmlString: string, dimensions: Dimensio
       ],
     }
   }
+
   const svgString = await satori(
     html(htmlString),
     cacheOfSatoriOptions[cacheKey],
   )
-  console.log("Generated SVG of ", svgString.substring(0, 100), '...')
+
   try {
     const result = await sharp(Buffer.from(svgString))
       .withMetadata({ density: 300 })
