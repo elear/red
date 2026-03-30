@@ -167,9 +167,10 @@ useRfcEditorHead({
   description: rfcBucketHtmlDocument.value?.rfc.abstract ?? '',
   modifiedDateTime:
     rfcBucketHtmlDocument.value?.rfc.published ?
-      DateTime.fromISO(rfcBucketHtmlDocument.value?.rfc.published)
+      DateTime.fromISO(rfcBucketHtmlDocument.value.rfc.published)
       : undefined,
   contentType: 'article',
+  customThumbnail: rfcBucketHtmlDocument.value ? `rfc${rfcBucketHtmlDocument.value.rfc.number}.png` : undefined,
   resourceTimestamps:
     resourceTimestampDatetime ?
       [

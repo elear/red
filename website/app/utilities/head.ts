@@ -28,6 +28,7 @@ type UseRfcEditorProps = {
    */
   contentType: 'website' | 'article'
   authors?: string[]
+  customThumbnail?: string,
   modifiedDateTime?: DateTime
   publishedDateTime?: DateTime
   keywords?: string[]
@@ -44,7 +45,7 @@ export const useRfcEditorHead = (props: UseRfcEditorProps) => {
     meta: [
       ...buildGenericMetaTags(newProps),
       ...buildOpenGraphMetaTags(newProps),
-      ...buildTwitterMetaTags(newProps),
+         // ...buildTwitterMetaTags(newProps),
       ...buildResourceTimestamps(newProps),
       ...buildGoogleScholarMetaTags(newProps)
     ].map(allowDuplicateNames),
