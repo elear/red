@@ -1,5 +1,10 @@
+import path from 'path'
+import fsPromises from 'fs/promises'
 import sanitizeHtml from 'sanitize-html'
 import { DateTime } from 'luxon'
+import { createSSRApp } from 'vue'
+import { renderToString } from 'vue/server-renderer'
+import { parse, type SFCDescriptor } from '@vue/compiler-sfc'
 import {
   getDOMParser,
   getParentElementNodeNames,
@@ -31,8 +36,11 @@ import {
 } from './rfc-html-xml2rfc.ts'
 import { chunkString, getAllIndexes } from '../utilities/string.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
-import { getFromS3 } from '../utilities/s3.ts'
+import { getFromS3, rfcBucketHtmlPathBuilder } from '../utilities/s3.ts'
 import { redactRfc } from './rfc.ts'
+import { renderHtmlToImage } from '../utilities/html-screenshot.ts'
+import { OPENGRAPH_IMAGE_DIMENSIONS } from '../utilities/html.ts'
+import { getRfcCommonCached } from '../utilities/api.ts'
 
 export const rfcBucketHtmlToRfcDocument = async (
   rfcBucketHtml: string,
@@ -108,7 +116,7 @@ export const fetchSourceRfcHtml = async (
   rfcNumber: number,
   getRfcHtml: typeof getFromS3
 ): Promise<string | null> => {
-  const key = `html/rfc${rfcNumber}.html`
+  const key = rfcBucketHtmlPathBuilder(rfcNumber)
   const dirtyHtml = await getRfcHtml('S3_RFC_BUCKET', key)
   if (!dirtyHtml) {
     console.warn(
@@ -120,7 +128,7 @@ export const fetchSourceRfcHtml = async (
   const dirtyHtmlString =
     dirtyHtml instanceof Uint8Array ?
       new TextDecoder().decode(dirtyHtml)
-    : dirtyHtml
+      : dirtyHtml
 
   // Sanitise HTML before returning it
 
@@ -181,7 +189,7 @@ export const fetchSourceRfcHtml = async (
       'pattern',
       'solidColor',
       'linearGradient',
-      'radialGradient'
+      'radialGradient',
     ]),
     allowedAttributes: {
       '*': ['id', 'class', 'style', 'dir'],
@@ -336,9 +344,9 @@ const convertHrefs = (
     const isInvalidUrl = (error: unknown): boolean => {
       return Boolean(
         error &&
-          typeof error === 'object' &&
-          'code' in error &&
-          error.code === 'ERR_INVALID_URL'
+        typeof error === 'object' &&
+        'code' in error &&
+        error.code === 'ERR_INVALID_URL'
       )
     }
 
@@ -500,9 +508,8 @@ export const ensureWordBreaks = (rfcDocument: Node[]): void => {
                 // because after splitting on words
                 // there will be a lot of contiguous
                 // text nodes
-                lastNode.textContent = `${
-                  lastNode.textContent ?? ''
-                }${textContent}`
+                lastNode.textContent = `${lastNode.textContent ?? ''
+                  }${textContent}`
               } else {
                 acc.push(node)
               }
@@ -521,4 +528,33 @@ export const ensureWordBreaks = (rfcDocument: Node[]): void => {
   }
 
   rfcDocument.forEach(walk)
+}
+
+
+const rfcMetaScreenshotTemplatePath = path.resolve(import.meta.dirname, '..', 'utilities', 'rfc-meta-screenshot.vue')
+
+const rfcMetaScreenshotTemplate = fsPromises.readFile(rfcMetaScreenshotTemplatePath, 'utf-8')
+
+let sfcDescriptorCache: SFCDescriptor | undefined = undefined
+
+export const getRfcHtmlMetaScreenshot = async (rfcNumber: number, getRfcCommon: typeof getRfcCommonCached): Promise<Buffer | undefined> => {
+  const rfc = await getRfcCommon(rfcNumber)
+  if (rfc) {
+    if (!sfcDescriptorCache) {
+      const templateData = await rfcMetaScreenshotTemplate
+      const { descriptor } = parse(templateData)
+      sfcDescriptorCache = descriptor
+    }
+    if (!sfcDescriptorCache || !sfcDescriptorCache.template) {
+      throw Error('Unable to load template')
+    }
+    const vueTemplate = sfcDescriptorCache.template.content
+    const app = createSSRApp({
+      data: () => ({ rfc }),
+      template: vueTemplate
+    })
+    const bodyHtml = await renderToString(app)
+    return renderHtmlToImage(bodyHtml, OPENGRAPH_IMAGE_DIMENSIONS)
+  }
+  return undefined
 }

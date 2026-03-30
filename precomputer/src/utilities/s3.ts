@@ -156,6 +156,10 @@ export const rfcImageFileNameBuilder = (
 export const rfcImagePathBuilder = (fileName: string) =>
   `rfc/${fileName}` as const
 
+export const rfcBucketHtmlPathBuilder = (rfcNumber: number) => `html/rfc${rfcNumber}.html`
+
+export const rfcMetaThumbnailPathBuilder = (rfcNumber: number) => `rfc-html/meta-thumbnail-${rfcNumber}.png` as const
+
 export const subseriesInfoPathBuilder = (
   subseriesType: SubseriesCommon['type'],
   subseriesNumber: SubseriesCommon['number']

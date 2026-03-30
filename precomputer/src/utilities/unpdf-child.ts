@@ -1,9 +1,9 @@
 import { z } from 'zod'
 import sharp from 'sharp'
 import { renderPageAsImage, extractText } from 'unpdf'
-import { PDF_WIDTH_PX } from './layout.ts'
 import { rfcImagePathBuilder, saveToS3 } from './s3.ts'
 import { compressImageToPng, isSharpImageGreyscale } from './image.ts'
+import type { ImageDimensions, ImageDimensionsOptionalHeight } from './html.ts'
 
 process.on('message', async (messageFromParent: unknown) => {
   const message = parseMessageFromParent(messageFromParent)
@@ -11,52 +11,63 @@ process.on('message', async (messageFromParent: unknown) => {
   // console.log(' - PDF was', message.base64Data.length)
   switch (message.type) {
     case 'SCREENSHOT_PAGE':
-      const screenshotDimensions = await screenshotAndUpload(
-        message.base64Data,
+      const { screenshotDimensions, base64Png } = await screenshotPdfPage(
+        message.base64Pdf,
         message.pageNumber,
         message.fileName,
-        message.shouldUploadToS3 === true.toString()
+        message.shouldUploadToS3 === true.toString(),
+        message.dimensions,
       )
-      send({ type: 'SCREENSHOT_PAGE_DONE', screenshotDimensions })
+      send({ type: 'SCREENSHOT_PAGE_DONE', screenshotDimensions, base64Png } satisfies ScreenshotPageDone)
       break
     case 'GET_TEXT':
-      const text = await getText(message.base64Data)
+      const text = await getText(message.base64Pdf)
       send({ type: 'GET_TEXT_DONE', text })
       break
   }
 })
 
-type ImageDimensions = { widthPx: number, heightPx: number }
-
-const screenshotAndUpload = async (
+const screenshotPdfPage = async (
   base64Data: string,
   pageNumber: number,
   fileName: string,
-  shouldUploadToS3: boolean
-): Promise<ImageDimensions> => {
+  shouldUploadToS3: boolean,
+  dimensions: ImageDimensionsOptionalHeight
+): Promise<Pick<ScreenshotPageDone, 'screenshotDimensions' | 'base64Png'>> => {
   const blob = parseBase64Data(base64Data)
   // console.log('- CHILD before', blob.byteLength)
   const screenshot = await renderPageAsImage(blob, pageNumber, {
     canvasImport: () => import('@napi-rs/canvas'),
     scale: 1,
-    width: PDF_WIDTH_PX
-  })
+    width: dimensions.widthPx,
+    height: dimensions.heightPx
+  })  
   const sharpImage = sharp(screenshot)
+ 
   const metadata = await sharpImage.metadata()
+  
+  // if we can detect that it's greyscale (and most RFC PDFs are) then we can gain better compression of PNGs
   const isGreyscale = await isSharpImageGreyscale(sharpImage)
-  const png = await compressImageToPng(sharpImage, isGreyscale ? 'compress-greyscale' : 'compress')
+  const png = await compressImageToPng(
+    sharpImage,
+    isGreyscale ? 'compress-greyscale' : 'compress',
+    dimensions.widthPx,
+    dimensions.heightPx ?? metadata.height
+  )
   if (shouldUploadToS3) {
     const bucketPath = rfcImagePathBuilder(fileName)
     await saveToS3(bucketPath, png)
     // console.log(` - uploaded screenshot of page ${pageNumber} to ${bucketPath}`)
   }
-  // TODO: send back dimensions of image to parent
-  return { widthPx: metadata.width, heightPx: metadata.height }
+  const base64Png = png .toString('base64');
+  return {
+    screenshotDimensions: { widthPx: metadata.width, heightPx: metadata.height },
+    base64Png
+  }
 }
 
-const getText = async (base64Data: string) => {
-  const blob = parseBase64Data(base64Data)
-  // console.log('- CHILD before', blob.byteLength)
+const getText = async (base64Pdf: string) => {
+  const blob = parseBase64Data(base64Pdf)
   return extractText(blob, { mergePages: false })
 }
 
@@ -64,25 +75,27 @@ const ScreenshotPageSchema = z.object({
   type: z.literal('SCREENSHOT_PAGE'),
   fileName: z.string(),
   pageNumber: z.number(),
-  base64Data: z.string(),
-  shouldUploadToS3: z.string()
+  base64Pdf: z.string(),
+  shouldUploadToS3: z.string(),
+  dimensions: z.object({
+    widthPx: z.number(),
+    heightPx: z.number().optional()
+  })
 })
 
 const TextSchema = z.object({
   type: z.literal('GET_TEXT'),
-  base64Data: z.string()
+  base64Pdf: z.string()
 })
 
 const ReceiveMessageSchema = z.union([ScreenshotPageSchema, TextSchema])
+
+export type ReceiveMessage = z.infer<typeof ReceiveMessageSchema>
 
 const parseMessageFromParent = (message: unknown) => {
   const { data: parsedMessage, error } = ReceiveMessageSchema.safeParse(message)
   if (error) {
     console.error('CHILD expected valid message.', error)
-    return null
-  }
-  if (parsedMessage.base64Data.length === 0) {
-    console.error('CHILD expected PDF length but was 0')
     return null
   }
   return parsedMessage
@@ -95,9 +108,11 @@ type Text = {
   text: string[]
 }
 
+export type ScreenshotPageDone = { type: 'SCREENSHOT_PAGE_DONE', screenshotDimensions: ImageDimensions, base64Png: string }
+
 type SendMessages =
   | { type: 'READY' }
-  | { type: 'SCREENSHOT_PAGE_DONE', screenshotDimensions: ImageDimensions }
+  | ScreenshotPageDone
   | { type: 'GET_TEXT_DONE'; text: Text }
 
 const send = (msg: SendMessages) => {

@@ -1,11 +1,12 @@
 import { DateTime } from 'luxon'
-import { fetchSourceRfcHtml, rfcBucketHtmlToRfcDocument } from './rfc-html.ts'
-import { fetchRfcPDF, rfcBucketPdfToRfcDocument } from './rfc-pdf.ts'
+import { fetchSourceRfcHtml, rfcBucketHtmlToRfcDocument, getRfcHtmlMetaScreenshot as getRfcHtmlMetaThumbnail } from './rfc-html.ts'
+import { fetchRfcPDF, rfcBucketPdfToRfcDocument, getRfcPdfMetaScreenshot as getRfcPdfMetaThumbnail } from './rfc-pdf.ts'
 import {
   rfcHtmlJsonPathBuilder,
   rfcJsonPathBuilder,
   rfcCommonPathBuilder,
   rfcRefPathBuilder,
+  rfcMetaThumbnailPathBuilder,
   saveToS3,
   getFromS3
 } from '../utilities/s3.ts'
@@ -30,7 +31,8 @@ export const uploadRfcData = async (rfcNumber: number): Promise<boolean> => {
     uploadRfcHtml(rfcNumber),
     uploadRfcJson(rfcNumber),
     uploadRfcCommonJson(rfcNumber),
-    uploadRefsRef(rfcNumber)
+    uploadRefsRef(rfcNumber),
+    uploadRfcMetaThumbnail(rfcNumber)
   ])
   return result.every((didSucceed) => didSucceed)
 }
@@ -76,6 +78,40 @@ export const getRfcBucketHtmlDocument = async (
     return undefined
   }
   return rfcDocFromPdf
+}
+
+export const uploadRfcMetaThumbnail = async (rfcNumber: number): Promise<boolean> => {
+  const rfcScreenshot = await getRfcMetaThumbnail({
+    rfcNumber,
+    getRfcCommon: getRfcCommonCached,
+    getRfcHtml: getFromS3,
+    fetchRfcPDF,
+  })
+  if (!rfcScreenshot) {
+    return false
+  }
+  const rfcThumbnailPath = rfcMetaThumbnailPathBuilder(rfcNumber)
+  await saveToS3(rfcThumbnailPath, rfcScreenshot)
+  return true
+}
+
+type RfcMetaScreenshotProps = {
+  rfcNumber: number
+  getRfcCommon: typeof getRfcCommonCached
+  getRfcHtml: typeof getFromS3
+  fetchRfcPDF: typeof fetchRfcPDF
+}
+
+export const getRfcMetaThumbnail = async ({ rfcNumber, getRfcCommon, fetchRfcPDF }: RfcMetaScreenshotProps): Promise<Buffer | undefined> => {
+  const pdfScreenshot = await getRfcPdfMetaThumbnail(rfcNumber, fetchRfcPDF)
+  if (pdfScreenshot) {
+    return pdfScreenshot
+  }
+  const htmlScreenshot = await getRfcHtmlMetaThumbnail(rfcNumber, getRfcCommon)
+  if (htmlScreenshot) {
+    return htmlScreenshot
+  }  
+  return undefined
 }
 
 export const uploadRfcJson = async (rfcNumber: number): Promise<boolean> => {
@@ -143,11 +179,10 @@ export const renderRefsRef = (rfc: RfcCommon): string => {
     throw Error(`Unexpected lack of 'published' date`)
   }
 
-  return `${rfc.authors.map((author) => formatAuthor(author, 'brief'))}, "${
-    rfc.title
-  }", RFC ${rfc.number}, ${formatIdentifiers(rfc.identifiers, ' ').join(
-    ''
-  )}, ${DateTime.fromISO(published).toFormat(
-    'LLLL yyyy'
-  )}, <${PUBLIC_SITE_URL_ORIGIN}${infoRfcPathBuilder(rfc)}>.\n`
+  return `${rfc.authors.map((author) => formatAuthor(author, 'brief'))}, "${rfc.title
+    }", RFC ${rfc.number}, ${formatIdentifiers(rfc.identifiers, ' ').join(
+      ''
+    )}, ${DateTime.fromISO(published).toFormat(
+      'LLLL yyyy'
+    )}, <${PUBLIC_SITE_URL_ORIGIN}${infoRfcPathBuilder(rfc)}>.\n`
 }
