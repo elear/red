@@ -156,7 +156,7 @@ export async function blobs(request, env) {
         headers.set('Cf-R2-Served', '1')
         headers.set('Access-Control-Allow-Origin', '*')
         headers.set('Content-Encoding', 'gzip')
-        headers.set('Content-Type', 'application/json;charset=utf-8')
+        headers.set('Content-Type', 'image/png')
 
         return new Response(object.body, {
           headers
