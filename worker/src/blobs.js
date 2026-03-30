@@ -142,6 +142,29 @@ export async function blobs(request, env) {
     }
   }
 
+  const META_THUMBNAIL_PREFIX = '/api/v1/meta-thumbnail/'
+  if (normalizedPath.startsWith(META_THUMBNAIL_PREFIX)) {
+    const objectPath = normalizedPath.substring(META_THUMBNAIL_PREFIX.length)
+
+    // -> Fetch R2 object
+    if (objectPath.endsWith('.png')) {
+      const object = await env.RED_BUCKET.get(`thumbnail/${objectPath}`)
+      if (object) {
+        const headers = new Headers()
+        object.writeHttpMetadata(headers)
+        headers.set('etag', object.httpEtag)
+        headers.set('Cf-R2-Served', '1')
+        headers.set('Access-Control-Allow-Origin', '*')
+        headers.set('Content-Encoding', 'gzip')
+        headers.set('Content-Type', 'application/json;charset=utf-8')
+
+        return new Response(object.body, {
+          headers
+        })
+      }
+    }
+  }
+
   const RFC_JSON_PREFIX = '/api/v1/rfc/rfc'
   if (normalizedPath.startsWith(RFC_JSON_PREFIX)) {
     console.log("accessing", RFC_JSON_PREFIX)

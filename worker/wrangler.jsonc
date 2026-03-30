@@ -30,6 +30,7 @@
         { "pattern": "www.staging.rfc-editor.org/api/v1/rfc/*", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/api/v1/rfc-common/*", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/api/v1/info-subseries/*", "zone_name": "rfc-editor.org" },
+        { "pattern": "www.staging.rfc-editor.org/api/v1/meta-thumbnail/*", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/api/v1/homepage-latest.json", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/api/v1/rfc-mini-index.json", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/rfc-index.txt", "zone_name": "rfc-editor.org" },
