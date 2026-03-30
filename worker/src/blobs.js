@@ -28,8 +28,9 @@ export async function blobs(request, env) {
     const objectPath = normalizedPath.substring(RFC_PREFIX.length)
 
     // -> Fetch R2 object
-    if (objectPath.endsWith('.html') || objectPath.endsWith('.txt') || objectPath.endsWith('.pdf')) {
-      const object = await env.RFC_BUCKET.get(objectPath)
+    if (['.html', '.json', '.pdf', '.txt', '.pdf'].some(ft => objectPath.endsWith(ft))) {
+      const fileType = objectPath.split('.').at(-1)
+      const object = await env.RFC_BUCKET.get(`${fileType}/${objectPath}`)
       if (object) {
         const headers = new Headers()
         object.writeHttpMetadata(headers)
