@@ -345,6 +345,8 @@ export const linkPreviewImageUrlBuilder = (
   return `/link-preview-image-${widthPx}x${heightPx}.png` as const
 }
 
+export const metaThumbnailPathBuilder = (rfcId: string) => `/api/v1/meta-thumbnail/${rfcId}.png` as const
+
 /**
  * Based on the URL of the API base
  */

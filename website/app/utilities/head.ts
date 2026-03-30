@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { useHead } from 'nuxt/app'
-import { linkPreviewImageUrlBuilder, faviconPathBuilder, useRfcPdfPathBuilder } from './url'
+import { linkPreviewImageUrlBuilder, faviconPathBuilder, useRfcPdfPathBuilder, metaThumbnailPathBuilder } from './url'
 import type { imagePreviewDimensions } from '#shared/utils/meta-preview-images'
 import {
   OPENGRAPH_DIMENSIONS,
@@ -28,7 +28,7 @@ type UseRfcEditorProps = {
    */
   contentType: 'website' | 'article'
   authors?: string[]
-  customThumbnail?: string,
+  customThumbnail?: string
   modifiedDateTime?: DateTime
   publishedDateTime?: DateTime
   keywords?: string[]
@@ -67,7 +67,7 @@ const formatTitle = (title?: string) => {
   )
 }
 
-const linkPreviewImageBuilder = (mode: 'opengraph' | 'twitter') => {
+const linkPreviewImageBuilder = (mode: 'opengraph' | 'twitter', customThumbnail?: string) => {
   const dimensions: Record<typeof mode, WidthHeight> = {
     opengraph: OPENGRAPH_DIMENSIONS,
     twitter: TWITTER_DIMENSIONS
@@ -76,7 +76,7 @@ const linkPreviewImageBuilder = (mode: 'opengraph' | 'twitter') => {
   if (!widthHeight || !widthHeight[0] || !widthHeight[1]) {
     throw Error(`Cannot find dimensions from mode ${mode}, ${widthHeight}`)
   }
-  const url = linkPreviewImageUrlBuilder(widthHeight[0], widthHeight[1])
+  const url = customThumbnail ? metaThumbnailPathBuilder(customThumbnail) : linkPreviewImageUrlBuilder(widthHeight[0], widthHeight[1])
 
   return {
     url,
@@ -100,7 +100,9 @@ type MetaTag = {
 }
 
 const buildOpenGraphMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
-  const linkPreviewImage = linkPreviewImageBuilder('opengraph')
+  const { customThumbnail } = props
+  const linkPreviewImage = linkPreviewImageBuilder('opengraph', customThumbnail)
+
   const metaTags: MetaTag[] = [
     {
       property: 'og:title',
@@ -179,40 +181,40 @@ const buildOpenGraphMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
   return metaTags
 }
 
-const buildTwitterMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
-  const linkPreviewImage = linkPreviewImageBuilder('twitter')
-  const metaTags: MetaTag[] = [
-    {
-      name: 'twitter:title',
-      content: props.title
-    },
-    {
-      name: 'twitter:image',
-      content: linkPreviewImage.url
-    },
-    {
-      name: 'twitter:image:alt',
-      content: IMAGE_PREVIEW_ALT_TEXT
-    },
-    {
-      name: 'twitter:image:width',
-      content: linkPreviewImage.widthHeight[0]?.toString() ?? '1024'
-    },
-    {
-      name: 'twitter:image:height',
-      content: linkPreviewImage.widthHeight[1]?.toString() ?? '1024'
-    }
-  ]
+// const buildTwitterMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
+//   const linkPreviewImage = linkPreviewImageBuilder('twitter')
+//   const metaTags: MetaTag[] = [
+//     {
+//       name: 'twitter:title',
+//       content: props.title
+//     },
+//     {
+//       name: 'twitter:image',
+//       content: linkPreviewImage.url
+//     },
+//     {
+//       name: 'twitter:image:alt',
+//       content: IMAGE_PREVIEW_ALT_TEXT
+//     },
+//     {
+//       name: 'twitter:image:width',
+//       content: linkPreviewImage.widthHeight[0]?.toString() ?? '1024'
+//     },
+//     {
+//       name: 'twitter:image:height',
+//       content: linkPreviewImage.widthHeight[1]?.toString() ?? '1024'
+//     }
+//   ]
 
-  if (props.description) {
-    metaTags.push({
-      name: 'twitter:description',
-      content: props.description
-    })
-  }
+//   if (props.description) {
+//     metaTags.push({
+//       name: 'twitter:description',
+//       content: props.description
+//     })
+//   }
 
-  return metaTags
-}
+//   return metaTags
+// }
 
 const buildGenericMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
   const metaTags: MetaTag[] = [
