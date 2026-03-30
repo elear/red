@@ -91,7 +91,7 @@ export const uploadRfcMetaThumbnail = async (rfcNumber: number): Promise<boolean
     return false
   }
   const rfcThumbnailPath = rfcMetaThumbnailPathBuilder(rfcNumber)
-  console.log(`[${rfcNumber}] uploaded thumbnail ${rfcThumbnailPath}`)
+  // console.log(`[RFC${rfcNumber}] uploaded thumbnail ${rfcThumbnailPath}`)
   await saveToS3(rfcThumbnailPath, rfcScreenshot)
   return true
 }
