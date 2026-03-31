@@ -26,20 +26,16 @@ export type SeriesId = {
 }
 
 /**
- * Parses a string like 'RFC100' or 'bcp4' into its constituent parts
+ * Parses a string like 'RFC100' or 'bcp4' into its constituent parts.
+ * 
  */
 export const parseSeriesId = (maybeSeriesId: string): SeriesId | undefined => {
-  // split by groups of letters or numbers
-  // ie "RFC0000" becomes ["RFC", "0000"]
   const parts = maybeSeriesId
-    .replace(
-      // remove whitespace including non-breaking-space
-      /\s/g,
-      ''
-    )
+    // split by groups of letters or numbers
+    // ie "RFC0000" becomes ["RFC", "0000"]
     .match(/\d+|\D+/g)
 
-  if (parts && parts.length >= 2) {
+  if (parts && parts.length === 2) {
     const [partType, partNumber] = parts
     if (partNumber === undefined) {
       return undefined

@@ -13,15 +13,8 @@ test('parseRFCId', () => {
     number: 1234
   })
 
-  expect(parseSeriesId('rfc1234bub')).toEqual({
-    type: 'rfc',
-    number: 1234
-  })
-
-  expect(parseSeriesId(`rfc${NONBREAKING_SPACE}1234`)).toEqual({
-    type: 'rfc',
-    number: 1234
-  })
+  expect(parseSeriesId('rfc1234')).toEqual(undefined)
+  expect(parseSeriesId(`rfc${NONBREAKING_SPACE}1234`)).toEqual(undefined)
 })
 
 export type DocListResponse = Awaited<ReturnType<ApiClient['red']['docList']>>
