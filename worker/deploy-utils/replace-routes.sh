@@ -5,6 +5,8 @@ if [ -z "$GITHUB_ACTION" ]; then
   exit 1
 fi
 
+echo "Replacing routes..."
+
 fx wrangler.jsonc 'x => {
   for (const envr in x.env) {
     if (envr === "production") {
@@ -21,3 +23,5 @@ fx wrangler.jsonc 'x => {
   }
   return x
 }' save
+
+echo "Done."
