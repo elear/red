@@ -43,6 +43,7 @@ export const uploadFavicons = async () => {
     const pngBuffer = await getFavIconImage(dimension[0], dimension[1])
     const s3Key = faviconPathBuilder(dimension[0], dimension[1])
     saveToS3(s3Key, pngBuffer)
+    console.log('Uploaded', s3Key)
   }))
 }
 
