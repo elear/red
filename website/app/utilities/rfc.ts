@@ -26,8 +26,12 @@ export type SeriesId = {
 }
 
 /**
- * Parses a string like 'RFC100' or 'bcp4' into its constituent parts.
- * 
+ * Parses a string like 'RFC100' or 'bcp4' into its 2 constituent parts.
+ *
+ * It attempts to be strict in its parsing, not lenient. We want to be able
+ * to parse series ids in urls (eg the 'rfc9000' in /info/rfc9000) so we want
+ * don't want a lenient parser that would make accept 'rfc9000<script>'
+ * or any other bizarro series id syntax.
  */
 export const parseSeriesId = (maybeSeriesId: string): SeriesId | undefined => {
   const parts = maybeSeriesId

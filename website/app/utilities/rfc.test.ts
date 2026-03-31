@@ -13,7 +13,7 @@ test('parseRFCId', () => {
     number: 1234
   })
 
-  expect(parseSeriesId('rfc1234')).toEqual(undefined)
+  expect(parseSeriesId('rfc1234suffix')).toEqual(undefined)
   expect(parseSeriesId(`rfc${NONBREAKING_SPACE}1234`)).toEqual(undefined)
 })
 
