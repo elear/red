@@ -70,7 +70,7 @@ jobs:
         run: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install fx
-          ./deploy-utils/replace-routes.sh
+          bash replace-routes.sh
           cat wrangler.jsonc
 
       - name: Deploy Worker
