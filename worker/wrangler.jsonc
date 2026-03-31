@@ -64,7 +64,7 @@
         "OIDC_CLIENT_AUTHORIZATION_ENDPOINT": "https://auth.ietf.org/api/openid/authorize",
         "OIDC_CLIENT_TOKEN_ENDPOINT": "https://auth.ietf.org/api/openid/token",
         "OIDC_CLIENT_KEYS_ENDPOINT": "https://auth.ietf.org/api/openid/jwks",
-        "OIDC_CLIENT_REDIRECT_URI": "https://red.staging.rfc-editor.org/oidc/callback"
+        "OIDC_CLIENT_REDIRECT_URI": "https://www.staging.rfc-editor.org/oidc/callback"
       }
     },
     "production": {
