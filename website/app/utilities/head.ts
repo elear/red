@@ -29,6 +29,7 @@ type UseRfcEditorProps = {
   contentType: 'website' | 'article'
   authors?: string[]
   customThumbnail?: string
+  customThumbnailAltText?: string
   modifiedDateTime?: DateTime
   publishedDateTime?: DateTime
   keywords?: string[]
@@ -45,7 +46,7 @@ export const useRfcEditorHead = (props: UseRfcEditorProps) => {
     meta: [
       ...buildGenericMetaTags(newProps),
       ...buildOpenGraphMetaTags(newProps),
-         // ...buildTwitterMetaTags(newProps),
+      // ...buildTwitterMetaTags(newProps),
       ...buildResourceTimestamps(newProps),
       ...buildGoogleScholarMetaTags(newProps)
     ].map(allowDuplicateNames),
@@ -55,11 +56,11 @@ export const useRfcEditorHead = (props: UseRfcEditorProps) => {
     ],
     noscript: [
       {
-         /**
-          * We never want <noscript> content to appear in search results, so we'll use the
-          * `data-nosnippet` as a hint to Googlebot etc to exclude it from search results
-          * See this related DataTracker issue https://github.com/ietf-tools/datatracker/issues/9667
-          **/
+        /**
+         * We never want <noscript> content to appear in search results, so we'll use the
+         * `data-nosnippet` as a hint to Googlebot etc to exclude it from search results
+         * See this related DataTracker issue https://github.com/ietf-tools/datatracker/issues/9667
+         **/
         'data-nosnippet': "true",
         innerHTML: 'Your browser JavaScript is disabled. Most of this site works without it, but some features —like search— require it. Please enable JavaScript and reload the page.',
       }
@@ -111,7 +112,7 @@ type MetaTag = {
 }
 
 const buildOpenGraphMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
-  const { customThumbnail } = props
+  const { authors, publishedDateTime, customThumbnail, modifiedDateTime, customThumbnailAltText, description, contentType } = props
   const linkPreviewImage = linkPreviewImageBuilder('opengraph', customThumbnail)
 
   const metaTags: MetaTag[] = [
@@ -129,7 +130,7 @@ const buildOpenGraphMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
     },
     {
       property: 'og:image:alt',
-      content: IMAGE_PREVIEW_ALT_TEXT
+      content: customThumbnailAltText ?? description ?? IMAGE_PREVIEW_ALT_TEXT
     },
     {
       property: 'og:image:type',
@@ -145,31 +146,31 @@ const buildOpenGraphMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
     }
   ]
 
-  if (props.description) {
+  if (description) {
     metaTags.push({
       property: 'og:description',
-      content: props.description
+      content: description
     })
   }
 
-  if (props.contentType === 'article') {
+  if (contentType === 'article') {
     metaTags.push({
       property: 'og:type',
-      content: props.contentType
+      content: contentType
     })
 
-    if (props.authors) {
+    if (authors) {
       metaTags.push(
         // OpenGraph uses a meta tag for each author
-        ...props.authors.map((author) => ({
+        ...authors.map((author) => ({
           property: 'article:author',
           content: author
         }))
       )
     }
 
-    if (props.publishedDateTime) {
-      const isoDate = props.publishedDateTime.toISODate()
+    if (publishedDateTime) {
+      const isoDate = publishedDateTime.toISODate()
       if (isoDate) {
         metaTags.push({
           property: 'article:published_time',
@@ -178,8 +179,8 @@ const buildOpenGraphMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
       }
     }
 
-    if (props.modifiedDateTime) {
-      const isoDate = props.modifiedDateTime.toISODate()
+    if (modifiedDateTime) {
+      const isoDate = modifiedDateTime.toISODate()
       if (isoDate) {
         metaTags.push({
           property: 'article:modified_time',

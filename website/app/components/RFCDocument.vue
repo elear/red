@@ -170,7 +170,8 @@ useRfcEditorHead({
       DateTime.fromISO(rfcBucketHtmlDocument.value.rfc.published)
       : undefined,
   contentType: 'article',
-  customThumbnail: rfcBucketHtmlDocument.value ? `rfc${rfcBucketHtmlDocument.value.rfc.number}.png` : undefined,
+  customThumbnail: rfcBucketHtmlDocument.value ? `rfc${rfcBucketHtmlDocument.value.rfc.number}` : undefined,
+  customThumbnailAltText: rfcBucketHtmlDocument.value ? `RFC ${rfcBucketHtmlDocument.value.rfc.number}: ${rfcBucketHtmlDocument.value.rfc.title}${rfcBucketHtmlDocument.value.rfc.abstract ? `. ${rfcBucketHtmlDocument.value.rfc.abstract}.` : ''}` : undefined,
   resourceTimestamps:
     resourceTimestampDatetime ?
       [

@@ -52,7 +52,6 @@ export const metaThumbnailSlugToDimensions = (slug: string): [number, number] | 
 
 const compressionLevel = 9
 
-
 export const uploadMetaThumbnails = async () => {
   await Promise.all(imagePreviewDimensions.map(async imagePreviewDimension => {
     const metaThumbnail = await getMetaThumbnail(imagePreviewDimension[0], imagePreviewDimension[1])
