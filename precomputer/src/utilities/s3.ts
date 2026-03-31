@@ -160,7 +160,7 @@ export const rfcBucketHtmlPathBuilder = (rfcNumber: number) => `html/rfc${rfcNum
 
 export const rfcMetaThumbnailPathBuilder = (rfcNumber: number) => `thumbnail/rfc${rfcNumber}.png` as const
 
-export const metaThumbnailPathBuilder = (fileName: string) => `thumbnail/${fileName}.png` as const
+export const metaThumbnailPathBuilder = (fileName: string) => `thumbnail/${fileName}` as const
 
 export const faviconPathBuilder = (widthPx: number, heightPx: number) => `other/favicon-${widthPx}-${heightPx}.png` as const
 
