@@ -68,6 +68,7 @@ jobs:
       - name: Transform routes
         working-directory: worker
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install fx
           ./deploy-utils/replace-routes.sh
 
@@ -101,6 +102,7 @@ jobs:
       - name: Transform routes
         working-directory: worker
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install fx
           ./deploy-utils/replace-routes.sh
 
