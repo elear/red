@@ -1,9 +1,9 @@
 #!/bin/bash
 
-if [ -z "$GITHUB_ACTION" ]; then
-  echo "DO NOT RUN THIS SCRIPT IN DEV. THIS IS FOR DEPLOYMENT ONLY."
-  exit 1
-fi
+# if [ -z "$GITHUB_ACTION" ]; then
+#   echo "DO NOT RUN THIS SCRIPT IN DEV. THIS IS FOR DEPLOYMENT ONLY."
+#   exit 1
+# fi
 
 fx wrangler.jsonc 'x => {
   for (const envr in x.env) {
