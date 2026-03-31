@@ -1,5 +1,5 @@
 name: Deploy Worker
-run-name: ${{ inputs.deploy == 'Staging Only' && '[Staging]' || '[Staging + Production]' }} Worker deployment ${{ github.run_number }} of branch ${{ github.ref_name }} by @${{ github.actor }}
+run-name: \[${{ inputs.deploy }}\] Worker deployment ${{ github.run_number }} of branch ${{ github.ref_name }} by @${{ github.actor }}
 
 on:
   workflow_dispatch:
@@ -11,6 +11,7 @@ on:
         type: choice
         options:
           - Staging Only
+          - Staging + Demo
           - Staging + Prod
 
 concurrency:
@@ -45,6 +46,38 @@ jobs:
         run: |
           npm ci
           npx wrangler deploy --env staging --name rfced-worker-staging
+
+  demo:
+    name: Deploy to Demo
+    if: ${{ !failure() && !cancelled() && (inputs.deploy == 'Staging + Demo') }}
+    needs: [staging]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: demo
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v6.3.0
+        with:
+          node-version: 24.x
+
+      - name: Transform routes
+        run: |
+          brew install fx
+          ./deploy-utils/replace-routes.sh
+
+      - name: Deploy Worker
+        working-directory: worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_WORKER_DEPLOY_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_WORKER_DEPLOY_ACCOUNT_ID }}
+        run: |
+          npm ci
+          npx wrangler deploy --env demo --name rfced-worker-demo
 
   production:
     name: Deploy to Production
