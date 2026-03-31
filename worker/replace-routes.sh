@@ -7,7 +7,7 @@ fi
 
 echo "Replacing routes..."
 
-fx wrangler.jsonc 'x => {
+npx fx wrangler.jsonc 'x => {
   for (const envr in x.env) {
     if (envr === "production") {
       x.env.production.routes = x.env.staging.routes.map(r => ({
