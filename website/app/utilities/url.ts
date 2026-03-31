@@ -342,7 +342,7 @@ export const linkPreviewImageUrlBuilder = (
   widthPx: ImagePreviewHorizontalDimensions,
   heightPx: ImagePreviewVerticalDimensions
 ) => {
-  return `/link-preview-image-${widthPx}x${heightPx}.png` as const
+  return `/api/v1/meta-thumbnail/link-preview-image-${widthPx}x${heightPx}.png` as const
 }
 
 export const metaThumbnailPathBuilder = (rfcId: string) => `/api/v1/meta-thumbnail/${rfcId}.png` as const
