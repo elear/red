@@ -70,6 +70,8 @@ jobs:
         run: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install fx
+          which fx
+          fx wrangler.jsonc 'x => x.env.demo'
           bash replace-routes.sh
           cat wrangler.jsonc
 
