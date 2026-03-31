@@ -8,6 +8,8 @@ import { getAllRFCs, getAllSubseries, getApiClient, getRfcCommonCached, parseSub
 import { renderAllSubseries } from '../tasks/info-subseries.ts'
 import { getFromS3 } from './s3.ts'
 import { fetchRfcPDF } from '../tasks/rfc-pdf.ts'
+import { getMetaThumbnail, metaThumbnailSlugToDimensions } from './meta-thumbnails.ts'
+import { getFavIconImage } from './favicons.ts'
 
 const fastify = Fastify({
   logger: true
@@ -35,31 +37,71 @@ fastify.get('/api/v1/rfc-html/:rfcNumber.json', async (request, reply) => {
   throw Error(`bad param? ${JSON.stringify(request.params)}`)
 })
 
-fastify.get('/api/v1/rfc-html/:rfcNumber.png', async (request, reply) => {
-  if (request.params && typeof request.params === 'object' && 'rfcNumber' in request.params) {
-    const { rfcNumber } = request.params
-    const rfcFloaty = parseFloat(String(rfcNumber))
+fastify.get('/api/v1/meta-thumbnail/:slug.png', async (request, reply) => {
+  console.log("meta thubm request")
+  if (request.params && typeof request.params === 'object' && 'slug' in request.params && typeof request.params.slug === 'string') {
+    const { slug } = request.params
+    console.log('get slug', slug)
 
-    const maybePngBuffer = await getRfcMetaThumbnail({
-      rfcNumber: rfcFloaty,
-      getRfcCommon: getRfcCommonCached,
-      getRfcHtml: mockLocalGetRfcHtml,
-      fetchRfcPDF: mockLocalFetchPDF,
-    })
-    if (maybePngBuffer) {
-      reply.code(200).headers({ 'content-type': 'image/png' }).send(maybePngBuffer)
+    if (slug.match(/rfc\d+/)) {
+      const RFC_PREFIX = 'rfc'
+      const rfcFloaty = parseFloat(String(slug.substring(RFC_PREFIX.length)))
+      const maybePngBuffer = await getRfcMetaThumbnail({
+        rfcNumber: rfcFloaty,
+        getRfcCommon: getRfcCommonCached,
+        getRfcHtml: mockLocalGetRfcHtml,
+        fetchRfcPDF: mockLocalFetchPDF,
+      })
+      if (maybePngBuffer) {
+        reply.code(200).headers({ 'content-type': 'image/png' }).send(maybePngBuffer)
+      }
     } else {
-      console.log("[404]", rfcFloaty)
-      reply
-        .code(404)
-        .type('text/plain')
-        .send(`404: RFC ${rfcFloaty} png`)
+      console.log("found slug")
+      const verifiedDimensions = metaThumbnailSlugToDimensions(`${slug}.png`)
+      if (verifiedDimensions) {
+        console.log('verifiedDimensions', verifiedDimensions)
+        const maybePng = await getMetaThumbnail(verifiedDimensions[0], verifiedDimensions[1])
+        console.log("maybpng", maybePng)
+        if (maybePng) {
+          reply.code(200).headers({ 'content-type': 'image/png' }).send(maybePng.pngBuffer)
+        }
+      }
     }
+
+    reply
+      .code(404)
+      .type('text/plain')
+      .send(`404: ${slug}.png`)
   } else {
     console.log('bad params?', request.params)
     throw Error(`bad param? ${JSON.stringify(request.params)}`)
   }
 })
+
+fastify.get('/api/v1/favicon/:slug.png', async (request, reply) => {
+  if (request.params && typeof request.params === 'object' && 'slug' in request.params && typeof request.params.slug === 'string') {
+    const { slug } = request.params
+
+    const parts = slug.match(/(\d+)x(\d+)/)
+    if (parts) {
+      const widthPx = parseInt(parts[1], 10)
+      const heightPx = parseInt(parts[2], 10)
+      const maybePngBuffer = await getFavIconImage(widthPx, heightPx)
+      if (maybePngBuffer) {
+        reply.code(200).headers({ 'content-type': 'image/png' }).send(maybePngBuffer)
+      }
+    }
+
+    reply
+      .code(404)
+      .type('text/plain')
+      .send(`404: ${slug}.png`)
+  } else {
+    console.log('bad params?', request.params)
+    throw Error(`bad param? ${JSON.stringify(request.params)}`)
+  }
+})
+
 
 
 fastify.get('/api/v1/info-subseries/:subseriesName.json', async (request, reply) => {

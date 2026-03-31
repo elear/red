@@ -87,7 +87,7 @@ export default defineNuxtConfig({
     cfServiceTokenId: '', // NUXT_CF_SERVICE_TOKEN_ID env var
     cfServiceTokenSecret: '', // NUXT_CF_SERVICE_TOKEN_SECRET env var
     public: {
-      // These settings are available client-side (others are server-side only)
+      // These settings are available client-side (others are server-side only). The following are default values overriden by env varss
       datatrackerBase: 'http://localhost:8000', // NUXT_PUBLIC_DATATRACKER_BASE env var
       siteBase: 'https://www.rfc-editor.org', // NUXT_PUBLIC_SITE_BASE env var
       errataBase: 'https://errata.rfc-editor.org', // NUXT_PUBLIC_ERRATA_BASE env var
