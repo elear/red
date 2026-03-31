@@ -165,6 +165,29 @@ export async function blobs(request, env) {
     }
   }
 
+  const FAVICON_PREFIX = '/api/v1/favicon/'
+  if (normalizedPath.startsWith(FAVICON_PREFIX)) {
+    const objectPath = normalizedPath.substring(FAVICON_PREFIX.length)
+
+    // -> Fetch R2 object
+    if (objectPath.endsWith('.png')) {
+      const object = await env.RED_BUCKET.get(`other/favicon-${objectPath}`)
+      if (object) {
+        const headers = new Headers()
+        object.writeHttpMetadata(headers)
+        headers.set('etag', object.httpEtag)
+        headers.set('Cf-R2-Served', '1')
+        headers.set('Access-Control-Allow-Origin', '*')
+        headers.set('Content-Encoding', 'gzip')
+        headers.set('Content-Type', 'image/png')
+
+        return new Response(object.body, {
+          headers
+        })
+      }
+    }
+  }
+
   const RFC_JSON_PREFIX = '/api/v1/rfc/rfc'
   if (normalizedPath.startsWith(RFC_JSON_PREFIX)) {
     console.log("accessing", RFC_JSON_PREFIX)
@@ -193,6 +216,10 @@ export async function blobs(request, env) {
   }
 
   const mappings = [
+    {
+      from: '/favicon.ico',
+      to: 'other/favicon-32x32.png'
+    },
     {
       from: '/api/v1/homepage-latest.json',
       to: 'other/homepage-latest.json'
