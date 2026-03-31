@@ -461,4 +461,4 @@ export const typeSenseEncodeUriComponent = (uriComponent: string) =>
   encodeURIComponent(uriComponent).replace(/%20/g, '+')
 
 export const faviconPathBuilder = (widthPx: number, heightPx: number) =>
-  `/favicon-${widthPx}-${heightPx}.png`
+  `/api/v1/favicon/${widthPx}-${heightPx}.png`
