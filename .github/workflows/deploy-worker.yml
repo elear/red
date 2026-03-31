@@ -97,6 +97,11 @@ jobs:
         with:
           node-version: 24.x
 
+      - name: Transform routes
+        run: |
+          brew install fx
+          ./deploy-utils/replace-routes.sh
+
       - name: Deploy Worker
         working-directory: worker
         env:
