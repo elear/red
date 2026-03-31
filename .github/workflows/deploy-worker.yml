@@ -67,9 +67,7 @@ jobs:
 
       - name: Transform routes
         working-directory: worker
-        run: |
-          bash replace-routes.sh
-          cat wrangler.jsonc
+        run: ./replace-routes.sh
 
       - name: Deploy Worker
         working-directory: worker
@@ -100,10 +98,7 @@ jobs:
 
       - name: Transform routes
         working-directory: worker
-        run: |
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          brew install fx
-          ./deploy-utils/replace-routes.sh
+        run: ./replace-routes.sh
 
       - name: Deploy Worker
         working-directory: worker
