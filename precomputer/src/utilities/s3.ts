@@ -162,7 +162,7 @@ export const rfcMetaThumbnailPathBuilder = (rfcNumber: number) => `thumbnail/rfc
 
 export const metaThumbnailPathBuilder = (fileName: string) => `thumbnail/${fileName}` as const
 
-export const faviconPathBuilder = (widthPx: number, heightPx: number) => `other/favicon-${widthPx}-${heightPx}.png` as const
+export const faviconPathBuilder = (widthPx: number, heightPx: number) => `other/favicon-${widthPx}x${heightPx}.png` as const
 
 export const subseriesInfoPathBuilder = (
   subseriesType: SubseriesCommon['type'],
