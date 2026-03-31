@@ -7,7 +7,6 @@ type RouteRules = NonNullable<
 >
 
 const oneHourInSeconds = 60 * 60
-const oneDayInSeconds = 24 * oneHourInSeconds
 
 // inserted in the <head> some inline JS to determine scrollbar width so that CSS can use it in calc()
 // this is intentionally inserted in the <head> so that it runs immediately in the browser
@@ -138,19 +137,19 @@ export default defineNuxtConfig({
        * Uncomment/comment out the lines to adjust the config.
        */
       '/api/v1/homepage-latest.json': {
-        proxy: 'https://red.staging.rfc-editor.org/api/v1/homepage-latest.json'
+        proxy: 'https://www.staging.rfc-editor.org/api/v1/homepage-latest.json'
         // proxy: 'http://localhost:3001/api/v1/homepage-latest.json'
       },
       '/api/v1/rfc-html/**': {
-        proxy: 'https://red.staging.rfc-editor.org/api/v1/rfc-html/**'
+        proxy: 'https://www.staging.rfc-editor.org/api/v1/rfc-html/**'
         // proxy: 'http://localhost:3001/api/v1/rfc-html/**'
       },
       '/api/v1/info-subseries/**': {
-        proxy: 'https://red.staging.rfc-editor.org/api/v1/info-subseries/**'
+        proxy: 'https://www.staging.rfc-editor.org/api/v1/info-subseries/**'
         // proxy: 'http://localhost:3001/api/v1/info-subseries/**'
       },
       '/api/v1/rfc-common/**': {
-        proxy: 'https://red.staging.rfc-editor.org/api/v1/rfc-common/**'
+        proxy: 'https://www.staging.rfc-editor.org/api/v1/rfc-common/**'
         // proxy: 'http://localhost:3001/api/v1/rfc-common/**'
       }
     }
@@ -160,7 +159,7 @@ export default defineNuxtConfig({
       // https://nitro.build/config#routerules
       // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
       '/': {
-        swr: oneDayInSeconds,
+        swr: oneHourInSeconds,
         prerender: true
       },
       ...redirects.redirects
@@ -168,7 +167,7 @@ export default defineNuxtConfig({
         .reduce((acc, redirect) => {
           const [fromPath, toPathOrUrl] = redirect
           if (typeof fromPath !== 'string' || typeof toPathOrUrl !== 'string') {
-            throw Error('Bad redirects.json file should only contain strings')
+            throw Error('Bad redirects.json file. Should only contain strings')
           }
           acc[fromPath] = { redirect: { to: toPathOrUrl, statusCode: 301 } }
           return acc

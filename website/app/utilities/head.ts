@@ -52,6 +52,17 @@ export const useRfcEditorHead = (props: UseRfcEditorProps) => {
     link: [
       { rel: 'canonical', href: props.canonicalUrl },
       ...buildFaviconLinks()
+    ],
+    noscript: [
+      {
+         /** 
+          * We never want <noscript> content to appear in search results, so we'll use the
+          * `data-nosnippet` as a hint to Googlebot etc to exclude it from search results
+          * See this related DataTracker issue https://github.com/ietf-tools/datatracker/issues/9667
+          *  */ 
+        'data-nosnippet': "true",
+        innerHTML: 'Your browser JavaScript is disabled. Most of this site works without it, but some features —like search— require it. Please enable JavaScript and reload the page.',
+      }
     ]
   })
 }
