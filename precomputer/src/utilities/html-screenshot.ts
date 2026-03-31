@@ -35,6 +35,7 @@ export const renderHtmlToImage = async (htmlString: string, dimensions: Dimensio
     cacheOfSatoriOptions[cacheKey] = {
       width: dimensions.widthPx,
       height: dimensions.heightPx,
+    
       fonts: [
         {
           name: 'sans-serif',
