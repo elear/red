@@ -60,7 +60,7 @@ jobs:
 
     - name: Get Next Version
       id: semver
-      if: ${{ inputs.deploy == 'Staging Only' || inputs.deploy == 'Staging + Prod' }}
+      if: ${{ inputs.deploy == 'Staging Only' || inputs.deploy == 'Staging + Demo' || inputs.deploy == 'Staging + Prod' }}
       uses: ietf-tools/semver-action@v1
       with:
         token: ${{ github.token }}
@@ -80,7 +80,7 @@ jobs:
         noNewCommitBehavior: 'current'
 
     - name: Set Release Flag
-      if: ${{ inputs.deploy == 'Staging Only' || inputs.deploy == 'Staging + Prod' }}
+      if: ${{ inputs.deploy == 'Staging Only' || inputs.deploy == 'Staging + Demo' || inputs.deploy == 'Staging + Prod' }}
       run: |
         echo "IS_RELEASE=true" >> $GITHUB_ENV
 
