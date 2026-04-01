@@ -6,7 +6,7 @@ import {
   SitemapAndIndexStream,
   SitemapStream,
   streamToPromise,
-  SitemapItemLoose,
+  type SitemapItemLoose,
   EnumChangefreq
 } from 'sitemap'
 import { type RfcCommon, type SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
