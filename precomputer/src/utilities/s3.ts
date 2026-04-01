@@ -195,5 +195,4 @@ export const REPORTS_CURRENT_QUEUE_STATS_DOT_TXT_PATH =
 
 export const siteMapXmlPathPrefixBuilder = (sitemapFilename: string) => {
   return `other${sitemapFilename}` as const
-
 }
