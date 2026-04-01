@@ -2,7 +2,6 @@ import { Readable, PassThrough } from 'node:stream'
 import path from 'node:path'
 import fsPromises from 'node:fs/promises'
 import { WriteStream } from 'node:fs'
-
 import {
   SitemapAndIndexStream,
   SitemapStream,
@@ -10,7 +9,7 @@ import {
   SitemapItemLoose,
   EnumChangefreq
 } from 'sitemap'
-import { RfcCommon, SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
+import { type RfcCommon, type SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
 import { ROBOTS_TXT_PATH, saveToS3, siteMapXmlPathPrefixBuilder } from './s3.ts'
 import { infoRfcPathBuilder, rfcFormatPathBuilder, siteMapXmlPathBuilder } from './url.ts'
 
