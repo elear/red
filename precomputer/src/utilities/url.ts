@@ -2,7 +2,7 @@ import type { RfcCommon } from '../../../website/app/utilities/rfc-validators.ts
 
 // Origin per https://developer.mozilla.org/en-US/docs/Glossary/Origin
 export const PUBLIC_SITE_URL_ORIGIN = 'https://www.rfc-editor.org'
-
+export const STAGING_SITE_URL_ORIGIN = 'https://www.staging.rfc-editor.org'
 export const apiRfcBucketDocumentURLBuilder = (fileName: string) => {
   // Intentionally not a relative url, the PUBLIC_SITE prefix is because this URL is served
   // from a bucket on prod; it's not something that a localhost Nuxt can serve.
@@ -15,6 +15,15 @@ export const infoRfcPathBuilder = (rfc: RfcCommon) => {
   return `/info/rfc${rfc.number}/` as const
 }
 
+type RfcCommonFormat = RfcCommon["formats"][number]["format"]
+
+export const rfcFormatPathBuilder = (rfc: RfcCommon, format: RfcCommonFormat) => {
+  if (format === 'notprepped') {
+    throw Error(`Cannot make URL for format ${JSON.stringify(format)}`)
+  }
+  return `/rfc/rfc${rfc.number}.${format}` as const
+}
+
 export const safeURLParse = (url: string): URL | null => {
   try {
     return new URL(url)
@@ -22,4 +31,11 @@ export const safeURLParse = (url: string): URL | null => {
     console.error("Can't parse URL", e)
     return null
   }
+}
+
+export const siteMapXmlPathBuilder = (index: number) => {
+  if (index === 0) {
+    return `/sitemap.xml` as const
+  }
+  return `/sitemap-${index}.xml` as const
 }
