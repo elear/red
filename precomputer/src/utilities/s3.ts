@@ -194,6 +194,6 @@ export const REPORTS_CURRENT_QUEUE_STATS_DOT_TXT_PATH =
   'other/reports/CurrQstats.txt'
 
 export const siteMapXmlPathPrefixBuilder = (sitemapFilename: string) => {
-  return `other/${sitemapFilename}` as const
+  return `other${sitemapFilename}` as const
 
 }
