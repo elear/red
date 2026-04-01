@@ -97,7 +97,7 @@ export const getSiteMapXmls = async (websiteOrigin: string, allRfcs: Readonly<Rf
     getSitemapStream: (i) => {
       const sitemapStream = new SitemapStream({ hostname: websiteOrigin })
       const destination = new PassThrough()
-      const filename = siteMapXmlPathBuilder(i)
+      const filename = siteMapXmlPathBuilder(i + 1)
       sitemapStream.pipe(destination)
       const capturePromise = streamToPromise(destination).then(data => {
         sitemapFiles.push([filename, data.toString()])
