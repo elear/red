@@ -33,6 +33,7 @@
         { "pattern": "www.staging.rfc-editor.org/api/v1/meta-thumbnail/*", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/favicon.ico", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/api/v1/favicon/*", "zone_name": "rfc-editor.org" },
+        { "pattern": "www.staging.rfc-editor.org/sitemap*", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/api/v1/homepage-latest.json", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/api/v1/rfc-mini-index.json", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/api/v1/errata.json", "zone_name": "rfc-editor.org" },
