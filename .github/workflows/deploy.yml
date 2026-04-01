@@ -178,7 +178,7 @@ jobs:
 
     - name: Generate CHANGELOG
       id: changelog
-      uses: Requarks/changelog-action@v1.21.0
+      uses: Requarks/changelog-action@v1
       if: ${{ env.IS_RELEASE == 'true' }}
       with:
         token: ${{ github.token }}
