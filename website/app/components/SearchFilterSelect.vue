@@ -32,7 +32,7 @@ const transformItems = (items: Items) => {
   return items.map((item) => ({
     ...item,
     label: formatLabel(item.label),
-  }));
+  }))
 }
 
 const formatLabel = (label: string) => {
