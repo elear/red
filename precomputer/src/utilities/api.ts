@@ -248,7 +248,7 @@ export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
     area: parseArea(rfc.area),
     stream: {
       slug: parseStreamSlug(rfc.stream.slug),
-      name: rfc.stream.name,
+      name: parseStreamName(rfc.stream.name),
       description: rfc.stream.desc
     },
     identifiers: rfc.identifiers,
@@ -280,7 +280,7 @@ export const rfcMetadataToRfcCommon = (rfcMetadata: RfcMetadata): RfcCommon => {
     area: parseArea(rfcMetadata.area),
     stream: {
       slug: parseStreamSlug(rfcMetadata.stream.slug),
-      name: rfcMetadata.stream.name,
+      name: parseStreamName(rfcMetadata.stream.name),
       description: rfcMetadata.stream.desc
     },
     identifiers: rfcMetadata.identifiers,
@@ -325,8 +325,7 @@ export const getAllRFCs = async ({
 
     if (rfcCommons.length > 0) {
       console.log(
-        ` - rfc ${rfcCommons[rfcCommons.length - 1].number}-${
-          rfcCommons[0].number
+        ` - rfc ${rfcCommons[rfcCommons.length - 1].number}-${rfcCommons[0].number
         }`
       )
     }
@@ -340,8 +339,7 @@ export const getAllRFCs = async ({
       (limit !== undefined && rfcs.length >= limit)
     ) {
       console.log(
-        `Finished downloading metadata for ${limit === undefined ? 'ALL' : limit} rfcs (${rfcs[0].number}-${
-          rfcs[rfcs.length - 1].number
+        `Finished downloading metadata for ${limit === undefined ? 'ALL' : limit} rfcs (${rfcs[0].number}-${rfcs[rfcs.length - 1].number
         })`
       )
       break
@@ -441,8 +439,7 @@ export const parseStatus = (
   const { data, error } = RfcCommonStatusSchema.safeParse(status)
   if (error) {
     throw Error(
-      `Unable to parse${
-        rfcNumberForDebug !== undefined ? ` RFC ${rfcNumberForDebug}` : ''
+      `Unable to parse${rfcNumberForDebug !== undefined ? ` RFC ${rfcNumberForDebug}` : ''
       } status ${JSON.stringify(status)}").`
     )
   }
@@ -478,6 +475,30 @@ const parseStreamSlug = (streamSlug?: string): RfcCommon['stream']['slug'] => {
   throw Error(`Unable to parse stream slug "${streamSlug}"`)
 }
 
+const parseStreamName = (streamName?: string): RfcCommon['stream']['name'] => {
+  if (!streamName) {
+    return 'Legacy'
+  }
+
+  switch (streamName.toLowerCase()) {
+    case 'ietf':
+      return 'IETF'
+    case 'iab':
+      return 'IAB'
+    case 'irtf':
+      return 'IRTF'
+    case 'ise':
+    case 'independent':
+      return 'Independent Stream'
+    case 'editorial':
+      return 'Editorial'
+    case 'legacy':
+      return 'Legacy'
+  }
+
+  throw Error(`Unable to parse stream name "${streamName}"`)
+}
+
 const parseArea = (
   area: Rfc['area'] | RfcMetadata['area']
 ): RfcCommon['area'] => {
@@ -500,8 +521,7 @@ const parseGroup = (
   if (error) {
     console.error(error)
     throw Error(
-      `Problem parsing group type ${JSON.stringify(group)} ${
-        rfcNumberForDebug !== undefined ? `from RFC ${rfcNumberForDebug}` : ''
+      `Problem parsing group type ${JSON.stringify(group)} ${rfcNumberForDebug !== undefined ? `from RFC ${rfcNumberForDebug}` : ''
       }`
     )
   }
@@ -573,16 +593,16 @@ const parseAuthors = (
   authors: Rfc['authors'] | RfcMetadata['authors']
 ): RfcCommon['authors'] => {
   return authors ?
-      authors.map((author): RfcCommon['authors'][number] => {
-        return {
-          titlepage_name: author.titlepage_name,
-          is_editor: author.is_editor,
-          person: author.person ?? undefined,
-          email: author.email ?? undefined,
-          affiliation: author.affiliation,
-          country: author.country,
-          datatracker_person_path: author.datatracker_person_path
-        }
-      })
+    authors.map((author): RfcCommon['authors'][number] => {
+      return {
+        titlepage_name: author.titlepage_name,
+        is_editor: author.is_editor,
+        person: author.person ?? undefined,
+        email: author.email ?? undefined,
+        affiliation: author.affiliation,
+        country: author.country,
+        datatracker_person_path: author.datatracker_person_path
+      }
+    })
     : []
 }

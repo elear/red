@@ -154,10 +154,20 @@ const list2 = computed(
   () =>
     [
       props.rfc.published ? formatDate(props.rfc.published) : undefined,
-      props.rfc.stream?.name && `${props.rfc.stream?.name} publication`,
+      props.rfc.stream?.name && formatStreamName(props.rfc.stream.name),
       props.rfc.area?.name
     ].filter(Boolean) as string[]
 )
+
+const formatStreamName = (streamName: string) => {
+  switch (streamName.toLowerCase()) {
+    case 'ise':
+    case 'independent':
+    case 'independent submission':
+      return 'Independent Submission'
+  }
+  return `${streamName} publication`
+}
 
 const tagText = computed(() => getRfcPillText(props.rfc))
 
