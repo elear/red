@@ -167,6 +167,7 @@ useRfcEditorHead({
   title: pageTitle,
   canonicalPath,
   description: rfcBucketHtmlDocument.value?.rfc.abstract ?? '',
+  keywords: rfcBucketHtmlDocument.value?.rfc.keywords,
   modifiedDateTime:
     rfcBucketHtmlDocument.value?.rfc.published ?
       DateTime.fromISO(rfcBucketHtmlDocument.value.rfc.published)
