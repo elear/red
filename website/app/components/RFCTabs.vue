@@ -176,8 +176,14 @@
             </dd>
           </template>
 
-          <dt class="font-bold mt-2">Date published</dt>
-          <dd>{{ formattedPublished }}</dd>
+          <template v-if="props.rfcBucketHtmlDocument.rfc.published">
+            <dt class="font-bold mt-2">Date published</dt>
+            <dd>
+              <time :datetime="props.rfcBucketHtmlDocument.rfc.published">
+                {{ formattedPublished }}
+              </time>
+            </dd>
+          </template>
 
           <template v-if="props.rfcBucketHtmlDocument.rfc.authors.length > 0">
             <dt class="font-bold mt-2">Authors</dt>
