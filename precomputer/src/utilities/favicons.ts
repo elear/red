@@ -45,6 +45,7 @@ export const uploadFavicons = async () => {
     saveToS3(s3Key, pngBuffer)
     console.log('Uploaded', s3Key)
   }))
+  return true
 }
 
 const svgPromise = fsPromises.readFile(faviconSvgSourcePath, 'utf-8')

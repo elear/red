@@ -42,5 +42,11 @@ export const indices = async ({ api, }: Props): Promise<boolean> => {
     uploadFavicons(),
   ])
 
+  results.forEach((result, i) => {
+    if(!result) {
+      console.error('indices ', i, ' failed ')
+    }
+  })
+
   return results.every(isSuccessful => isSuccessful)
 }

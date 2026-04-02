@@ -59,6 +59,7 @@ export const uploadMetaThumbnails = async () => {
     saveToS3(s3Key, metaThumbnail.pngBuffer)
     console.log('Uploaded', s3Key)
   }))
+  return true
 }
 
 export const bgBlue = '#002d3c'
