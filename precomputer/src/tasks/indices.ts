@@ -21,6 +21,8 @@ type Props = {
   api: ApiClient
 }
 
+type AsyncTaskItem = Promise<boolean>[]
+
 export const indices = async ({ api, }: Props): Promise<boolean> => {
   console.log("Generating indices for ", process.env.NUXT_PUBLIC_SITE_BASE)
   const [allRfcs, allSubseries] = await Promise.all([
@@ -42,7 +44,7 @@ export const indices = async ({ api, }: Props): Promise<boolean> => {
     uploadMetaThumbnails(),
     uploadRfcIndexXsd(),
     uploadFavicons(),
-  ])
+  ] satisfies AsyncTaskItem)
 
   results.forEach((result, i) => {
     if(!result) {
