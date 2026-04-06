@@ -1,12 +1,12 @@
 {
   "//": "this is a separate file so that we can potentially migrate it to a worker later",
   "redirects": [
-    ["/rfc-index.html", "/rfc-index/"],
-    ["/rfc-index2.html", "/rfc-index2/"],
-    ["/rfc-index-100a.html", "/rfc-index-100a/"],
-    ["/rfc-index-100d.html", "/rfc-index-100d/"],
+    ["/rfc-index.html", "/search/"],
+    ["/rfc-index2.html", "/search/"],
+    ["/rfc-index-100a.html", "/search/"],
+    ["/rfc-index-100d.html", "/search/"],
     ["/status_changes.php", "/status-changes/"],
-    ["/all_clusters.php", "/all_clusters/"],
+    ["/all_clusters.php", "https://queue.rfc-editor.org/clusters/"],
     ["/standards", "/search/?status=Internet+Standard"],
     ["/errata.php", "https://errata.rfc-editor.org"],
     ["/source-definitions", "/series/rfc-tips/"],
