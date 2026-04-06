@@ -267,6 +267,10 @@ export async function blobs(request, env) {
       from: '/rfc-index.xml',
       to: 'other/rfc-index.xml'
     },
+       {
+      from: '/rfc-index.xsd',
+      to: 'other/rfc-index.xsd'
+    },
     {
       from: '/rfcrss.xml',
       to: 'other/rfcrss.xml'
