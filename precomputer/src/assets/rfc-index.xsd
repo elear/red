@@ -3,33 +3,34 @@
 
 <!--
 +==========================================================================+
-|  NAME: rfc-index.xsd							   |
-|									   |
-|  DESCRIPTION:								   |
-|	This XML schema is used to describe a complete RFC Index.  It	   |
-|	includes structures for RFC, sub-series (STD, BCP, FYI), and Not   |
-|	Issued RFC entries.  Datatypes and structures have been documented |
-|	through the use of in-line comments.		  		   |
-|									   |
-|	Any questions or suggestions for improvement should be directed to |
-|	the RFC Editor staff at rfc-editor@rfc-editor.org.		   |
-|									   |
-|  DRAFT DATE: February 10, 2003					   |
-|									   |
+|  NAME: rfc-index.xsd                                                     |
+|                                                                          |
+|  DESCRIPTION:                                                            |
+|  This XML schema is used to describe a complete RFC Index.  It           |
+|  includes structures for RFC, sub-series (STD, BCP, FYI), and Not        |
+|  Issued RFC entries.  Datatypes and structures have been documented      |
+|  through the use of in-line comments.                                    |
+|                                                                          |
+|  Any questions or suggestions for improvement should be directed to      |
+|  the RFC Editor staff at rfc-editor@rfc-editor.org.                      |
+|                                                                          |
+|  DRAFT DATE: February 10, 2003                                           |
+|                                                                          |
 |  HISTORY:                                                                |
+|       2026-04-01: 5 digit RFC numbers. Matthew Holloway                  |
 |       2022-08-16: Added Editoril Stream. Priyanka Narkar                 |
 |       2015-03-12: Added DOIs. John Levine <johnl@taugh.com>              |
 |       2006-08-03:Fixed errors in <abstract> and <dayOfMonth> definitions |
-|	           that caused XML files to fail validation. Aaron Falk    |
+|                  that caused XML files to fail validation. Aaron Falk    |
 |                  <falk@isi.edu>.                                         |
-|		                                                           |
+|                                                                          |
 |       2003-11-05:Created defined datatype dayOfMonth to be used in place | 
 |                  of gDay for day fields- Gordon Thomas <gjthomas@isi.edu>|
 |                                                                          |
-|	2003-02-10:Created by Nathalie Collins <collins@isi.edu>.	   |
-|		   Based upon a DTD created by Tony Hansen, Bob Braden,    |
-|		   and Dong-Jin Son - ISI (RFC Editor).		           |
-|									   |
+|       2003-02-10:Created by Nathalie Collins <collins@isi.edu>.          |
+|                  Based upon a DTD created by Tony Hansen, Bob Braden,    |
+|                  and Dong-Jin Son - ISI (RFC Editor).                    |
+|                                                                          |
 +==========================================================================+
 -->
 
@@ -58,9 +59,9 @@
 	||		RFC/sub-series document formats.  Current types
 	||		include ASCII, PDF, and PS.  Note that this field
 	||		may be expanded upon in the future.
-        ||              New types added : HTML, XML, TEXT (August 2019)
+	||              New types added : HTML, XML, TEXT (August 2019)
 	||
-	|| monthName:	An enumerated list of fully spelled out month names
+	|| monthName:An enumerated list of fully spelled out month names
 	||		as they appear in RFC dates.
 	||
 	|| documentRef:	Elements of this type serve as links to other
@@ -68,7 +69,7 @@
 	||		externally.  They point to one or more document IDs.
 	||
 	|| stream:	An enumerated list of document production streams.
-        || 		For the definition of Stream, see RFC 4844.
+	|| 		For the definition of Stream, see RFC 4844.
 	||
     -->
 
@@ -196,8 +197,8 @@
 	||		available in more than one format.  Each
 	||		'file-format' has an associated character count and
 	||		page count (where available).
-        ||              (August 2019) : Each format is represented as file-format
-        ||              and page count is described as seperate entity.
+	||              (August 2019) : Each format is represented as file-format
+	||              and page count is described as seperate entity.
 	||
 	|| keywords:	This serves as a container for an unlimited number
 	||		of <kw> elements, each of which hold a keyword
@@ -334,10 +335,10 @@
 	|| see-also:	References to other related documents - intended as
 	||		helpful information to the reader.
 	||
-	|| abstract:    Most RFCs (except older ones) contain
-	||              abstracts.  An abstract  may contain multiple
-        ||	        paragraphs.  Each paragraph is surrounded by
-	||              html-ish paragraph markers, i.e., <p> and </p>.
+	|| abstract:	Most RFCs (except older ones) contain
+	||           abstracts.  An abstract  may contain multiple
+	||           paragraphs.  Each paragraph is surrounded by
+	||           html-ish paragraph markers, i.e., <p> and </p>.
     -->
 
     <xsd:element name="rfc-entry">
