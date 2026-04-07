@@ -39,6 +39,7 @@
         { "pattern": "www.staging.rfc-editor.org/api/v1/errata.json", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/rfc-index.txt", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/rfc-index.xml", "zone_name": "rfc-editor.org" },
+        { "pattern": "www.staging.rfc-editor.org/rfc-index.xsd", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/rfcrss.xml", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/rfcatom.xml", "zone_name": "rfc-editor.org" },
         { "pattern": "www.staging.rfc-editor.org/in-notes/rfc-ref.txt", "zone_name": "rfc-editor.org" },
