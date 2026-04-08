@@ -1,24 +1,6 @@
-import * as cookie from 'cookie'
-import { verify } from './oidc'
-
 export async function blobs(request, env) {
   const url = new URL(request.url)
   const normalizedPath = decodeURIComponent(url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname)
-  const isBetaWebsite = url.hostname === 'www-beta.rfc-editor.org'
-
-  // Beta Website only - Check for access (exclude non-html pages)
-  if (isBetaWebsite && !url.pathname.includes('.')) {
-    const cookies = cookie.parse(request.headers.get('Cookie') ?? '')
-
-    if (!cookies.jwt) {
-      return Response.redirect(`${url.origin}/oidc?p=${encodeURIComponent(url.pathname)}`, 302)
-    }
-
-    const jwtState = await verify(env, cookies.jwt)
-    if (!jwtState.isValid || jwtState.isExpired) {
-      return Response.redirect(`${url.origin}/oidc?p=${encodeURIComponent(url.pathname)}`, 302)
-    }
-  }
 
   /**
    * RFC bucket usage (note env.RFC_BUCKET)
@@ -219,7 +201,6 @@ export async function blobs(request, env) {
   if (normalizedPath.startsWith(SITEMAP_NUMBER_PREFIX)) {
     console.log("accessing", SITEMAP_NUMBER_PREFIX)
     const objectPath = normalizedPath.substring(SITEMAP_NUMBER_PREFIX.length)
-    console.log({ objectPath })
 
     // -> Fetch R2 object
     if (objectPath.endsWith('.xml')) {
@@ -339,21 +320,5 @@ export async function blobs(request, env) {
     }
   }
 
-  // Beta website only - fetch origin without cache
-  if (isBetaWebsite) {
-    return await fetch(request)
-  }
-
-  /**
-   * Fetch from origin as fallback
-   */
-  let response = await fetch(request, {
-    cf: {
-      cacheTtl: 300,
-      cacheEverything: true
-    }
-  })
-  response = new Response(response.body, response)
-  response.headers.set('Cache-Control', 'max-age=600')
-  return response
+  return new Response('404 — Not found', { status: 404, headers: { 'Content-Type': 'text/plain' } })
 }
