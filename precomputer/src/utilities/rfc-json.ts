@@ -42,6 +42,7 @@ export const rfcToRfcJson = (rfc: RfcCommon): RFCJSON => {
 
 const RfcJsonStatusSchema = z.union([
   z.literal('UNKNOWN'),
+  z.literal('DRAFT STANDARD'),
   z.literal('INTERNET STANDARD'),
   z.literal('EXPERIMENTAL'),
   z.literal('HISTORIC'),
@@ -108,7 +109,7 @@ const formatRfcStatusAsRfcJsonStatus = (
       return 'INTERNET STANDARD'
     case 'draft standard':
       // FIXME: is this an accurate conversion?
-      return 'PROPOSED STANDARD'
+      return 'DRAFT STANDARD'
   }
   assertNever(status)
 }
