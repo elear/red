@@ -105,7 +105,8 @@ export default defineNuxtConfig({
       queueBase: 'https://queue.rfc-editor.org', // NUXT_PUBLIC_QUEUE_BASE env var
       materialsBase: 'https://materials.rfc-editor.org', // NUXT_PUBLIC_MATERIALS_BASE env var
       iadBase: 'https://iad.rfc-editor.org', // NUXT_PUBLIC_IAD_BASE env var
-      dashboardBase: 'https://dashboard.rfc-editor.org' // NUXT_PUBLIC_DASHBOARD_BASE env var
+      dashboardBase: 'https://dashboard.rfc-editor.org', // NUXT_PUBLIC_DASHBOARD_BASE env var
+      matomoSiteId: '12', // NUXT_PUBLIC_MATOMO_SITE_ID
     }
   },
   postcss: {

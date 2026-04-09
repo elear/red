@@ -296,6 +296,9 @@ export async function blobs(request, env) {
           case '.json':
             headers.set('Content-Type', 'application/json;charset=utf-8')
             break
+          case '.ico':
+            headers.set('Content-Type', 'image/png')
+            break;
           case '.txt':
             headers.set('Content-Type', 'text/plain;charset=utf-8')
             break;

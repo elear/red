@@ -5,6 +5,9 @@ declare global {
   }
 }
 
+const DEFAULT_MATOMO_STAGING_SITE_ID = 12
+const DEFAULT_MATOMO_SITE_URL = 'https://analytics.ietf.org/'
+
 export default defineNuxtPlugin({
   setup(_nuxtApp) {
     if (
@@ -16,10 +19,21 @@ export default defineNuxtPlugin({
       return
     }
 
+    const runtimeConfig = useRuntimeConfig()
+    const matomoSiteIdString = runtimeConfig.public.matomoSiteId
+
+    if (!matomoSiteIdString) {
+      console.warn('No Matomo Site Id env var found. Using default instead:', DEFAULT_MATOMO_STAGING_SITE_ID)
+    } else {
+      console.log('Using Matomo site id from env of ', JSON.stringify(matomoSiteIdString))
+    }
+
+    const matomoSiteId = matomoSiteIdString ? parseInt(matomoSiteIdString, 10) : DEFAULT_MATOMO_STAGING_SITE_ID
+
     useHead({
       script: [
         {
-          innerHTML: getMatomoScript()
+          innerHTML: getMatomoScript(matomoSiteId)
         }
       ]
     })
@@ -40,19 +54,16 @@ export default defineNuxtPlugin({
   }
 })
 
-// FIXME: get from env var
-const MATOMO_STAGING_SITE_ID = 12
-
 const getMatomoScript = (
-  siteId: number = MATOMO_STAGING_SITE_ID,
-  analyticsUrl: string = 'https://analytics.ietf.org/'
+  siteId: number = DEFAULT_MATOMO_STAGING_SITE_ID,
+
 ) => `
   var _paq = window._paq = window._paq || [];
   /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function() {
-    var u=${JSON.stringify(analyticsUrl)};
+    var u=${JSON.stringify(DEFAULT_MATOMO_SITE_URL)};
     _paq.push(['setTrackerUrl', u+'matomo.php']);
     _paq.push(['setSiteId', ${JSON.stringify(siteId)}]);
     var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
