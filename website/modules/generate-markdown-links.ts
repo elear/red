@@ -288,7 +288,7 @@ const regenerateValidMarkdownLinks = async (logger?: Logger) => {
   const { markdownPaths, docs } = await getMarkdownInit()
 
   const markdownPathToPublicPath = (markdownPath: string) =>
-    `/${markdownPath.replace(/\.md$/, '/')}`
+    `/${markdownPath.replace(/\.md$/, '/').replace(/\/index\/$/, '/')}`
 
   const markdownPublicPaths: string[] = []
 
