@@ -41,6 +41,7 @@ import { redactRfc } from './rfc.ts'
 import { renderHtmlToImage } from '../utilities/html-screenshot.ts'
 import { OPENGRAPH_IMAGE_DIMENSIONS } from '../utilities/html.ts'
 import { getRfcCommonCached } from '../utilities/api.ts'
+import sharp from 'sharp'
 
 export const rfcBucketHtmlToRfcDocument = async (
   rfcBucketHtml: string,
@@ -435,6 +436,9 @@ const convertHrefs = (
  * This function has a new approach where it inserts <wbr> elements. These <wbr> elements seem to
  * work better than unicode approaches (zero-width spaces etc) because being non-characters they
  * aren't copied to the clipboard.
+ * 
+ * This also means we can control breaks so if the text looks like a URL we can insert <wbr> at
+ * appropriate points
  **/
 export const ensureWordBreaks = (rfcDocument: Node[]): void => {
   const walk = (node: Node): void => {
@@ -529,31 +533,64 @@ export const ensureWordBreaks = (rfcDocument: Node[]): void => {
   rfcDocument.forEach(walk)
 }
 
+const srcDir = path.resolve(import.meta.dirname, '..')
 
-const rfcMetaScreenshotTemplatePath = path.resolve(import.meta.dirname, '..', 'utilities', 'rfc-meta-screenshot.vue')
+const rfcMetaScreenshotTemplatePath = path.resolve(srcDir, 'utilities', 'rfc-meta-screenshot.vue')
+
+const metaThumbnailRfcNLogoPath = path.resolve(srcDir, 'assets', 'meta-thumbnail-rfcN-logo.svg')
 
 const rfcMetaScreenshotTemplate = fsPromises.readFile(rfcMetaScreenshotTemplatePath, 'utf-8')
 
 let sfcDescriptorCache: SFCDescriptor | undefined = undefined
 
+const logoBase64UriPromise = new Promise<string>((resolve, reject) => {
+  const bgBlue = '#002d3c'
+  const paddingPx = 50
+  const logoWidthPx = 600
+  const canvasWidthPx = 2000
+  fsPromises.readFile(metaThumbnailRfcNLogoPath, 'utf-8')
+    .then(svgString =>
+      sharp(Buffer.from(svgString))
+        // render logo at logo size
+        .resize(logoWidthPx)
+        // extend canvas so that logo takes less than half the width of the graphic
+        .extend({
+          top: paddingPx,
+          right: (canvasWidthPx - logoWidthPx) + paddingPx,
+          bottom: paddingPx,
+          left: paddingPx,
+          background: bgBlue
+        })
+        .flatten({
+          background: bgBlue
+        })
+        .withMetadata({ density: 300 })
+        .toBuffer()
+        .then(buffer => {
+          resolve(`data:image/png;base64,${buffer.toString('base64')}`)
+        })
+    )
+})
+
 export const getRfcHtmlMetaScreenshot = async (rfcNumber: number, getRfcCommon: typeof getRfcCommonCached): Promise<Buffer | undefined> => {
   const rfc = await getRfcCommon(rfcNumber)
-  if (rfc) {
-    if (!sfcDescriptorCache) {
-      const templateData = await rfcMetaScreenshotTemplate
-      const { descriptor } = parse(templateData)
-      sfcDescriptorCache = descriptor
-    }
-    if (!sfcDescriptorCache || !sfcDescriptorCache.template) {
-      throw Error('Unable to load template')
-    }
-    const vueTemplate = sfcDescriptorCache.template.content
-    const app = createSSRApp({
-      data: () => ({ rfc }),
-      template: vueTemplate
-    })
-    const bodyHtml = await renderToString(app)
-    return renderHtmlToImage(bodyHtml, OPENGRAPH_IMAGE_DIMENSIONS)
+  if (!rfc) {
+    return undefined
   }
-  return undefined
+  if (!sfcDescriptorCache) {
+    const templateData = await rfcMetaScreenshotTemplate
+    const { descriptor } = parse(templateData)
+    sfcDescriptorCache = descriptor
+  }
+  if (!sfcDescriptorCache || !sfcDescriptorCache.template) {
+    throw Error('Unable to load template')
+  }
+  const vueTemplate = sfcDescriptorCache.template.content
+  const logoBase64Uri = await logoBase64UriPromise
+  const app = createSSRApp({
+    data: () => ({ rfc, logoBase64Uri }),
+    template: vueTemplate
+  })
+  const bodyHtml = await renderToString(app)
+  return renderHtmlToImage(bodyHtml, OPENGRAPH_IMAGE_DIMENSIONS)
 }

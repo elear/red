@@ -8,7 +8,7 @@ import { metaThumbnailPathBuilder, saveToS3 } from './s3.ts'
 
 const __dirname = import.meta.dirname
 const precomputerRoot = path.resolve(__dirname, '..', '..')
-const linkPreviewImageDefault = path.resolve(
+const linkPreviewImageDefaultPath = path.resolve(
   precomputerRoot,
   'src',
   'assets',
@@ -64,7 +64,7 @@ export const uploadMetaThumbnails = async () => {
 
 export const bgBlue = '#002d3c'
 
-const svgPromise = fsPromises.readFile(linkPreviewImageDefault, 'utf-8')
+const svgPromise = fsPromises.readFile(linkPreviewImageDefaultPath, 'utf-8')
 
 export const getMetaThumbnail = async (widthPx: number, heightPx: number) => {
   const svgString = await svgPromise

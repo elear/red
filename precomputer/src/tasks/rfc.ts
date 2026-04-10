@@ -133,6 +133,11 @@ export const uploadRfcJson = async (rfcNumber: number): Promise<boolean> => {
   return true
 }
 
+/**
+ * Redact info that doesn't need to be in the public file.
+ * * format.path: This is a file size optimisation, the website
+ *                 doesn't use it
+ */
 export const redactRfc = (rfc: RfcCommon): RfcCommon => {
   return {
     ...rfc,
