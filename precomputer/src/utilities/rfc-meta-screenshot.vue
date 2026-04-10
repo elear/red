@@ -15,7 +15,7 @@
     <p style="font-size:30px;margin:8px 0 0 4px;padding:0;font-style:italic;color:#333">
       <span v-for="(author, authorIndex) in rfc.authors" :key="authorIndex">
         <span>{{ author.titlepage_name }}</span>
-        <span v-if="author.is_editor">, Ed</span>
+        <span v-if="author.is_editor">, Ed.</span>
         <span v-if="authorIndex < rfc.authors.length - 1" style="padding:0 12px 0 0">,</span>
         <span v-else>.</span>
       </span>
