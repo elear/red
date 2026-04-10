@@ -17,7 +17,6 @@
         <span>{{ author.titlepage_name }}</span>
         <span v-if="author.is_editor">, Ed.</span>
         <span v-if="authorIndex < rfc.authors.length - 1" style="padding:0 12px 0 0">,</span>
-        <span v-else>.</span>
       </span>
     </p>
     <div style="font-size:30px;line-height:1.5;margin: 8px 0 0 0" v-html="rfc.abstract"></div>
