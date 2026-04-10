@@ -35,7 +35,7 @@ export const renderHtmlToImage = async (htmlString: string, dimensions: Dimensio
     cacheOfSatoriOptions[cacheKey] = {
       width: dimensions.widthPx,
       height: dimensions.heightPx,
-    
+
       fonts: [
         {
           name: 'sans-serif',
@@ -73,6 +73,9 @@ export const renderHtmlToImage = async (htmlString: string, dimensions: Dimensio
   try {
     const result = await sharp(Buffer.from(svgString))
       .withMetadata({ density: 300 })
+      .flatten({
+        background: '#eeeeee'
+      })
       .png()
       .toBuffer()
 
