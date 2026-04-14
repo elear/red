@@ -52,9 +52,6 @@ router
   .get('/ien/ien-index.html', redirectTo('/ien/ien-index/', 302))
   .get('/current_queue.php', redirectTo('/authors/rfc-edit/pub-queue/', 302))
 
-  // Add path normalization
-  .get('*', addNormalizedPath)
-
   // Dynamic Redirects
   .get('/authors/:extra+', (req) =>
     Response.redirect(`https://auth48-transition.rfc-editor.org/authors/${req.params.extra}`, 302)
@@ -64,7 +61,7 @@ router
       return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/clusters/${req.query.cid}`, 302)
     }
   })
-  .get('/in-notes/prerelease/*', (req) => {
+  .get('/in-notes/prerelease/*', addNormalizedPath, (req) => {
     const match = req.normalizedPath.match(/\/in-notes\/prerelease\/rfc(?<num>\d+)\.notprepped\.xml/i)
     if (match?.groups?.num) {
       return Response.redirect(
@@ -73,7 +70,7 @@ router
       )
     }
   })
-  .get('/auth48/*', (req) => {
+  .get('/auth48/*', addNormalizedPath, (req) => {
     let match = req.normalizedPath.match(/\/auth48\/c(?<num>\d+)/i)
     if (match?.groups?.num) {
       return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/final-review/C${match.groups.num}`, 302)
@@ -93,16 +90,16 @@ router
   // .get('/oidc/callback', oidc.callback)
 
   // Blobs
-  .get('/rfc/*', blobsRfc)
-  .get('/refs/*', blobsRefs)
-  .get('/api/v1/rfc-html/*', blobsApiRfcHtml)
-  .get('/api/v1/rfc-common/*', blobsApiRfcCommon)
-  .get('/api/v1/info-subseries/*', blobsApiInfoSubseries)
-  .get('/api/v1/meta-thumbnail/*', blobsApiMetaThumbnail)
-  .get('/api/v1/favicon/*', blobsApiFavicon)
-  .get('/api/v1/rfc/*', blobsApiRfcJson)
-  .get('/*', blobsSitemap)
-  .get('/*', blobsStatics)
+  .get('/rfc/*', addNormalizedPath, blobsRfc)
+  .get('/refs/*', addNormalizedPath, blobsRefs)
+  .get('/api/v1/rfc-html/*', addNormalizedPath, blobsApiRfcHtml)
+  .get('/api/v1/rfc-common/*', addNormalizedPath, blobsApiRfcCommon)
+  .get('/api/v1/info-subseries/*', addNormalizedPath, blobsApiInfoSubseries)
+  .get('/api/v1/meta-thumbnail/*', addNormalizedPath, blobsApiMetaThumbnail)
+  .get('/api/v1/favicon/*', addNormalizedPath, blobsApiFavicon)
+  .get('/api/v1/rfc/*', addNormalizedPath, blobsApiRfcJson)
+  .get('/*', addNormalizedPath, blobsSitemap)
+  .get('/*', addNormalizedPath, blobsStatics)
 
   // Fallback to origin
   .all('*', async (req) => {
