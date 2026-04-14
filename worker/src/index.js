@@ -59,6 +59,31 @@ router
   .get('/authors/:extra+', (req) =>
     Response.redirect(`https://auth48-transition.rfc-editor.org/authors/${req.params.extra}`, 302)
   )
+  .get('/cluster_info.php', (req) => {
+    if (req.query?.cid?.startsWith('C')) {
+      return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/clusters/${req.query.cid}`, 302)
+    }
+  })
+  .get('/in-notes/prerelease/*', (req) => {
+    const match = req.normalizedPath.match(/\/in-notes\/prerelease\/rfc(?<num>\d+)\.notprepped\.xml/i)
+    if (match?.groups?.num) {
+      return Response.redirect(
+        `https://datatracker${env.ENV_DOMAIN}.ietf.org/doc/rfc${match.groups.num}/notprepped/`,
+        302
+      )
+    }
+  })
+  .get('/auth48/*', (req) => {
+    let match = req.normalizedPath.match(/\/auth48\/c(?<num>\d+)/i)
+    if (match?.groups?.num) {
+      return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/final-review/C${match.groups.num}`, 302)
+    }
+
+    match = req.normalizedPath.match(/\/auth48\/rfc(?<num>\d+)/i)
+    if (match?.groups?.num) {
+      return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/final-review/rfc${match.groups.num}`, 302)
+    }
+  })
   .get('/in-notes/:extra+', (req) => Response.redirect(`https://in-notes.rfc-editor.org/${req.params.extra}`, 302))
   .get('/materials/:extra+', (req) => Response.redirect(`https://materials.rfc-editor.org/${req.params.extra}`, 302))
 
