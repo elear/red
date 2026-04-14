@@ -33,8 +33,7 @@ export async function blobsRefs(req, env) {
 
     // -> Fetch R2 object from RED bucket
     if (objectPath.endsWith('.txt')) {
-      const bucketPath = `rfc-ref/${objectPath}`
-      const object = await env.RED_BUCKET.get(bucketPath)
+      const object = await env.RED_BUCKET.get(`rfc-ref/${objectPath}`)
       if (object) {
         return createBlobResponse(object, 'text/plain;charset=utf-8')
       }
@@ -151,13 +150,12 @@ export async function blobsApiRfcJson(req, env) {
   const RFC_JSON_PREFIX = '/api/v1/rfc/rfc'
 
   if (req.normalizedPath.startsWith(RFC_JSON_PREFIX)) {
-    // -> Strip /refs/ref from path
-    const objectPath = req.normalizedPath.substring(RFC_JSON_PREFIX.length)
+    // -> Extract RFC number from path
+    const rfcNumber = req.normalizedPath.match(/^\/api\/v1\/rfc\/rfc(?<num>\d+)$/i)?.groups?.num
 
-    // -> Fetch R2 object from RED bucket
-    if (objectPath.endsWith('.json')) {
-      const bucketPath = `rfc-json/${objectPath}`
-      const object = await env.RED_BUCKET.get(bucketPath)
+    // -> Fetch R2 object from RFC bucket
+    if (rfcNumber) {
+      const object = await env.RFC_BUCKET.get(`json/rfc${rfcNumber}.json`)
       if (object) {
         return createBlobResponse(object, 'application/json;charset=utf-8')
       }
