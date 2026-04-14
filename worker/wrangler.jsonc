@@ -24,26 +24,7 @@
   "env": {
     "staging": {
       "routes": [
-        { "pattern": "www.staging.rfc-editor.org/rfc/*", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/refs/*", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/api/v1/rfc-html/*", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/api/v1/rfc/*", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/api/v1/rfc-common/*", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/api/v1/info-subseries/*", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/api/v1/meta-thumbnail/*", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/favicon.ico", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/api/v1/favicon/*", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/sitemap*", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/api/v1/homepage-latest.json", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/api/v1/rfc-mini-index.json", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/api/v1/errata.json", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/rfc-index.txt", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/rfc-index.xml", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/rfc-index.xsd", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/rfcrss.xml", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/rfcatom.xml", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/in-notes/rfc-ref.txt", "zone_name": "rfc-editor.org" },
-        { "pattern": "www.staging.rfc-editor.org/reports/CurrQstats.txt", "zone_name": "rfc-editor.org" }
+        { "pattern": "www.staging.rfc-editor.org/*", "zone_name": "rfc-editor.org" }
       ],
       "kv_namespaces": [
         {
@@ -65,6 +46,7 @@
         }
       ],
       "vars": {
+        "ENV_DOMAIN": ".staging",
         "OIDC_ISSUER": "https://auth.ietf.org/api/openid",
         "OIDC_CLIENT_AUTHORIZATION_ENDPOINT": "https://auth.ietf.org/api/openid/authorize",
         "OIDC_CLIENT_TOKEN_ENDPOINT": "https://auth.ietf.org/api/openid/token",
@@ -74,7 +56,7 @@
     },
     "demo": {
       "routes": [
-        // LEAVE EMPTY, copied and adapted from staging routes at deploy time
+        { "pattern": "www.demo.rfc-editor.org/*", "zone_name": "rfc-editor.org" }
       ],
       "kv_namespaces": [
         {
@@ -93,6 +75,7 @@
         }
       ],
       "vars": {
+        "ENV_DOMAIN": ".demo",
         "OIDC_ISSUER": "https://auth.ietf.org/api/openid",
         "OIDC_CLIENT_AUTHORIZATION_ENDPOINT": "https://auth.ietf.org/api/openid/authorize",
         "OIDC_CLIENT_TOKEN_ENDPOINT": "https://auth.ietf.org/api/openid/token",
@@ -102,7 +85,7 @@
     },
     "production": {
       "routes": [
-        // LEAVE EMPTY, copied and adapted from staging routes at deploy time
+        // { "pattern": "www.rfc-editor.org/*", "zone_name": "rfc-editor.org" }
       ],
       "kv_namespaces": [
         {
@@ -121,6 +104,7 @@
         }
       ],
       "vars": {
+        "ENV_DOMAIN": "",
         "OIDC_ISSUER": "https://auth.ietf.org/api/openid",
         "OIDC_CLIENT_AUTHORIZATION_ENDPOINT": "https://auth.ietf.org/api/openid/authorize",
         "OIDC_CLIENT_TOKEN_ENDPOINT": "https://auth.ietf.org/api/openid/token",

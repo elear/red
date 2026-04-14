@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v6.3.0
+        uses: actions/setup-node@v6
         with:
           node-version: 24.x
 
@@ -61,13 +61,13 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v6.3.0
+        uses: actions/setup-node@v6
         with:
           node-version: 24.x
 
-      - name: Transform routes
-        working-directory: worker
-        run: ./replace-routes.sh
+      # - name: Transform routes
+      #   working-directory: worker
+      #   run: ./replace-routes.sh
 
       - name: Deploy Worker
         working-directory: worker
@@ -92,13 +92,13 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v6.3.0
+        uses: actions/setup-node@v6
         with:
           node-version: 24.x
 
-      - name: Transform routes
-        working-directory: worker
-        run: ./replace-routes.sh
+      # - name: Transform routes
+      #   working-directory: worker
+      #   run: ./replace-routes.sh
 
       - name: Deploy Worker
         working-directory: worker

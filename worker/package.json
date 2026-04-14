@@ -8,6 +8,8 @@
     "dev-remote": "wrangler dev --env staging --remote"
   },
   "devDependencies": {
+    "oxfmt": "0.45.0",
+    "oxlint": "1.60.0",
     "wrangler": "4.43.0"
   },
   "dependencies": {

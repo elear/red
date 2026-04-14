@@ -1,228 +1,199 @@
-export async function blobs(request, env) {
-  const url = new URL(request.url)
-  const normalizedPath = decodeURIComponent(url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname)
+import { createBlobResponse, createBlobNotFoundResponse } from './helpers'
 
-  /**
-   * RFC bucket usage (note env.RFC_BUCKET)
-   */
+/**
+ * RFC blobs
+ */
+export async function blobsRfc(req, env) {
   const RFC_PREFIX = '/rfc/'
-  if (normalizedPath.startsWith(RFC_PREFIX)) {
-    const objectPath = normalizedPath.substring(RFC_PREFIX.length)
 
-    // -> Fetch R2 object
-    if (['.html', '.json', '.pdf', '.txt', '.xml'].some(ft => objectPath.endsWith(ft))) {
-      const fileType = objectPath.split('.').at(-1)
-      const object = await env.RFC_BUCKET.get(`${fileType}/${objectPath}`)
-      if (object) {
-        const headers = new Headers()
-        object.writeHttpMetadata(headers)
-        headers.set('etag', object.httpEtag)
-        headers.set('Cf-R2-Served', '1')
-        headers.set('Access-Control-Allow-Origin', '*')
-        headers.set('Content-Encoding', 'gzip')
+  // -> Strip /rfc/ from path
+  const objectPath = req.normalizedPath.substring(RFC_PREFIX.length)
 
-        return new Response(object.body, {
-          headers
-        })
-      }
+  // -> Fetch R2 object from RFC bucket
+  if (['.html', '.json', '.pdf', '.txt', '.xml'].some((ft) => objectPath.endsWith(ft))) {
+    const fileType = objectPath.split('.').at(-1)
+    const object = await env.RFC_BUCKET.get(`${fileType}/${objectPath}`)
+    if (object) {
+      return createBlobResponse(object)
     }
   }
 
-  /**
-   * RED bucket usage (note env.RED_BUCKET)
-   */
-  const REFS_PREFIX = '/refs/ref'
-  if (normalizedPath.startsWith(REFS_PREFIX)) {
-    const objectPath = normalizedPath.substring(REFS_PREFIX.length)
+  return createBlobNotFoundResponse()
+}
 
-    // -> Fetch R2 object
+/**
+ * Refs blobs
+ */
+export async function blobsRefs(req, env) {
+  const REFS_PREFIX = '/refs/ref'
+
+  if (req.normalizedPath.startsWith(REFS_PREFIX)) {
+    // -> Strip /refs/ref from path
+    const objectPath = req.normalizedPath.substring(REFS_PREFIX.length)
+
+    // -> Fetch R2 object from RED bucket
     if (objectPath.endsWith('.txt')) {
       const bucketPath = `rfc-ref/${objectPath}`
       const object = await env.RED_BUCKET.get(bucketPath)
       if (object) {
-        const headers = new Headers()
-        object.writeHttpMetadata(headers)
-        headers.set('etag', object.httpEtag)
-        headers.set('Cf-R2-Served', '1')
-        headers.set('Access-Control-Allow-Origin', '*')
-        headers.set('Content-Encoding', 'gzip')
-        headers.set('Content-Type', 'text/plain;charset=utf-8')
-
-        return new Response(object.body, {
-          headers
-        })
+        return createBlobResponse(object, 'text/plain;charset=utf-8')
       }
     }
-  }
 
+    return createBlobNotFoundResponse()
+  }
+}
+
+/**
+ * API RFC HTML blobs
+ */
+export async function blobsApiRfcHtml(req, env) {
   const RFC_HTML_PREFIX = '/api/v1/rfc-html/'
-  if (normalizedPath.startsWith(RFC_HTML_PREFIX)) {
-    const objectPath = normalizedPath.substring(RFC_HTML_PREFIX.length)
 
-    // -> Fetch R2 object
-    if (objectPath.endsWith('.json') || objectPath.endsWith('.png')) {
-      const object = await env.RED_BUCKET.get(`rfc/${objectPath}`)
-      if (object) {
-        const headers = new Headers()
-        object.writeHttpMetadata(headers)
-        headers.set('etag', object.httpEtag)
-        headers.set('Cf-R2-Served', '1')
-        headers.set('Access-Control-Allow-Origin', '*')
-        headers.set('Content-Encoding', 'gzip')
-        headers.set('Content-Type', 'application/json;charset=utf-8')
+  // -> Strip /api/v1/rfc-html/ from path
+  const objectPath = req.normalizedPath.substring(RFC_HTML_PREFIX.length)
 
-        return new Response(object.body, {
-          headers
-        })
-      }
+  // -> Fetch R2 object
+  if (objectPath.endsWith('.json') || objectPath.endsWith('.png')) {
+    const object = await env.RED_BUCKET.get(`rfc/${objectPath}`)
+    if (object) {
+      return createBlobResponse(object, 'application/json;charset=utf-8')
     }
   }
 
+  return createBlobNotFoundResponse()
+}
+
+/**
+ * API RFC Common blobs
+ */
+export async function blobsApiRfcCommon(req, env) {
   const RFC_COMMON_PREFIX = '/api/v1/rfc-common/'
-  if (normalizedPath.startsWith(RFC_COMMON_PREFIX)) {
-    const objectPath = normalizedPath.substring(RFC_COMMON_PREFIX.length)
 
-    // -> Fetch R2 object
-    if (objectPath.endsWith('.json')) {
-      const object = await env.RED_BUCKET.get(`rfc-common/${objectPath}`)
-      if (object) {
-        const headers = new Headers()
-        object.writeHttpMetadata(headers)
-        headers.set('etag', object.httpEtag)
-        headers.set('Cf-R2-Served', '1')
-        headers.set('Access-Control-Allow-Origin', '*')
-        headers.set('Content-Encoding', 'gzip')
-        headers.set('Content-Type', 'application/json;charset=utf-8')
+  // -> Strip /api/v1/rfc-common/ from path
+  const objectPath = req.normalizedPath.substring(RFC_COMMON_PREFIX.length)
 
-        return new Response(object.body, {
-          headers
-        })
-      }
+  // -> Fetch R2 object
+  if (objectPath.endsWith('.json')) {
+    const object = await env.RED_BUCKET.get(`rfc-common/${objectPath}`)
+    if (object) {
+      return createBlobResponse(object, 'application/json;charset=utf-8')
     }
   }
 
+  return createBlobNotFoundResponse()
+}
+
+/**
+ * API Info Subseries blobs
+ */
+export async function blobsApiInfoSubseries(req, env) {
   const INFO_SUBSERIES_PREFIX = '/api/v1/info-subseries/'
-  if (normalizedPath.startsWith(INFO_SUBSERIES_PREFIX)) {
-    const objectPath = normalizedPath.substring(INFO_SUBSERIES_PREFIX.length)
 
-    // -> Fetch R2 object
-    if (objectPath.endsWith('.json')) {
-      const object = await env.RED_BUCKET.get(`subseries/${objectPath}`)
-      if (object) {
-        const headers = new Headers()
-        object.writeHttpMetadata(headers)
-        headers.set('etag', object.httpEtag)
-        headers.set('Cf-R2-Served', '1')
-        headers.set('Access-Control-Allow-Origin', '*')
-        headers.set('Content-Encoding', 'gzip')
-        headers.set('Content-Type', 'application/json;charset=utf-8')
+  // -> Strip /api/v1/info-subseries/ from path
+  const objectPath = req.normalizedPath.substring(INFO_SUBSERIES_PREFIX.length)
 
-        return new Response(object.body, {
-          headers
-        })
-      }
+  // -> Fetch R2 object
+  if (objectPath.endsWith('.json')) {
+    const object = await env.RED_BUCKET.get(`rfc-common/${objectPath}`)
+    if (object) {
+      return createBlobResponse(object, 'application/json;charset=utf-8')
     }
   }
 
+  return createBlobNotFoundResponse()
+}
+
+/**
+ * API Meta Thumbnail blobs
+ */
+export async function blobsApiMetaThumbnail(req, env) {
   const META_THUMBNAIL_PREFIX = '/api/v1/meta-thumbnail/'
-  if (normalizedPath.startsWith(META_THUMBNAIL_PREFIX)) {
-    const objectPath = normalizedPath.substring(META_THUMBNAIL_PREFIX.length)
 
-    // -> Fetch R2 object
-    if (objectPath.endsWith('.png')) {
-      const object = await env.RED_BUCKET.get(`thumbnail/${objectPath}`)
-      if (object) {
-        const headers = new Headers()
-        object.writeHttpMetadata(headers)
-        headers.set('etag', object.httpEtag)
-        headers.set('Cf-R2-Served', '1')
-        headers.set('Access-Control-Allow-Origin', '*')
-        headers.set('Content-Encoding', 'gzip')
-        headers.set('Content-Type', 'image/png')
+  // -> Strip /api/v1/meta-thumbnail/ from path
+  const objectPath = req.normalizedPath.substring(META_THUMBNAIL_PREFIX.length)
 
-        return new Response(object.body, {
-          headers
-        })
-      }
+  // -> Fetch R2 object
+  if (objectPath.endsWith('.png')) {
+    const object = await env.RED_BUCKET.get(`thumbnail/${objectPath}`)
+    if (object) {
+      return createBlobResponse(object, 'image/png')
     }
   }
 
+  return createBlobNotFoundResponse()
+}
+
+/**
+ * API Favicon blobs
+ */
+export async function blobsApiFavicon(req, env) {
   const FAVICON_PREFIX = '/api/v1/favicon/'
-  if (normalizedPath.startsWith(FAVICON_PREFIX)) {
-    const objectPath = normalizedPath.substring(FAVICON_PREFIX.length)
 
-    // -> Fetch R2 object
-    if (objectPath.endsWith('.png')) {
-      const object = await env.RED_BUCKET.get(`other/favicon-${objectPath}`)
-      if (object) {
-        const headers = new Headers()
-        object.writeHttpMetadata(headers)
-        headers.set('etag', object.httpEtag)
-        headers.set('Cf-R2-Served', '1')
-        headers.set('Access-Control-Allow-Origin', '*')
-        headers.set('Content-Encoding', 'gzip')
-        headers.set('Content-Type', 'image/png')
+  // -> Strip /api/v1/favicon/ from path
+  const objectPath = req.normalizedPath.substring(FAVICON_PREFIX.length)
 
-        return new Response(object.body, {
-          headers
-        })
-      }
+  // -> Fetch R2 object
+  if (objectPath.endsWith('.png')) {
+    const object = await env.RED_BUCKET.get(`other/favicon-${objectPath}`)
+    if (object) {
+      return createBlobResponse(object, 'image/png')
     }
   }
 
+  return createBlobNotFoundResponse()
+}
+
+/**
+ * API RFC JSON blobs
+ */
+export async function blobsApiRfcJson(req, env) {
   const RFC_JSON_PREFIX = '/api/v1/rfc/rfc'
-  if (normalizedPath.startsWith(RFC_JSON_PREFIX)) {
-    console.log("accessing", RFC_JSON_PREFIX)
-    const objectPath = normalizedPath.substring(RFC_JSON_PREFIX.length)
-    console.log({ objectPath })
 
-    // -> Fetch R2 object
+  if (req.normalizedPath.startsWith(RFC_JSON_PREFIX)) {
+    // -> Strip /refs/ref from path
+    const objectPath = req.normalizedPath.substring(RFC_JSON_PREFIX.length)
+
+    // -> Fetch R2 object from RED bucket
     if (objectPath.endsWith('.json')) {
-      const object = await env.RED_BUCKET.get(`rfc-json/${objectPath}`)
+      const bucketPath = `rfc-json/${objectPath}`
+      const object = await env.RED_BUCKET.get(bucketPath)
       if (object) {
-        const headers = new Headers()
-        object.writeHttpMetadata(headers)
-        headers.set('etag', object.httpEtag)
-        headers.set('Cf-R2-Served', '1')
-        headers.set('Access-Control-Allow-Origin', '*')
-        headers.set('Content-Encoding', 'gzip')
-        headers.set('Content-Type', 'application/json;charset=utf-8')
-
-        return new Response(object.body, {
-          headers
-        })
-      } else {
-        console.log("Object not found")
+        return createBlobResponse(object, 'application/json;charset=utf-8')
       }
     }
-  }
 
+    return createBlobNotFoundResponse()
+  }
+}
+
+/**
+ * Sitemap blobs
+ */
+export async function blobsSitemap(req, env) {
   const SITEMAP_NUMBER_PREFIX = '/sitemap-'
-  if (normalizedPath.startsWith(SITEMAP_NUMBER_PREFIX)) {
-    console.log("accessing", SITEMAP_NUMBER_PREFIX)
-    const objectPath = normalizedPath.substring(SITEMAP_NUMBER_PREFIX.length)
 
-    // -> Fetch R2 object
+  if (req.normalizedPath.startsWith(SITEMAP_NUMBER_PREFIX)) {
+    // -> Strip /sitemap- from path
+    const objectPath = req.normalizedPath.substring(SITEMAP_NUMBER_PREFIX.length)
+
+    // -> Fetch R2 object from RED bucket
     if (objectPath.endsWith('.xml')) {
-      const object = await env.RED_BUCKET.get(`other/sitemap-${objectPath}`)
+      const bucketPath = `other/sitemap-${objectPath}`
+      const object = await env.RED_BUCKET.get(bucketPath)
       if (object) {
-        const headers = new Headers()
-        object.writeHttpMetadata(headers)
-        headers.set('etag', object.httpEtag)
-        headers.set('Cf-R2-Served', '1')
-        headers.set('Access-Control-Allow-Origin', '*')
-        headers.set('Content-Encoding', 'gzip')
-        headers.set('Content-Type', 'application/xml;charset=utf-8')
-
-        return new Response(object.body, {
-          headers
-        })
-      } else {
-        console.log("Object not found")
+        return createBlobResponse(object, 'application/xml;charset=utf-8')
       }
     }
-  }
 
+    return createBlobNotFoundResponse()
+  }
+}
+
+/**
+ * Static mappings to blobs
+ */
+export async function blobsStatics(req, env) {
   const mappings = [
     {
       from: '/favicon.ico',
@@ -248,7 +219,7 @@ export async function blobs(request, env) {
       from: '/rfc-index.xml',
       to: 'other/rfc-index.xml'
     },
-       {
+    {
       from: '/rfc-index.xsd',
       to: 'other/rfc-index.xsd'
     },
@@ -278,50 +249,43 @@ export async function blobs(request, env) {
     }
   ]
 
-  const mapping = mappings.find(mapping => mapping.from === normalizedPath)
+  const mapping = mappings.find((mapping) => mapping.from === req.normalizedPath)
   if (mapping) {
     const objectPath = mapping.to
+
     // -> Fetch R2 object
     const object = await env.RED_BUCKET.get(objectPath)
     if (object) {
-      const headers = new Headers()
-      object.writeHttpMetadata(headers)
-      headers.set('etag', object.httpEtag)
-      headers.set('Cf-R2-Served', '1')
-      headers.set('Access-Control-Allow-Origin', '*')
-      headers.set('Content-Encoding', 'gzip')
+      let contentType = null
       if (mapping.to.includes('.')) {
         const extension = mapping.to.substring(mapping.to.lastIndexOf('.'))
         switch (extension) {
           case '.json':
-            headers.set('Content-Type', 'application/json;charset=utf-8')
+            contentType = 'application/json;charset=utf-8'
             break
           case '.ico':
-            headers.set('Content-Type', 'image/png')
-            break;
+            contentType = 'image/png'
+            break
           case '.txt':
-            headers.set('Content-Type', 'text/plain;charset=utf-8')
-            break;
+            contentType = 'text/plain;charset=utf-8'
+            break
           case '.xml':
             if (mapping.from.endsWith('rfcatom.xml')) {
               // Atom has a specific mime type
-              headers.set('Content-Type', 'application/atom+xml;charset=utf-8')
+              contentType = 'application/atom+xml;charset=utf-8'
             } else {
               // Note that RSS doesn't have a mime type from IANA (but Atom does!)
               // see https://www.iana.org/assignments/media-types/media-types.xhtml
               //
               // per RFC 7303 don't use `text/xml` and instead use `application/xml`.
-              headers.set('Content-Type', 'application/xml;charset=utf-8')
+              contentType = 'application/xml;charset=utf-8'
             }
-            break;
+            break
         }
       }
-
-      return new Response(object.body, {
-        headers
-      })
+      return createBlobResponse(object, contentType)
     }
-  }
 
-  return new Response('404 - Not found', { status: 404, headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
+    return createBlobNotFoundResponse()
+  }
 }
