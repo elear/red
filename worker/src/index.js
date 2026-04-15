@@ -58,7 +58,7 @@ router
   )
   .get('/cluster_info.php', (req) => {
     if (req.query?.cid?.startsWith('C')) {
-      return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/clusters/${req.query.cid}`, 302)
+      return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/clusters/${req.query.cid.slice(1)}`, 302)
     }
   })
   .get('/in-notes/prerelease/*', addNormalizedPath, (req) => {
