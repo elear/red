@@ -49,8 +49,12 @@ export const getApiClient = (): ApiClient => {
       'X-Api-Key': NUXT_DATATRACKER_API_KEY
     }
 
+    const baseUrl = NUXT_PUBLIC_DATATRACKER_BASE
+
+    console.log("Using API ", baseUrl)
+
     return new ApiClient({
-      baseUrl: NUXT_PUBLIC_DATATRACKER_BASE,
+      baseUrl,
       headers
     })
   }
@@ -69,8 +73,11 @@ export const getApiClient = (): ApiClient => {
 }
 
 /**
- * Safety wrapper around docRetrieve access to catch 404 errors, retry if timeouts etc
- * Currently the API fails about 1/2000 uses
+ * Safety wrapper around docRetrieve access to catch 404 errors,
+ * retry if timeouts etc.
+ * 
+ * Currently the API fails about 1/2000 uses when under heavy
+ * load from 8 simultaneous Node processes.
  */
 export const safeDocRetrieve = async (
   api: ApiClient,
@@ -99,7 +106,17 @@ export const safeDocRetrieve = async (
 
   while (attemptsRemaining > 0) {
     try {
-      return await api.red.docRetrieve(rfcNumber)
+      const data = await api.red.docRetrieve(rfcNumber)
+      // Although TS says it's an `Rfc` it's possible for network
+      // intermediaries to mess with responses and return something else,
+      // like login pages (eg Cloudflare Access) that respond with
+      // HTTP 200 and text/html or text/plain. So we'll do a quick
+      // test of the shape of the response before using it
+      if (typeof data === 'object') {
+        return data
+      }
+      console.error("Unexpected API response, wasn't docRetrieve", api, typeof data, data)
+      throw Error(`Unexpected typeof=${typeof data}`)
     } catch (e: unknown) {
       if (isDocRetrieveNotFoundError(e)) {
         return null
@@ -140,9 +157,19 @@ export const safeSubseriesList = async (
   const errors: unknown[] = []
   while (attemptsRemaining > 0) {
     try {
-      return await api.red.subseriesList(
+      const data = await api.red.subseriesList(
         subseriesType ? { type: [subseriesType] } : {}
       )
+      // Although TS says it's an `SubseriesDoc[]` it's possible for network
+      // intermediaries to mess with responses and return something else,
+      // like login pages (eg Cloudflare Access) that respond with
+      // HTTP 200 and text/html or text/plain. So we'll do a quick
+      // test of the shape of the response before using it
+      if (typeof data === 'object') {
+        return data
+      }
+      console.error('Unexpected API response: ', api, typeof data, data)
+      throw Error(`Unexpected API response, wasn't subseriesList: typeof=${typeof data}. See console.`)
     } catch (e: unknown) {
       errors.push(e)
       if (await isRecovereableFetchError(e)) {
@@ -167,8 +194,9 @@ export const safeSubseriesList = async (
 }
 
 /**
- * Safety wrapper around docList access to retry on timeouts
- * Currently the API fails about 1/2000 uses
+ * Safety wrapper around docList access to retry on timeouts.
+ * Currently the API fails about 1/2000 uses when under heavy
+ * load from 8 simultaneous Node processes.
  */
 export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
   let attemptsRemaining = NUMBER_OF_API_RETRIES
@@ -176,7 +204,17 @@ export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
   const errors: unknown[] = []
   while (attemptsRemaining > 0) {
     try {
-      return await api.red.docList(options)
+      const data = await api.red.docList(options)
+      // Although TS says it's an `PaginatedRfcMetadataList` it's
+      // possible for network intermediaries to mess with responses and return something else,
+      // like login pages (eg Cloudflare Access) that respond with
+      // HTTP 200 and text/html or text/plain. So we'll do a quick
+      // test of the shape of the response before using it
+      if (typeof data === 'object') {
+        return data
+      }
+      console.error('Unexpected API response: ', api, typeof data, data)
+      throw Error(`Unexpected API response wasn't docList: typeof=${typeof data}. See console.`)
     } catch (e: unknown) {
       errors.push(e)
       if (await isRecovereableFetchError(e)) {
@@ -320,6 +358,9 @@ export const getAllRFCs = async ({
     docListOptions.limit = limit ?? MAX_LIMIT_PER_REQUEST
     const response = await safeDocList(api, docListOptions)
     if (!response.results) {
+      // Although TS says this can't happen it can.
+      // This can happen if the API response is HTML, caused
+      // by an error page
       console.error('No response.results? This seems like an invalid API response.', JSON.stringify(response))
       throw Error(`Bad API response. Expected response.results to be truthy. See console for more`)
     }
