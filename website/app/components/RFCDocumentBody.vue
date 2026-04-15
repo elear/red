@@ -157,7 +157,7 @@ const enrichedDocument = computed<VNode>(() =>
  *
  * Consider whether you should instead modify the HTML string provided by
  * the 'precomputer' in Red see `getXml2RfcRfcDocument` and `getPlaintextRfcDocument`
- * etc
+ * etc.
  */
 const renderDocumentPojo = (nodes: DocumentPojo): VNode => {
   const unwrapChildrenForVue = (vnodes: VNode[]) => {
