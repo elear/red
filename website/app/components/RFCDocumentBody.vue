@@ -62,12 +62,38 @@
       For more information, please refer to
       <ul class="mt-1 flex flex-col gap-2">
         <li
-          v-for="(obsoletedByItem, obsoletedByItemIndex) in props
-            .rfcBucketHtmlDocument.rfc.obsoleted_by"
+          v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfcBucketHtmlDocument.rfc.obsoleted_by"
           :key="obsoletedByItemIndex"
         >
-          <AMaybeRFCLink :href="infoSeriesPathBuilder(`RFC${obsoletedByItem.number}`)">
+          <AMaybeRFCLink
+            :href="infoSeriesPathBuilder(`RFC${obsoletedByItem.number}`)"
+            :class="ANCHOR_TAILWIND_STYLE"
+          >
             <RFCTitle :rfc="obsoletedByItem" />
+          </AMaybeRFCLink>
+        </li>
+      </ul>
+    </div>
+  </Alert>
+
+  <Alert
+    v-if="props.rfcBucketHtmlDocument.rfc.updated_by?.length"
+    variant="info"
+    heading="This RFC was updated"
+    class="ml-1"
+  >
+    <div class="text-base mt-1">
+      See also
+      <ul class="flex flex-col gap-2">
+        <li
+          v-for="(updatedByItem, updatedByItemIndex) in props.rfcBucketHtmlDocument.rfc.updated_by"
+          :key="updatedByItemIndex"
+        >
+          <AMaybeRFCLink
+            :href="infoSeriesPathBuilder(`RFC${updatedByItem.number}`)"
+            :class="ANCHOR_TAILWIND_STYLE"
+          >
+            <RFCTitle :rfc="updatedByItem" />
           </AMaybeRFCLink>
         </li>
       </ul>
@@ -106,6 +132,7 @@ import type {
   NodePojo
 } from '~/utilities/rfc-validators'
 import type { RfcBucketHtmlDocument } from '~/utilities/rfc'
+import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme'
 
 type Props = {
   rfcBucketHtmlDocument: RfcBucketHtmlDocument
