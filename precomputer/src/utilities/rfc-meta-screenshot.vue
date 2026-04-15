@@ -9,7 +9,7 @@
     <img :src="logoBase64Uri" style="position:absolute;left:0;top:0;" />
     <h1 style="font-size:50px;padding:0;margin:110px 0 0 0;line-height:1.3;">
       <span style="font-weight:normal;padding: 0 16px 0 0">RFC</span>
-      {{ rfc.number }}   
+      {{ rfc.number }}
     </h1>
     <h2 style="font-size:70px;font-weight:normal;margin:0;padding:0">{{ rfc.title }}</h2>
     <p style="font-size:30px;margin:8px 0 0 4px;padding:0;font-style:italic;color:#333">
@@ -19,7 +19,8 @@
         <span v-if="authorIndex < rfc.authors.length - 1" style="padding:0 12px 0 0">,</span>
       </span>
     </p>
-    <div style="font-size:30px;line-height:1.5;margin: 8px 0 0 0" v-html="rfc.abstract"></div>
+    <div style="display:flex;flex-direction:column;font-size:30px;line-height:1.5;margin: 8px 0 0 0"
+      v-html="rfc.abstract"></div>
   </div>
 </template>
 
