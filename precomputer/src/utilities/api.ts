@@ -115,7 +115,7 @@ export const safeDocRetrieve = async (
       if (typeof data === 'object') {
         return data
       }
-      console.error("Unexpected API response, wasn't docRetrieve", api, typeof data, data)
+      console.error("Unexpected API response, wasn't docRetrieve", typeof data, data)
       throw Error(`Unexpected typeof=${typeof data}`)
     } catch (e: unknown) {
       if (isDocRetrieveNotFoundError(e)) {
@@ -168,7 +168,7 @@ export const safeSubseriesList = async (
       if (typeof data === 'object') {
         return data
       }
-      console.error('Unexpected API response: ', api, typeof data, data)
+      console.error('Unexpected API response: ', typeof data, data)
       throw Error(`Unexpected API response, wasn't subseriesList: typeof=${typeof data}. See console.`)
     } catch (e: unknown) {
       errors.push(e)
@@ -213,7 +213,7 @@ export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
       if (typeof data === 'object') {
         return data
       }
-      console.error('Unexpected API response: ', api, typeof data, data)
+      console.error('Unexpected API response: ', typeof data, data)
       throw Error(`Unexpected API response wasn't docList: typeof=${typeof data}. See console.`)
     } catch (e: unknown) {
       errors.push(e)
