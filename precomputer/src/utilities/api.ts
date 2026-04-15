@@ -77,7 +77,8 @@ export const getApiClient = (): ApiClient => {
  * retry if timeouts etc.
  * 
  * Currently the API fails about 1/2000 uses when under heavy
- * load from 8 simultaneous Node processes.
+ * load from 8 simultaneous Node processes, so this helps recover
+ * and try again.
  */
 export const safeDocRetrieve = async (
   api: ApiClient,
@@ -146,7 +147,10 @@ export const safeDocRetrieve = async (
 
 /**
  * Safety wrapper around subseriesList access to retry on timeouts
- * Currently the API fails about 1/2000 uses on Tekton
+ * 
+ * Currently the API fails about 1/2000 uses when under heavy
+ * load from 8 simultaneous Node processes, so this helps recover
+ * and try again.
  */
 export const safeSubseriesList = async (
   api: ApiClient,
@@ -195,8 +199,10 @@ export const safeSubseriesList = async (
 
 /**
  * Safety wrapper around docList access to retry on timeouts.
+ * 
  * Currently the API fails about 1/2000 uses when under heavy
- * load from 8 simultaneous Node processes.
+ * load from 8 simultaneous Node processes, so this helps recover
+ * and try again.
  */
 export const safeDocList = async (api: ApiClient, options: DocListOptions) => {
   let attemptsRemaining = NUMBER_OF_API_RETRIES
@@ -563,7 +569,7 @@ const parseGroup = (
   const { acronym, name, type } = group
   const { data: parsedType, error } = RfcCommonGroupTypeSchema.safeParse(type)
   if (error) {
-    console.error(error)
+    console.error("Zod error for input type: ", JSON.stringify(type), error)
     throw Error(
       `Problem parsing group type ${JSON.stringify(group)} ${rfcNumberForDebug !== undefined ? `from RFC ${rfcNumberForDebug}` : ''
       }`

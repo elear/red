@@ -42,8 +42,8 @@ export const fetchRfcRetry = async (
 }
 
 /**
- * Tests whether an error thrown by fetch() is a temporary glitch that will likely
- * succeed if tried again
+ * Attempts to decide whether an error thrown by fetch() is a
+ * temporary glitch that will likely succeed if tried again.
  */
 export const isRecovereableFetchError = async (error: unknown): Promise<boolean> => {
   if (
@@ -67,7 +67,7 @@ export const isRecovereableFetchError = async (error: unknown): Promise<boolean>
     return true
   }
   const HTTP_502_BAD_GATEWAY = 502
-  if(error instanceof Response && error.status === HTTP_502_BAD_GATEWAY) {
+  if (error instanceof Response && error.status === HTTP_502_BAD_GATEWAY) {
     // Bad gateway errors seem to typically take longer to recover from, so we'll sleep for a bit
     await sleep(10000)
     return true

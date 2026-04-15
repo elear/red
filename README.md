@@ -75,4 +75,4 @@ In `/precomputer/` run `npm run test`.
 
 ### During local dev website doesn't update with changes
 
-Stop the dev server, run `npm run cleanup`, and restart the dev server.
+Stop the dev server, run `npm run cleanup`, and restart the dev server
