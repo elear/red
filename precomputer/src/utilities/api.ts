@@ -319,6 +319,10 @@ export const getAllRFCs = async ({
     docListOptions.offset = offset
     docListOptions.limit = limit ?? MAX_LIMIT_PER_REQUEST
     const response = await safeDocList(api, docListOptions)
+    if (!response.results) {
+      console.error('No response.results? This seems like an invalid API response.', JSON.stringify(response))
+      throw Error(`Bad API response. Expected response.results to be truthy. See console for more`)
+    }
     const rfcCommons = response.results.map(rfcMetadataToRfcCommon)
     rfcs.unshift(...rfcCommons)
     rfcs.sort((a, b) => a.number - b.number)
