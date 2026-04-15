@@ -162,8 +162,7 @@ const RfcCommonDraftSchema = z.object({
 
 export const RfcCommonAreaSchema = z.object({
   acronym: z.string(),
-  name: z.string(),
-  type: z.string().optional()
+  name: z.string()
 })
 
 export const RfcCommonGroupTypeSchema = z.union([

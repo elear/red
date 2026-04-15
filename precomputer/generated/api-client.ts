@@ -238,6 +238,10 @@ export class ApiClient {
       )
     },
 
+    refreshRfcIndex: () => {
+      return this.Fetch<void>('post', '/api/purple/rfc_index/refresh/', {})
+    },
+
     getSubjectPersonById: (subject_id: string) => {
       return this.Fetch<Person>(
         'get',
@@ -252,6 +256,7 @@ export class ApiClient {
       area?: string[]
       group?: string[]
       limit?: number
+      number?: number[]
       offset?: number
       published_after?: string
       published_before?: string
@@ -299,6 +304,17 @@ export class ApiClient {
   }
 }
 
+export type Area = {
+  acronym: string
+  name: string
+  ads?: AreaDirector[]
+}
+
+export type AreaDirector = {
+  name?: string
+  email?: string
+}
+
 export type AuthorPerson = {
   person_pk?: number
   name: string
@@ -324,6 +340,7 @@ export type DocIdentifierTypeEnum = 'doi' | 'issn'
 export type DocumentAuthor = {
   person: number
   plain_name?: string
+  affiliation?: string
 }
 
 export type Draft = {
@@ -345,12 +362,25 @@ export type DraftWithAuthors = {
 }
 
 export type EditableRfc = {
-  id?: number
+  title: string
   authors: RfcAuthor[]
+  stream?: string | null
+  abstract?: string
+  pages?: number | null
+  std_level?: string | null
+  keywords?: unknown
 }
 
 export type EditableRfcRequest = {
+  published: Date
+  title: string
   authors: RfcAuthorRequest[]
+  stream?: string | null
+  abstract?: string
+  pages?: number | null
+  std_level?: string | null
+  subseries: string[]
+  keywords?: unknown
 }
 
 export type EmailPerson = {
@@ -390,6 +420,7 @@ export type FullDraft = {
   stream?: string | null
   title: string
   group?: string
+  area?: Area
   abstract?: string
   pages?: number | null
   source_format?: SourceFormatEnum
@@ -398,6 +429,7 @@ export type FullDraft = {
   consensus?: boolean | null
   shepherd?: number
   ad?: number | null
+  wg_chairs?: WgChair[]
 }
 
 export type GetDraftAuthorsErrorResponse400 = ParseErrorResponse
@@ -422,6 +454,7 @@ export type Group = {
   acronym: string
   name: string
   type?: string | null
+  list_email?: string
 }
 
 export type NotificationAck = {
@@ -463,24 +496,6 @@ export type NotifyRfcPublishedAuthorsINDEXCountryErrorComponent = {
     | 'null'
     | 'null_characters_not_allowed'
     | 'surrogate_characters_not_allowed'
-  detail: string
-}
-
-export type NotifyRfcPublishedAuthorsINDEXDatatrackerPersonPathErrorComponent =
-  {
-    attr: 'authors.INDEX.datatracker_person_path'
-    code:
-      | 'blank'
-      | 'invalid'
-      | 'null'
-      | 'null_characters_not_allowed'
-      | 'surrogate_characters_not_allowed'
-    detail: string
-  }
-
-export type NotifyRfcPublishedAuthorsINDEXEmailErrorComponent = {
-  attr: 'authors.INDEX.email'
-  code: 'does_not_exist' | 'incorrect_type'
   detail: string
 }
 
@@ -555,10 +570,8 @@ export type NotifyRfcPublishedError =
   | NotifyRfcPublishedAuthorsINDEXTitlepageNameErrorComponent
   | NotifyRfcPublishedAuthorsINDEXIsEditorErrorComponent
   | NotifyRfcPublishedAuthorsINDEXPersonErrorComponent
-  | NotifyRfcPublishedAuthorsINDEXEmailErrorComponent
   | NotifyRfcPublishedAuthorsINDEXAffiliationErrorComponent
   | NotifyRfcPublishedAuthorsINDEXCountryErrorComponent
-  | NotifyRfcPublishedAuthorsINDEXDatatrackerPersonPathErrorComponent
   | NotifyRfcPublishedGroupErrorComponent
   | NotifyRfcPublishedStreamErrorComponent
   | NotifyRfcPublishedAbstractErrorComponent
@@ -569,6 +582,7 @@ export type NotifyRfcPublishedError =
   | NotifyRfcPublishedUpdatesErrorComponent
   | NotifyRfcPublishedSubseriesErrorComponent
   | NotifyRfcPublishedSubseriesINDEXErrorComponent
+  | NotifyRfcPublishedKeywordsErrorComponent
 
 export type NotifyRfcPublishedErrorResponse400 =
   | NotifyRfcPublishedValidationError
@@ -577,6 +591,12 @@ export type NotifyRfcPublishedErrorResponse400 =
 export type NotifyRfcPublishedGroupErrorComponent = {
   attr: 'group'
   code: 'does_not_exist' | 'invalid' | 'null'
+  detail: string
+}
+
+export type NotifyRfcPublishedKeywordsErrorComponent = {
+  attr: 'keywords'
+  code: 'invalid' | 'null'
   detail: string
 }
 
@@ -696,7 +716,15 @@ export type ParseErrorResponse = {
 }
 
 export type PatchedEditableRfcRequest = {
+  published?: Date
+  title?: string
   authors?: RfcAuthorRequest[]
+  stream?: string | null
+  abstract?: string
+  pages?: number | null
+  std_level?: string | null
+  subseries?: string[]
+  keywords?: unknown
 }
 
 export type Person = {
@@ -712,6 +740,16 @@ export type PersonsByEmailErrorResponse400 = ParseErrorResponse
 export type PurpleRfcAuthorsListErrorResponse400 = ParseErrorResponse
 
 export type PurpleRfcAuthorsRetrieveErrorResponse400 = ParseErrorResponse
+
+export type PurpleRfcPartialUpdateAbstractErrorComponent = {
+  attr: 'abstract'
+  code:
+    | 'invalid'
+    | 'null'
+    | 'null_characters_not_allowed'
+    | 'surrogate_characters_not_allowed'
+  detail: string
+}
 
 export type PurpleRfcPartialUpdateAuthorsINDEXAffiliationErrorComponent = {
   attr: 'authors.INDEX.affiliation'
@@ -732,24 +770,6 @@ export type PurpleRfcPartialUpdateAuthorsINDEXCountryErrorComponent = {
     | 'null'
     | 'null_characters_not_allowed'
     | 'surrogate_characters_not_allowed'
-  detail: string
-}
-
-export type PurpleRfcPartialUpdateAuthorsINDEXDatatrackerPersonPathErrorComponent =
-  {
-    attr: 'authors.INDEX.datatracker_person_path'
-    code:
-      | 'blank'
-      | 'invalid'
-      | 'null'
-      | 'null_characters_not_allowed'
-      | 'surrogate_characters_not_allowed'
-    detail: string
-  }
-
-export type PurpleRfcPartialUpdateAuthorsINDEXEmailErrorComponent = {
-  attr: 'authors.INDEX.email'
-  code: 'does_not_exist' | 'incorrect_type'
   detail: string
 }
 
@@ -792,19 +812,32 @@ export type PurpleRfcPartialUpdateAuthorsNonFieldErrorsErrorComponent = {
 
 export type PurpleRfcPartialUpdateError =
   | PurpleRfcPartialUpdateNonFieldErrorsErrorComponent
+  | PurpleRfcPartialUpdatePublishedErrorComponent
+  | PurpleRfcPartialUpdateTitleErrorComponent
   | PurpleRfcPartialUpdateAuthorsNonFieldErrorsErrorComponent
   | PurpleRfcPartialUpdateAuthorsINDEXNonFieldErrorsErrorComponent
   | PurpleRfcPartialUpdateAuthorsINDEXTitlepageNameErrorComponent
   | PurpleRfcPartialUpdateAuthorsINDEXIsEditorErrorComponent
   | PurpleRfcPartialUpdateAuthorsINDEXPersonErrorComponent
-  | PurpleRfcPartialUpdateAuthorsINDEXEmailErrorComponent
   | PurpleRfcPartialUpdateAuthorsINDEXAffiliationErrorComponent
   | PurpleRfcPartialUpdateAuthorsINDEXCountryErrorComponent
-  | PurpleRfcPartialUpdateAuthorsINDEXDatatrackerPersonPathErrorComponent
+  | PurpleRfcPartialUpdateStreamErrorComponent
+  | PurpleRfcPartialUpdateAbstractErrorComponent
+  | PurpleRfcPartialUpdatePagesErrorComponent
+  | PurpleRfcPartialUpdateStdLevelErrorComponent
+  | PurpleRfcPartialUpdateSubseriesErrorComponent
+  | PurpleRfcPartialUpdateSubseriesINDEXErrorComponent
+  | PurpleRfcPartialUpdateKeywordsErrorComponent
 
 export type PurpleRfcPartialUpdateErrorResponse400 =
   | PurpleRfcPartialUpdateValidationError
   | ParseErrorResponse
+
+export type PurpleRfcPartialUpdateKeywordsErrorComponent = {
+  attr: 'keywords'
+  code: 'invalid' | 'null'
+  detail: string
+}
 
 export type PurpleRfcPartialUpdateNonFieldErrorsErrorComponent = {
   attr: 'non_field_errors'
@@ -812,9 +845,73 @@ export type PurpleRfcPartialUpdateNonFieldErrorsErrorComponent = {
   detail: string
 }
 
+export type PurpleRfcPartialUpdatePagesErrorComponent = {
+  attr: 'pages'
+  code: 'invalid' | 'max_string_length' | 'max_value' | 'min_value'
+  detail: string
+}
+
+export type PurpleRfcPartialUpdatePublishedErrorComponent = {
+  attr: 'published'
+  code: 'date' | 'invalid' | 'make_aware' | 'null' | 'overflow' | 'required'
+  detail: string
+}
+
+export type PurpleRfcPartialUpdateStdLevelErrorComponent = {
+  attr: 'std_level'
+  code: 'does_not_exist' | 'incorrect_type'
+  detail: string
+}
+
+export type PurpleRfcPartialUpdateStreamErrorComponent = {
+  attr: 'stream'
+  code: 'does_not_exist' | 'incorrect_type'
+  detail: string
+}
+
+export type PurpleRfcPartialUpdateSubseriesErrorComponent = {
+  attr: 'subseries'
+  code: 'not_a_list' | 'null' | 'required'
+  detail: string
+}
+
+export type PurpleRfcPartialUpdateSubseriesINDEXErrorComponent = {
+  attr: 'subseries.INDEX'
+  code:
+    | 'blank'
+    | 'invalid'
+    | 'null'
+    | 'null_characters_not_allowed'
+    | 'surrogate_characters_not_allowed'
+  detail: string
+}
+
+export type PurpleRfcPartialUpdateTitleErrorComponent = {
+  attr: 'title'
+  code:
+    | 'blank'
+    | 'invalid'
+    | 'max_length'
+    | 'null'
+    | 'null_characters_not_allowed'
+    | 'required'
+    | 'surrogate_characters_not_allowed'
+  detail: string
+}
+
 export type PurpleRfcPartialUpdateValidationError = {
   type: ValidationErrorEnum
   errors: PurpleRfcPartialUpdateError[]
+}
+
+export type PurpleRfcUpdateAbstractErrorComponent = {
+  attr: 'abstract'
+  code:
+    | 'invalid'
+    | 'null'
+    | 'null_characters_not_allowed'
+    | 'surrogate_characters_not_allowed'
+  detail: string
 }
 
 export type PurpleRfcUpdateAuthorsINDEXAffiliationErrorComponent = {
@@ -836,23 +933,6 @@ export type PurpleRfcUpdateAuthorsINDEXCountryErrorComponent = {
     | 'null'
     | 'null_characters_not_allowed'
     | 'surrogate_characters_not_allowed'
-  detail: string
-}
-
-export type PurpleRfcUpdateAuthorsINDEXDatatrackerPersonPathErrorComponent = {
-  attr: 'authors.INDEX.datatracker_person_path'
-  code:
-    | 'blank'
-    | 'invalid'
-    | 'null'
-    | 'null_characters_not_allowed'
-    | 'surrogate_characters_not_allowed'
-  detail: string
-}
-
-export type PurpleRfcUpdateAuthorsINDEXEmailErrorComponent = {
-  attr: 'authors.INDEX.email'
-  code: 'does_not_exist' | 'incorrect_type'
   detail: string
 }
 
@@ -895,23 +975,90 @@ export type PurpleRfcUpdateAuthorsNonFieldErrorsErrorComponent = {
 
 export type PurpleRfcUpdateError =
   | PurpleRfcUpdateNonFieldErrorsErrorComponent
+  | PurpleRfcUpdatePublishedErrorComponent
+  | PurpleRfcUpdateTitleErrorComponent
   | PurpleRfcUpdateAuthorsNonFieldErrorsErrorComponent
   | PurpleRfcUpdateAuthorsINDEXNonFieldErrorsErrorComponent
   | PurpleRfcUpdateAuthorsINDEXTitlepageNameErrorComponent
   | PurpleRfcUpdateAuthorsINDEXIsEditorErrorComponent
   | PurpleRfcUpdateAuthorsINDEXPersonErrorComponent
-  | PurpleRfcUpdateAuthorsINDEXEmailErrorComponent
   | PurpleRfcUpdateAuthorsINDEXAffiliationErrorComponent
   | PurpleRfcUpdateAuthorsINDEXCountryErrorComponent
-  | PurpleRfcUpdateAuthorsINDEXDatatrackerPersonPathErrorComponent
+  | PurpleRfcUpdateStreamErrorComponent
+  | PurpleRfcUpdateAbstractErrorComponent
+  | PurpleRfcUpdatePagesErrorComponent
+  | PurpleRfcUpdateStdLevelErrorComponent
+  | PurpleRfcUpdateSubseriesErrorComponent
+  | PurpleRfcUpdateSubseriesINDEXErrorComponent
+  | PurpleRfcUpdateKeywordsErrorComponent
 
 export type PurpleRfcUpdateErrorResponse400 =
   | PurpleRfcUpdateValidationError
   | ParseErrorResponse
 
+export type PurpleRfcUpdateKeywordsErrorComponent = {
+  attr: 'keywords'
+  code: 'invalid' | 'null'
+  detail: string
+}
+
 export type PurpleRfcUpdateNonFieldErrorsErrorComponent = {
   attr: 'non_field_errors'
   code: 'invalid' | 'null'
+  detail: string
+}
+
+export type PurpleRfcUpdatePagesErrorComponent = {
+  attr: 'pages'
+  code: 'invalid' | 'max_string_length' | 'max_value' | 'min_value'
+  detail: string
+}
+
+export type PurpleRfcUpdatePublishedErrorComponent = {
+  attr: 'published'
+  code: 'date' | 'invalid' | 'make_aware' | 'null' | 'overflow' | 'required'
+  detail: string
+}
+
+export type PurpleRfcUpdateStdLevelErrorComponent = {
+  attr: 'std_level'
+  code: 'does_not_exist' | 'incorrect_type'
+  detail: string
+}
+
+export type PurpleRfcUpdateStreamErrorComponent = {
+  attr: 'stream'
+  code: 'does_not_exist' | 'incorrect_type'
+  detail: string
+}
+
+export type PurpleRfcUpdateSubseriesErrorComponent = {
+  attr: 'subseries'
+  code: 'not_a_list' | 'null' | 'required'
+  detail: string
+}
+
+export type PurpleRfcUpdateSubseriesINDEXErrorComponent = {
+  attr: 'subseries.INDEX'
+  code:
+    | 'blank'
+    | 'invalid'
+    | 'null'
+    | 'null_characters_not_allowed'
+    | 'surrogate_characters_not_allowed'
+  detail: string
+}
+
+export type PurpleRfcUpdateTitleErrorComponent = {
+  attr: 'title'
+  code:
+    | 'blank'
+    | 'invalid'
+    | 'max_length'
+    | 'null'
+    | 'null_characters_not_allowed'
+    | 'required'
+    | 'surrogate_characters_not_allowed'
   detail: string
 }
 
@@ -929,6 +1076,7 @@ export type RedDocListAreaErrorComponent = {
 export type RedDocListError =
   | RedDocListPublishedErrorComponent
   | RedDocListStreamErrorComponent
+  | RedDocListNumberErrorComponent
   | RedDocListGroupErrorComponent
   | RedDocListAreaErrorComponent
   | RedDocListStatusErrorComponent
@@ -941,6 +1089,12 @@ export type RedDocListErrorResponse400 =
 export type RedDocListGroupErrorComponent = {
   attr: 'group'
   code: 'invalid_choice' | 'invalid_list' | 'invalid_pk_value'
+  detail: string
+}
+
+export type RedDocListNumberErrorComponent = {
+  attr: 'number'
+  code: 'invalid' | 'max_value'
   detail: string
 }
 
@@ -999,10 +1153,14 @@ export type Reference = {
   name?: string
 }
 
+export type RefreshRfcIndexErrorResponse400 = ParseErrorResponse
+
 export type RelatedDraft = {
   id: number
   name: string
   title: string
+  shepherd: Shepherd
+  ad: AreaDirector
 }
 
 export type RelatedRfc = {
@@ -1025,8 +1183,10 @@ export type Rfc = {
   pages?: number | null
   authors?: RfcAuthor[]
   group: Group
-  area?: Group
+  area?: Area
   stream: StreamName
+  ad?: AreaDirector
+  group_list_email?: string
   identifiers?: DocIdentifier[]
   obsoletes?: RelatedRfc[]
   obsoleted_by?: ReverseRelatedRfc[]
@@ -1045,7 +1205,7 @@ export type RfcAuthor = {
   titlepage_name: string
   is_editor?: boolean
   person?: number | null
-  email?: string | null
+  email?: string
   affiliation?: string
   country?: string
   datatracker_person_path?: string
@@ -1055,10 +1215,8 @@ export type RfcAuthorRequest = {
   titlepage_name: string
   is_editor?: boolean
   person?: number | null
-  email?: string | null
   affiliation?: string
   country?: string
-  datatracker_person_path?: string
 }
 
 export type RfcFileRequest = {
@@ -1081,8 +1239,10 @@ export type RfcMetadata = {
   pages?: number | null
   authors?: RfcAuthor[]
   group: Group
-  area?: Group
+  area?: Area
   stream: StreamName
+  ad?: AreaDirector
+  group_list_email?: string
   identifiers?: DocIdentifier[]
   obsoletes?: RelatedRfc[]
   obsoleted_by?: ReverseRelatedRfc[]
@@ -1112,6 +1272,7 @@ export type RfcPubRequest = {
   obsoletes?: (number | null)[]
   updates?: (number | null)[]
   subseries: string[]
+  keywords?: unknown
 }
 
 export type RfcStatus = {
@@ -1127,6 +1288,10 @@ export type RfcWithAuthors = {
 export type SchemaRetrieveErrorResponse400 = ParseErrorResponse
 
 export type SearchPersonErrorResponse400 = ParseErrorResponse
+
+export type Shepherd = {
+  email: string
+}
 
 export type SlugEnum =
   | 'bcp'
@@ -1165,8 +1330,10 @@ export type SubseriesContent = {
   pages?: number | null
   authors?: RfcAuthor[]
   group: Group
-  area?: Group
+  area?: Area
   stream: StreamName
+  ad?: AreaDirector
+  group_list_email?: string
   identifiers?: DocIdentifier[]
   obsoletes?: RelatedRfc[]
   obsoleted_by?: ReverseRelatedRfc[]
@@ -1240,3 +1407,8 @@ export type UploadRfcFilesValidationError = {
 }
 
 export type ValidationErrorEnum = 'validation_error'
+
+export type WgChair = {
+  name?: string
+  email?: string
+}

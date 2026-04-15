@@ -51,7 +51,6 @@ export const blankRfcCommon: RfcCommon = {
     type: 'area'
   },
   area: {
-    type: 'area',
     acronym: '',
     name: ''
   },

@@ -503,12 +503,11 @@ const parseArea = (
   area: Rfc['area'] | RfcMetadata['area']
 ): RfcCommon['area'] => {
   if (!area) return undefined
-  const { acronym, name, type } = area
+  const { acronym, name } = area
 
   return {
     acronym,
-    name,
-    type: type ?? undefined
+    name
   }
 }
 

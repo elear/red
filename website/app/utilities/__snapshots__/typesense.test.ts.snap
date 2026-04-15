@@ -6,7 +6,6 @@ exports[`typeSenseSearchItemToRFC 1`] = `
   "area": {
     "acronym": "iesg",
     "name": "Internet Engineering Steering Group",
-    "type": "area",
   },
   "authors": [
     {
