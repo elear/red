@@ -1,20 +1,4 @@
 {
   "//": "this is a separate file so that we can potentially migrate it to a worker later",
-  "redirects": [
-    ["/rfc-index.html", "/search/"],
-    ["/rfc-index2.html", "/search/"],
-    ["/rfc-index-100a.html", "/search/"],
-    ["/rfc-index-100d.html", "/search/"],
-    ["/status_changes.php", "/status-changes/"],
-    ["/all_clusters.php", "https://queue.rfc-editor.org/clusters/"],
-    ["/standards", "/search/?status=Internet+Standard"],
-    ["/errata.php", "https://errata.rfc-editor.org"],
-    ["/source-definitions", "/series/rfc-tips/"],
-    ["/how-to-verify", "/series/rfc-errata/"],
-    ["/ien/ien-index.html", "/ien/ien-index/"],
-    ["/current_queue.php", "/authors/rfc-edit/pub-queue/"],
-    ["/rfc/rfc*.json", "/api/v1/rfc/rfc$1.json"],
-    ["/materials/*", "https://materials.rfc-editor.org/$1"],
-    ["/in-notes/*", "https://in-notes.rfc-editor.org/$1"]
-  ]
+  "redirects": []
 }
