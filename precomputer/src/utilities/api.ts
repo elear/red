@@ -21,16 +21,16 @@ const NUMBER_OF_API_RETRIES = 5
 const MINIMUM_DELAY_BETWEEN_REQUESTS_MS = 1000
 
 export const getApiClient = (): ApiClient => {
-  const NUXT_PUBLIC_DATATRACKER_BASE = process.env.NUXT_PUBLIC_DATATRACKER_BASE
+  const DATATRACKER_API_BASE = process.env.DATATRACKER_API_BASE
   const NUXT_CF_SERVICE_TOKEN_ID = process.env.NUXT_CF_SERVICE_TOKEN_ID
   const NUXT_CF_SERVICE_TOKEN_SECRET = process.env.NUXT_CF_SERVICE_TOKEN_SECRET
   const NUXT_DATATRACKER_API_KEY = process.env.NUXT_DATATRACKER_API_KEY
 
-  if (NUXT_PUBLIC_DATATRACKER_BASE) {
+  if (DATATRACKER_API_BASE) {
     // Production environment (prod/staging/etc)
 
     assertIsString(
-      NUXT_PUBLIC_DATATRACKER_BASE,
+      DATATRACKER_API_BASE,
       "datatracker base wasn't a string"
     )
     assertIsString(NUXT_CF_SERVICE_TOKEN_ID, "cloudflare token wasn't a string")
@@ -49,7 +49,7 @@ export const getApiClient = (): ApiClient => {
       'X-Api-Key': NUXT_DATATRACKER_API_KEY
     }
 
-    const baseUrl = NUXT_PUBLIC_DATATRACKER_BASE
+    const baseUrl = DATATRACKER_API_BASE
 
     console.log("Using API ", baseUrl)
 
