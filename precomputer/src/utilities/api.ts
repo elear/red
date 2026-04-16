@@ -20,6 +20,8 @@ type DocListOptions = Parameters<RedApi['docList']>[0]
 const NUMBER_OF_API_RETRIES = 5
 const MINIMUM_DELAY_BETWEEN_REQUESTS_MS = 1000
 
+let hasPrintedAPIUrl = false
+
 export const getApiClient = (): ApiClient => {
   const DATATRACKER_API_BASE = process.env.DATATRACKER_API_BASE
   const NUXT_DATATRACKER_API_KEY = process.env.NUXT_DATATRACKER_API_KEY
@@ -42,7 +44,10 @@ export const getApiClient = (): ApiClient => {
 
     const baseUrl = DATATRACKER_API_BASE
 
-    console.log("Using API ", baseUrl)
+    if (hasPrintedAPIUrl === false) {
+      console.log("Using API ", baseUrl)
+      hasPrintedAPIUrl = true
+    }
 
     return new ApiClient({
       baseUrl,
