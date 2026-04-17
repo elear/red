@@ -259,6 +259,8 @@ export const rfcCitePathBuilder = (
   }
 }
 
+export const doiUrlBuilder = (identifierValue: string, encodeIdentifier: boolean) => `https://doi.org/${encodeIdentifier ? encodeURI(identifierValue) : identifierValue}` as const
+
 type FormatCommon = RfcCommon['formats'][number]['format']
 
 export const rfcFormatPathBuilder = (rfcId: string, format: FormatCommon) => {

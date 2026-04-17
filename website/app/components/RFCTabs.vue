@@ -340,10 +340,10 @@
               <dd>
                 <Anchor
                   v-if="identifier.type === 'doi'"
-                  :href="`https://doi.org/${encodeURI(identifier.value)}`"
+                  :href="doiUrlBuilder(identifier.value, true)"
                   :class="ANCHOR_COLOR_TAILWIND_STYLE"
                 >
-                  {{ `https://doi.org/${identifier.value}` }}
+                  {{ doiUrlBuilder(identifier.value, false) }}
                   <Icon
                     name="fluent:window-new-20-regular"
                     class="text-lg align-middle ml-1"
@@ -399,6 +399,31 @@
               </ul>
             </dd>
           </template>
+
+          <dt>Cite this RFC</dt>
+          <dd>
+            <Anchor
+              :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'txt')"
+              aria-label="Cite TXT URL"
+            >
+              TXT
+            </Anchor>
+            {{ COMMA }}
+            <Anchor
+              :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'xml')"
+              aria-label="Cite XML URL"
+            >
+              XML
+            </Anchor>
+            {{ COMMA }}
+            <Anchor
+              :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'bibTeX')"
+              aria-label="Cite BibTeX URL"
+            >
+              BibTeX
+            </Anchor>
+            {{ FULLSTOP }}
+          </dd>
         </dl>
       </VerticalScrollable>
     </TabsContent>
@@ -463,7 +488,9 @@ import {
   useErrataUrlOrigin,
   rfcFormatPathBuilder,
   streamUrlBuilder,
-  useWorkingGroupUrlBuilder
+  useWorkingGroupUrlBuilder,
+  rfcCitePathBuilder,
+  doiUrlBuilder
 } from '~/utilities/url'
 import type { RfcBucketHtmlDocument } from '~/utilities/rfc'
 import type { RfcCommon } from '~/utilities/rfc-validators'
