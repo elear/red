@@ -1,12 +1,7 @@
 <template>
   <div class="min-h-[100vh]">
-    <ais-instant-search
-      ref="aisInstantSearchRef"
-      :index-name="INDEX_NAME"
-      :search-client="searchClient"
-      :future="{ preserveSharedStateOnUnmount: true }"
-      :routing="routing"
-    >
+    <ais-instant-search ref="aisInstantSearchRef" :index-name="INDEX_NAME" :search-client="searchClient"
+      :future="{ preserveSharedStateOnUnmount: true }" :routing="routing">
       <NuxtLayout name="default">
         <SearchMainHeader />
         <div class="container mx-auto flex flex-row items-start py-5 lg:min-h-screen md:px-2">
@@ -24,11 +19,8 @@
                 <SearchStats />
                 <div class="hidden lg:flex lg:items-center lg:h-10">
                   <SearchSortBy />
-                  <Separator
-                    orientation="vertical"
-                    decorative
-                    class="bg-gray-400 data-[orientation=vertical]:h-7 data-[orientation=vertical]:w-px mx-3"
-                  />
+                  <Separator orientation="vertical" decorative
+                    class="bg-gray-400 data-[orientation=vertical]:h-7 data-[orientation=vertical]:w-px mx-3" />
                   <SearchDensity v-model="searchStore.density" />
                 </div>
                 <div class="lg:hidden print:hidden">
@@ -36,16 +28,10 @@
                 </div>
               </div>
 
-              <SearchSubseriesBar
-                v-if="searchStore.isSubseries"
-                :label="searchStore.subseriesLabel"
-                :href="searchStore.subseriesHref"
-              />
+              <SearchSubseriesBar v-if="searchStore.isSubseries" :label="searchStore.subseriesLabel"
+                :href="searchStore.subseriesHref" />
 
-              <ais-hits
-                :id="INSTANTSEARCH_HITS_CONTAINER_DOM_ID"
-                class="mt-4"
-              >
+              <ais-hits :id="INSTANTSEARCH_HITS_CONTAINER_DOM_ID" class="mt-4">
                 <template #default="{ items }">
                   <!-- NO RESULTS -->
                   <SearchNoResults v-if="!items.length" />
@@ -85,12 +71,15 @@ const router = useRouter()
  * Typesense Search Client
  */
 
+const host = useTypesenseHost()
+const apiKey = useTypesenseApiKey()
+
 const typesenseAdapter = new TypesenseInstantSearchAdapter({
   server: {
-    apiKey: '2Ic06V287miUyJ32ee25q0ccXK0Dr3RO', // Be sure to use an API key that only allows search operations
+    apiKey,
     nodes: [
       {
-        host: 'typesense.ietf.org',
+        host,
         path: '',
         port: 443,
         protocol: 'https'
