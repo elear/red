@@ -400,11 +400,12 @@
             </dd>
           </template>
 
-          <dt>Cite this RFC</dt>
+          <dt class="font-bold mt-2">Cite this RFC</dt>
           <dd>
             <Anchor
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'txt')"
               aria-label="Cite TXT URL"
+              :class="ANCHOR_COLOR_TAILWIND_STYLE"
             >
               TXT
             </Anchor>
@@ -412,6 +413,7 @@
             <Anchor
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'xml')"
               aria-label="Cite XML URL"
+              :class="ANCHOR_COLOR_TAILWIND_STYLE"
             >
               XML
             </Anchor>
@@ -419,6 +421,7 @@
             <Anchor
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'bibTeX')"
               aria-label="Cite BibTeX URL"
+              :class="ANCHOR_COLOR_TAILWIND_STYLE"
             >
               BibTeX
             </Anchor>
