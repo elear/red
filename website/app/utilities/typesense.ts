@@ -108,7 +108,7 @@ export const TypeSenseSearchItemSchema = z.object({
   type: z.string(),
 
   filename: z.string(),
-  pages: z.number(),
+  pages: z.number().optional(),
   keywords: z.array(z.string()),
 
   flags: z
