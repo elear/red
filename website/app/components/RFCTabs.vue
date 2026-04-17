@@ -408,24 +408,21 @@
               :class="ANCHOR_COLOR_TAILWIND_STYLE"
             >
               TXT
-            </Anchor>
-            {{ COMMA }}
+            </Anchor>{{ COMMA }}
             <Anchor
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'xml')"
               aria-label="Cite XML URL"
               :class="ANCHOR_COLOR_TAILWIND_STYLE"
             >
               XML
-            </Anchor>
-            {{ COMMA }}
+            </Anchor>{{ COMMA }}
             <Anchor
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'bibTeX')"
               aria-label="Cite BibTeX URL"
               :class="ANCHOR_COLOR_TAILWIND_STYLE"
             >
               BibTeX
-            </Anchor>
-            {{ FULLSTOP }}
+            </Anchor>{{ FULLSTOP }}
           </dd>
         </dl>
       </VerticalScrollable>
