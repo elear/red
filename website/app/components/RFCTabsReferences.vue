@@ -23,5 +23,5 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const sortedRfcReferences = computed(() => props.rfcs.sort((a, b) => a.number - b.number))
+const sortedRfcReferences = computed(() => Array.from(props.rfcs).sort((a, b) => a.number - b.number))
 </script>
