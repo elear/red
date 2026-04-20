@@ -1,11 +1,12 @@
 <template>
   <HoverCardRoot v-model:open="isHoverCardOpen">
     <HoverCardTrigger as-child>
-      <a v-if="props.href?.startsWith('#')" v-bind="props" @focus="loadRfc" @mouseover="loadRfc"
+      <a v-if="props.href?.startsWith('#')" :class="props.class" :id="props.id" @focus="loadRfc" @mouseover="loadRfc"
         @blur="isHoverCardOpen = false">
         <slot />
       </a>
-      <NuxtLink v-else v-bind="propsWithHrefAsTo" @focus="loadRfc" @mouseover="loadRfc" @blur="isHoverCardOpen = false">
+      <NuxtLink v-else :to="props.href" :class="props.class" :id="props.id" @focus="loadRfc" @mouseover="loadRfc"
+        @blur="isHoverCardOpen = false">
         <slot />
       </NuxtLink>
     </HoverCardTrigger>
@@ -102,12 +103,6 @@ const loadingStatus = ref<LoadingStatus>({ type: 'idle' })
 onUnmounted(() => {
   hasUnmountedAbortController?.abort()
 })
-
-const propsWithHrefAsTo = computed(() => ({
-  ...props,
-  to: props.href, // copy `href` to `to` for usage
-  href: undefined // clobber 'href' with undefined because we're using NuxtLink
-}))
 
 /**
  * Loads RFC Common for the link preview
