@@ -273,8 +273,7 @@
             <dt class="font-bold mt-2">Area</dt>
             <dd>
               <Anchor
-                :href="areaGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.area)
-                  "
+                :href="areaGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.area)"
                 :class="ANCHOR_COLOR_TAILWIND_STYLE"
               >
                 {{ props.rfcBucketHtmlDocument.rfc.area?.name }}
@@ -291,7 +290,23 @@
             </dd>
           </template>
 
-          <dt class="font-bold mt-2">Publication Stream</dt>
+          <dt class="font-bold mt-2">
+            <template v-if="props.rfcBucketHtmlDocument.rfc.stream.slug === 'IAB'">
+              IAB stream
+            </template>
+            <template v-else-if="props.rfcBucketHtmlDocument.rfc.stream.slug === 'INDEPENDENT'">
+              Independent Stream
+            </template>
+            <template v-else-if="props.rfcBucketHtmlDocument.rfc.stream.slug === 'Editorial'">
+              Editorial Stream
+            </template>
+            <template v-else-if="props.rfcBucketHtmlDocument.rfc.stream.slug === 'Legacy'">
+              Legacy Stream
+            </template>
+            <template v-else>
+              Publication Stream
+            </template>
+          </dt>
           <dd>
             <template v-if="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)">
               <Anchor
