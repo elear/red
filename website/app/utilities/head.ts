@@ -64,6 +64,7 @@ export const useRfcEditorHead = (props: UseRfcEditorProps) => {
          * See related DataTracker issue https://github.com/ietf-tools/datatracker/issues/9667
          **/
         'data-nosnippet': "true",
+        tagPosition: 'bodyOpen',
         innerHTML: 'Your browser JavaScript is disabled. Most of this site works without it, but some features —like search— require it. Please enable JavaScript and reload the page.',
       }
     ]
