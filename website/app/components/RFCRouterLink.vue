@@ -1,11 +1,11 @@
 <template>
   <HoverCardRoot v-model:open="isHoverCardOpen">
     <HoverCardTrigger as-child>
-      <a v-if="props.href?.startsWith('#')" :class="props.class" :id="props.id" @focus="loadRfc" @mouseover="loadRfc"
+      <a v-if="props.href?.startsWith('#')" :id="props.id" :class="props.class" @focus="loadRfc" @mouseover="loadRfc"
         @blur="isHoverCardOpen = false">
         <slot />
       </a>
-      <NuxtLink v-else :to="props.href" :class="props.class" :id="props.id" @focus="loadRfc" @mouseover="loadRfc"
+      <NuxtLink v-else :id="props.id" :to="props.href" :class="props.class" @focus="loadRfc" @mouseover="loadRfc"
         @blur="isHoverCardOpen = false">
         <slot />
       </NuxtLink>
@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted, customRef } from 'vue'
+import { onUnmounted, customRef } from 'vue'
 import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
 import { NuxtLink } from '#components'
 import { RFC_TYPE_RFC } from '~/utilities/rfc'
