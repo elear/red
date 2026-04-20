@@ -291,21 +291,7 @@
           </template>
 
           <dt class="font-bold mt-2">
-            <template v-if="props.rfcBucketHtmlDocument.rfc.stream.slug === 'IAB'">
-              IAB stream
-            </template>
-            <template v-else-if="props.rfcBucketHtmlDocument.rfc.stream.slug === 'INDEPENDENT'">
-              Independent Stream
-            </template>
-            <template v-else-if="props.rfcBucketHtmlDocument.rfc.stream.slug === 'Editorial'">
-              Editorial Stream
-            </template>
-            <template v-else-if="props.rfcBucketHtmlDocument.rfc.stream.slug === 'Legacy'">
-              Legacy Stream
-            </template>
-            <template v-else>
-              Publication Stream
-            </template>
+            {{ streamName }}
           </dt>
           <dd>
             <template v-if="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)">
@@ -553,6 +539,21 @@ const shouldShowGroup = (rfc: RfcCommon): boolean => {
   }
   return true
 }
+
+const streamName = computed(() => {
+  switch (props.rfcBucketHtmlDocument.rfc.stream.slug) {
+    case 'IAB':
+      return 'IAB stream'
+    case 'INDEPENDENT':
+      return 'Independent Stream'
+    case 'Editorial':
+      return 'Editorial Stream'
+    case 'Legacy':
+      return 'Legacy Stream'
+    default:
+      return 'Publication Stream'
+  }
+})
 
 const TAB_CONTENT_CLASS = 'flex flex-col min-h-0 text-black dark:text-white'
 const DEFAULT_CLASS =
