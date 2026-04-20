@@ -44,9 +44,17 @@ This route may redirect to a subdomain of rfc-editor.org. Please ensure your cli
 
 #### `/queue.xml` and `/queue2.xml`
 
-Leading zeros in RFC ids will be removed.
+These routes will redirect to a subdomain of rfc-editor.org such as queue.rfc-editor.org. Please ensure your client will follow HTTP redirects.
 
-This route may redirect to a subdomain of rfc-editor.org such as queue.rfc-editor.org. Please ensure your client will follow HTTP redirects.
+These routes will redirect to the same URL, as we're consolidating the feeds into a single feed file.
+
+This new file is based on the format of `queue2.xml` but the path will be called `queue.xml`.
+
+Here is [the `queue.xml` schema named `queue.xsd`](https://raw.githubusercontent.com/ietf-tools/queue/cd4ad57253d264ede05a073cf4a27c38f4d9f97b/precomputer/src/utils/queue.xsd).
+
+Notable changes:
+  * Leading zeros in RFC ids will be removed.
+  * `<section>` element `xml:id` attribute renamed `id`.
 
 ### `/in-notes/tar/*.tar.gz` and `/in-notes/tar/*.zip`
 
