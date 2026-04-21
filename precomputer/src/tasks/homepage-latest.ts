@@ -26,6 +26,8 @@ export const uploadHomepageLatest = async (
       if (data.every(key => key !== false)) {
         remainingRfcsToUpload--
         rfcNumbersToRender.push(rfcNumber)
+      } else {
+        console.log(`[${HOMEPAGE_LATEST_PATH}]`, `Can't use RFC ${rfcNumber} as target RFC content isn't available.`, data)
       }
     }
   }
