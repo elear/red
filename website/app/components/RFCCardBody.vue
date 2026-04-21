@@ -137,7 +137,7 @@ function formatObsoletedBy(
               title: `${formatTitlePlaintext(`RFC${obsoletedByItem.number}`)}: ${obsoletedByItem.title}`,
               class: 'relative z-50 underline p-1 -m-1 hover:bg-gray-100'
             },
-            ['RFC', h('b', obsoletedByItem.number)]
+            ['RFC ', h('b', obsoletedByItem.number)]
           )
         )
 

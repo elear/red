@@ -16,15 +16,12 @@ export const uploadHomepageLatest = async (
     .sort((a, b) => a - b)
 
   const rfcNumbersToRender: number[] = []
-  console.log(`[${HOMEPAGE_LATEST_PATH}]`, rfcNumbers)
 
-  let remainingRfcsToUpload = NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE
-  while (remainingRfcsToUpload > 0 && rfcNumbers.length > 0) {
+  while (rfcNumbersToRender.length < NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE) {
     const rfcNumber = rfcNumbers.pop()
     if (typeof rfcNumber === 'number') {
       const taskResults = await uploadRfcData(rfcNumber)
       if (taskResults.every(key => key !== false)) {
-        remainingRfcsToUpload--
         rfcNumbersToRender.push(rfcNumber)
       } else {
         console.error(`[${HOMEPAGE_LATEST_PATH}]`, `Can't use RFC ${rfcNumber} as target RFC content isn't available.`, taskResults)
