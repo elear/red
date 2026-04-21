@@ -12,12 +12,27 @@ export const NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE = 3
 export const uploadHomepageLatest = async (
   allRfcs: Readonly<RfcCommon[]>
 ): AsyncTaskItem => {
-  const data = await renderHomepageLatest(allRfcs)
+  const rfcNumbers = allRfcs.map(rfc => rfc.number)
+    .sort((a, b) => b - a)
+
+  const rfcNumbersToRender: number[] = []
+  console.log(`[${HOMEPAGE_LATEST_PATH}]`, rfcNumbers)
+
+  let remainingRfcsToUpload = NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE
+  while (remainingRfcsToUpload > 0 && rfcNumbers.length > 0) {
+    const rfcNumber = rfcNumbers.pop()
+    if (typeof rfcNumber === 'number') {
+      const data = await uploadRfcData(rfcNumber)
+      if (data.every(key => key !== false)) {
+        remainingRfcsToUpload--
+        rfcNumbersToRender.push(rfcNumber)
+      }
+    }
+  }
+
+  const data = await renderHomepageLatest(allRfcs, rfcNumbersToRender)
   await saveToS3(HOMEPAGE_LATEST_PATH, JSON.stringify(data))
   console.log(`[${HOMEPAGE_LATEST_PATH}]`, 'Uploaded', HOMEPAGE_LATEST_PATH)
-
-  // also upload the referenced 'homepage latest' RFCs so that the links to RFCs will work
-  await Promise.all(data.homepageLatest.map((rfc) => uploadRfcData(rfc.number)))
 
   return [HOMEPAGE_LATEST_PATH]
 }
@@ -25,11 +40,12 @@ export const uploadHomepageLatest = async (
 type HomepageLatest = z.infer<typeof HomepageLatestSchema>
 
 export const renderHomepageLatest = async (
-  allRfcs: Readonly<RfcCommon[]>
+  allRfcs: Readonly<RfcCommon[]>,
+  rfcNumbersToRender: number[]
 ): Promise<HomepageLatest> => {
   const response: HomepageLatest = {
     homepageLatest: allRfcs
-      .slice(-NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE)
+      .filter(rfc => rfcNumbersToRender.includes(rfc.number))
       .sort((a, b) => b.number - a.number)
       .map(redactRfc),
     timestampIso: DateTime.now().toUTC().toISO()
