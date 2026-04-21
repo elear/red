@@ -18,8 +18,7 @@ const fastify = Fastify({
 fastify.get('/api/v1/homepage-latest.json', async (request, reply) => {
   const api = getApiClient()
   const rfcs = await getAllRFCs({ api, limit: NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE })
-  const rfcsToRender = rfcs.slice(-NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE).map(rfc => rfc.number)
-  return renderHomepageLatest(rfcs, rfcsToRender)
+  return renderHomepageLatest(rfcs)
 })
 
 fastify.get('/api/v1/rfc-mini-index.json', async (request, reply) => {
