@@ -17,9 +17,9 @@ export const uploadHomepageLatest = async (
   console.log(`[${HOMEPAGE_LATEST_PATH}]`, 'Uploaded', HOMEPAGE_LATEST_PATH)
 
   // also upload the referenced 'homepage latest' RFCs so that the links to RFCs will work
-  const referencedKeys = await Promise.all(data.homepageLatest.map((rfc) => uploadRfcData(rfc.number)))
+  await Promise.all(data.homepageLatest.map((rfc) => uploadRfcData(rfc.number)))
 
-  return [HOMEPAGE_LATEST_PATH, ...referencedKeys.flat()]
+  return [HOMEPAGE_LATEST_PATH]
 }
 
 type HomepageLatest = z.infer<typeof HomepageLatestSchema>
