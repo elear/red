@@ -109,7 +109,10 @@ export async function getFromS3(
     }
   } catch (err) {
     const errorHeader = `Failed to fetch ${JSON.stringify(key)} from ${JSON.stringify(S3_BUCKET)} bucket.`
-    console.error(errorHeader, err)
+    console.error(
+      errorHeader,
+      // err
+    )
     return null
   }
 }
@@ -149,7 +152,8 @@ export const listS3Files = async () => {
   for await (const data of paginateListObjectsV2({ client: s3RedCli }, { Bucket: S3_RED_BUCKET })) {
     keys.push(...(data.Contents ?? []));
   }
-  return keys;
+  keys.sort();
+  return keys
 }
 
 export const deleteFromS3 = async (

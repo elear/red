@@ -14,7 +14,7 @@ export const uploadAllSubseries = async (
   const allSubseriesValidated = await renderAllSubseries(allSubseries)
   const logItems: string[] = []
 
-  const { results, errors } = await PromisePool.for(allSubseriesValidated)
+  const { results: resultsArray, errors } = await PromisePool.for(allSubseriesValidated)
     .withConcurrency(NUMBER_OF_CONCURRENT_SUBSERIES_S3_UPLOADS)
     .onTaskFinished((_item, pool) => {
       if (
@@ -34,14 +34,14 @@ export const uploadAllSubseries = async (
         console.log(` - subseries ${percent}% ${logText.join(', ')}.`)
       }
     })
-    .process(async (subseriesItem, i) => {
+    .process(async (subseriesItem, i): AsyncTaskItem => {
       const s3Path = subseriesInfoPathBuilder(
         subseriesItem.type,
         subseriesItem.number
       )
       await saveToS3(s3Path, JSON.stringify(subseriesItem))
       logItems.push(s3Path)
-      return s3Path
+      return [s3Path]
     })
 
   console.log(
@@ -58,7 +58,7 @@ export const uploadAllSubseries = async (
     console.log(` - subseries done (${allSubseriesValidated.length} files)`)
   }
 
-  return results
+  return resultsArray.flat()
 }
 
 export const renderAllSubseries = async (

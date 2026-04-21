@@ -37,7 +37,7 @@ export const uploadRfcData = async (rfcNumber: number): AsyncTaskItem => {
 export const uploadRfcHtml = async (rfcNumber: number): AsyncTaskItem => {
   const rfcDoc = await getRfcBucketHtmlDocument(rfcNumber)
   if (rfcDoc === false) {
-    console.error('[RfcBucketHtmlDocument]', `Failed to generate JSON for RFC ${rfcNumber}`)
+    console.error(`[RFC ${rfcNumber}]`, `Failed to generate rfc bucket html doc JSON`)
     return [false]
   }
   const rfcDocS3Path = rfcHtmlJsonPathBuilder(rfcNumber)
