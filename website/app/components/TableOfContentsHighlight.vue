@@ -91,6 +91,10 @@ if (
 
 const { setActive: _setActive, activeId, targetId } = useTocActiveId(ids)
 
+type Timer = ReturnType<typeof setTimeout>
+
+const timers: Timer[] = []
+
 const handleClick = (id: string): void => {
   /**
    * After they click the `#id` link the page scrolls which recalculates the
@@ -101,14 +105,14 @@ const handleClick = (id: string): void => {
    * FIXME: This isn't great but it works.
    */
   _setActive(id)
-  setTimeout(() => _setActive(id), 50)
-  setTimeout(() => _setActive(id), 100)
-  setTimeout(() => _setActive(id), 150)
+  timers.push(setTimeout(() => _setActive(id), 50))
+  timers.push(setTimeout(() => _setActive(id), 100))
+  timers.push(setTimeout(() => _setActive(id), 150))
 }
 
 useValidateIds(ids)
 
-const makeTocId = (id: string) => `toc-${id}`
+const makeTocId = (id: string) => `toc-${id}` as const
 
 useScrollTocContainer({
   toTargetIdRef: targetId,
@@ -119,5 +123,9 @@ useScrollTocContainer({
 const isSSR = ref(true)
 onMounted(() => {
   isSSR.value = false
+})
+
+onUnmounted(() => {
+  timers.forEach(timer => clearTimeout(timer))
 })
 </script>

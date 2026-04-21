@@ -64,6 +64,8 @@ type Props = {
 
 const props = defineProps<Props>()
 
+const route = useRoute()
+
 const sanitisedId = computed(() => `${props.subseriesId.type}${props.subseriesId.number}`)
 
 const subseriesDocumentKey = computed(() => `info-subseries-${sanitisedId.value}`)
@@ -97,6 +99,12 @@ if (subseriesDocumentError.value) {
 }
 
 const canonicalPath = infoSeriesPathBuilder(sanitisedId.value)
+
+if (route.fullPath !== canonicalPath) {
+  await navigateTo({
+    path: canonicalPath
+  })
+}
 
 const lastRfcPublished = computed(() => {
   if (!subseriesDocument.value) return ''

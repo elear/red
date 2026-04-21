@@ -1,4 +1,4 @@
-import { watch } from 'vue'
+import { watch, onUnmounted } from 'vue'
 import { throttle, clamp } from 'es-toolkit'
 import { watchDebounced } from '@vueuse/core'
 import { prefersReducedMotion } from './accessibility'
@@ -15,6 +15,8 @@ const MINIMUM_VELOCITY = 2.6 // magic number derived from scrolling up and down 
 const FRICTION = 0.5
 const ENDS_THRESHOLD_PX = 10
 
+type Timer = ReturnType<typeof setTimeout>
+
 export const useTocActiveId = (ids: Ref<string[]>) => {
   const activeIdRef = ref(ids.value[0])
   const targetIdRef = ref(ids.value[0])
@@ -24,7 +26,12 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
   let velocity = 0
   let elements: HTMLElement[] = []
   let elementTops: number[] = []
-  let animationCallbackHandle: ReturnType<typeof setTimeout>
+
+  const timers: Timer[] = []
+
+  const clearTimeouts = () => {
+    timers.forEach(timer => clearTimeout(timer))
+  }
 
   const setActive = (id: string) => {
     activeIdIndex = ids.value.indexOf(id)
@@ -168,9 +175,7 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
     setActiveIdByIndex(newActiveIdIndex)
 
     if (newActiveIdIndex === targetIdIndex) {
-      if (animationCallbackHandle) {
-        clearTimeout(animationCallbackHandle)
-      }
+      clearTimeouts()
       velocity = 0
     } else {
       animateSoon()
@@ -178,13 +183,11 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
   }
 
   const animateSoon = () => {
-    if (animationCallbackHandle) {
-      clearTimeout(animationCallbackHandle)
-    }
-    animationCallbackHandle = setTimeout(
+    clearTimeouts()
+    timers.push(setTimeout(
       animateActiveIndex,
       1000 / ANIMATE_INDEX_FPS
-    )
+    ))
   }
 
   const handleScroll = () => {
@@ -250,9 +253,7 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
     document.removeEventListener('scrollsnapchanging', throttledHandleScroll)
     document.removeEventListener('touchmove', throttledHandleScroll)
     document.removeEventListener('resize', throttledHandleResize)
-    if (animationCallbackHandle) {
-      clearTimeout(animationCallbackHandle)
-    }
+    clearTimeouts()
   })
 
   return {
@@ -300,16 +301,15 @@ export const useScrollTocContainer = ({
       const tocLink = document.getElementById(makeTocId(toTargetIdRef.value))
 
       if (!tocLink || !wrapper || !previousTocLink) {
-        console.error('Required element(s) not found', {
+        // because this function is in a debounced callback it can execute
+        // after the Vue component was removed from the DOM.
+        // So this state isn't necessarily an error, even though it could
+        // mask errors.
+        console.info('useScrollTocContainer() element(s) not found. This can happen if component was quickly unmounted', {
           tocLink,
           wrapper,
           previousTocLink
         })
-        if (import.meta.dev) {
-          throw Error(
-            `Scroll TOC required element(s) not found toActiveIdRef=${toTargetIdRef.value} tocLink=${tocLink}, wrapper=${wrapper}, previousTocLink=${previousTocLink}`
-          )
-        }
         return
       }
 

@@ -322,6 +322,10 @@ html.dark::selection {
   text-shadow: -0.5px -0.5px 0.5px currentColor;
 }
 
+.toc-highlight-transition {
+  transition: text-shadow 150ms;
+}
+
 .toc-highlight {
   text-shadow:
     -0.5px -0.5px 0.5px currentColor,

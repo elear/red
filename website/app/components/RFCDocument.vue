@@ -53,6 +53,8 @@ type Props = {
 
 const props = defineProps<Props>()
 
+const route = useRoute()
+
 const sanitisedId = computed(() => `${props.rfcId.type}${props.rfcId.number}`)
 
 const asyncRfcBucketHtmlDocumentKey = computed(
@@ -149,6 +151,12 @@ const breadcrumbItems: BreadcrumbItem[] = [{ url: '/', label: 'Home' }]
 const isModalOpen = ref(false)
 
 const canonicalPath = infoSeriesPathBuilder(sanitisedId.value)
+
+if (route.fullPath !== canonicalPath) {
+  await navigateTo({
+    path: canonicalPath
+  })
+}
 
 // see https://github.com/ietf-tools/red/issues/196
 const pageTitle =
