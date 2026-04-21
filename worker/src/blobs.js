@@ -94,7 +94,7 @@ export async function blobsApiInfoSubseries(req, env) {
 
   // -> Fetch R2 object
   if (objectPath.endsWith('.json')) {
-    const object = await env.RED_BUCKET.get(`rfc-common/${objectPath}`)
+    const object = await env.RED_BUCKET.get(`subseries/${objectPath}`)
     if (object) {
       return createBlobResponse(object, detectContentType(objectPath))
     }
