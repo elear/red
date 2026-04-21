@@ -27,11 +27,12 @@ export const uploadHomepageLatest = async (
         remainingRfcsToUpload--
         rfcNumbersToRender.push(rfcNumber)
       } else {
-        console.log(`[${HOMEPAGE_LATEST_PATH}]`, `Can't use RFC ${rfcNumber} as target RFC content isn't available.`, data)
+        console.error(`[${HOMEPAGE_LATEST_PATH}]`, `Can't use RFC ${rfcNumber} as target RFC content isn't available.`, data)
       }
     }
   }
 
+  console.log(`[${HOMEPAGE_LATEST_PATH}]`, `Using homepage latest RFCS:`, rfcNumbersToRender)
   const data = await renderHomepageLatest(allRfcs, rfcNumbersToRender)
   await saveToS3(HOMEPAGE_LATEST_PATH, JSON.stringify(data))
   console.log(`[${HOMEPAGE_LATEST_PATH}]`, 'Uploaded', HOMEPAGE_LATEST_PATH)
