@@ -47,7 +47,7 @@ export const indices = async ({ api, }: Props): AsyncTaskItem => {
 
 
   resultsArray.forEach((result, i) => {
-    if (result.includes(false) === false) {
+    if (result.includes(false)) {
       console.error('indices #', i, ' failed. Was ', result)
     }
   })
