@@ -1,7 +1,7 @@
 import { PromisePool } from '@supercharge/promise-pool'
 import { difference } from 'es-toolkit'
 
-import { listS3Files } from "./s3.ts"
+import { deleteFromS3, listS3Files } from "./s3.ts"
 import { assertIsString } from "./typescript.ts"
 
 const GOOD_KEYS = [
@@ -25,6 +25,9 @@ const GOOD_KEYS = [
 // This is just a hint number, not a hard limit at all
 const NUMBER_OF_CONCURRENT_S3_USAGES = 4
 
+/**
+ * Purges files that shouldn't exist on bucket
+ */
 export const cleanupRedBucket = async (uploadedKeys: string[]): Promise<boolean> => {
   console.log('[Cleanup] Now cleaning up Red bucket...')
 
@@ -60,16 +63,17 @@ export const cleanupRedBucket = async (uploadedKeys: string[]): Promise<boolean>
       .withConcurrency(NUMBER_OF_CONCURRENT_S3_USAGES)
       .process(async (keyToPurge) => {
         try {
-          console.log('[Cleanup] would delete ', keyToPurge)
-          // await deleteFromS3(keyToPurge) // FIXME: enable after testing
-          // console.log(`[Cleanup ${keyToPurge}] deleted sucessfully`)
+          // console.log('[Cleanup] would delete ', keyToPurge)
+          await deleteFromS3(keyToPurge) // FIXME: enable after testing
+          console.log(`[Cleanup ${keyToPurge}] deleted sucessfully`)
+          return true
         } catch (err) {
           console.warn(
             `[Cleanup ${keyToPurge}] threw exception: ${(err as Error).message}`
           )
           throw err
         }
-        return true
+        return false
       })
 
     if (purgeErrors.length > 0) {

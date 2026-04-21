@@ -45,13 +45,14 @@ export const indices = async ({ api, }: Props): AsyncTaskItem => {
     uploadFavicons(),
   ] satisfies AsyncTaskItem[])
 
-  const results = resultsArray.flat()
 
-  results.forEach((result, i) => {
-    if (result === false) {
-      console.error('indices #', i, ' failed ')
+  resultsArray.forEach((result, i) => {
+    if (result.includes(false) === false) {
+      console.error('indices #', i, ' failed. Was ', result)
     }
   })
+
+  const results = resultsArray.flat()
 
   return results
 }
