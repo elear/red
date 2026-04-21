@@ -190,8 +190,9 @@ export const checkRFCContentsDoNotExist = async ({ allRfcs }: CheckRfcContentsEx
   const rfcNumbersToCheck = allRfcs
     .slice(-CHECK_RFC_NUMBER_LARGEST_MINUS_N)
     .map(rfc => rfc.number)
+    .sort((a, b) => b - a)
 
-  console.log('[RFC Contents Check] Checking RFC contents for RFCs: ', rfcNumbersToCheck.join(', '))
+  console.log('[RFC contents] Checking RFC contents for RFCs: ', rfcNumbersToCheck.join(', '))
 
   const {
     results, // list of rfc numbers whose content doesn't exist on the bucket, or `true` for rfcs whose content does exist
@@ -226,7 +227,9 @@ export const checkRFCContentsDoNotExist = async ({ allRfcs }: CheckRfcContentsEx
   const rfcsContentsDoNotExist = results.filter(result => result !== true)
 
   if (rfcsContentsDoNotExist.length > 0) {
-    console.warn(`[${ERROR_CODE_RFC_MISSING_CONTENT}]`, `RFC content (html/pdf) doesn't exist for these RFCs: ${rfcsContentsDoNotExist}`)
+    console.warn(`[${ERROR_CODE_RFC_MISSING_CONTENT}]`, `RFC content (html/pdf) doesn't exist for these RFCs: ${rfcsContentsDoNotExist.join(', ')}`)
+  } else {
+    console.log('[RFC contents check] Success, all recent RFCs have content')
   }
 
   return allRfcs.filter(rfc => !rfcsContentsDoNotExist.includes(rfc.number))
