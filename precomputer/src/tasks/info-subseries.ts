@@ -31,7 +31,7 @@ export const uploadAllSubseries = async (
         const percent = Math.round(
           (pool.processedCount() / allSubseriesValidated.length) * 100
         )
-        console.log(` - subseries ${percent}% ${logText.join(', ')}.`)
+        console.log(`[subseries] ${percent}% ${logText.join(', ')}.`)
       }
     })
     .process(async (subseriesItem, i): AsyncTaskItem => {
