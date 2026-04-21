@@ -12,52 +12,25 @@ export const NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE = 3
 export const uploadHomepageLatest = async (
   allRfcs: Readonly<RfcCommon[]>
 ): AsyncTaskItem => {
-  const rfcNumbers = allRfcs.map(rfc => rfc.number)
-    .sort((a, b) => a - b)
-
-  const rfcNumbersToRender: number[] = []
-
-  while (rfcNumbersToRender.length < NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE) {
-    const rfcNumber = rfcNumbers.pop()
-    if (typeof rfcNumber === 'number') {
-      const taskResults = await uploadRfcData(rfcNumber)
-      if (taskResults.every(key => key !== false)) {
-        rfcNumbersToRender.push(rfcNumber)
-      } else {
-        console.error(`[${HOMEPAGE_LATEST_PATH}]`, `Can't use RFC ${rfcNumber} as target RFC content isn't available.`, taskResults)
-      }
-    }
-  }
-
-  console.log(`[${HOMEPAGE_LATEST_PATH}]`, `Using homepage latest RFCS:`, rfcNumbersToRender)
-  const data = await renderHomepageLatest(allRfcs, rfcNumbersToRender)
+  const data = await renderHomepageLatest(allRfcs)
   await saveToS3(HOMEPAGE_LATEST_PATH, JSON.stringify(data))
-  console.log(`[${HOMEPAGE_LATEST_PATH}]`, 'Uploaded', HOMEPAGE_LATEST_PATH)
+  console.log('Uploaded', HOMEPAGE_LATEST_PATH)
 
-  return [HOMEPAGE_LATEST_PATH]
+  // also upload the referenced 'homepage latest' RFCs so that the links to RFCs will work
+  const referencedKeys = await Promise.all(data.homepageLatest.map((rfc) => uploadRfcData(rfc.number)))
+
+  return [HOMEPAGE_LATEST_PATH, ...referencedKeys.flat()]
 }
 
 type HomepageLatest = z.infer<typeof HomepageLatestSchema>
 
 export const renderHomepageLatest = async (
-  allRfcs: Readonly<RfcCommon[]>,
-  rfcNumbersToRender: number[]
+  allRfcs: Readonly<RfcCommon[]>
 ): Promise<HomepageLatest> => {
-  if (rfcNumbersToRender.length !== NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE) {
-    console.error(`[${HOMEPAGE_LATEST_PATH}] Bad number of rfcNumbersToRender`, JSON.stringify(rfcNumbersToRender))
-    throw Error(`Expected homepage latest to have ${NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE} items but had ${rfcNumbersToRender.length} items.`)
-  }
-
-  const homepageLatest = allRfcs
-    .filter(rfc => rfcNumbersToRender.includes(rfc.number))
-
-  if (homepageLatest.length !== NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE) {
-    console.error(`[${HOMEPAGE_LATEST_PATH}] Bad number of homepageLatest`, JSON.stringify(homepageLatest))
-    throw Error(`Expected homepage latest to have ${NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE} items but had ${homepageLatest.length} items.`)
-  }
-
   const response: HomepageLatest = {
-    homepageLatest: homepageLatest.sort((a, b) => b.number - a.number)
+    homepageLatest: allRfcs
+      .slice(-NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE)
+      .sort((a, b) => b.number - a.number)
       .map(redactRfc),
     timestampIso: DateTime.now().toUTC().toISO()
   }

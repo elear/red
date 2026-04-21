@@ -5,8 +5,11 @@ import {
   paginateListObjectsV2,
   DeleteObjectCommand
 } from '@aws-sdk/client-s3'
-import type { SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
+import { PromisePool } from '@supercharge/promise-pool'
+import type { RfcCommon, SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
 import { assertIsString } from './typescript.ts'
+import { fetchSourceRfcHtml } from '../tasks/rfc-html.ts';
+import { fetchRfcPDF } from '../tasks/rfc-pdf.ts';
 
 let s3Ref: undefined | { s3RfcCli: S3Client; s3RedCli: S3Client } = undefined
 
@@ -173,6 +176,61 @@ export const deleteFromS3 = async (
   )
 }
 
+// This is just a hint number, not a hard limit at all
+const NUMBER_OF_CONCURRENT_S3_USAGES = 4
+const CHECK_RFC_NUMBER_LARGEST_MINUS_N = 100
+export const ERROR_CODE_RFC_MISSING_CONTENT = 'RFC_MISSING_CONTENT'
+export const ERROR_CODE_RFC_BUCKET_ERROR = 'RFC_BUCKET_ERROR'
+
+type CheckRfcContentsExistProps = {
+  allRfcs: Readonly<RfcCommon[]>
+}
+
+export const checkRFCContentsDoNotExist = async ({ allRfcs }: CheckRfcContentsExistProps): Promise<Readonly<RfcCommon[]>> => {
+  const rfcNumbersToCheck = allRfcs
+    .slice(-CHECK_RFC_NUMBER_LARGEST_MINUS_N)
+    .map(rfc => rfc.number)
+
+  console.log('[RFC Contents Check] Checking RFC contents for RFCs: ', rfcNumbersToCheck.join(', '))
+
+  const {
+    results, // list of rfc numbers whose content doesn't exist on the bucket, or `true` for rfcs whose content does exist
+    errors
+  } = await PromisePool.for(rfcNumbersToCheck)
+    .withConcurrency(NUMBER_OF_CONCURRENT_S3_USAGES)
+    .process(async (rfcNumber) => {
+      try {
+        // try HTML
+        const rfcHTML = await fetchSourceRfcHtml(rfcNumber, getFromS3)
+        if (rfcHTML === null) {
+          // try PDF
+          const rfcPDF = await fetchRfcPDF(rfcNumber)
+          if (rfcPDF === null) {
+            console.log(`[RFC Contents Check] [RFC ${rfcNumber}] Bucket lacks RFC contents`)
+            return rfcNumber
+          }
+        }
+        return true
+      } catch (err) {
+        console.warn(
+          `[RFC ${rfcNumber}] threw exception: ${(err as Error).message}`
+        )
+        throw err
+      }
+    })
+
+  if (errors && errors.length > 0) {
+    console.error(`[${ERROR_CODE_RFC_BUCKET_ERROR}] there were errors getting RFC contents from the bucket`)
+  }
+
+  const rfcsContentsDoNotExist = results.filter(result => result !== true)
+
+  if (rfcsContentsDoNotExist.length > 0) {
+    console.warn(`[${ERROR_CODE_RFC_MISSING_CONTENT}]`, `RFC content (html/pdf) doesn't exist for these RFCs: ${rfcsContentsDoNotExist}`)
+  }
+
+  return allRfcs.filter(rfc => !rfcsContentsDoNotExist.includes(rfc.number))
+}
 
 export const rfcCommonPathBuilder = (rfcNumber: number) =>
   `rfc-common/${rfcNumber}.json` as const
