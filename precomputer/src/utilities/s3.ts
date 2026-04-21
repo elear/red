@@ -227,7 +227,7 @@ export const checkRFCContentsDoNotExist = async ({ allRfcs }: CheckRfcContentsEx
   const rfcsContentsDoNotExist = results.filter(result => result !== true)
 
   if (rfcsContentsDoNotExist.length > 0) {
-    console.warn(`[${ERROR_CODE_RFC_MISSING_CONTENT}]`, `RFC content (html/pdf) doesn't exist for these RFCs: ${rfcsContentsDoNotExist.join(', ')}`)
+    console.warn(`[${ERROR_CODE_RFC_MISSING_CONTENT}]`, `RFC content (html/pdf) doesn't exist for these recent RFCs: ${rfcsContentsDoNotExist.join(', ')}`)
   } else {
     console.log('[RFC contents check] Success, all recent RFCs have content')
   }
