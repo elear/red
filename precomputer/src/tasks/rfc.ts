@@ -22,25 +22,26 @@ import {
   formatIdentifiers
 } from '../utilities/rfc-converters-utils.ts'
 import { getErrataForRfc } from '../utilities/errata.ts'
+import { type AsyncTaskItem } from '../utilities/task.ts'
 
-export const uploadRfcData = async (rfcNumber: number): Promise<boolean> => {
-  const result = await Promise.all([
+export const uploadRfcData = async (rfcNumber: number): AsyncTaskItem => {
+  const results = await Promise.all([
     uploadRfcHtml(rfcNumber),
     uploadRfcCommonJson(rfcNumber),
     uploadRefsRef(rfcNumber),
     uploadRfcMetaThumbnail(rfcNumber)
   ])
-  return result.every((didSucceed) => didSucceed)
+  return results.flat()
 }
 
-export const uploadRfcHtml = async (rfcNumber: number): Promise<boolean> => {
+export const uploadRfcHtml = async (rfcNumber: number): AsyncTaskItem => {
   const rfcDoc = await getRfcBucketHtmlDocument(rfcNumber)
   if (!rfcDoc) {
-    return false
+    return [false]
   }
   const rfcDocS3Path = rfcHtmlJsonPathBuilder(rfcNumber)
   await saveToS3(rfcDocS3Path, JSON.stringify(rfcDoc))
-  return true
+  return [rfcDocS3Path]
 }
 
 export const getRfcBucketHtmlDocument = async (
@@ -76,7 +77,7 @@ export const getRfcBucketHtmlDocument = async (
   return rfcDocFromPdf
 }
 
-export const uploadRfcMetaThumbnail = async (rfcNumber: number): Promise<boolean> => {
+export const uploadRfcMetaThumbnail = async (rfcNumber: number): AsyncTaskItem => {
   const rfcScreenshot = await getRfcMetaThumbnail({
     rfcNumber,
     getRfcCommon: getRfcCommonCached,
@@ -84,12 +85,12 @@ export const uploadRfcMetaThumbnail = async (rfcNumber: number): Promise<boolean
     fetchRfcPDF,
   })
   if (!rfcScreenshot) {
-    return false
+    return [false]
   }
   const rfcThumbnailPath = rfcMetaThumbnailPathBuilder(rfcNumber)
   // console.log(`[RFC${rfcNumber}] uploaded thumbnail ${rfcThumbnailPath}`)
   await saveToS3(rfcThumbnailPath, rfcScreenshot)
-  return true
+  return [rfcThumbnailPath]
 }
 
 type RfcMetaScreenshotProps = {
@@ -113,7 +114,7 @@ export const getRfcMetaThumbnail = async ({ rfcNumber, getRfcCommon }: RfcMetaSc
   const htmlScreenshot = await getRfcHtmlMetaThumbnail(rfcNumber, getRfcCommon)
   if (htmlScreenshot) {
     return htmlScreenshot
-  }  
+  }
   return undefined
 }
 
@@ -138,27 +139,27 @@ export const redactRfc = (rfc: RfcCommon): RfcCommon => {
 
 export const uploadRfcCommonJson = async (
   rfcNumber: number
-): Promise<boolean> => {
+): AsyncTaskItem => {
   const rfc = await getRfcCommonCached(rfcNumber)
   if (rfc === null) {
-    return false
+    return [false]
   }
   const redactedRfc = redactRfc(rfc)
   validateDocument(redactedRfc, RfcCommonSchema)
   const rfcCommonS3Path = rfcCommonPathBuilder(redactedRfc.number)
   await saveToS3(rfcCommonS3Path, JSON.stringify(redactedRfc))
-  return true
+  return [rfcCommonS3Path]
 }
 
-export const uploadRefsRef = async (rfcNumber: number): Promise<boolean> => {
+export const uploadRefsRef = async (rfcNumber: number): AsyncTaskItem => {
   const rfc = await getRfcCommonCached(rfcNumber)
   if (rfc === null) {
-    return false
+    return [false]
   }
   const rfcRef = renderRefsRef(rfc)
   const rfcRefS3Path = rfcRefPathBuilder(rfcNumber)
   await saveToS3(rfcRefS3Path, rfcRef)
-  return true
+  return [rfcRefS3Path]
 }
 
 /**

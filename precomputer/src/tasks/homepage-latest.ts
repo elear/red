@@ -5,20 +5,21 @@ import { HomepageLatestSchema } from '../../../website/app/utilities/rfc-validat
 import type { RfcCommon } from '../../../website/app/utilities/rfc-validators.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
 import { redactRfc, uploadRfcData } from './rfc.ts'
+import { type AsyncTaskItem } from '../utilities/task.ts'
 
 export const NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE = 3
 
 export const uploadHomepageLatest = async (
   allRfcs: Readonly<RfcCommon[]>
-): Promise<boolean> => {
+): AsyncTaskItem => {
   const data = await renderHomepageLatest(allRfcs)
   await saveToS3(HOMEPAGE_LATEST_PATH, JSON.stringify(data))
   console.log('Uploaded', HOMEPAGE_LATEST_PATH)
 
   // also upload the referenced 'homepage latest' RFCs so that the links to RFCs will work
-  await Promise.all(data.homepageLatest.map((rfc) => uploadRfcData(rfc.number)))
+  const referencedKeys = await Promise.all(data.homepageLatest.map((rfc) => uploadRfcData(rfc.number)))
 
-  return true
+  return [HOMEPAGE_LATEST_PATH, ...referencedKeys.flat()]
 }
 
 type HomepageLatest = z.infer<typeof HomepageLatestSchema>

@@ -8,12 +8,13 @@ import {
   RFC_FEED_RSS_PATH,
   saveToS3
 } from '../utilities/s3.ts'
+import { type AsyncTaskItem } from '../utilities/task.ts'
 
 const NUMBER_OF_RFCS_IN_FEED = 15
 
 export const uploadFeeds = async (
   allRfcs: Readonly<RfcCommon[]>
-): Promise<boolean> => {
+): AsyncTaskItem => {
   const { rss2, atom1 } = await renderFeeds(allRfcs)
 
   await Promise.all([
@@ -23,7 +24,7 @@ export const uploadFeeds = async (
 
   console.log('Uploaded', RFC_FEED_RSS_PATH, RFC_FEED_ATOM_PATH)
 
-  return true
+  return [RFC_FEED_RSS_PATH, RFC_FEED_ATOM_PATH]
 }
 
 export const renderFeeds = async (

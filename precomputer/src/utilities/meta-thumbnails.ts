@@ -5,6 +5,7 @@ import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
 import { metaThumbnailPathBuilder, saveToS3 } from './s3.ts'
+import { type AsyncTaskItem } from './task.ts'
 
 const __dirname = import.meta.dirname
 const precomputerRoot = path.resolve(__dirname, '..', '..')
@@ -52,14 +53,14 @@ export const metaThumbnailSlugToDimensions = (slug: string): [number, number] | 
 
 const compressionLevel = 9
 
-export const uploadMetaThumbnails = async () => {
-  await Promise.all(imagePreviewDimensions.map(async imagePreviewDimension => {
+export const uploadMetaThumbnails = async (): AsyncTaskItem => {
+  return await Promise.all(imagePreviewDimensions.map(async imagePreviewDimension => {
     const metaThumbnail = await getMetaThumbnail(imagePreviewDimension[0], imagePreviewDimension[1])
     const s3Key = metaThumbnailPathBuilder(metaThumbnail.filename)
     saveToS3(s3Key, metaThumbnail.pngBuffer)
     console.log('Uploaded', s3Key)
+    return s3Key
   }))
-  return true
 }
 
 export const bgBlue = '#002d3c'

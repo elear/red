@@ -3,13 +3,14 @@ import { saveToS3, subseriesInfoPathBuilder } from '../utilities/s3.ts'
 import { SubseriesCommonSchema } from '../../../website/app/utilities/rfc-validators.ts'
 import type { SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
+import { type AsyncTaskItem } from '../utilities/task.ts'
 
 const CONSOLE_PURGE_LENGTH = 10
 const NUMBER_OF_CONCURRENT_SUBSERIES_S3_UPLOADS = 4
 
 export const uploadAllSubseries = async (
   allSubseries: Readonly<SubseriesCommon[]>
-): Promise<boolean> => {
+): AsyncTaskItem => {
   const allSubseriesValidated = await renderAllSubseries(allSubseries)
   const logItems: string[] = []
 
@@ -40,25 +41,24 @@ export const uploadAllSubseries = async (
       )
       await saveToS3(s3Path, JSON.stringify(subseriesItem))
       logItems.push(s3Path)
-      return true
+      return s3Path
     })
 
   console.log(
-    ` - subseries 100% ${
-      logItems.length > 0
-        ? // print any remaining log items
-          `${logItems.join(', ')}.`
-        : ''
+    ` - subseries 100% ${logItems.length > 0
+      ? // print any remaining log items
+      `${logItems.join(', ')}.`
+      : ''
     }`
   )
 
-  if (results.some((result) => result !== true) || errors.length > 0) {
+  if (errors.length > 0) {
     console.error(` - subseries error ${errors}`)
   } else {
     console.log(` - subseries done (${allSubseriesValidated.length} files)`)
   }
 
-  return true
+  return results
 }
 
 export const renderAllSubseries = async (

@@ -378,9 +378,9 @@ export const useScrollTocContainer = ({
  *  There have been subtle bugs in Vue rendering HTML that affect DOM ids,
  *  so --in the browser-- we check whether the ids given to useActiveScroll()
  *  actually exist and log some feedback.
- * 
+ *
  *  The possible reasons for an id missing are many, but so far
- * 
+ *
  *    * Vue template bugs (ie, not rendering an DOM id attribute)
  *    * Generating ids based on content by using $slots.default during a Vue
  *      render which confuses Vue (this might be incorrect usage of Vue) and

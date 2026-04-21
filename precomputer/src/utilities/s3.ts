@@ -1,7 +1,9 @@
 import {
   S3Client,
   GetObjectCommand,
-  PutObjectCommand
+  PutObjectCommand,
+  paginateListObjectsV2,
+  DeleteObjectCommand
 } from '@aws-sdk/client-s3'
 import type { SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
 import { assertIsString } from './typescript.ts'
@@ -135,6 +137,38 @@ export async function saveToS3(
     })
   )
 }
+
+export const listS3Files = async () => {
+  const { s3RedCli } = getS3Singleton()
+  const S3_RED_BUCKET = process.env.S3_RED_BUCKET
+  assertIsString(
+    S3_RED_BUCKET,
+    `process.env.S3_RED_BUCKET wasn't a string. Was ${typeof S3_RED_BUCKET}`
+  )
+  const keys = [];
+  for await (const data of paginateListObjectsV2({ client: s3RedCli }, { Bucket: S3_RED_BUCKET })) {
+    keys.push(...(data.Contents ?? []));
+  }
+  return keys;
+}
+
+export const deleteFromS3 = async (
+  key: string,
+): Promise<void> => {
+  const { s3RedCli } = getS3Singleton()
+  const S3_RED_BUCKET = process.env.S3_RED_BUCKET
+  assertIsString(
+    S3_RED_BUCKET,
+    `process.env.S3_RED_BUCKET wasn't a string. Was ${typeof S3_RED_BUCKET}`
+  )
+  await s3RedCli.send(
+    new DeleteObjectCommand({
+      Bucket: S3_RED_BUCKET,
+      Key: key
+    })
+  )
+}
+
 
 export const rfcCommonPathBuilder = (rfcNumber: number) =>
   `rfc-common/${rfcNumber}.json` as const

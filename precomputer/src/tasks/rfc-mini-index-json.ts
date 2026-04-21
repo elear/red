@@ -6,14 +6,15 @@ import {
 import { RFC_MINI_INDEX_JSON_PATH, saveToS3 } from '../utilities/s3.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
 import { DateTime } from 'luxon'
+import { type AsyncTaskItem } from '../utilities/task.ts'
 
 export const uploadRfcMiniIndexJson = async (
   allRfcs: Readonly<RfcCommon[]>
-): Promise<boolean> => {
+): AsyncTaskItem => {
   const txt = await renderRfcMiniIndexJson(allRfcs)
   await saveToS3(RFC_MINI_INDEX_JSON_PATH, txt)
   console.log('Uploaded', RFC_MINI_INDEX_JSON_PATH)
-  return true
+  return [RFC_MINI_INDEX_JSON_PATH]
 }
 
 export const renderRfcMiniIndexJson = async (

@@ -1,10 +1,11 @@
 import { ROBOTS_TXT_PATH, saveToS3 } from './s3.ts'
+import { type AsyncTaskItem } from './task.ts'
 import { siteMapXmlPathBuilder } from './url.ts'
 
-export const uploadRobotsTxt = async (websiteOrigin: string): Promise<boolean> => {
+export const uploadRobotsTxt = async (websiteOrigin: string): AsyncTaskItem => {
   const robotsTxt = await getRobotsTxt(websiteOrigin)
   await saveToS3(ROBOTS_TXT_PATH, robotsTxt)
-  return true
+  return [ROBOTS_TXT_PATH]
 }
 
 // placeholder string that shouldn't collide with actual data

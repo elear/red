@@ -7,18 +7,19 @@ import {
 import type { RfcCommon } from '../../../website/app/utilities/rfc-validators.ts'
 import { IN_NOTES_RFC_REF_DOT_TXT_PATH, saveToS3 } from '../utilities/s3.ts'
 import { PUBLIC_SITE_URL_ORIGIN } from '../utilities/url.ts'
+import { type AsyncTaskItem } from '../utilities/task.ts'
 
 export const uploadInNotesRfcRefDotTxt = async (
   allRfcs: Readonly<RfcCommon[]>,
   rfcNumberColumnMinimumCharWidth: number
-): Promise<boolean> => {
+): AsyncTaskItem => {
   const txt = await renderInNotesRfcRefDotTxt(
     allRfcs,
     rfcNumberColumnMinimumCharWidth
   )
   await saveToS3(IN_NOTES_RFC_REF_DOT_TXT_PATH, txt)
   console.log('Uploaded', IN_NOTES_RFC_REF_DOT_TXT_PATH)
-  return true
+  return [IN_NOTES_RFC_REF_DOT_TXT_PATH]
 }
 
 export const renderInNotesRfcRefDotTxt = async (
@@ -100,9 +101,8 @@ const stringifyRFC = (rfc: RfcCommon): string => {
 
     return `${rfc.authors
       .map((author) => formatAuthor(author, 'reverse'))
-      .join(', ')}, "${rfc.title}", ${also}RFC ${rfc.number}, ${doi},${
-      rfcdate ? ` ${rfcdate},` : ''
-    } <${PUBLIC_SITE_URL_ORIGIN}/info/rfc${rfc.number}/>.`
+      .join(', ')}, "${rfc.title}", ${also}RFC ${rfc.number}, ${doi},${rfcdate ? ` ${rfcdate},` : ''
+      } <${PUBLIC_SITE_URL_ORIGIN}/info/rfc${rfc.number}/>.`
   }
 }
 

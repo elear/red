@@ -14,6 +14,7 @@ import { uploadRobotsTxt } from '../utilities/robots-txt-etc.ts'
 import { assertIsString } from '../utilities/typescript.ts'
 import { uploadSitemapXmls } from '../utilities/sitemap.ts'
 import { uploadRfcIndexXsd } from './rfc-index-xsd.ts'
+import { type AsyncTaskItem } from '../utilities/task.ts'
 
 const RFC_NUMBER_MINIMUM_CHAR_WIDTH = 5 // for Red the default width is 5 chars to handle eg RFC10000 (aka the RFC10k problem).
 
@@ -21,9 +22,7 @@ type Props = {
   api: ApiClient
 }
 
-type AsyncTaskItem = Promise<boolean>[]
-
-export const indices = async ({ api, }: Props): Promise<boolean> => {
+export const indices = async ({ api, }: Props): AsyncTaskItem => {
   console.log("Generating indices for ", process.env.NUXT_PUBLIC_SITE_BASE)
   const [allRfcs, allSubseries] = await Promise.all([
     getAllRFCs({ api }),
@@ -33,7 +32,7 @@ export const indices = async ({ api, }: Props): Promise<boolean> => {
 
   assertIsString(websiteOrigin, 'Expected process.env.NUXT_PUBLIC_SITE_BASE to be string')
 
-  const results = await Promise.all([
+  const resultsArray = await Promise.all([
     uploadHomepageLatest(allRfcs),
     uploadRfcMiniIndexJson(allRfcs),
     uploadFeeds(allRfcs),
@@ -44,13 +43,15 @@ export const indices = async ({ api, }: Props): Promise<boolean> => {
     uploadMetaThumbnails(),
     uploadRfcIndexXsd(),
     uploadFavicons(),
-  ] satisfies AsyncTaskItem)
+  ] satisfies AsyncTaskItem[])
+
+  const results = resultsArray.flat()
 
   results.forEach((result, i) => {
-    if(!result) {
-      console.error('indices ', i, ' failed ')
+    if (result === false) {
+      console.error('indices #', i, ' failed ')
     }
   })
 
-  return results.every(isSuccessful => isSuccessful)
+  return results
 }

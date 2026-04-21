@@ -1,0 +1,1 @@
+export type AsyncTaskItem = Promise<(string | false)[]>

@@ -6,19 +6,20 @@ import { PassThrough, Readable } from 'stream';
 import type { RfcCommon, SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts';
 import { infoRfcPathBuilder, rfcFormatPathBuilder, subseriesPathBuilder, siteMapXmlPathBuilder } from './url.ts';
 import { saveToS3, siteMapXmlPathPrefixBuilder } from './s3.ts';
+import { type AsyncTaskItem } from './task.ts';
 
 const precomputerRoot = path.resolve(import.meta.dirname, '..', '..')
 export const markdownPathsJsonPath = path.join(precomputerRoot, 'src', 'assets', 'markdown-paths.json')
 export const markdownPathsJsonPromise = fsPromises.readFile(markdownPathsJsonPath, 'utf-8')
 
-export const uploadSitemapXmls = async (websiteOrigin: string, allRfcs: Readonly<RfcCommon[]>, allSubseries: Readonly<SubseriesCommon[]>): Promise<boolean> => {
+export const uploadSitemapXmls = async (websiteOrigin: string, allRfcs: Readonly<RfcCommon[]>, allSubseries: Readonly<SubseriesCommon[]>): AsyncTaskItem => {
   const siteMapXmls = await getSiteMapXmls(websiteOrigin, allRfcs, allSubseries)
-  await Promise.all(siteMapXmls.map(([filename, xmlString]) => {
+  return await Promise.all(siteMapXmls.map(([filename, xmlString]) => {
     const s3Key = siteMapXmlPathPrefixBuilder(filename)
     console.log('Uploading ', s3Key)
     saveToS3(s3Key, xmlString)
+    return s3Key
   }))
-  return true
 }
 
 export const getSiteMapXmls = async (websiteOrigin: string, allRfcs: Readonly<RfcCommon[]>, allSubseries: Readonly<SubseriesCommon[]>) => {
