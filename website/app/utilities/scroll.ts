@@ -227,7 +227,7 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
       handleScroll()
     },
     100,
-    { edges: ["leading"] }
+    { edges: ['leading'] }
   )
 
   onMounted(() => {
@@ -374,67 +374,27 @@ export const useScrollTocContainer = ({
   )
 }
 
+/**
+ *  There have been subtle bugs in Vue rendering HTML that affect DOM ids,
+ *  so --in the browser-- we check whether the ids given to useActiveScroll()
+ *  actually exist and log some feedback.
+ * 
+ *  The possible reasons for an id missing are many, but so far
+ * 
+ *    * Vue template bugs (ie, not rendering an DOM id attribute)
+ *    * Generating ids based on content by using $slots.default during a Vue
+ *      render which confuses Vue (this might be incorrect usage of Vue) and
+ *      Vue doesn't update attributes correctly.
+ *    * Generating DOM ids with different algorithm:
+ *      *  For markdown we're using the `remark-heading-id` plugin to support the
+ *         Markdown `{#id}` syntax, for custom ids needed on the FAQ page, so we
+ *         have to pass that `id` attribute. We're trying to maintain the existing
+ *         page anchor links from a previous implementation.
+ *
+ *  Verifying them as a way of surfacing bugs is what this function does.
+ */
 export const useValidateIds = (ids: Ref<string[]>) => {
   watch(ids, () => {
-    /** FIXME: write a Playwright test for this and delete this
-     *
-     *  There have been subtle bugs in Vue rendering HTML that affect DOM ids,
-     *  so --in the browser-- we check whether the ids given to useActiveScroll()
-     *  actually exist.
-     *
-     *  There was a bug first noticed on the FAQ page, whose headings and ids come
-     *  from markdown, but strictly speaking the bug could occur more generally
-     *  if the ids given to this component don't exist.
-     *
-     *  For those wanting more detail about the bug...
-     *
-     *      There was a bug noticed first on the FAQ page where the '#' link
-     *      was pointing to a missing heading id. There were two duplicate 'wg' DOM ids,
-     *      and `Heading.vue` '#' link to `#errata` wasn't pointing anywhere.
-     *
-     *      As well as breaking the '#' link, this also broke useActiveScroll() because the
-     *      id `errata` was missing.
-     *
-     *      But to make matters stranger `Heading.vue` renders from the same `id` prop and they
-     *      were getting out of sync WITHIN the same component, so something with reactivity
-     *      was broken. In both cases Heading.vue's template renders with
-     *
-     *          props.id ?? getAnchorId($slots.default)
-     *
-     *      so they should result in the same string, but apparently not!
-     *
-     *      We're using the `remark-heading-id` plugin to support the Markdown `{#id}` syntax,
-     *      for custom ids needed on the FAQ page, so we have to pass that `id` attribute
-     *      along.
-     *
-     *      The markdown renderer supports overriding renderers `components/content/Prose*.vue`
-     *      and the anchor <a> override is `ProseA.vue`. We need ProseA.vue to override anchors
-     *      to support RFC Link Previews.
-     *
-     *      When we don't override using ProseA.vue the bug disappears, so let's start there.
-     *
-     *      This test throws an exception if it finds missing ids, so it's easy to reload the
-     *      page after trying a fix to see whether the bug is still present. Doing a manual
-     *      bisect (ie deleting half the code until the bug goes away) I traced the bug to
-     *      RFCRouterLink.vue and the line:
-     *
-     *         <div v-show="hasTouchStore.hasTouch === true" class="inline">
-     *
-     *      `v-show` means it will render the HTML to the DOM but selectively reveal it using CSS.
-     *      Changing it to this fixed the bug,
-     *
-     *         <div v-if="hasTouchStore.hasTouch === true" class="inline">
-     *
-     *      Although this fixes the bug it doesn't explain why duplicate 'wg' ids would appear
-     *      in Headings, or how `id` props got of sync within that component.
-     *
-     *      Perhaps something in Nuxt Content is caching and reusing VNodes incorrectly.
-     *
-     *  Anyway, devs using this component should provide valid ids so checking them (as a way
-     *  of surfacing this bug) is what this test does.
-     *
-     */
-
     const problemIds = ids.value.filter((id) => {
       // returns problematic ids, ie those that appear more than once
 
