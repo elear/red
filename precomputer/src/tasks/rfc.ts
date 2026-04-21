@@ -36,7 +36,8 @@ export const uploadRfcData = async (rfcNumber: number): AsyncTaskItem => {
 
 export const uploadRfcHtml = async (rfcNumber: number): AsyncTaskItem => {
   const rfcDoc = await getRfcBucketHtmlDocument(rfcNumber)
-  if (!rfcDoc) {
+  if (rfcDoc === false) {
+    console.error('[RfcBucketHtmlDocument]', `Failed to generate JSON for RFC ${rfcNumber}`)
     return [false]
   }
   const rfcDocS3Path = rfcHtmlJsonPathBuilder(rfcNumber)
@@ -46,7 +47,7 @@ export const uploadRfcHtml = async (rfcNumber: number): AsyncTaskItem => {
 
 export const getRfcBucketHtmlDocument = async (
   rfcNumber: number
-): Promise<RfcBucketHtmlDocument | undefined> => {
+): Promise<RfcBucketHtmlDocument | false> => {
   const html = await fetchSourceRfcHtml(rfcNumber, getFromS3)
   if (html !== null) {
     const rfcDocFromHtml = await rfcBucketHtmlToRfcDocument(
@@ -56,7 +57,7 @@ export const getRfcBucketHtmlDocument = async (
       getErrataForRfc
     )
     if (rfcDocFromHtml === null) {
-      return undefined
+      return false
     }
     return rfcDocFromHtml
   }
@@ -72,8 +73,9 @@ export const getRfcBucketHtmlDocument = async (
     fetchRfcPDF
   )
   if (rfcDocFromPdf === null) {
-    return undefined
+    return false
   }
+
   return rfcDocFromPdf
 }
 

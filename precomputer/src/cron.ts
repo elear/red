@@ -17,9 +17,11 @@ export const main = async (): Promise<void> => {
     console.error(
       'cron.ts finished with error(s)' // these errors should be already printed to console
     )
-    process.exit(1)
+  } else {
+    console.log('[cron.ts] Uploads completed.')
   }
-  console.log('[cron.ts] Uploads completed. Now cleaning up bucket...')
+  console.log('[Cleanup] Now cleaning up bucket...')
+
   const existingBucketObjects = await listS3Files()
   const existingBucketKeys = existingBucketObjects.map(obj => {
     assertIsString(obj.Key, `Bucket object ${JSON.stringify(obj)} has no key.`)
@@ -53,7 +55,13 @@ export const main = async (): Promise<void> => {
     console.log("[Cleanup] No need to purge any files from S3.")
   }
 
-  console.log('cron.ts finished successfully')
+  if (!s3Keys.some(s3Key => s3Key === false)) {
+    console.log('[cron.ts] finished successfully')
+  } else {
+    console.error(
+      '[cron.ts] finished with error(s)' // these errors should be already printed to console
+    )
+  }
   process.exit(0)
 }
 
