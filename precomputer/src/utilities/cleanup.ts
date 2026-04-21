@@ -44,7 +44,8 @@ export const cleanupRedBucket = async (uploadedKeys: string[]): Promise<boolean>
       key.match(/^rfc-ref\/\d+\.txt$/) ||
       key.match(/^rfc\/\d+\.json$/) ||
       key.match(/^thumbnail\/rfc\d+\.png$/) ||
-      key.match(/^thumbnail\/rfc-editor-logo-\d+x\d+\.png$/)
+      key.match(/^thumbnail\/rfc-editor-logo-\d+x\d+\.png$/) ||
+      key.match(/^rfc\/\d+-page-\d+\.png$/) // pdf page screenshots
     ) {
       return false
     }
