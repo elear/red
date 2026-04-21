@@ -1,7 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
 
-const oneHourInSeconds = 60 * 60
-
 // inserted in the <head> some inline JS to determine scrollbar width so that CSS can use it in calc()
 // this is intentionally inserted in the <head> so that it runs immediately in the browser
 const scrollbarWidthInlineJS = `function _updateScrollbarWidth(){document.body.style.setProperty('--rfc-editor-org-scrollbar-width',(window.innerWidth-document.documentElement.clientWidth)+'px')}window.addEventListener('resize', _updateScrollbarWidth, false);document.addEventListener('DOMContentLoaded', _updateScrollbarWidth, false);window.addEventListener('load', _updateScrollbarWidth);window.setInterval(_updateScrollbarWidth,1000)`
@@ -150,15 +148,5 @@ export default defineNuxtConfig({
         // proxy: 'http://localhost:3001/api/v1/rfc-common/**'
       },
     },
-  },
-  $production: {
-    routeRules: {
-      // https://nitro.build/config#routerules
-      // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
-      '/': {
-        swr: oneHourInSeconds,
-        prerender: true
-      },
-    }
   }
 })
