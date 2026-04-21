@@ -43,10 +43,21 @@ export const renderHomepageLatest = async (
   allRfcs: Readonly<RfcCommon[]>,
   rfcNumbersToRender: number[]
 ): Promise<HomepageLatest> => {
+  if (rfcNumbersToRender.length !== NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE) {
+    console.error(`[${HOMEPAGE_LATEST_PATH}] Bad number of rfcNumbersToRender`, JSON.stringify(rfcNumbersToRender))
+    throw Error(`Expected homepage latest to have ${NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE} items but had ${rfcNumbersToRender.length} items.`)
+  }
+
+  const homepageLatest = allRfcs
+    .filter(rfc => rfcNumbersToRender.includes(rfc.number))
+
+  if (homepageLatest.length !== NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE) {
+    console.error(`[${HOMEPAGE_LATEST_PATH}] Bad number of homepageLatest`, JSON.stringify(homepageLatest))
+    throw Error(`Expected homepage latest to have ${NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE} items but had ${homepageLatest.length} items.`)
+  }
+
   const response: HomepageLatest = {
-    homepageLatest: allRfcs
-      .filter(rfc => rfcNumbersToRender.includes(rfc.number))
-      .sort((a, b) => b.number - a.number)
+    homepageLatest: homepageLatest.sort((a, b) => b.number - a.number)
       .map(redactRfc),
     timestampIso: DateTime.now().toUTC().toISO()
   }

@@ -18,7 +18,8 @@ const fastify = Fastify({
 fastify.get('/api/v1/homepage-latest.json', async (request, reply) => {
   const api = getApiClient()
   const rfcs = await getAllRFCs({ api, limit: NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE })
-  return renderHomepageLatest(rfcs)
+  const rfcsToRender = rfcs.slice(-NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE).map(rfc => rfc.number)
+  return renderHomepageLatest(rfcs, rfcsToRender)
 })
 
 fastify.get('/api/v1/rfc-mini-index.json', async (request, reply) => {
@@ -147,7 +148,7 @@ fastify.get('/api/v1/rfc-common/:rfcNumber.json', async (request, reply) => {
     }
     return rfcCommon
   }
-  return renderHomepageLatest([])
+  return {}
 })
 
 const mockLocalBucket: typeof getFromS3 = async (bucket, key, outputType, prefixForDebug) => {
