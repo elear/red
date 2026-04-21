@@ -14,7 +14,7 @@ export const uploadHomepageLatest = async (
 ): AsyncTaskItem => {
   const data = await renderHomepageLatest(allRfcs)
   await saveToS3(HOMEPAGE_LATEST_PATH, JSON.stringify(data))
-  console.log('Uploaded', HOMEPAGE_LATEST_PATH)
+  console.log(`[${HOMEPAGE_LATEST_PATH}]`, 'Uploaded', HOMEPAGE_LATEST_PATH)
 
   // also upload the referenced 'homepage latest' RFCs so that the links to RFCs will work
   const referencedKeys = await Promise.all(data.homepageLatest.map((rfc) => uploadRfcData(rfc.number)))

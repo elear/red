@@ -58,7 +58,7 @@ export const uploadMetaThumbnails = async (): AsyncTaskItem => {
     const metaThumbnail = await getMetaThumbnail(imagePreviewDimension[0], imagePreviewDimension[1])
     const s3Key = metaThumbnailPathBuilder(metaThumbnail.filename)
     saveToS3(s3Key, metaThumbnail.pngBuffer)
-    console.log('Uploaded', s3Key)
+    console.log('[meta-thumbnail]', 'Uploaded', s3Key)
     return s3Key
   }))
 }

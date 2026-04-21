@@ -117,7 +117,7 @@ export const fetchSourceRfcHtml = async (
   getRfcHtml: typeof getFromS3
 ): Promise<string | null> => {
   const key = rfcBucketHtmlPathBuilder(rfcNumber)
-  const dirtyHtml = await getRfcHtml('S3_RFC_BUCKET', key)
+  const dirtyHtml = await getRfcHtml('S3_RFC_BUCKET', key, 'default', `RFC ${rfcNumber}`)
   if (!dirtyHtml) {
     console.warn(
       `[RFC ${rfcNumber}] HTML from ${JSON.stringify(key)} not available`

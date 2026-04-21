@@ -77,7 +77,8 @@ type S3OutputType = 'default' | 'base64'
 export async function getFromS3(
   bucket: 'S3_RFC_BUCKET' | 'S3_RED_BUCKET',
   key: string,
-  outputType?: S3OutputType
+  outputType: S3OutputType,
+  prefixForDebug: string,
 ): Promise<string | Uint8Array | null> {
   const S3_BUCKET =
     bucket === 'S3_RFC_BUCKET' ?
@@ -108,9 +109,8 @@ export async function getFromS3(
       }
     }
   } catch (err) {
-    const errorHeader = `Failed to fetch ${JSON.stringify(key)} from ${JSON.stringify(S3_BUCKET)} bucket.`
-    console.error(
-      errorHeader,
+    const errorHeader = `[${prefixForDebug}] Failed to fetch ${JSON.stringify(key)} from ${JSON.stringify(S3_BUCKET)} bucket.`
+    console.error(errorHeader,
       // err
     )
     return null

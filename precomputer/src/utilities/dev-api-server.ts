@@ -150,7 +150,7 @@ fastify.get('/api/v1/rfc-common/:rfcNumber.json', async (request, reply) => {
   return renderHomepageLatest([])
 })
 
-const mockLocalBucket: typeof getFromS3 = async (bucket, key, outputType) => {
+const mockLocalBucket: typeof getFromS3 = async (bucket, key, outputType, prefixForDebug) => {
   const mockLocalBucketDirName = 'mockLocalBucket'
   const localPath = path.join(import.meta.dirname, mockLocalBucketDirName, bucket, key)
   try {
@@ -159,15 +159,15 @@ const mockLocalBucket: typeof getFromS3 = async (bucket, key, outputType) => {
     return data
   } catch (e: unknown) {
     // Probably just a missing file, so suppress the error
-    console.error('Problem reading ', localPath, e)
+    console.error(`[${prefixForDebug}]`, 'Problem reading', localPath, e)
   }
   return null
 }
 
-const mockLocalGetRfcHtml: typeof getFromS3 = async (bucket, key, outputType) => mockLocalBucket(bucket, key, outputType)
+const mockLocalGetRfcHtml: typeof getFromS3 = async (bucket, key, outputType, prefixForDebug) => mockLocalBucket(bucket, key, outputType, prefixForDebug)
 
 const mockLocalFetchPDF: typeof fetchRfcPDF = async (rfcNumber: number) => {
-  const result = await mockLocalBucket('S3_RFC_BUCKET', `pdf/${rfcNumber}.pdf`, 'base64')
+  const result = await mockLocalBucket('S3_RFC_BUCKET', `pdf/${rfcNumber}.pdf`, 'base64', `RFC ${rfcNumber}`)
   return result === null ? null : result.toString()
 }
 

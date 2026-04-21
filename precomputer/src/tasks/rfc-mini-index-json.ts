@@ -13,7 +13,7 @@ export const uploadRfcMiniIndexJson = async (
 ): AsyncTaskItem => {
   const txt = await renderRfcMiniIndexJson(allRfcs)
   await saveToS3(RFC_MINI_INDEX_JSON_PATH, txt)
-  console.log('Uploaded', RFC_MINI_INDEX_JSON_PATH)
+  console.log(`[${RFC_MINI_INDEX_JSON_PATH}]`, 'Uploaded', RFC_MINI_INDEX_JSON_PATH)
   return [RFC_MINI_INDEX_JSON_PATH]
 }
 

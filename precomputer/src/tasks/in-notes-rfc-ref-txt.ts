@@ -18,7 +18,7 @@ export const uploadInNotesRfcRefDotTxt = async (
     rfcNumberColumnMinimumCharWidth
   )
   await saveToS3(IN_NOTES_RFC_REF_DOT_TXT_PATH, txt)
-  console.log('Uploaded', IN_NOTES_RFC_REF_DOT_TXT_PATH)
+  console.log(`[${IN_NOTES_RFC_REF_DOT_TXT_PATH}]`, 'Uploaded', IN_NOTES_RFC_REF_DOT_TXT_PATH)
   return [IN_NOTES_RFC_REF_DOT_TXT_PATH]
 }
 

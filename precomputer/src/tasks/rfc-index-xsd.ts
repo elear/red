@@ -10,6 +10,6 @@ const xsdFileData = fsPromises.readFile(xsdPath, 'utf-8')
 export const uploadRfcIndexXsd = async (): AsyncTaskItem => {
   const xsd = await xsdFileData
   await saveToS3(RFC_INDEX_XSD_PATH, xsd)
-  console.log('Uploaded', RFC_INDEX_XSD_PATH)
+  console.log(`[rfc-index.xsd]`, 'Uploaded', RFC_INDEX_XSD_PATH)
   return [RFC_INDEX_XSD_PATH]
 }

@@ -17,7 +17,7 @@ export const uploadSitemapXmls = async (websiteOrigin: string, allRfcs: Readonly
   return await Promise.all(siteMapXmls.map(([filename, xmlString]) => {
     const s3Key = siteMapXmlPathPrefixBuilder(filename)
     saveToS3(s3Key, xmlString)
-    console.log('Uploaded ', s3Key)
+    console.log('[sitemap*.xml]', 'Uploaded ', s3Key)
     return s3Key
   }))
 }
