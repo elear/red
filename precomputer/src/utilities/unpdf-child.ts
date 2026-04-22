@@ -53,7 +53,8 @@ const screenshotPdfPage = async (
     metadata,
     isGreyscale ? 'compress-greyscale' : 'compress',
     dimensions.widthPx,
-    dimensions.heightPx ?? metadata.height
+    dimensions.heightPx ?? metadata.height,
+    debugPrefix: `${fileName}:${pageNumber}`,
   )
   if (png) {
     if (shouldUploadToS3) {

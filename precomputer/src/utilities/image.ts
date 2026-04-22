@@ -65,8 +65,10 @@ export const compressImageToPng = async (
   mode: 'compress' | 'compress-greyscale',
   widthPx: number,
   heightPx: number,
+  debugPrefix: string
 ): Promise<Buffer | undefined> => {
   console.log({
+    debugPrefix,
     widthPx,
     heightPx,
     metadata_width: metadata.width,
@@ -104,7 +106,7 @@ export const compressImageToPng = async (
     }
   }
   catch (e) {
-    console.error('[UNPDF_ERROR]', { width, height }, e)
+    console.error('[UNPDF_ERROR]', { debugPrefix, extractOptions, width, height }, e)
     throw e
   }
 }
