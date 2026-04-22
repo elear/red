@@ -88,7 +88,11 @@ export const compressImageToPng = async ({
     switch (mode) {
       case 'compress':
         const bufferCompress = await sharpImage
-          .autoOrient() // auto-rotates if EXIF data etc say it should and then removes the Exif flag
+          /**
+           * The PDF of RFC 8 page 9 has EXIF rotate metadata that we need to obey
+           * or else the Sharp extract coordinates are off canvas
+           */
+          .autoOrient() // auto-rotates if EXIF data etc say it should and then removes the Exif flag from it's in-memory metadata so it won't appear in output
           .keepExif()
           .extract(extractOptions)
           .png({ compressionLevel })
@@ -96,7 +100,11 @@ export const compressImageToPng = async ({
         return bufferCompress
       case 'compress-greyscale':
         const bufferCompressGrayscale = await sharpImage
-          .autoOrient() // auto-rotates if EXIF data etc say it should and then removes the Exif flag
+          /**
+           * The PDF of RFC 8 page 9 has EXIF rotate metadata that we need to obey
+           * or else the Sharp extract coordinates are off canvas
+           */
+          .autoOrient() // auto-rotates if EXIF data etc say it should and then removes the Exif flag from it's in-memory metadata so it won't appear in output
           .greyscale(true)
           .extract(extractOptions)
           .png({
