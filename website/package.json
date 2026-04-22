@@ -51,9 +51,9 @@
     "remark-heading-id": "1.0.1",
     "simple-git": "3.27.0",
     "tailwindcss": "4.2.2",
-    "typesense-instantsearch-adapter": "2.9.0",
-    "vue": "3.5.13",
-    "vue-instantsearch": "4.20.8",
+    "typesense-instantsearch-adapter": "3.0.2",
+    "vue": "3.5.32",
+    "vue-instantsearch": "4.25.0",
     "zod": "3.25.30"
   },
   "devDependencies": {
