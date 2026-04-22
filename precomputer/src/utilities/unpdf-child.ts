@@ -68,8 +68,8 @@ const screenshotPdfPage = async (
   }
   return {
     screenshotDimensions: {
-      widthPx: metadata.width,
-      heightPx: metadata.height
+      widthPx,
+      heightPx,
     },
     base64Png: ''
   }

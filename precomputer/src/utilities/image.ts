@@ -63,7 +63,7 @@ type CompressImageToPngProps = {
   sharpImage: SharpImage,
   mode: 'compress' | 'compress-greyscale',
   widthPx: number,
-  heightPx: number,
+  heightPx?: number,
   debugPrefix: string
 }
 
@@ -73,46 +73,44 @@ export const compressImageToPng = async ({
   widthPx,
   heightPx,
   debugPrefix,
-}: CompressImageToPngProps): Promise<{ png: Buffer, widthPx: number, heightPx: number } | undefined> => {
-  const rotatedSharp = sharpImage
+}: CompressImageToPngProps): Promise<{ png: Buffer, widthPx: number, heightPx: number }> => {
+  let sharp = sharpImage
     /**
      * The PDF of RFC 8 page 9 has EXIF rotate metadata that we need to obey
      * or else the Sharp extract coordinates are off canvas
      */
     .autoOrient() // auto-rotates if EXIF data etc say it should and then removes the Exif flag from it's in-memory metadata so it won't appear in output
 
-  const metadata = await rotatedSharp.metadata()
+  let metadata = await sharp.metadata()
 
   const resizeOptions: ResizeOptions = { width: metadata.width, height: metadata.height }
   const compressionLevel = 9
 
-  let buffer: Buffer | undefined = undefined
+  if (mode === 'compress-greyscale') {
+    sharp = sharp.greyscale(true)
+  }
+
+  sharp = sharp.resize(resizeOptions)
+
+  // if heightPx was undefined we'll need to get the new calculated height and return it
+  metadata = await sharp.metadata()
+
   try {
-    switch (mode) {
-      case 'compress':
-        buffer = await rotatedSharp
-          .resize(resizeOptions)
-          .png({ compressionLevel })
-          .toBuffer()
-        break
-      case 'compress-greyscale':
-        buffer = await rotatedSharp
-          .greyscale(true)
-          .resize(resizeOptions)
-          .png({
-            compressionLevel,
-            colours:
-              // 64 greys oughta be enough for anyone
-              64
-          })
-          .toBuffer()
-        break
-    }
+    const png = await sharp
+      .resize(resizeOptions)
+      .png(
+        mode === 'compress' ? { compressionLevel } : {
+          compressionLevel,
+          colours:
+            // 64 greys oughta be enough for anyone
+            64
+        })
+      .toBuffer()
 
     return {
-      png: buffer,
-      widthPx,
-      heightPx,
+      png,
+      widthPx: metadata.width,
+      heightPx: metadata.height,
     }
   } catch (e) {
     console.error('[UNPDF_ERROR]',
