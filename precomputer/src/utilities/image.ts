@@ -59,14 +59,23 @@ export const isSharpImageGreyscale = async (
   }
 }
 
-export const compressImageToPng = async (
+type CompressImageToPngProps = {
   sharpImage: SharpImage,
   metadata: sharp.Metadata,
   mode: 'compress' | 'compress-greyscale',
   widthPx: number,
   heightPx: number,
   debugPrefix: string
-): Promise<Buffer | undefined> => {
+}
+
+export const compressImageToPng = async ({
+  sharpImage,
+  metadata,
+  mode,
+  widthPx,
+  heightPx,
+  debugPrefix,
+}: CompressImageToPngProps): Promise<Buffer | undefined> => {
   console.log({
     debugPrefix,
     widthPx,

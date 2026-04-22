@@ -48,14 +48,15 @@ const screenshotPdfPage = async (
 
   // if we can detect that it's greyscale (and most RFC PDFs are) then we can gain better compression of PNGs
   const isGreyscale = await isSharpImageGreyscale(sharpImage)
-  const png = await compressImageToPng(
+  const png = await compressImageToPng({
     sharpImage,
     metadata,
-    isGreyscale ? 'compress-greyscale' : 'compress',
-    dimensions.widthPx,
-    dimensions.heightPx ?? metadata.height,
+    mode: isGreyscale ? 'compress-greyscale' : 'compress',
+    widthPx: dimensions.widthPx,
+    heightPx: dimensions.heightPx ?? metadata.height,
     debugPrefix: `${fileName}:${pageNumber}`,
-  )
+  })
+
   if (png) {
     if (shouldUploadToS3) {
       const bucketPath = rfcImagePathBuilder(fileName)
