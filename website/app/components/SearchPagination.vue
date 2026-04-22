@@ -18,7 +18,7 @@
         }"
         @click="scrollUpToNewSearchResults"
       >
-        <template v-slot="{
+        <template #default="{
           currentRefinement,
           nbPages,
           pages,
@@ -130,7 +130,6 @@
         }"
       />
     </label>
-
   </div>
 </template>
 
