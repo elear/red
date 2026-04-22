@@ -88,7 +88,7 @@ export const compressImageToPng = async ({
     switch (mode) {
       case 'compress':
         const bufferCompress = await sharpImage
-          // .autoOrient() // auto-rotates if EXIF data etc say it should
+          .autoOrient() // auto-rotates if EXIF data etc say it should and then removes the Exif flag
           .keepExif()
           .extract(extractOptions)
           .png({ compressionLevel })
@@ -96,7 +96,7 @@ export const compressImageToPng = async ({
         return bufferCompress
       case 'compress-greyscale':
         const bufferCompressGrayscale = await sharpImage
-          // .autoOrient() // auto-rotates if EXIF data etc say it should
+          .autoOrient() // auto-rotates if EXIF data etc say it should and then removes the Exif flag
           .greyscale(true)
           .extract(extractOptions)
           .png({
