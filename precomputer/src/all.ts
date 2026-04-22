@@ -1,7 +1,7 @@
 import { PromisePool } from '@supercharge/promise-pool'
 import { range } from 'es-toolkit'
 import { uploadRfcData } from './tasks/rfc.ts'
-import { taskItemWasSuccessful } from './utilities/task.ts'
+import { AsyncTaskItem, TaskItem, taskItemWasSuccessful } from './utilities/task.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
 
@@ -26,22 +26,18 @@ const main = async (
   console.log(
     `Processing ${minRfcNumber}-${maxRfcNumber}. Using ${NUMBER_OF_CONCURRENT_RFC_PROCESSORS} concurrent promises (results may appear out of order)`
   )
+
+  type Result = [number, TaskItem]
+
   const { results, errors } = await PromisePool.for(rfcRange)
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
-    .process(async (rfcNumber) => {
+    .process(async (rfcNumber): Promise<Result> => {
       try {
         const uploadResults = await uploadRfcData(rfcNumber)
         if (taskItemWasSuccessful(uploadResults)) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)
-        } else {
-
-          console.error(
-            `[RFC ${rfcNumber}] generation failed. If the RFC was NOT_ISSUED this isn't an error. Results: `,
-            uploadResults
-          )
-
         }
-        return { [rfcNumber]: uploadResults }
+        return [rfcNumber, uploadResults]
       } catch (err) {
         console.warn(
           `[RFC ${rfcNumber}] threw exception: ${String(err)}`
@@ -55,8 +51,27 @@ const main = async (
     console.error(errors)
     process.exit(1)
   } else {
-    console.log('[all.ts] finished successfully')
-    process.exit(0)
+    const resultsWithErrors = results
+      .filter(
+        ([_rfcNumber, uploadResults]) => taskItemWasSuccessful(uploadResults)
+      )
+
+    if (resultsWithErrors.length > 0) {
+      console.error(
+        '[all.ts] finished with errors',
+        resultsWithErrors
+          .map(
+            result => `RFC ${result[0]}: ${result[1]
+              .map((taskItem, index) => taskItem === false ? index : undefined)
+              .filter(maybeTaskItemIndex => maybeTaskItemIndex !== undefined)
+              .join(', ')}`)
+          .join('. '))
+
+      process.exit(1)
+    } else {
+      console.log('[all.ts] finished successfully')
+      process.exit(0)
+    }
   }
 }
 

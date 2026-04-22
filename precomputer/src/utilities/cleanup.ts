@@ -1,7 +1,7 @@
 import { PromisePool } from '@supercharge/promise-pool'
 import { difference } from 'es-toolkit'
 
-import { deleteFromS3, listS3Files } from "./s3.ts"
+import { deleteFromS3, listS3Files, UNUSABLE_RFC_NUMBERS_PATH } from "./s3.ts"
 import { assertIsString } from "./typescript.ts"
 
 const GOOD_KEYS = [
@@ -19,7 +19,7 @@ const GOOD_KEYS = [
   'other/publication-std-levels.json',
   'other/reports/CurrQstats.txt',
 
-  'other/unusable-rfc-numbers.json',
+  UNUSABLE_RFC_NUMBERS_PATH,
 ]
 
 // This is just a hint number, not a hard limit at all

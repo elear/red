@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import {
   S3Client,
   GetObjectCommand,
@@ -296,3 +297,31 @@ export const REPORTS_CURRENT_QUEUE_STATS_DOT_TXT_PATH =
 export const siteMapXmlPathPrefixBuilder = (sitemapFilename: string) => {
   return `other${sitemapFilename}` as const
 }
+export const UNUSABLE_RFC_NUMBERS_PATH = 'other/unusable-rfc-numbers.json'
+
+const UnusableRfcNumbersSchema = z.object({
+  number: z.number(),
+  comment: z.string()
+}).array()
+
+export type UnusableRfcNumbers = z.infer<typeof UnusableRfcNumbersSchema>
+
+export const getUnusableRfcNumbers = async (): Promise<UnusableRfcNumbers> => {
+  const usableRfcNumbersJson = await getFromS3('S3_RED_BUCKET', UNUSABLE_RFC_NUMBERS_PATH, 'default', '')
+  const usableRfcNumbersObj = JSON.parse(String(usableRfcNumbersJson))
+  return UnusableRfcNumbersSchema.parse(usableRfcNumbersObj)
+}
+
+/**
+ * Note: IIFE
+ */
+export const getUnusableRfcNumbersCached = (() => {
+  let unusableRfcNumbersPromise: ReturnType<typeof getUnusableRfcNumbers> | undefined = undefined
+  return () => {
+    if (!unusableRfcNumbersPromise) {
+      // defer promise instantiation until first call so that tests etc don't run this
+      unusableRfcNumbersPromise = getUnusableRfcNumbers()
+    }
+    return unusableRfcNumbersPromise
+  }
+})()

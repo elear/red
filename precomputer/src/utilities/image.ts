@@ -76,13 +76,6 @@ export const compressImageToPng = async ({
   heightPx,
   debugPrefix,
 }: CompressImageToPngProps): Promise<Buffer | undefined> => {
-  console.log({
-    debugPrefix,
-    widthPx,
-    heightPx,
-    metadata_width: metadata.width,
-    metadata_height: metadata.height,
-  })
   const [width, height] = [
     Math.min(widthPx, metadata.width),
     Math.min(heightPx, metadata.height)

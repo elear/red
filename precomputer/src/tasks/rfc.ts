@@ -7,7 +7,9 @@ import {
   rfcRefPathBuilder,
   rfcMetaThumbnailPathBuilder,
   saveToS3,
-  getFromS3
+  getFromS3,
+  getUnusableRfcNumbersCached,
+  UNUSABLE_RFC_NUMBERS_PATH
 } from '../utilities/s3.ts'
 import { getRfcCommonCached } from '../utilities/api.ts'
 import { RfcCommonSchema } from '../../../website/app/utilities/rfc-validators.ts'
@@ -22,9 +24,15 @@ import {
   formatIdentifiers
 } from '../utilities/rfc-converters-utils.ts'
 import { getErrataForRfc } from '../utilities/errata.ts'
-import { type AsyncTaskItem, taskItemWasSuccessful } from '../utilities/task.ts'
+import { type AsyncTaskItem } from '../utilities/task.ts'
 
 export const uploadRfcData = async (rfcNumber: number): AsyncTaskItem => {
+  const unusableRfcNumbers = await getUnusableRfcNumbersCached()
+  if (unusableRfcNumbers.some(unusableRfcNumber => unusableRfcNumber.number === rfcNumber)) {
+    console.info(`[RFC ${rfcNumber}] Skipping this RFC as it's in ${UNUSABLE_RFC_NUMBERS_PATH}`)
+    return []
+  }
+
   const results = await Promise.all([
     uploadRfcHtml(rfcNumber),
     uploadRfcCommonJson(rfcNumber),

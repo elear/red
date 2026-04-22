@@ -1,7 +1,7 @@
 /**
  * Use taskItemWasSuccessful() to analyse results
  */
-type TaskItem = (string | false)[]
+export type TaskItem = (string | false)[]
 
 /**
  * Use taskItemWasSuccessful() to analyse results
