@@ -1,4 +1,4 @@
-import sharp from 'sharp'
+import sharp, { Region } from 'sharp'
 
 type SharpImage = ReturnType<typeof sharp>
 
@@ -66,19 +66,25 @@ export const compressImageToPng = async (
   widthPx: number,
   heightPx: number,
 ): Promise<Buffer> => {
-  const extractOptions = { left: 0, top: 0, width: widthPx, height: heightPx }
+  const [width, height] = [
+    Math.min(widthPx, metadata.width),
+    Math.min(heightPx, metadata.height)
+  ].sort() // assuming portrait layout so width < height
+
+  const extractOptions: Region = { left: 0, top: 0, width, height }
   const compressionLevel = 9
 
   switch (mode) {
     case 'compress':
       return sharpImage
-        .autoOrient() // auto-rotates if EXIF data etc say it should
+        // .autoOrient() // auto-rotates if EXIF data etc say it should
+        .keepExif()
         .extract(extractOptions)
         .png({ compressionLevel })
         .toBuffer()
     case 'compress-greyscale':
       return sharpImage
-        .autoOrient() // auto-rotates if EXIF data etc say it should
+        // .autoOrient() // auto-rotates if EXIF data etc say it should
         .greyscale(true)
         .extract(extractOptions)
         .png({
