@@ -32,21 +32,38 @@
     <div class="lg:w-2/3 xl:w-1/2 mb-2 md:mb-4 md:pt-2 md:pl-2">
       <p class="hidden leading-6 lg:block pl-5 md:p-0 text-pretty">
         RFCs outline computer networking and Internet foundations, including
-        <AValidHref href="/standards/">Internet Standards</AValidHref>
-        and historical or informative content. They are published by the RFC
-        Editor for the
+        <AValidHref :href="searchPathBuilder({ status: ['Internet Standard'] })">Internet Standards</AValidHref>
+        and historical or informative content.
+
+        They are published by the RFC Editor for the
         <AValidHref :href="IETF_URL_ORIGIN">
           <abbr title="Internet Engineering Task Force">IETF</abbr>
+          <Icon
+            name="fluent:window-new-20-regular"
+            class="text-lg align-middle ml-1"
+          />
         </AValidHref>,
         <AValidHref :href="IRTF_URL_ORIGIN">
           <abbr title="Internet Research Task Force">IRTF</abbr>
+          <Icon
+            name="fluent:window-new-20-regular"
+            class="text-lg align-middle ml-1"
+          />
         </AValidHref>,
         <AValidHref :href="IAB_URL_ORIGIN">
           <abbr title="Internet Architecture Board">IAB</abbr>
+          <Icon
+            name="fluent:window-new-20-regular"
+            class="text-lg align-middle ml-1"
+          />
         </AValidHref>, and
         <AValidHref href="/authors/rfc-independent-submissions/">
           <abbr title="Independent Submission Editor">ISE</abbr>
-        </AValidHref>, which collectively form the authoritative source for RFCs
+          <Icon
+            name="fluent:window-new-20-regular"
+            class="text-lg align-middle ml-1"
+          />
+        </AValidHref>, which collectively form the authoritative source for RFCs.
       </p>
       <SearchBox class="mt-2 mb-0 md:mb-4" />
     </div>
@@ -54,5 +71,5 @@
 </template>
 
 <script setup lang="ts">
-import { IAB_URL_ORIGIN, IETF_URL_ORIGIN, IRTF_URL_ORIGIN } from '~/utilities/url'
+import { IAB_URL_ORIGIN, IETF_URL_ORIGIN, IRTF_URL_ORIGIN, searchPathBuilder } from '~/utilities/url'
 </script>

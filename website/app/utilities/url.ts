@@ -19,7 +19,6 @@ export type ValidHrefs =
   | typeof RFC_INDEX_ALL_ASCENDING_PATH
   | typeof RSS_PATH
   | typeof ATOM_PATH
-  | typeof STANDARDS_PATH
   | typeof IN_NOTES_BCP_REF_TXT
   | typeof IN_NOTES_RFC_REF_TXT
   | typeof IN_NOTES_STD_REF_TXT
@@ -118,8 +117,6 @@ export const API_RFC_MINI_INDEX_PATH = `/api/v1/rfc-mini-index.json`
 export const RFC_INDEX_XML_PATH = '/rfc-index.xml'
 export const RFC_INDEX_ALL_ASCENDING_PATH = '/rfc-index/'
 export const REPORTS_CURRENT_QUEUE_STATS_TXT_PATH = '/reports/CurrQstats.txt'
-
-export const STANDARDS_PATH = '/standards/'
 
 export const RSS_PATH = '/rfcrss.xml'
 export const ATOM_PATH = '/rfcatom.xml'

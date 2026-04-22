@@ -18,7 +18,7 @@ In a word, **"NO!"**. Many RFCs have Informational or Experimental status and do
 
 ## How can one tell where in the Standards Track an RFC is? {#stdtrack}
 
-Consult the online document ["Internet Official Protocol Standards"](/standards/).
+Consult the online document ["Internet Official Protocol Standards"](/search/?status=Internet+Standard).
 
 ## Can the status of an RFC change after publication? {#statuschanges}
 
