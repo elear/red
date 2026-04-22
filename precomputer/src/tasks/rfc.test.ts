@@ -23,7 +23,7 @@ test('renderRfcRef 9804', async () => {
   expect(rfc9804Ref).toMatchSnapshot()
 })
 
-// 9084 rendering 'Wang, A., Lindem, A., Dong, J., Psenak, P., and K. Talaulikar, Ed., "OSPF Prefix Originator Extensions", RFC 9084, DOI 10.17487/RFC9084, August 2021, <https://www.rfc-editor.org/info/rfc9084>.'
+// 9084 reference rendering 'Wang, A., Lindem, A., Dong, J., Psenak, P., and K. Talaulikar, Ed., "OSPF Prefix Originator Extensions", RFC 9084, DOI 10.17487/RFC9084, August 2021, <https://www.rfc-editor.org/info/rfc9084>.'
 
 test('renderRfcRef 9084', async () => {
   const rfc9084 = testMockAllRfcs.find((rfc) => rfc.number === 9084)
