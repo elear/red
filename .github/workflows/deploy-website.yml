@@ -132,11 +132,10 @@ jobs:
           red-api.yml
           api-client.ts
 
-    # Build dev instead of production until we sort out how to do prerendering, which needs a live datatracker
     - name: NPM Install + Build Site
       run: |
         npm ci
-        npm run build:dev
+        npm run build
       working-directory: ./red/website
 
     - name: Setup Docker Buildx
