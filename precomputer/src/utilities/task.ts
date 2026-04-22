@@ -33,6 +33,7 @@ export const processExitFromUploadResults = ({ filename, uploadResults, errors }
       .filter(
         ([_rfcNumber, uploadResults]) => !taskItemWasSuccessful(uploadResults)
       )
+      .sort((a, b) => a[0] - b[0])
 
     if (uploadResultsWithErrors.length > 0) {
       console.error(
