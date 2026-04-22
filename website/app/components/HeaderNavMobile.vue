@@ -16,7 +16,7 @@
     <DialogPortal>
       <DialogOverlay />
       <DialogContent :class="// needs overflow-y-scroll to force scrollbars, to ensure same page width as the main view
-        'absolute inset-0 z-50 bg-blue-900 text-white dark:bg-blue-950 dark:text-white overflow-y-scroll h-full'">
+        'absolute inset-0 z-60 bg-blue-900 text-white dark:bg-blue-950 dark:text-white overflow-y-scroll h-full'">
         <DialogTitle>
           <button
             type="button"

@@ -10,7 +10,7 @@
     </div>
     <div
         :id="INSTANTSEARCH_STICKY_CONTAINER_DOM_ID"
-        class="lg:sticky lg:top-0 lg:z-50 bg-blue-900 dark:bg-blue-950 text-white mt-0"
+        class="lg:sticky lg:top-0 lg:z-60 bg-blue-900 dark:bg-blue-950 text-white mt-0"
     >
         <div class="flex flex-row items-center pt-4 pb-4 container mx-auto">
             <div class="w-full md:w-2/3">

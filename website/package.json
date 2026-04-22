@@ -23,6 +23,12 @@
     "generate:content-metadata": "node ./scripts/generate-content-metadata.ts"
   },
   "dependencies": {
+    "@iconify-json/eos-icons": "1.2.4",
+    "@iconify-json/f7": "1.2.2",
+    "@iconify-json/fa-solid": "1.2.2",
+    "@iconify-json/mdi": "1.2.3",
+    "@iconify-json/ph": "1.2.2",
+    "@iconify-json/vaadin": "1.2.1",
     "@internationalized/date": "3.8.1",
     "@nuxt/content": "3.7.1",
     "@nuxt/icon": "1.13.0",
