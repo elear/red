@@ -1,4 +1,4 @@
-import sharp, { Region } from 'sharp'
+import sharp, { type Region } from 'sharp'
 
 type SharpImage = ReturnType<typeof sharp>
 
