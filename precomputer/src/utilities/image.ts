@@ -94,14 +94,15 @@ export const compressImageToPng = async ({
   try {
     switch (mode) {
       case 'compress':
-        return await sharpImage
+        const bufferCompress = await sharpImage
           // .autoOrient() // auto-rotates if EXIF data etc say it should
           .keepExif()
           .extract(extractOptions)
           .png({ compressionLevel })
           .toBuffer()
+        return bufferCompress
       case 'compress-greyscale':
-        return await sharpImage
+        const bufferCompressGrayscale = await sharpImage
           // .autoOrient() // auto-rotates if EXIF data etc say it should
           .greyscale(true)
           .extract(extractOptions)
@@ -112,9 +113,9 @@ export const compressImageToPng = async ({
               64
           })
           .toBuffer()
+        return bufferCompressGrayscale
     }
-  }
-  catch (e) {
+  } catch (e) {
     console.error('[UNPDF_ERROR]',
       debugPrefix,
       JSON.stringify(extractOptions),

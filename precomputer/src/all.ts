@@ -26,7 +26,7 @@ const main = async (
   console.log(
     `Processing ${minRfcNumber}-${maxRfcNumber}. Using ${NUMBER_OF_CONCURRENT_RFC_PROCESSORS} concurrent promises (results may appear out of order)`
   )
-  const { errors } = await PromisePool.for(rfcRange)
+  const { results, errors } = await PromisePool.for(rfcRange)
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
     .process(async (rfcNumber) => {
       try {
@@ -34,11 +34,14 @@ const main = async (
         if (taskItemWasSuccessful(uploadResults)) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)
         } else {
+
           console.error(
             `[RFC ${rfcNumber}] generation failed. If the RFC was NOT_ISSUED this isn't an error. Results: `,
             uploadResults
           )
+
         }
+        return { [rfcNumber]: uploadResults }
       } catch (err) {
         console.warn(
           `[RFC ${rfcNumber}] threw exception: ${String(err)}`
@@ -48,10 +51,11 @@ const main = async (
     })
 
   if (errors.length > 0) {
-    console.log('all.ts finished with error(s)')
+    console.log('[all.ts] finished with error(s)')
     console.error(errors)
     process.exit(1)
   } else {
+    console.log('[all.ts] finished successfully')
     process.exit(0)
   }
 }

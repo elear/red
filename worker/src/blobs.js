@@ -256,6 +256,10 @@ export async function blobsStatics(req, env) {
     {
       from: '/reports/CurrQstats.txt',
       to: 'other/reports/CurrQstats.txt'
+    },
+    {
+      from: '/api/v1/unusable-rfc-numbers.json',
+      to: 'other/unusable-rfc-numbers.json'
     }
   ]
 
