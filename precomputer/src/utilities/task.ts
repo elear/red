@@ -25,18 +25,18 @@ type ProcessExitFromUploadResultsProps = {
 
 export const processExitFromUploadResults = ({ filename, uploadResults, errors }: ProcessExitFromUploadResultsProps): void => {
   if (errors.length > 0) {
-    console.log(`[${filename}] finished with error(s)`)
+    console.log(`[${filename}] finished with exceptions thrown`)
     console.error(errors)
     process.exit(1)
   } else {
     const uploadResultsWithErrors = uploadResults
       .filter(
-        ([_rfcNumber, uploadResults]) => taskItemWasSuccessful(uploadResults)
+        ([_rfcNumber, uploadResults]) => !taskItemWasSuccessful(uploadResults)
       )
 
     if (uploadResultsWithErrors.length > 0) {
       console.error(
-        `[${filename}] finished with errors`,
+        `[${filename}] finished with error(s)`,
         uploadResultsWithErrors
           .map(
             result => `RFC ${result[0]}: ${result[1]
