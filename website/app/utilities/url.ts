@@ -57,7 +57,10 @@ export const usePublicSiteUrlOrigin = () => {
 }
 export const useApiV1UrlOrigin = () => {
   const runtimeConfig = useRuntimeConfig()
-  return assertUrlOrigin(runtimeConfig.public.apiV1Base, 'apiV1Base', '')
+
+  return runtimeConfig.public.apiV1Base !== ''
+    ? assertUrlOrigin(runtimeConfig.public.apiV1Base, 'apiV1Base', '')
+    : runtimeConfig.public.apiV1Base
 }
 export const useErrataUrlOrigin = () => {
   const runtimeConfig = useRuntimeConfig()

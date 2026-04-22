@@ -40,7 +40,8 @@ import { RfcBucketHtmlDocumentSchema } from '~/utilities/rfc-validators'
 import {
   apiRfcBucketDocumentPathBuilder,
   infoSeriesPathBuilder,
-  rfcFormatPathBuilder, useApiV1UrlOrigin,
+  rfcFormatPathBuilder,
+  useApiV1UrlOrigin,
   usePublicSiteUrlOrigin
 } from '~/utilities/url'
 import { rfcCommonToGoogleScholar, useRfcEditorHead } from '~/utilities/head'
@@ -55,7 +56,8 @@ const props = defineProps<Props>()
 
 const route = useRoute()
 
-const apiV1Base = useApiV1UrlOrigin()
+const publicSiteUrlOrigin = usePublicSiteUrlOrigin()
+const apiV1UrlOrigin = useApiV1UrlOrigin()
 
 const sanitisedId = computed(() => `${props.rfcId.type}${props.rfcId.number}`)
 
@@ -66,11 +68,10 @@ const { data: rfcBucketHtmlDocument, error: rfcBucketHtmlDocumentError } =
   await useAsyncData(
     asyncRfcBucketHtmlDocumentKey,
     async () => {
-      console.log(`apiV1Base: ${apiV1Base}`)
-      const path = apiRfcBucketDocumentPathBuilder(props.rfcId.number)
-      const maybeRfcBucketDocument = await $fetch(path, {
+      const rfcDataPath = apiRfcBucketDocumentPathBuilder(props.rfcId.number)
+      const maybeRfcBucketDocument = await $fetch(rfcDataPath, {
         method: 'GET',
-        baseURL: apiV1Base
+        baseURL: import.meta.server ? apiV1UrlOrigin : undefined,
       })
       if (typeof maybeRfcBucketDocument !== 'object') {
         console.log(
@@ -99,8 +100,6 @@ const { data: rfcBucketHtmlDocument, error: rfcBucketHtmlDocumentError } =
       server: true // we want server fetching so that we can generate server HTTP 404s if necessary
     }
   )
-
-const publicSiteUrlOrigin = usePublicSiteUrlOrigin()
 
 if (rfcBucketHtmlDocumentError.value) {
   console.error(rfcBucketHtmlDocumentError.value)

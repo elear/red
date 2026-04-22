@@ -53,7 +53,8 @@ import { DateTime } from 'luxon'
 import { SubseriesCommonSchema } from '~/utilities/rfc-validators'
 import {
   infoSeriesPathBuilder,
-  apiSubseriesPathBuilder
+  apiSubseriesPathBuilder,
+  useApiV1UrlOrigin
 } from '~/utilities/url'
 import { useRfcEditorHead } from '~/utilities/head'
 import type { SeriesId } from '~/utilities/rfc'
@@ -68,14 +69,16 @@ const route = useRoute()
 
 const sanitisedId = computed(() => `${props.subseriesId.type}${props.subseriesId.number}`)
 
+const apiV1UrlOrigin = useApiV1UrlOrigin()
+
 const subseriesDocumentKey = computed(() => `info-subseries-${sanitisedId.value}`)
 const { data: subseriesDocument, error: subseriesDocumentError } = await useAsyncData(
   subseriesDocumentKey,
   async () => {
-    const url = apiSubseriesPathBuilder(props.subseriesId.type, props.subseriesId.number)
-    const maybeRfcBucketDocument = await $fetch(url, {
+    const subseriesPath = apiSubseriesPathBuilder(props.subseriesId.type, props.subseriesId.number)
+    const maybeRfcBucketDocument = await $fetch(subseriesPath, {
       method: 'GET',
-      credentials: 'same-origin'
+      baseURL: import.meta.server ? apiV1UrlOrigin : undefined,
     })
     if (typeof maybeRfcBucketDocument !== 'object') {
       console.log("Unexpected response type. The server Content-Type may be misconfigured so $fetch() doesn't parse as JSON", typeof maybeRfcBucketDocument, maybeRfcBucketDocument)

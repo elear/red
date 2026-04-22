@@ -161,7 +161,8 @@ import {
   API_HOMEPAGE_LATEST_PATH,
   searchPathBuilder,
   useDatatrackerUrlOrigin,
-  usePublicSiteUrlOrigin
+  usePublicSiteUrlOrigin,
+  useApiV1UrlOrigin
 } from '~/utilities/url'
 import type { RfcCommon } from '~/utilities/rfc-validators'
 
@@ -171,12 +172,23 @@ definePageMeta({
 
 const datatrackerUrlOrigin = useDatatrackerUrlOrigin()
 const publicSiteUrlOrigin = usePublicSiteUrlOrigin()
+const apiV1UrlOrigin = useApiV1UrlOrigin()
 
 const {
   data: homepageLatestData,
   status: homepageLatestStatus,
   error: homepageLatestError
-} = await useAsyncData(() => $fetch(API_HOMEPAGE_LATEST_PATH, { credentials: 'same-origin' }))
+} = await useAsyncData(() => {
+  const maybeHomepageLatest = $fetch(API_HOMEPAGE_LATEST_PATH, {
+    method: 'GET',
+    baseURL: import.meta.server ? apiV1UrlOrigin : undefined,
+  })
+  if (typeof maybeHomepageLatest !== 'object') {
+    console.log("Unexpected response type. The server Content-Type may be misconfigured so $fetch() doesn't parse as JSON", typeof maybeRfcBucketDocument, maybeRfcBucketDocument)
+    throw Error(`Unable to load homepage latest. See console for more.`)
+  }
+  return maybeHomepageLatest
+})
 
 const homepageLatest = computed((): RfcCommon[] => {
   if (homepageLatestError.value) {
@@ -193,7 +205,7 @@ const homepageLatest = computed((): RfcCommon[] => {
 
 useRfcEditorHead({
   title: '',
-  canonicalPath: publicSiteUrlOrigin,
+  canonicalPath: `${publicSiteUrlOrigin}/`,
   description:
     'The official home of RFCs. RFCs outline computer networking and Internet foundations, including Internet Standards and historical or informative content.',
   contentType: 'website'
