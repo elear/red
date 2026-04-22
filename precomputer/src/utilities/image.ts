@@ -106,7 +106,7 @@ export const compressImageToPng = async (
     }
   }
   catch (e) {
-    console.error('[UNPDF_ERROR]', { debugPrefix, extractOptions, width, height }, e)
+    console.error('[UNPDF_ERROR]', debugPrefix, JSON.stringify(extractOptions), width, height, e)
     throw e
   }
 }
