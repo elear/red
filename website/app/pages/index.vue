@@ -184,7 +184,7 @@ const {
     baseURL: import.meta.server ? apiV1UrlOrigin : undefined,
   })
   if (typeof maybeHomepageLatest !== 'object') {
-    console.log("Unexpected response type. The server Content-Type may be misconfigured so $fetch() doesn't parse as JSON", typeof maybeRfcBucketDocument, maybeRfcBucketDocument)
+    console.log("Unexpected response type. The server Content-Type may be misconfigured so $fetch() doesn't parse as JSON", typeof maybeHomepageLatest, maybeHomepageLatest)
     throw Error(`Unable to load homepage latest. See console for more.`)
   }
   return maybeHomepageLatest

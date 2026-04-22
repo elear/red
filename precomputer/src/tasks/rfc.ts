@@ -186,7 +186,12 @@ export const renderRefsRef = (rfc: RfcCommon): string => {
     throw Error(`Unexpected lack of 'published' date`)
   }
 
-  return `${rfc.authors.map((author) => formatAuthor(author, 'brief'))}, "${rfc.title
+  return `${rfc.authors.map((author, index, arr) => {
+    const formattedName = formatAuthor(author, 'brief')
+    const isLast = index === arr.length - 1
+    const isSecondToLast = index === arr.length - 2
+    return `${formattedName}${!isLast ? isSecondToLast ? ', and ' : ',' : ''}`
+  }).join('')}, "${rfc.title
     }", RFC ${rfc.number}, ${formatIdentifiers(rfc.identifiers, ' ').join(
       ''
     )}, ${DateTime.fromISO(published).toFormat(
