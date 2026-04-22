@@ -21,7 +21,10 @@ const main = async (
     )
   }
 
-  const rfcRange = range(minRfcNumber, maxRfcNumber)
+  const rfcRange = range(
+    minRfcNumber,
+    maxRfcNumber + 1 // range(1, 4) returns [1,2,3] so we need +1 to also include the maxRfcNumber in the range
+  )
 
   console.log(
     `Processing ${minRfcNumber}-${maxRfcNumber}. Using ${NUMBER_OF_CONCURRENT_RFC_PROCESSORS} concurrent promises (results may appear out of order)`
