@@ -190,7 +190,11 @@ export const renderRefsRef = (rfc: RfcCommon): string => {
     const formattedName = formatAuthor(author, 'brief')
     const isLast = index === arr.length - 1
     const isSecondToLast = index === arr.length - 2
-    return `${formattedName}${!isLast ? isSecondToLast ? ', and ' : ',' : ''}`
+    return `${formattedName}${!isLast
+      ? isSecondToLast
+        ? ', and '
+        : ', '
+      : ''}`
   }).join('')}, "${rfc.title
     }", RFC ${rfc.number}, ${formatIdentifiers(rfc.identifiers, ' ').join(
       ''

@@ -57,7 +57,7 @@ export const formatAuthor = (
       assertNever(style)
     }, '')
 
-  return author.affiliation === 'Editor' ? `${name}, Ed.` : name
+  return author.is_editor ? `${name}, Ed.` : name
 }
 
 export const formatIdentifiers = (

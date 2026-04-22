@@ -35,7 +35,8 @@ const regenerateTestData = async () => {
     (rfc) =>
       rfcsByNumberToInclude.includes(rfc.number) ||
       /// get a test subset of RFCs across the whole series that hopefully represent metadata variations from different epochs
-      rfc.number % 1000 < 50
+      rfc.number % 1000 < 50 ||
+      rfc.number === 9084
   )
 
   const someSubseries = allSubseries.filter(

@@ -58,6 +58,91 @@ exports[`homepage latest RFCs 1`] = `
       "updates": [],
     },
     {
+      "abstract": "This document defines OSPF extensions to include information associated with the node originating a prefix along with the prefix advertisement.  These extensions do not change the core OSPF route computation functionality but provide useful information for network analysis, troubleshooting, and use cases like traffic engineering.",
+      "area": {
+        "acronym": "rtg",
+        "name": "Routing Area",
+      },
+      "authors": [
+        {
+          "affiliation": "China Telecom",
+          "country": "China",
+          "datatracker_person_path": "/person/Aijun%20Wang",
+          "email": "wangaj3@chinatelecom.cn",
+          "is_editor": false,
+          "person": 111366,
+          "titlepage_name": "Aijun Wang",
+        },
+        {
+          "affiliation": "Cisco Systems",
+          "country": "USA",
+          "datatracker_person_path": "/person/Acee%20Lindem",
+          "email": "acee.ietf@gmail.com",
+          "is_editor": false,
+          "person": 10784,
+          "titlepage_name": "Acee Lindem",
+        },
+        {
+          "affiliation": "Huawei Technologies",
+          "country": "China",
+          "datatracker_person_path": "/person/Jie%20Dong",
+          "email": "jie.dong@huawei.com",
+          "is_editor": false,
+          "person": 110737,
+          "titlepage_name": "Jie Dong",
+        },
+        {
+          "affiliation": "Cisco Systems",
+          "country": "Slovakia",
+          "datatracker_person_path": "/person/Peter%20Psenak",
+          "email": "ppsenak@cisco.com",
+          "is_editor": false,
+          "person": 105091,
+          "titlepage_name": "Peter Psenak",
+        },
+        {
+          "affiliation": "Cisco Systems",
+          "country": "India",
+          "datatracker_person_path": "/person/Ketan%20Talaulikar",
+          "email": "ketant.ietf@gmail.com",
+          "is_editor": false,
+          "person": 122823,
+          "titlepage_name": "Ketan Talaulikar",
+        },
+      ],
+      "formats": [],
+      "group": {
+        "acronym": "lsr",
+        "name": "Link State Routing",
+        "type": "wg",
+      },
+      "identifiers": [
+        {
+          "type": "doi",
+          "value": "10.17487/RFC9084",
+        },
+      ],
+      "keywords": [],
+      "number": 9084,
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "pages": 9,
+      "published": "2021-08-13",
+      "status": {
+        "name": "proposed standard",
+        "slug": "ps",
+      },
+      "stream": {
+        "description": "Internet Engineering Task Force (IETF)",
+        "name": "IETF",
+        "slug": "IETF",
+      },
+      "subseries": [],
+      "title": "OSPF Prefix Originator Extensions",
+      "updated_by": [],
+      "updates": [],
+    },
+    {
       "abstract": "This document is a product of the Path Aware Networking Research Group (PANRG). At the first meeting of the PANRG, the Research Group agreed to catalog and analyze past efforts to develop and deploy Path Aware techniques, most of which were unsuccessful or at most partially successful, in order to extract insights and lessons for Path Aware networking researchers.
 
  This document contains that catalog and analysis.",
@@ -103,105 +188,6 @@ exports[`homepage latest RFCs 1`] = `
       "title": "Path Aware Networking: Obstacles to Deployment (A Bestiary of Roads Not Taken)",
       "updated_by": [],
       "updates": [],
-    },
-    {
-      "abstract": "The 3GPP mobile network Authentication and Key Agreement (AKA) is an authentication mechanism for devices wishing to access mobile networks. RFC 4187 (EAP-AKA) made the use of this mechanism possible within the Extensible Authentication Protocol (EAP) framework. RFC 5448 (EAP-AKA') was an improved version of EAP-AKA.
-
- This document is the most recent specification of EAP-AKA', including, for instance, details about and references related to operating EAP-AKA' in 5G networks.
-
- EAP-AKA' differs from EAP-AKA by providing a key derivation function that binds the keys derived within the method to the name of the access network. The key derivation function has been defined in the 3rd Generation Partnership Project (3GPP). EAP-AKA' allows its use in EAP in an interoperable manner. EAP-AKA' also updates the algorithm used in hash functions, as it employs SHA-256 / HMAC-SHA-256 instead of SHA-1 / HMAC-SHA-1, which is used in EAP-AKA.
-
- This version of the EAP-AKA' specification defines the protocol behavior for both 4G and 5G deployments, whereas the previous version defined protocol behavior for 4G deployments only. While EAP-AKA' as defined in RFC 5448 is not obsolete, this document defines the most recent and fully backwards-compatible specification of EAP-AKA'. This document updates both RFCs 4187 and 5448.",
-      "area": {
-        "acronym": "sec",
-        "name": "Security Area",
-      },
-      "authors": [
-        {
-          "affiliation": "Ericsson",
-          "country": "Finland",
-          "datatracker_person_path": "/person/Jari%20Arkko",
-          "email": "jari.arkko@ericsson.com",
-          "is_editor": false,
-          "person": 21072,
-          "titlepage_name": "Jari Arkko",
-        },
-        {
-          "affiliation": "Ericsson",
-          "country": "Finland",
-          "datatracker_person_path": "/person/Vesa%20Lehtovirta",
-          "email": "vesa.lehtovirta@ericsson.com",
-          "is_editor": false,
-          "person": 107410,
-          "titlepage_name": "Vesa Lehtovirta",
-        },
-        {
-          "affiliation": "Ericsson",
-          "country": "Finland",
-          "datatracker_person_path": "/person/Vesa%20Torvinen",
-          "email": "vesa.torvinen@ericsson.com",
-          "is_editor": false,
-          "person": 105361,
-          "titlepage_name": "Vesa Torvinen",
-        },
-        {
-          "affiliation": "Independent",
-          "country": "Finland",
-          "datatracker_person_path": "/person/Pasi%20Eronen",
-          "email": "pe@iki.fi",
-          "is_editor": false,
-          "person": 106164,
-          "titlepage_name": "Pasi Eronen",
-        },
-      ],
-      "formats": [],
-      "group": {
-        "acronym": "emu",
-        "name": "EAP Method Update",
-        "type": "wg",
-      },
-      "identifiers": [
-        {
-          "type": "doi",
-          "value": "10.17487/RFC9048",
-        },
-      ],
-      "keywords": [],
-      "number": 9048,
-      "obsoleted_by": [],
-      "obsoletes": [],
-      "pages": 40,
-      "published": "2021-10-29",
-      "status": {
-        "name": "proposed standard",
-        "slug": "ps",
-      },
-      "stream": {
-        "description": "Internet Engineering Task Force (IETF)",
-        "name": "IETF",
-        "slug": "IETF",
-      },
-      "subseries": [],
-      "title": "Improved Extensible Authentication Protocol Method for 3GPP Mobile Network Authentication and Key Agreement (EAP-AKA')",
-      "updated_by": [
-        {
-          "id": 143548,
-          "number": 9678,
-          "title": "Forward Secrecy Extension to the Improved Extensible Authentication Protocol Method for Authentication and Key Agreement (EAP-AKA' FS)",
-        },
-      ],
-      "updates": [
-        {
-          "id": 126119,
-          "number": 4187,
-          "title": "Extensible Authentication Protocol Method for 3rd Generation Authentication and Key Agreement (EAP-AKA)",
-        },
-        {
-          "id": 127335,
-          "number": 5448,
-          "title": "Improved Extensible Authentication Protocol Method for 3rd Generation Authentication and Key Agreement (EAP-AKA')",
-        },
-      ],
     },
   ],
   "timestampIso": "2025-01-14T00:00:00.000Z",

@@ -5,7 +5,12 @@ exports[`renderRfcRef 298 1`] = `
 "
 `;
 
+exports[`renderRfcRef 9084 1`] = `
+"Wang, A., Lindem, A., Dong, J., Psenak, P., and Talaulikar, K., "OSPF Prefix Originator Extensions", RFC 9084, DOI 10.17487/RFC9084, August 2021, <https://www.rfc-editor.org/info/rfc9084/>.
+"
+`;
+
 exports[`renderRfcRef 9804 1`] = `
-"Rivest, R.,Eastlake, D., "Simple Public Key Infrastructure (SPKI) S-Expressions", RFC 9804, DOI 10.17487/RFC9804, June 2025, <https://www.rfc-editor.org/info/rfc9804/>.
+"Rivest, R., and Eastlake, D., "Simple Public Key Infrastructure (SPKI) S-Expressions", RFC 9804, DOI 10.17487/RFC9804, June 2025, <https://www.rfc-editor.org/info/rfc9804/>.
 "
 `;
