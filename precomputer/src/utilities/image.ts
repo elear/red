@@ -65,7 +65,13 @@ export const compressImageToPng = async (
   mode: 'compress' | 'compress-greyscale',
   widthPx: number,
   heightPx: number,
-): Promise<Buffer> => {
+): Promise<Buffer | undefined> => {
+  console.log({
+    widthPx,
+    heightPx,
+    metadata_width: metadata.width,
+    metadata_height: metadata.height,
+  })
   const [width, height] = [
     Math.min(widthPx, metadata.width),
     Math.min(heightPx, metadata.height)
@@ -74,25 +80,31 @@ export const compressImageToPng = async (
   const extractOptions: Region = { left: 0, top: 0, width, height }
   const compressionLevel = 9
 
-  switch (mode) {
-    case 'compress':
-      return sharpImage
-        // .autoOrient() // auto-rotates if EXIF data etc say it should
-        .keepExif()
-        .extract(extractOptions)
-        .png({ compressionLevel })
-        .toBuffer()
-    case 'compress-greyscale':
-      return sharpImage
-        // .autoOrient() // auto-rotates if EXIF data etc say it should
-        .greyscale(true)
-        .extract(extractOptions)
-        .png({
-          compressionLevel: 9,
-          colours:
-            // 64 greys oughta be enough for anyone
-            64
-        })
-        .toBuffer()
+  try {
+    switch (mode) {
+      case 'compress':
+        return await sharpImage
+          // .autoOrient() // auto-rotates if EXIF data etc say it should
+          .keepExif()
+          .extract(extractOptions)
+          .png({ compressionLevel })
+          .toBuffer()
+      case 'compress-greyscale':
+        return await sharpImage
+          // .autoOrient() // auto-rotates if EXIF data etc say it should
+          .greyscale(true)
+          .extract(extractOptions)
+          .png({
+            compressionLevel,
+            colours:
+              // 64 greys oughta be enough for anyone
+              64
+          })
+          .toBuffer()
+    }
+  }
+  catch (e) {
+    console.error('[UNPDF_ERROR]', { width, height }, e)
+    throw e
   }
 }

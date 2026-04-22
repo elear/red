@@ -188,5 +188,9 @@ export const getRfcPdfMetaScreenshot = async (rfcNumber: number, getRfcPDF: type
     dimensions: OPENGRAPH_IMAGE_DIMENSIONS
   })
 
+  if (result.base64Png === '') {
+    return undefined
+  }
+
   return Buffer.from(result.base64Png, 'base64');
 }

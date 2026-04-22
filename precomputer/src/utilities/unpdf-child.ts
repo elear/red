@@ -55,15 +55,24 @@ const screenshotPdfPage = async (
     dimensions.widthPx,
     dimensions.heightPx ?? metadata.height
   )
-  if (shouldUploadToS3) {
-    const bucketPath = rfcImagePathBuilder(fileName)
-    await saveToS3(bucketPath, png)
-    // console.log(` - uploaded screenshot of page ${pageNumber} to ${bucketPath}`)
+  if (png) {
+    if (shouldUploadToS3) {
+      const bucketPath = rfcImagePathBuilder(fileName)
+      await saveToS3(bucketPath, png)
+      // console.log(` - uploaded screenshot of page ${pageNumber} to ${bucketPath}`)
+    }
+    const base64Png = png.toString('base64');
+    return {
+      screenshotDimensions: { widthPx: metadata.width, heightPx: metadata.height },
+      base64Png
+    }
   }
-  const base64Png = png.toString('base64');
   return {
-    screenshotDimensions: { widthPx: metadata.width, heightPx: metadata.height },
-    base64Png
+    screenshotDimensions: {
+      widthPx: metadata.width,
+      heightPx: metadata.height
+    },
+    base64Png: ''
   }
 }
 
@@ -109,7 +118,11 @@ type Text = {
   text: string[]
 }
 
-export type ScreenshotPageDone = { type: 'SCREENSHOT_PAGE_DONE', screenshotDimensions: ImageDimensions, base64Png: string }
+export type ScreenshotPageDone = {
+  type: 'SCREENSHOT_PAGE_DONE',
+  screenshotDimensions: ImageDimensions,
+  base64Png: string
+}
 
 type SendMessages =
   | { type: 'READY' }
