@@ -12,7 +12,7 @@ import { assertIsString } from '../utilities/typescript.ts'
 import { uploadSitemapXmls } from '../utilities/sitemap.ts'
 import { uploadRfcIndexXsd } from './rfc-index-xsd.ts'
 import { type AsyncTaskItem } from '../utilities/task.ts'
-import { checkRFCContentsDoNotExist } from '../utilities/s3.ts'
+import { filterRFCsByBucketContentExisting } from '../utilities/s3.ts'
 
 const RFC_NUMBER_MINIMUM_CHAR_WIDTH = 5 // for Red the default width is 5 chars to handle eg RFC10000 (aka the RFC10k problem).
 
@@ -27,7 +27,7 @@ export const indices = async ({ api, }: Props): AsyncTaskItem => {
     getAllSubseries({ api }),
   ])
 
-  const allRfcsWithContent = await checkRFCContentsDoNotExist({ allRfcs })
+  const allRfcsWithContent = await filterRFCsByBucketContentExisting({ allRfcs })
 
   const websiteOrigin = process.env.NUXT_PUBLIC_SITE_BASE
 

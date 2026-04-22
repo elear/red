@@ -23,7 +23,7 @@ const main = async (rfcNumbers: number[]): Promise<void> => {
         }
       } catch (err) {
         console.warn(
-          `[RFC ${rfcNumber}] threw exception: ${(err as Error).message}`
+          `[RFC ${rfcNumber}] threw exception: ${String(err)}`
         )
         throw err
       }

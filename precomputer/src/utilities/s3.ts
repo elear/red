@@ -186,7 +186,11 @@ type CheckRfcContentsExistProps = {
   allRfcs: Readonly<RfcCommon[]>
 }
 
-export const checkRFCContentsDoNotExist = async ({ allRfcs }: CheckRfcContentsExistProps): Promise<Readonly<RfcCommon[]>> => {
+/**
+ * allRfcs comes from the Datatracker API docList() but recent RFCs might not have their files,
+ * such as html or pdf etc., uploaded to the bucket yet.
+ */
+export const filterRFCsByBucketContentExisting = async ({ allRfcs }: CheckRfcContentsExistProps): Promise<Readonly<RfcCommon[]>> => {
   const rfcNumbersToCheck = allRfcs
     .slice(-CHECK_RFC_NUMBER_LARGEST_MINUS_N)
     .map(rfc => rfc.number)
@@ -214,7 +218,7 @@ export const checkRFCContentsDoNotExist = async ({ allRfcs }: CheckRfcContentsEx
         return true
       } catch (err) {
         console.warn(
-          `[RFC ${rfcNumber}] threw exception: ${(err as Error).message}`
+          `[RFC ${rfcNumber}] threw exception: ${String(err)}`
         )
         throw err
       }

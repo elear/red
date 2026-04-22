@@ -69,7 +69,7 @@ export const cleanupRedBucket = async (uploadedKeys: string[]): Promise<boolean>
           return true
         } catch (err) {
           console.warn(
-            `[Cleanup ${keyToPurge}] threw exception: ${(err as Error).message}`
+            `[Cleanup ${keyToPurge}] threw exception: ${String(err)}`
           )
           throw err
         }
