@@ -1,16 +1,19 @@
 import { uploadRfcData } from './tasks/rfc.ts'
+import { taskItemWasSuccessful } from './utilities/task.ts'
 
 const main = async (rfcNumber: number): Promise<void> => {
   console.log(`Processing RFC ${rfcNumber}...`)
   try {
-    const isDone = await uploadRfcData(rfcNumber)
-    if (isDone) {
+    const uploadResults = await uploadRfcData(rfcNumber)
+    if (taskItemWasSuccessful(uploadResults)) {
       console.log(`Pushed RFC ${rfcNumber} to bucket successfully.`)
     } else {
-      console.error(`Unable to process RFC ${rfcNumber}`)
+      console.error(`Unable to process RFC ${rfcNumber}. If the RFC was NOT_ISSUED this isn't an error. Results: `,
+        uploadResults
+      )
     }
   } catch (err: unknown) {
-    if(err instanceof Error) {
+    if (err instanceof Error) {
       console.error(
         `Failed to process RFC ${rfcNumber}: `,
         err.message,

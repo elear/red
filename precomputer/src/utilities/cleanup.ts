@@ -68,7 +68,7 @@ export const cleanupRedBucket = async (uploadedKeys: string[]): Promise<boolean>
           console.log(`[Cleanup ${keyToPurge}] deleted sucessfully`)
           return true
         } catch (err) {
-          console.warn(
+          console.error(
             `[Cleanup ${keyToPurge}] threw exception: ${String(err)}`
           )
           throw err

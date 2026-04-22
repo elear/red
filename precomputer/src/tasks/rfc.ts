@@ -22,7 +22,7 @@ import {
   formatIdentifiers
 } from '../utilities/rfc-converters-utils.ts'
 import { getErrataForRfc } from '../utilities/errata.ts'
-import { type AsyncTaskItem } from '../utilities/task.ts'
+import { type AsyncTaskItem, taskItemWasSuccessful } from '../utilities/task.ts'
 
 export const uploadRfcData = async (rfcNumber: number): AsyncTaskItem => {
   const results = await Promise.all([

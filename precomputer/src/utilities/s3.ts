@@ -217,7 +217,7 @@ export const filterRFCsByBucketContentExisting = async ({ allRfcs }: CheckRfcCon
         }
         return true
       } catch (err) {
-        console.warn(
+        console.error(
           `[RFC ${rfcNumber}] threw exception: ${String(err)}`
         )
         throw err

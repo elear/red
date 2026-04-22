@@ -29,7 +29,7 @@ export const isSharpImageGreyscale = async (
     const width = info.width
     const height = info.height
 
-    // Compare RGB values across all pixels
+    // Compare RGB values across all pixels, sequentially...
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         const offset = (y * width + x) * metadata.channels
@@ -49,11 +49,11 @@ export const isSharpImageGreyscale = async (
 
     return true
   } catch (error: unknown) {
+    console.error(error)
     throw new Error(
-      `Failed to check if image is grayscale: ${
-        error && typeof error === 'object' && 'message' in error
-          ? error.message
-          : error
+      `Failed to check if image is grayscale: ${error && typeof error === 'object' && 'message' in error
+        ? error.message
+        : error
       }`
     )
   }
@@ -61,20 +61,24 @@ export const isSharpImageGreyscale = async (
 
 export const compressImageToPng = async (
   sharpImage: SharpImage,
+  metadata: sharp.Metadata,
   mode: 'compress' | 'compress-greyscale',
   widthPx: number,
   heightPx: number,
 ): Promise<Buffer> => {
   const extractOptions = { left: 0, top: 0, width: widthPx, height: heightPx }
   const compressionLevel = 9
+
   switch (mode) {
     case 'compress':
       return sharpImage
+        .autoOrient() // auto-rotates if EXIF data etc say it should
         .extract(extractOptions)
-        .png({ compressionLevel })        
+        .png({ compressionLevel })
         .toBuffer()
     case 'compress-greyscale':
       return sharpImage
+        .autoOrient() // auto-rotates if EXIF data etc say it should
         .greyscale(true)
         .extract(extractOptions)
         .png({

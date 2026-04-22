@@ -17,6 +17,8 @@ export const uploadHomepageLatest = async (
   console.log('Uploaded', HOMEPAGE_LATEST_PATH)
 
   // also upload the referenced 'homepage latest' RFCs so that the links to RFCs will work
+  // the list of allRfcs should already be filtered to those that have bucket files, html
+  // or pdf etc., available.
   const referencedKeys = await Promise.all(data.homepageLatest.map((rfc) => uploadRfcData(rfc.number)))
 
   return [HOMEPAGE_LATEST_PATH, ...referencedKeys.flat()]

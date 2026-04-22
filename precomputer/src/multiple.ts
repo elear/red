@@ -2,6 +2,7 @@ import { PromisePool } from '@supercharge/promise-pool'
 import { uploadRfcData } from './tasks/rfc.ts'
 import { indices } from './tasks/indices.ts'
 import { getApiClient } from './utilities/api.ts'
+import { taskItemWasSuccessful } from './utilities/task.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
 
@@ -13,12 +14,13 @@ const main = async (rfcNumbers: number[]): Promise<void> => {
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
     .process(async (rfcNumber) => {
       try {
-        const isDone = await uploadRfcData(rfcNumber)
-        if (isDone) {
+        const uploadResults = await uploadRfcData(rfcNumber)
+        if (taskItemWasSuccessful(uploadResults)) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)
         } else {
           console.error(
-            `[RFC ${rfcNumber}] generation failed. If the RFC was NOT_ISSUED this isn't an error.`
+            `[RFC ${rfcNumber}] generation failed. If the RFC was NOT_ISSUED this isn't an error. Results: `,
+            uploadResults
           )
         }
       } catch (err) {
