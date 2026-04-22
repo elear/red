@@ -1,7 +1,7 @@
 import { PromisePool } from '@supercharge/promise-pool'
 import { range } from 'es-toolkit'
 import { uploadRfcData } from './tasks/rfc.ts'
-import { AsyncTaskItem, TaskItem, taskItemWasSuccessful } from './utilities/task.ts'
+import { processExitFromUploadResults, taskItemWasSuccessful, type UploadResult } from './utilities/task.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
 
@@ -27,11 +27,9 @@ const main = async (
     `Processing ${minRfcNumber}-${maxRfcNumber}. Using ${NUMBER_OF_CONCURRENT_RFC_PROCESSORS} concurrent promises (results may appear out of order)`
   )
 
-  type Result = [number, TaskItem]
-
   const { results, errors } = await PromisePool.for(rfcRange)
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
-    .process(async (rfcNumber): Promise<Result> => {
+    .process(async (rfcNumber): Promise<UploadResult> => {
       try {
         const uploadResults = await uploadRfcData(rfcNumber)
         if (taskItemWasSuccessful(uploadResults)) {
@@ -46,33 +44,11 @@ const main = async (
       }
     })
 
-  if (errors.length > 0) {
-    console.log('[all.ts] finished with error(s)')
-    console.error(errors)
-    process.exit(1)
-  } else {
-    const resultsWithErrors = results
-      .filter(
-        ([_rfcNumber, uploadResults]) => taskItemWasSuccessful(uploadResults)
-      )
-
-    if (resultsWithErrors.length > 0) {
-      console.error(
-        '[all.ts] finished with errors',
-        resultsWithErrors
-          .map(
-            result => `RFC ${result[0]}: ${result[1]
-              .map((taskItem, index) => taskItem === false ? index : undefined)
-              .filter(maybeTaskItemIndex => maybeTaskItemIndex !== undefined)
-              .join(', ')}`)
-          .join('. '))
-
-      process.exit(1)
-    } else {
-      console.log('[all.ts] finished successfully')
-      process.exit(0)
-    }
-  }
+  processExitFromUploadResults({
+    uploadResults: results,
+    errors,
+    filename: 'all.ts'
+  })
 }
 
 if (!process.argv[2] || !process.argv[3]) {

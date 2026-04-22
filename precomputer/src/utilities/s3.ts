@@ -184,15 +184,15 @@ export const ERROR_CODE_RFC_MISSING_CONTENT = 'RFC_MISSING_CONTENT'
 export const ERROR_CODE_RFC_BUCKET_ERROR = 'RFC_BUCKET_ERROR'
 
 type CheckRfcContentsExistProps = {
-  allRfcs: Readonly<RfcCommon[]>
+  rfcs: Readonly<RfcCommon[]>
 }
 
 /**
- * allRfcs comes from the Datatracker API docList() but recent RFCs might not have their files,
- * such as html or pdf etc., uploaded to the bucket yet.
+ * RFCs come from the Datatracker API but recent RFCs might not have their bucket files,
+ * such as html or pdf etc., yet.
  */
-export const filterRFCsByBucketContentExisting = async ({ allRfcs }: CheckRfcContentsExistProps): Promise<Readonly<RfcCommon[]>> => {
-  const rfcNumbersToCheck = allRfcs
+export const filterRFCsByBucketContentExisting = async ({ rfcs }: CheckRfcContentsExistProps): Promise<Readonly<RfcCommon[]>> => {
+  const rfcNumbersToCheck = rfcs
     .slice(-CHECK_RFC_NUMBER_LARGEST_MINUS_N)
     .map(rfc => rfc.number)
     .sort((a, b) => b - a)
@@ -237,7 +237,7 @@ export const filterRFCsByBucketContentExisting = async ({ allRfcs }: CheckRfcCon
     console.log('[RFC contents check] Success, all recent RFCs have content')
   }
 
-  return allRfcs.filter(rfc => !rfcsContentsDoNotExist.includes(rfc.number))
+  return rfcs.filter(rfc => !rfcsContentsDoNotExist.includes(rfc.number))
 }
 
 export const rfcCommonPathBuilder = (rfcNumber: number) =>

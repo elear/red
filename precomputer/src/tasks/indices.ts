@@ -27,7 +27,8 @@ export const indices = async ({ api, }: Props): AsyncTaskItem => {
     getAllSubseries({ api }),
   ])
 
-  const allRfcsWithContent = await filterRFCsByBucketContentExisting({ allRfcs })
+  // we only want to use rfcs with content available in the bucket
+  const allRfcsWithContent = await filterRFCsByBucketContentExisting({ rfcs: allRfcs })
 
   const websiteOrigin = process.env.NUXT_PUBLIC_SITE_BASE
 

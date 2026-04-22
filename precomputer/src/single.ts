@@ -7,6 +7,7 @@ const main = async (rfcNumber: number): Promise<void> => {
     const uploadResults = await uploadRfcData(rfcNumber)
     if (taskItemWasSuccessful(uploadResults)) {
       console.log(`Pushed RFC ${rfcNumber} to bucket successfully.`)
+      process.exit(0)
     } else {
       console.error(`Unable to process RFC ${rfcNumber}. If the RFC was NOT_ISSUED this isn't an error. Results: `,
         uploadResults
@@ -22,8 +23,8 @@ const main = async (rfcNumber: number): Promise<void> => {
     } else {
       console.error(`Failed to process RFC ${rfcNumber}:`, err)
     }
-    throw err
   }
+  process.exit(1)
 }
 
 if (!process.argv[2]) {

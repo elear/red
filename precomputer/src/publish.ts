@@ -12,6 +12,7 @@ import {
 import { ApiClient } from '../generated/api-client.ts'
 import { safeURLParse } from './utilities/url.ts'
 import { taskItemWasSuccessful } from './utilities/task.ts'
+import { filterRFCsByBucketContentExisting } from './utilities/s3.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
 
@@ -53,6 +54,7 @@ const main = async (
   urlCallbackString: string,
   rfcNumbers: number[]
 ): Promise<void> => {
+  console.log("[publish.ts] Starting job...")
   const urlCallback = safeURLParse(urlCallbackString)
 
   if (urlCallback === null) {
@@ -75,7 +77,7 @@ const main = async (
   }
 
   const sendErrorAndExit = async (message: string): Promise<void> => {
-    console.error(message)
+    console.error('[publish.ts]', message)
     await fetch(urlCallback, {
       method: 'POST',
       headers,
@@ -85,13 +87,13 @@ const main = async (
   }
 
   const sendSuccessAndExit = async (message: string): Promise<void> => {
-    console.error(message)
+    console.error('[publish.ts]', message)
     await fetch(urlCallback, {
       method: 'POST',
       headers,
       body: JSON.stringify(createSuccessBody(message))
     })
-    process.exit(1)
+    process.exit(0)
   }
 
   if (rfcNumbers.some((rfcNumber) => Number.isNaN(rfcNumber))) {
@@ -150,7 +152,11 @@ const main = async (
     docListOptions.limit = NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE
     const docListResult = await safeDocList(api, docListOptions)
     const latestRfcs = docListResult.results.map(rfcMetadataToRfcCommon)
-    const didUpdateHomepageSuccessfully = await uploadHomepageLatest(latestRfcs)
+
+    // we only want to use rfcs with content available in the bucket
+    const latestRfcsWithContent = await filterRFCsByBucketContentExisting({ rfcs: latestRfcs })
+
+    const didUpdateHomepageSuccessfully = await uploadHomepageLatest(latestRfcsWithContent)
 
     if (didUpdateHomepageSuccessfully) {
       await sendSuccessAndExit(

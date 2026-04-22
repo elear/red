@@ -2,27 +2,25 @@ import { PromisePool } from '@supercharge/promise-pool'
 import { uploadRfcData } from './tasks/rfc.ts'
 import { indices } from './tasks/indices.ts'
 import { getApiClient } from './utilities/api.ts'
-import { taskItemWasSuccessful } from './utilities/task.ts'
+import { processExitFromUploadResults, type TaskItem, taskItemWasSuccessful } from './utilities/task.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
+
+type Result = [number, TaskItem]
 
 const main = async (rfcNumbers: number[]): Promise<void> => {
   console.log(
     `Processing RFCs ${rfcNumbers.join(', ')}. Using ${NUMBER_OF_CONCURRENT_RFC_PROCESSORS} concurrent promises (results may appear out of order).`
   )
-  const { errors } = await PromisePool.for(rfcNumbers)
+  const { results, errors } = await PromisePool.for(rfcNumbers)
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
-    .process(async (rfcNumber) => {
+    .process(async (rfcNumber): Promise<Result> => {
       try {
         const uploadResults = await uploadRfcData(rfcNumber)
         if (taskItemWasSuccessful(uploadResults)) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)
-        } else {
-          console.error(
-            `[RFC ${rfcNumber}] generation failed. If the RFC was NOT_ISSUED this isn't an error. Results: `,
-            uploadResults
-          )
         }
+        return [rfcNumber, uploadResults]
       } catch (err) {
         console.warn(
           `[RFC ${rfcNumber}] threw exception: ${String(err)}`
@@ -31,24 +29,11 @@ const main = async (rfcNumbers: number[]): Promise<void> => {
       }
     })
 
-  if (errors.length > 0) {
-    console.log('multiple.ts finished with error(s)')
-    console.error(errors)
-    process.exit(1)
-  }
-
-  console.log('Individual RFCs updated, now updating indices...')
-  const api = getApiClient()
-  const isSuccessful = await indices({ api })
-  if (!isSuccessful) {
-    console.error(
-      'multiple.ts finished with error(s)' // these errors should be already printed to console
-    )
-    process.exit(1)
-  }
-
-  console.log('multiple.ts finished successfully')
-  process.exit(0)
+  processExitFromUploadResults({
+    uploadResults: results,
+    errors,
+    filename: 'multiple.ts'
+  })
 }
 
 if (!process.argv[2]) {
