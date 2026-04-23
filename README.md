@@ -41,6 +41,11 @@ Website content from markdown files can be found in `/website/content/`.
 
 Markdown Frontmatter (metadata) fields supported are listed in [content.config.js](https://github.com/ietf-tools/red/blob/main/website/content.config.ts#L8).
 
+The 'last updated' footer on markdown pages is computed from Git log's commit time.
+It is manually synced by a developer by running (from within `website/`) the command `npm run generate:content-metadata`.
+This will update `generated/content-metadata.json` and that file should be committed.
+
+
 #### Website testing
 
 In `/website/` run `npm run test`
