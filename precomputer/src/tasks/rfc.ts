@@ -196,8 +196,6 @@ export const renderRefsRef = (rfc: RfcCommon): string => {
     const isLast = index === arr.length - 1
     const isSecondToLast = index === arr.length - 2
 
-    console.log(rfc.number, { formattedName, hasTwoAuthors, hasMultipleAuthors, isLast, isSecondToLast })
-
     return `${isLast && hasMultipleAuthors ? reversedName : formattedName
       }${isLast
         ? ''
