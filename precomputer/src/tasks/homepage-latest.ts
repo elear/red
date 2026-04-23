@@ -16,9 +16,11 @@ export const uploadHomepageLatest = async (
   await saveToS3(HOMEPAGE_LATEST_PATH, JSON.stringify(data))
   console.log('Uploaded', HOMEPAGE_LATEST_PATH)
 
-  // also upload the referenced 'homepage latest' RFCs so that the links to RFCs will work
-  // the list of allRfcs should already be filtered to those that have bucket files, html
-  // or pdf etc., available.
+  // Upload the referenced 'homepage latest' RFCs so that the links to RFCs
+  // at /info/rfcN/ will work.
+  // The list of `allRfcs` should already be filtered to those that have bucket files,
+  // html or pdf etc. If there's an error caused by missing RFC files it probably means
+  // that `allRfcs` wasn't filtered correctly.
   const referencedKeys = await Promise.all(data.homepageLatest.map((rfc) => uploadRfcData(rfc.number)))
 
   return [HOMEPAGE_LATEST_PATH, ...referencedKeys.flat()]

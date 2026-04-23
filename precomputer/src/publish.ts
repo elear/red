@@ -11,7 +11,7 @@ import {
 } from './tasks/homepage-latest.ts'
 import { ApiClient } from '../generated/api-client.ts'
 import { safeURLParse } from './utilities/url.ts'
-import { taskItemWasSuccessful } from './utilities/task.ts'
+import { taskItemWasSkipped, taskItemWasSuccessful } from './utilities/task.ts'
 import { filterRFCsByBucketContentExisting } from './utilities/s3.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
@@ -122,7 +122,7 @@ const main = async (
     .process(async (rfcNumber) => {
       try {
         const uploadResults = await uploadRfcData(rfcNumber)
-        if (uploadResults.length === 0) {
+        if (taskItemWasSkipped(uploadResults)) {
           console.log(`[RFC ${rfcNumber}] skipped`)
         } else if (taskItemWasSuccessful(uploadResults)) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)

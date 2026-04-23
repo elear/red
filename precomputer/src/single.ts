@@ -1,11 +1,11 @@
 import { uploadRfcData } from './tasks/rfc.ts'
-import { taskItemWasSuccessful } from './utilities/task.ts'
+import { taskItemWasSkipped, taskItemWasSuccessful } from './utilities/task.ts'
 
 const main = async (rfcNumber: number): Promise<void> => {
   console.log(`Processing RFC ${rfcNumber}...`)
   try {
     const uploadResults = await uploadRfcData(rfcNumber)
-    if (uploadResults.length === 0) {
+    if (taskItemWasSkipped(uploadResults)) {
       console.log(`[RFC ${rfcNumber}] skipped`)
     } else if (taskItemWasSuccessful(uploadResults)) {
       console.log(`Pushed RFC ${rfcNumber} to bucket successfully.`)
