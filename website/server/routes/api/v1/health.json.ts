@@ -55,7 +55,7 @@ const httpOk = (url: string) => {
           // https://developer.mozilla.org/en-US/docs/Web/API/Response/ok
           statusCode >= 200 && statusCode <= 299
         )
-      }).on('error', (err) => reject())
-      .end();
+      }).on('error', (_err) => reject())
+      .end()
   })
 }
