@@ -1,7 +1,5 @@
 import { PromisePool } from '@supercharge/promise-pool'
 import { uploadRfcData } from './tasks/rfc.ts'
-import { indices } from './tasks/indices.ts'
-import { getApiClient } from './utilities/api.ts'
 import { processExitFromUploadResults, type TaskItem, taskItemWasSuccessful } from './utilities/task.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
@@ -17,7 +15,9 @@ const main = async (rfcNumbers: number[]): Promise<void> => {
     .process(async (rfcNumber): Promise<Result> => {
       try {
         const uploadResults = await uploadRfcData(rfcNumber)
-        if (taskItemWasSuccessful(uploadResults)) {
+        if (uploadResults.length === 0) {
+          console.log(`[RFC ${rfcNumber}] skipped`)
+        } else if (taskItemWasSuccessful(uploadResults)) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)
         }
         return [rfcNumber, uploadResults]

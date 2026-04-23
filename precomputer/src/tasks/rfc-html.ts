@@ -414,8 +414,8 @@ const convertHrefs = (
             } else {
             }
           } else {
-            console.warn(
-              `[RFC ${rfcNumberForDebug}] Info: failed to parse URL ${JSON.stringify(href)} so this href won't be converted (made relative).`
+            console.info(
+              `[RFC ${rfcNumberForDebug}] Failed to parse URL ${JSON.stringify(href)} so this href won't be converted (made relative).`
             )
           }
         }

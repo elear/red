@@ -122,7 +122,9 @@ const main = async (
     .process(async (rfcNumber) => {
       try {
         const uploadResults = await uploadRfcData(rfcNumber)
-        if (taskItemWasSuccessful(uploadResults)) {
+        if (uploadResults.length === 0) {
+          console.log(`[RFC ${rfcNumber}] skipped`)
+        } else if (taskItemWasSuccessful(uploadResults)) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)
         } else {
           console.error(

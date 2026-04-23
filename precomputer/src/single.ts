@@ -5,7 +5,9 @@ const main = async (rfcNumber: number): Promise<void> => {
   console.log(`Processing RFC ${rfcNumber}...`)
   try {
     const uploadResults = await uploadRfcData(rfcNumber)
-    if (taskItemWasSuccessful(uploadResults)) {
+    if (uploadResults.length === 0) {
+      console.log(`[RFC ${rfcNumber}] skipped`)
+    } else if (taskItemWasSuccessful(uploadResults)) {
       console.log(`Pushed RFC ${rfcNumber} to bucket successfully.`)
       process.exit(0)
     } else {
