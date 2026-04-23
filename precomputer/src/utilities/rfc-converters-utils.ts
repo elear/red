@@ -4,6 +4,8 @@ import { DateTime } from 'luxon'
 
 type RfcAuthor = RfcCommon['authors'][number]
 
+export const EDITOR_SUFFIX = ', Ed.'
+
 /**
  * Formats author names into an initialised format.
  *
@@ -57,7 +59,7 @@ export const formatAuthor = (
       assertNever(style)
     }, '')
 
-  return author.is_editor ? `${name}, Ed.` : name
+  return author.is_editor ? `${name}${EDITOR_SUFFIX}` : name
 }
 
 export const formatIdentifiers = (

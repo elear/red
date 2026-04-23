@@ -383,9 +383,7 @@
                       )
                       "
                     :class="ANCHOR_COLOR_TAILWIND_STYLE"
-                  >
-                    {{ formatItem.format.toUpperCase() }}
-                  </a>
+                  >{{ formatItem.format.toUpperCase() }}</a>
                   <template v-if="
                     formatIndex <
                     props.rfcBucketHtmlDocument.rfc.formats.length - 1
