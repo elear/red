@@ -188,18 +188,24 @@ export const renderRefsRef = (rfc: RfcCommon): string => {
 
   return `${rfc.authors.map((author, index, arr) => {
     const formattedName = formatAuthor(author, 'brief')
-    const reversedName = formattedName.split(/\s+/g).reverse().join(' ')
+    const hasTwoAuthors = arr.length === 2
+    const hasMultipleAuthors = arr.length > 1
+    // The last author has its name reversed per
+    // * https://www.rfc-editor.org/styleguide/part2/#ref_rfcs
+    const reversedName = formattedName.split(/\s+/g).reverse().join(' ').replace(/,$/, '')
     const isLast = index === arr.length - 1
     const isSecondToLast = index === arr.length - 2
-    return `${
-      // The last author has its name reversed per
-      // * https://www.rfc-editor.org/styleguide/part2/#ref_rfcs
-      isLast ? reversedName : formattedName
-      }${!isLast
-        ? isSecondToLast
-          ? ', and '
+
+    console.log(rfc.number, { formattedName, hasTwoAuthors, hasMultipleAuthors, isLast, isSecondToLast })
+
+    return `${isLast && hasMultipleAuthors ? reversedName : formattedName
+      }${isLast
+        ? ''
+        : isSecondToLast
+          ? hasTwoAuthors ? ' and ' :
+            ', and '
           : ', '
-        : ''}`
+      }`
   }).join('')}, "${rfc.title
     }", RFC ${rfc.number}, ${formatIdentifiers(rfc.identifiers, ' ').join(
       ''
