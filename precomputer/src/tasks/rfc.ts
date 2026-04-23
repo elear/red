@@ -20,7 +20,6 @@ import type {
 import { validateDocument } from '../utilities/validate-zod.ts'
 import { infoRfcPathBuilder, PUBLIC_SITE_URL_ORIGIN } from '../utilities/url.ts'
 import {
-  formatAuthor,
   formatIdentifiers
 } from '../utilities/rfc-converters-utils.ts'
 import { getErrataForRfc } from '../utilities/errata.ts'
@@ -31,6 +30,13 @@ export const uploadRfcData = async (rfcNumber: number): AsyncTaskItem => {
   const unusableRfcNumbers = await getUnusableRfcNumbersCached()
   if (unusableRfcNumbers.some(unusableRfcNumber => unusableRfcNumber.number === rfcNumber)) {
     console.info(`[RFC ${rfcNumber}] Skipping this RFC as it's in ${UNUSABLE_RFC_NUMBERS_PATH}`)
+    return []
+  }
+
+  const rfcCommon = await getRfcCommonCached(rfcNumber)
+
+  if (!rfcCommon) {
+    console.info(`[RFC ${rfcNumber}] Skipping this RFC as the API doesn't know about it`)
     return []
   }
 
@@ -47,7 +53,7 @@ export const uploadRfcHtml = async (rfcNumber: number): AsyncTaskItem => {
   const rfcDoc = await getRfcBucketHtmlDocument(rfcNumber)
   if (rfcDoc === false) {
     console.error(`[RFC ${rfcNumber}]`, `Failed to generate rfc bucket html doc JSON`)
-    return [false]
+    return []
   }
   const rfcDocS3Path = rfcHtmlJsonPathBuilder(rfcNumber)
   await saveToS3(rfcDocS3Path, JSON.stringify(rfcDoc))

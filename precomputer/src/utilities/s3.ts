@@ -313,6 +313,7 @@ export const getUnusableRfcNumbers = async (): Promise<UnusableRfcNumbers> => {
 }
 
 /**
+ * A list of unusable RFC numbers specified in JSON from a bucket
  * Note: IIFE
  */
 export const getUnusableRfcNumbersCached = (() => {
