@@ -29,7 +29,7 @@ jobs:
         run: npm ci
         working-directory: ./website
 
-      - name: Install dependencies (extractor)
+      - name: Install dependencies (precomputer)
         run: npm ci
         working-directory: ./precomputer
 
