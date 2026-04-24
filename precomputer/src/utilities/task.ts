@@ -31,7 +31,7 @@ type ProcessExitFromUploadResultsProps = {
 export const processExitFromUploadResults = ({ filename, uploadResults, exceptions }: ProcessExitFromUploadResultsProps): void => {
   const uploadResultsWithErrors = uploadResults
     .filter(
-      ([_rfcNumber, uploadResults]) => !taskItemWasSuccessful(uploadResults)
+      ([_rfcNumber, uploadResults]) => !taskItemWasSkipped(uploadResults) || !taskItemWasSuccessful(uploadResults)
     )
     .sort((a, b) => a[0] - b[0])
 
