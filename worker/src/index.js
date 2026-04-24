@@ -15,6 +15,17 @@ import {
 } from './blobs'
 import { addNormalizedPath, redirectTo } from './helpers'
 
+// Temporary - Exclude the paths from being redirected to auth48-transition.rfc-editor.org
+const excludeAuthorRedirects = [
+  '/authors/rfc-edit',
+  '/authors/rfc-how-to',
+  '/authors/rfc-independent-submissions',
+  '/authors/rfc-style-guide',
+  '/authors/rfc-edit/auth48',
+  '/authors/rfc-edit/doc-clusters',
+  '/authors/rfc-edit/pub-queue'
+]
+
 const router = IttyRouter()
 
 router
@@ -53,9 +64,11 @@ router
   .get('/current_queue.php', redirectTo(`https://queue${env.ENV_DOMAIN}.rfc-editor.org`, 302))
 
   // Dynamic Redirects
-  .get('/authors/:extra+', (req) =>
-    Response.redirect(`https://auth48-transition.rfc-editor.org/authors/${req.params.extra}`, 302)
-  )
+  .get('/authors/:extra+', addNormalizedPath, (req) => {
+    if (!excludeAuthorRedirects.some((p) => req.normalizedPath.startsWith(p))) {
+      Response.redirect(`https://auth48-transition.rfc-editor.org/authors/${req.params.extra}`, 302)
+    }
+  })
   .get('/cluster_info.php', (req) => {
     if (req.query?.cid?.startsWith('C')) {
       return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/clusters/${req.query.cid.slice(1)}`, 302)
