@@ -1,23 +1,10 @@
 <template>
   <div class="flex flex-col items-center md:justify-center md:flex-row mt-8">
     <HorizontalScrollable
-      class="md:w-full"
+      class="w-full"
       inner-class="py-1"
     >
-      <ais-pagination
-        :class-names="{
-          'ais-Pagination': '',
-          'ais-Pagination-list': '',
-          'ais-Pagination-item': '',
-          'ais-Pagination-item--selected':
-            '',
-          'ais-Pagination-item--disabled':
-            'bg-transparent dark:bg-transparent text-gray-800 dark:text-gray-200',
-          'ais-Pagination-link':
-            'cursor-pointer py-2 px-3 block no-underline hover:underline focus:underline'
-        }"
-        @click="scrollUpToNewSearchResults"
-      >
+      <ais-pagination @click="scrollUpToNewSearchResults">
         <template #default="{
           currentRefinement,
           nbPages,
@@ -30,7 +17,7 @@
         }">
           <div class="w-full md:w-auto">
             {{ classNames }}
-            <ul class="w-auto ml-auto mr-auto flex flex-row justify-left md:justify-center">
+            <ul class="w-auto ml-auto mr-auto flex flex-row justify-center md:justify-left">
               <li
                 v-if="!isFirstPage"
                 class="mr-1 bg-gray-200 dark:bg-gray-900 rounded-xs"
