@@ -255,7 +255,12 @@ export const rfcCitePathBuilder = (
   }
   switch (format) {
     case 'txt':
-      return `/refs/${seriesId.type.toLowerCase()}${seriesId.number}.txt` as const
+      if (seriesId.type !== 'rfc') {
+        const errorTitle = "Internal error, can't make citation url for non-RFC"
+        console.error(`${errorTitle}. Was: `, JSON.stringify(seriesId))
+        throw Error(errorTitle)
+      }
+      return `/refs/ref${seriesId.number}.txt` as const
     case 'xml':
       return `https://bib.ietf.org/public/rfc/bibxml/reference.${seriesId.type.toUpperCase()}.${seriesId.number}.xml` as const
     case 'bibTeX':

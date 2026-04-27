@@ -33,8 +33,8 @@ const _HrefThatShouldFail: ValidHrefs = '/href-that-should-fail/'
 const _HrefThatShouldSucceed: ValidHrefs = '/series/rfc/#what-is-an-rfc'
 
 test('rfcCitePathBuilder: txt', () => {
-  expect(rfcCitePathBuilder('rfc9000', 'txt')).toEqual('/refs/rfc9000.txt')
-  expect(rfcCitePathBuilder('RFC9000', 'txt')).toEqual('/refs/rfc9000.txt')
+  expect(rfcCitePathBuilder('rfc9000', 'txt')).toEqual('/refs/ref9000.txt')
+  expect(rfcCitePathBuilder('RFC9000', 'txt')).toEqual('/refs/ref9000.txt')
 })
 
 test('rfcCitePathBuilder: xml', () => {
