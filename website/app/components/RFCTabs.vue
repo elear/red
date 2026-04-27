@@ -235,7 +235,8 @@
                 Research group
               </template>
               <template v-else-if="
-                props.rfcBucketHtmlDocument.rfc.group?.type === 'individ'
+                props.rfcBucketHtmlDocument.rfc.group?.type === 'individ' ||
+                props.rfcBucketHtmlDocument.rfc.group?.type === 'area'
               ">
                 Source
               </template>
@@ -249,6 +250,13 @@
                 // also we don't want it linked, unlike other groups
               ">
                 Individual Submission
+              </template>
+              <template v-if="props.rfcBucketHtmlDocument.rfc.group?.type === 'area'">
+                Individual Submission in the
+                <abbr :title="props.rfcBucketHtmlDocument.rfc.group?.name.replace(/ Area$/i, '')">
+                  {{ props.rfcBucketHtmlDocument.rfc.group?.acronym?.toUpperCase() }}
+                </abbr>
+                area
               </template>
               <Anchor
                 v-else
@@ -298,8 +306,7 @@
               <Anchor
                 :href="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)"
                 :class="ANCHOR_COLOR_TAILWIND_STYLE"
-              >
-                {{ props.rfcBucketHtmlDocument.rfc.stream.name }}
+              >{{ props.rfcBucketHtmlDocument.rfc.stream.name }}
                 <Icon
                   name="fluent:window-new-20-regular"
                   class="text-lg align-middle ml-1"
@@ -322,21 +329,15 @@
                   <abbr
                     title="Digital object identifier"
                     class="no-underline"
-                  >
-                    DOI
-                  </abbr>
+                  >DOI</abbr>
                 </template>
                 <template v-else-if="identifier.type === 'issn'">
                   <abbr
                     title="International Standard Serial Number"
                     class="no-underline"
-                  >
-                    ISSN
-                  </abbr>
+                  >ISSN</abbr>
                 </template>
-                <template v-else>
-                  {{ identifier.type }}
-                </template>
+                <template v-else>{{ identifier.type }}</template>
               </dt>
               <dd>
                 <Anchor
@@ -367,8 +368,7 @@
             <dd>
               <ul class="text-sm">
                 <li
-                  v-for="(formatItem, formatIndex) in props
-                    .rfcBucketHtmlDocument.rfc.formats"
+                  v-for="(formatItem, formatIndex) in props.rfcBucketHtmlDocument.rfc.formats"
                   :key="formatIndex"
                   class="inline"
                 >
@@ -405,23 +405,17 @@
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'txt')"
               aria-label="Cite TXT URL"
               :class="ANCHOR_COLOR_TAILWIND_STYLE"
-            >
-              TXT
-            </Anchor>{{ COMMA }}
+            >TXT</Anchor>{{ COMMA }}
             <Anchor
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'xml')"
               aria-label="Cite XML URL"
               :class="ANCHOR_COLOR_TAILWIND_STYLE"
-            >
-              XML
-            </Anchor>{{ COMMA }}
+            >XML</Anchor>{{ COMMA }}
             <Anchor
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'bibTeX')"
               aria-label="Cite BibTeX URL"
               :class="ANCHOR_COLOR_TAILWIND_STYLE"
-            >
-              BibTeX
-            </Anchor>{{ FULLSTOP }}
+            >BibTeX</Anchor>{{ FULLSTOP }}
           </dd>
         </dl>
       </VerticalScrollable>
