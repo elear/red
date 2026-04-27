@@ -402,13 +402,17 @@
 
           <dt class="font-bold mt-2">Cite this RFC</dt>
           <dd>
-            <Anchor
-              :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'txt')"
+            <a
+              :href="
+                // This needs to be <a> not <Anchor> because the path is outside the Nuxt app
+                // (served direct from blob storage) but is on the same domain
+                // so we can't SPA navigate to it
+                rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'txt')"
               aria-label="Cite TXT URL"
               :class="ANCHOR_COLOR_TAILWIND_STYLE"
             >
               TXT
-            </Anchor>{{ COMMA }}
+            </a>{{ COMMA }}
             <Anchor
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'xml')"
               aria-label="Cite XML URL"
