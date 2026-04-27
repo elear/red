@@ -306,7 +306,8 @@
               <Anchor
                 :href="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)"
                 :class="ANCHOR_COLOR_TAILWIND_STYLE"
-              >{{ props.rfcBucketHtmlDocument.rfc.stream.name }}
+              >
+                {{ props.rfcBucketHtmlDocument.rfc.stream.name }}
                 <Icon
                   name="fluent:window-new-20-regular"
                   class="text-lg align-middle ml-1"
@@ -405,17 +406,23 @@
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'txt')"
               aria-label="Cite TXT URL"
               :class="ANCHOR_COLOR_TAILWIND_STYLE"
-            >TXT</Anchor>{{ COMMA }}
+            >
+              TXT
+            </Anchor>{{ COMMA }}
             <Anchor
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'xml')"
               aria-label="Cite XML URL"
               :class="ANCHOR_COLOR_TAILWIND_STYLE"
-            >XML</Anchor>{{ COMMA }}
+            >
+              XML
+            </Anchor>{{ COMMA }}
             <Anchor
               :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'bibTeX')"
               aria-label="Cite BibTeX URL"
               :class="ANCHOR_COLOR_TAILWIND_STYLE"
-            >BibTeX</Anchor>{{ FULLSTOP }}
+            >
+              BibTeX
+            </Anchor>{{ FULLSTOP }}
           </dd>
         </dl>
       </VerticalScrollable>
