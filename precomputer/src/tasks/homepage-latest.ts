@@ -35,7 +35,7 @@ export const renderHomepageLatest = async (
   const response: HomepageLatest = {
     homepageLatest: allRfcs.toSorted()
       .sort((a, b) => {
-        // The homepage latest list is of the latest published RFCs
+        // The homepage latest list is of the latest PUBLISHED rfcs
         // not the largest RFC number
 
         if (!a.published && !b.published) {
