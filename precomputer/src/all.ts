@@ -35,13 +35,13 @@ const main = async (
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
     .process(async (rfcNumber): Promise<UploadResult> => {
       try {
-        const uploadResults = await uploadRfcData(rfcNumber)
-        if (taskItemWasSkipped(uploadResults)) {
+        const taskItem = await uploadRfcData(rfcNumber)
+        if (taskItemWasSkipped(taskItem)) {
           console.log(`[RFC ${rfcNumber}] Skipped.`)
-        } else if (taskItemWasSuccessful(uploadResults)) {
+        } else if (taskItemWasSuccessful(taskItem)) {
           console.log(`[RFC ${rfcNumber}] upload succeeded`)
         }
-        return [rfcNumber, uploadResults]
+        return [rfcNumber, taskItem]
       } catch (err) {
         console.warn(
           `[RFC ${rfcNumber}] threw exception: ${String(err)}`

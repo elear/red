@@ -31,31 +31,30 @@ type ProcessExitFromUploadResultsProps = {
 export const processExitFromUploadResults = ({ filename, uploadResults, exceptions }: ProcessExitFromUploadResultsProps): void => {
   const uploadResultsWithErrors = uploadResults
     .filter(
-      ([_rfcNumber, uploadResults]) => !taskItemWasSkipped(uploadResults) || !taskItemWasSuccessful(uploadResults)
+      ([_rfcNumber, taskItem]) => !taskItemWasSkipped(taskItem) || !taskItemWasSuccessful(taskItem)
     )
     .sort((a, b) => a[0] - b[0])
 
   const hasExceptions = exceptions.length > 0
-  const hasUploadResultErrors = uploadResultsWithErrors.length > 0
+  const hasErrors = uploadResultsWithErrors.length > 0
 
-  if (hasExceptions || hasUploadResultErrors) {
+  if (hasExceptions || hasErrors) {
     console.error(`[${filename}] finished with ${[
       hasExceptions ? 'exceptions thrown' : undefined,
-      hasUploadResultErrors ? 'upload errors' : undefined,
+      hasErrors ? 'errors' : undefined,
     ].filter(Boolean).join(', ')}.`)
 
     if (hasExceptions) {
       console.error(...stringifyExceptions(exceptions))
     }
 
-    if (hasUploadResultErrors) {
+    if (hasErrors) {
       console.error(
         uploadResultsWithErrors
           .map(
-            result => `RFC ${result[0]}: ${result[1]
-              .map((taskItem, index) => taskItem === false ? index : undefined)
-              .filter(maybeTaskItemIndex => maybeTaskItemIndex !== undefined)
-              .join(', ')}`)
+            ([rfcNumber, taskItem]) => {
+              return `RFC ${rfcNumber}: ${stringifyTaskItemErrors(taskItem)}`
+            })
           .join('. '))
     }
 
@@ -82,4 +81,18 @@ const stringifyExceptions = (exceptions: unknown[]): string[] => {
     }
     return [String(exception)]
   })
+}
+
+/**
+ * stringifies and returns indexes of errors
+ */
+const stringifyTaskItemErrors = (taskItem: TaskItem): string => {
+  if (taskItemWasSuccessful(taskItem)) {
+    throw Error('stringifyTaskItemErrors should only receive a task with errors.')
+  }
+
+  return taskItem
+    .map((job, index) => job === false ? index : undefined)
+    .filter((index) => index !== undefined)
+    .join(', ')
 }
