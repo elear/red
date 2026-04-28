@@ -1,6 +1,6 @@
 import { PromisePool } from '@supercharge/promise-pool'
 import { range } from 'es-toolkit'
-import { processExitFromUploadResults, processRfcUploadTask, TaskItem, taskItemHadErrors, taskItemWasSkipped, taskItemWasSuccessful, type UploadResult } from './utilities/task.ts'
+import { processExitFromUploadResults, processRfcUploadTask } from './utilities/task.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
 
