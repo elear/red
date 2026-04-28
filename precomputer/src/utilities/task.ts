@@ -31,7 +31,12 @@ type ProcessExitFromUploadResultsProps = {
 export const processExitFromUploadResults = ({ filename, uploadResults, exceptions }: ProcessExitFromUploadResultsProps): void => {
   const uploadResultsWithErrors = uploadResults
     .filter(
-      ([_rfcNumber, taskItem]) => !taskItemWasSkipped(taskItem) || !taskItemWasSuccessful(taskItem)
+      ([_rfcNumber, taskItem]) => {
+        if (taskItemWasSkipped(taskItem)) {
+          return false
+        }
+        return !taskItemWasSuccessful(taskItem)
+      }
     )
     .sort((a, b) => a[0] - b[0])
 
@@ -88,7 +93,9 @@ const stringifyExceptions = (exceptions: unknown[]): string[] => {
  */
 const stringifyTaskItemErrors = (taskItem: TaskItem): string => {
   if (taskItemWasSuccessful(taskItem)) {
-    throw Error('stringifyTaskItemErrors should only receive a task with errors.')
+    const errorTitle = 'stringifyTaskItemErrors should only receive a task with errors.'
+    console.error(errorTitle, JSON.stringify(taskItem))
+    throw Error(errorTitle)
   }
 
   return taskItem
