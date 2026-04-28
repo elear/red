@@ -165,7 +165,7 @@ import {
   usePublicSiteUrlOrigin,
   useApiV1UrlOrigin
 } from '~/utilities/url'
-import type { HomepageLatest, RfcCommon } from '~/utilities/rfc-validators'
+import type { HomepageLatest } from '~/utilities/rfc-validators'
 
 definePageMeta({
   layout: false
