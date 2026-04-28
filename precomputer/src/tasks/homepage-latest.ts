@@ -6,6 +6,7 @@ import type { RfcCommon } from '../../../website/app/utilities/rfc-validators.ts
 import { validateDocument } from '../utilities/validate-zod.ts'
 import { redactRfc, uploadRfcData } from './rfc.ts'
 import { type AsyncTaskItem } from '../utilities/task.ts'
+import { assertIsString } from '../utilities/typescript.ts'
 
 export const NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE = 3
 
@@ -32,9 +33,33 @@ export const renderHomepageLatest = async (
   allRfcs: Readonly<RfcCommon[]>
 ): Promise<HomepageLatest> => {
   const response: HomepageLatest = {
-    homepageLatest: allRfcs
+    homepageLatest: allRfcs.toSorted()
+      .sort((a, b) => {
+        // The homepage latest list is of the latest published RFCs
+        // not the largest RFC number
+
+        if (!a.published && !b.published) {
+          return 0
+        }
+        if (a.published && !b.published) {
+          return -1
+        }
+        if (!a.published && b.published) {
+          return 1
+        }
+
+        if (
+          // this shouldn't be possible with the previous checks
+          // so this is only for TS benefit to narrow types to string
+          !a.published || !b.published) {
+          throw Error('internal error. bad sorting')
+        }
+
+        const aPublished = DateTime.fromISO(a.published)
+        const bPublished = DateTime.fromISO(b.published)
+        return aPublished.toMillis() - bPublished.toMillis()
+      })
       .slice(-NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE)
-      .sort((a, b) => b.number - a.number)
       .map(redactRfc),
     timestampIso: DateTime.now().toUTC().toISO()
   }

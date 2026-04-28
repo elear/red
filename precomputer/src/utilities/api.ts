@@ -353,7 +353,7 @@ export const getAllRFCs = async ({
 
   const docListOptions: DocListOptions = {}
   docListOptions.sort = ['-number'] // we start at the most recent RFC and walk back to RFC 1
-  let offset = 0 // offset is API database row offset, not an RFC number offset
+  let offset = 0 // offset is API database row offset, not an RFC number offset, as RFC numbers may be skipped
 
   while (true) {
     docListOptions.offset = offset
@@ -362,7 +362,7 @@ export const getAllRFCs = async ({
     if (!response.results) {
       // Although TS says this can't happen it can.
       // This can happen if the API response is HTML, caused
-      // by an error page
+      // by an proxy error page
       console.error('No response.results? This seems like an invalid API response.', JSON.stringify(response))
       throw Error(`Bad API response. Expected response.results to be truthy. See console for more`)
     }
