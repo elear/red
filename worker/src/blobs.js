@@ -2,6 +2,13 @@ import { createBlobResponse, createBlobNotFoundResponse, detectContentType } fro
 
 /**
  * RFC blobs
+ * 
+ * Should handle urls like,
+ * 
+ *   "/rfc/rfc9000.html"
+ *   "/rfc/rfc9000.pdf"
+ *   "/rfc/inline-errata/rfc9000.html"
+ * 
  */
 export async function blobsRfc(req, env) {
   const RFC_PREFIX = '/rfc/'
@@ -9,6 +16,44 @@ export async function blobsRfc(req, env) {
 
   // -> Strip /rfc/ from path
   const objectPath = req.normalizedPath.substring(RFC_PREFIX.length)
+
+  // Make an HTTP canonical header
+  // Canonical urls help search engines deduplicate search results, allowing
+  // them to link a preferred version of duplicate content.
+  //
+  //   "A canonical URL is the preferred version of a web page that search engines
+  //    recognize as the most representative among a set of duplicate or similar
+  //    pages. It helps prevent duplicate content issues by indicating which URL
+  //    should be indexed and ranked by search engines"
+  //    -- https://developers.google.com/search/docs/crawling-indexing/canonicalization
+  //
+  // rfc-editor.org have a lot of duplicated content. Eg,
+  //   * /info/rfcN/
+  //   * /rfc/rfcN.html
+  //   * /rfc/rfcN.pdf
+  //   * /rfc/rfcN.txt
+  //   * ...etc.
+  //
+  // Google say that this also applies to HTML vs PDF vs DOCX etc:
+  //    "If you publish content in many file formats, such as PDF or Microsoft Word,
+  //     each on their own URL, you can return a rel="canonical" HTTP header to tell
+  //     Googlebot what is the canonical URL for the non-HTML files. For example, to
+  //     indicate that the PDF version of the .docx version should be canonical"
+  //     -- https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#rel-canonical-header-method
+  // 
+  // So RFCs in HTML or PDF or TXT should have a canonical URL.
+  // And the entry page for RFCs should be the /info/rfcN route which is what we'll
+  // link to.
+  //
+  // Note that this doesn't apply to anything with `rfcN` in the URL. We don't want to
+  // apply this to `/refs/refN` as that has distinct content. It's always a judgement
+  // call whether the content is sufficiently similar or distinct.
+  const { origin } = new URL(request.url)
+  let canonicalUrl = undefined
+  const rfcParts = objectPath.match(/(rfc(\d+))/)
+  if (rfcParts && rfcParts[1]) {
+    canonicalUrl = `https://${origin}/info/rfc${rfcParts[1]}/`
+  }
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
     if (objectPath.endsWith('.html')) {
@@ -23,7 +68,7 @@ export async function blobsRfc(req, env) {
     const fileType = objectPath.split('.').at(-1)
     const object = await env.RFC_BUCKET.get(`${fileType}/${objectPath}`)
     if (object) {
-      return createBlobResponse(object, detectContentType(objectPath))
+      return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
     }
   }
 

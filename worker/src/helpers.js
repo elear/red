@@ -33,7 +33,7 @@ export function addNormalizedPath(req) {
  * @param {string} [contentType] Content-Type
  * @returns {Response} Blob Response
  */
-export function createBlobResponse(object, contentType) {
+export function createBlobResponse(object, contentType, canonicalUrl) {
   const headers = new Headers()
   object.writeHttpMetadata(headers)
   headers.set('etag', object.httpEtag)
@@ -42,6 +42,9 @@ export function createBlobResponse(object, contentType) {
   headers.set('Content-Encoding', 'gzip')
   if (contentType) {
     headers.set('Content-Type', contentType)
+  }
+  if (canonicalUrl) {
+    headers.set('Link', `<${canonicalUrl}>; rel="canonical"`)
   }
 
   return new Response(object.body, {
