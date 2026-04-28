@@ -369,7 +369,7 @@
             <dd>
               <ul class="text-sm">
                 <li
-                  v-for="(formatItem, formatIndex) in props.rfcBucketHtmlDocument.rfc.formats"
+                  v-for="(formatItem, formatIndex) in formats"
                   :key="formatIndex"
                   class="inline"
                 >
@@ -557,6 +557,17 @@ const streamName = computed(() => {
       return 'Publication Stream'
   }
 })
+
+const formats = computed(() => props.rfcBucketHtmlDocument.rfc.formats.filter(
+  format => {
+    switch (format.format) {
+      case 'notprepped':
+      case 'json':
+        return false
+    }
+    return true
+  }
+))
 
 const TAB_CONTENT_CLASS = 'flex flex-col min-h-0 text-black dark:text-white'
 const DEFAULT_CLASS =
