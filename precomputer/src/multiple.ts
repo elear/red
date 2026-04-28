@@ -1,10 +1,7 @@
 import { PromisePool } from '@supercharge/promise-pool'
-import { uploadRfcData } from './tasks/rfc.ts'
-import { processExitFromUploadResults, type TaskItem, taskItemWasSkipped, taskItemWasSuccessful } from './utilities/task.ts'
+import { processExitFromUploadResults, processRfcUploadTask } from './utilities/task.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
-
-type Result = [number, TaskItem]
 
 const main = async (rfcNumbers: number[]): Promise<void> => {
   console.log(
@@ -12,22 +9,7 @@ const main = async (rfcNumbers: number[]): Promise<void> => {
   )
   const { results, errors } = await PromisePool.for(rfcNumbers)
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
-    .process(async (rfcNumber): Promise<Result> => {
-      try {
-        const uploadResults = await uploadRfcData(rfcNumber)
-        if (taskItemWasSkipped(uploadResults)) {
-          console.log(`[RFC ${rfcNumber}] skipped`)
-        } else if (taskItemWasSuccessful(uploadResults)) {
-          console.log(`[RFC ${rfcNumber}] upload succeeded`)
-        }
-        return [rfcNumber, uploadResults]
-      } catch (err) {
-        console.warn(
-          `[RFC ${rfcNumber}] threw exception: ${String(err)}`
-        )
-        throw err
-      }
-    })
+    .process(processRfcUploadTask)
 
   processExitFromUploadResults({
     uploadResults: results,

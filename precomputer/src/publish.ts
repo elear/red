@@ -1,5 +1,4 @@
 import { PromisePool } from '@supercharge/promise-pool'
-import { uploadRfcData } from './tasks/rfc.ts'
 import {
   getApiClient,
   rfcMetadataToRfcCommon,
@@ -11,7 +10,7 @@ import {
 } from './tasks/homepage-latest.ts'
 import { ApiClient } from '../generated/api-client.ts'
 import { safeURLParse } from './utilities/url.ts'
-import { taskItemWasSkipped, taskItemWasSuccessful } from './utilities/task.ts'
+import { processRfcUploadTask } from './utilities/task.ts'
 import { filterRFCsByBucketContentExisting } from './utilities/s3.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
@@ -119,26 +118,7 @@ const main = async (
 
   const { errors } = await PromisePool.for(rfcNumbers)
     .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
-    .process(async (rfcNumber) => {
-      try {
-        const uploadResults = await uploadRfcData(rfcNumber)
-        if (taskItemWasSkipped(uploadResults)) {
-          console.log(`[RFC ${rfcNumber}] skipped`)
-        } else if (taskItemWasSuccessful(uploadResults)) {
-          console.log(`[RFC ${rfcNumber}] upload succeeded`)
-        } else {
-          console.error(
-            `[RFC ${rfcNumber}] generation failed. If the RFC was NOT_ISSUED this isn't an error. Results: `,
-            uploadResults
-          )
-        }
-      } catch (err) {
-        console.error(
-          `[RFC ${rfcNumber}] threw exception: ${String(err)}`
-        )
-        throw err
-      }
-    })
+    .process(processRfcUploadTask)
 
   if (errors.length > 0) {
     console.error(errors)

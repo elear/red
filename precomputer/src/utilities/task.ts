@@ -1,4 +1,5 @@
 import { PromisePoolError } from "@supercharge/promise-pool"
+import { uploadRfcData } from "../tasks/rfc.ts"
 
 
 /**
@@ -17,6 +18,8 @@ export const taskItemWasSuccessful = (taskItem: TaskItem): boolean =>
 export const taskItemWasSkipped = (taskItem: TaskItem): boolean =>
   taskItem.length === 0
 
+export const taskItemHadErrors = (taskItem: TaskItem): boolean => !taskItemWasSuccessful(taskItem)
+
 export type UploadResult = [
   number, // rfc number
   TaskItem
@@ -26,6 +29,36 @@ type ProcessExitFromUploadResultsProps = {
   filename: string
   uploadResults: UploadResult[]
   exceptions: any[]
+}
+
+const NUMBER_OF_RFC_UPLOAD_ATTEMPTS = 3
+
+export const processRfcUploadTask = async (rfcNumber: number): Promise<UploadResult> => {
+  let taskItem: TaskItem | undefined = undefined
+  let attemptsRemaining = NUMBER_OF_RFC_UPLOAD_ATTEMPTS
+  let errors: unknown[] = []
+  while (attemptsRemaining--) {
+    try {
+      taskItem = await uploadRfcData(rfcNumber)
+      if (taskItemWasSkipped(taskItem)) {
+        console.log(`[RFC ${rfcNumber}] Skipped.`)
+        return [rfcNumber, taskItem]
+      } else if (taskItemWasSuccessful(taskItem)) {
+        console.log(`[RFC ${rfcNumber}] upload succeeded`)
+        return [rfcNumber, taskItem]
+      } else if (taskItemHadErrors(taskItem)) {
+        console.log(`[RFC ${rfcNumber}] had errors so trying again (${attemptsRemaining} attempts remaining)`)
+      }
+    } catch (err) {
+      console.log(
+        `[RFC ${rfcNumber}] threw exception so trying again (${attemptsRemaining} attempts remaining). Exception was:`,
+        err
+      )
+      errors.push(err)
+    }
+  }
+  console.error(`[RFC ${rfcNumber}] upload failed after ${NUMBER_OF_RFC_UPLOAD_ATTEMPTS} reattempts`)
+  throw Error('')
 }
 
 export const processExitFromUploadResults = ({ filename, uploadResults, exceptions }: ProcessExitFromUploadResultsProps): void => {
