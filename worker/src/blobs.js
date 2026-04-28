@@ -48,12 +48,12 @@ export async function blobsRfc(req, env) {
   // Note that this doesn't apply to anything with `rfcN` in the URL. We don't want to
   // apply this to `/refs/refN` as that has distinct content. It's always a judgement
   // call whether the content is sufficiently similar or distinct.
-  const { origin } = new URL(request.url)
-  let canonicalUrl = undefined
-  const rfcParts = objectPath.match(/(rfc(\d+))/)
-  if (rfcParts && rfcParts[1]) {
-    canonicalUrl = `https://${origin}/info/rfc${rfcParts[1]}/`
-  }
+  // const { origin } = new URL(request.url)
+  // let canonicalUrl = undefined
+  // const rfcParts = objectPath.match(/(rfc(\d+))/)
+  // if (rfcParts && rfcParts[1]) {
+  //   canonicalUrl = `https://${origin}/info/rfc${rfcParts[1]}/`
+  // }
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
     if (objectPath.endsWith('.html')) {
