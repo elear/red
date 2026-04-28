@@ -226,6 +226,8 @@ export const HomepageLatestSchema = z.object({
   timestampIso: z.string() // not using `z.coerce.date()` because we'll manually parse into a Luxon DateTime rather than a standard JS Date
 })
 
+export type HomepageLatest = z.infer<typeof HomepageLatestSchema>
+
 /**
  * TODO:
  * Was used on the Rfc Index nuxt route

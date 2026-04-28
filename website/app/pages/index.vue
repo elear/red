@@ -36,9 +36,10 @@
         <div
           v-if="homepageLatestStatus === 'success'"
           class="md:mx-2 grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          :data-timestamp-iso="homepageLatest?.timestampIso"
         >
           <RFCCard
-            v-for="rfc in homepageLatest"
+            v-for="rfc in homepageLatest?.homepageLatest"
             :key="rfc.number"
             heading-level="3"
             :rfc="rfc"
@@ -164,7 +165,7 @@ import {
   usePublicSiteUrlOrigin,
   useApiV1UrlOrigin
 } from '~/utilities/url'
-import type { RfcCommon } from '~/utilities/rfc-validators'
+import type { HomepageLatest, RfcCommon } from '~/utilities/rfc-validators'
 
 definePageMeta({
   layout: false
@@ -190,17 +191,17 @@ const {
   return maybeHomepageLatest
 })
 
-const homepageLatest = computed((): RfcCommon[] => {
+const homepageLatest = computed((): HomepageLatest | undefined => {
   if (homepageLatestError.value) {
     console.error('Homepage latest loading problem', homepageLatestError.value)
-    return []
+    return undefined
   }
   const { data, error } = HomepageLatestSchema.safeParse(homepageLatestData.value)
   if (error) {
     console.error('Homepage latest parsing problem', error)
-    return []
+    return undefined
   }
-  return data.homepageLatest
+  return data
 })
 
 useRfcEditorHead({

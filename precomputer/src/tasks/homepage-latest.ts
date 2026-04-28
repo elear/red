@@ -21,7 +21,7 @@ export const uploadHomepageLatest = async (
   // at /info/rfcN/ will work.
   // The list of `allRfcs` should already be filtered to those that have bucket files,
   // html or pdf etc. If there's an error caused by missing RFC files it probably means
-  // that `allRfcs` wasn't filtered correctly.
+  // that `allRfcs` wasn't filtered correctly before it got this far.
   const referencedKeys = await Promise.all(data.homepageLatest.map((rfc) => uploadRfcData(rfc.number)))
 
   return [HOMEPAGE_LATEST_PATH, ...referencedKeys.flat()]
