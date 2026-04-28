@@ -5,12 +5,21 @@ import { createBlobResponse, createBlobNotFoundResponse, detectContentType } fro
  */
 export async function blobsRfc(req, env) {
   const RFC_PREFIX = '/rfc/'
+  const INLINE_ERRATA_PREFIX = 'inline-errata/'
 
   // -> Strip /rfc/ from path
   const objectPath = req.normalizedPath.substring(RFC_PREFIX.length)
 
-  // -> Fetch R2 object from RFC bucket
-  if (['.html', '.json', '.pdf', '.txt', '.xml'].some((ft) => objectPath.endsWith(ft))) {
+  if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
+    if (objectPath.endsWith('.html')) {
+      const object = await env.RFC_BUCKET.get(objectPath)
+      if (object) {
+        return createBlobResponse(object, detectContentType(objectPath))
+      }
+    }
+  } else if (
+    // -> Fetch R2 object from RFC bucket
+    ['.html', '.json', '.pdf', '.txt', '.xml'].some((ft) => objectPath.endsWith(ft))) {
     const fileType = objectPath.split('.').at(-1)
     const object = await env.RFC_BUCKET.get(`${fileType}/${objectPath}`)
     if (object) {
