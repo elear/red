@@ -557,7 +557,7 @@ const streamName = computed(() => {
     case 'IAB':
       return 'IAB stream'
     case 'INDEPENDENT':
-      return 'Independent Stream'
+      return 'Independent Submission'
     case 'Editorial':
       return 'Editorial Stream'
     case 'Legacy':
