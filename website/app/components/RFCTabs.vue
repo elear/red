@@ -534,7 +534,7 @@ const shouldShowArea = (rfc: RfcCommon): boolean => {
 
 const shouldShowStreamValue = (rfc: RfcCommon): boolean => {
   if (
-    // https://github.com/ietf-tools/red/issues/147#issuecomment-4337849819  
+    // https://github.com/ietf-tools/red/issues/147#issuecomment-4337849819
     rfc.stream.slug === 'Legacy'
   ) {
     return false
