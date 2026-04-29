@@ -179,7 +179,7 @@ export const deleteFromS3 = async (
 
 // This is just a hint number, not a hard limit at all
 const NUMBER_OF_CONCURRENT_S3_USAGES = 4
-const CHECK_RFC_NUMBER_LARGEST_MINUS_N = 100
+const CHECK_RFC_NUMBER_LARGEST_MINUS_N = 500
 export const ERROR_CODE_RFC_MISSING_CONTENT = 'RFC_MISSING_CONTENT'
 export const ERROR_CODE_RFC_BUCKET_ERROR = 'RFC_BUCKET_ERROR'
 
@@ -190,6 +190,8 @@ type CheckRfcContentsExistProps = {
 /**
  * RFCs come from the Datatracker API but recent RFCs might not have their bucket files,
  * such as html or pdf etc., yet.
+ * 
+ * On staging the bucket might be very out of sync.
  */
 export const filterRFCsByBucketContentExisting = async ({ rfcs }: CheckRfcContentsExistProps): Promise<Readonly<RfcCommon[]>> => {
   const rfcNumbersToCheck = rfcs
