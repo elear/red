@@ -11,6 +11,7 @@ import type { RfcCommon, SubseriesCommon } from '../../../website/app/utilities/
 import { assertIsString } from './typescript.ts'
 import { fetchSourceRfcHtml } from '../tasks/rfc-html.ts';
 import { fetchRfcPDF } from '../tasks/rfc-pdf.ts';
+import { sortByRfcPublish } from './rfc-sorting.ts'
 
 let s3Ref: undefined | { s3RfcCli: S3Client; s3RedCli: S3Client } = undefined
 
@@ -195,7 +196,11 @@ type CheckRfcContentsExistProps = {
  */
 export const filterRFCsByBucketContentExisting = async ({ rfcs }: CheckRfcContentsExistProps): Promise<Readonly<RfcCommon[]>> => {
   const rfcNumbersToCheck = rfcs
-    .slice(-CHECK_RFC_NUMBER_LARGEST_MINUS_N)
+    .toSorted(
+      // The best indicator of RFCs that need content checking is the `published` date,
+      // not the RFC number.
+      sortByRfcPublish)
+    .slice(0, CHECK_RFC_NUMBER_LARGEST_MINUS_N)
     .map(rfc => rfc.number)
     .sort((a, b) => b - a)
 
