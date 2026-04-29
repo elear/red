@@ -118,12 +118,12 @@ router
   .all('*', async (req) => {
     let resp = await fetch(req, {
       cf: {
-        cacheTtl: 300,
+        cacheTtl: 60,
         cacheEverything: true
       }
     })
     resp = new Response(resp.body, resp)
-    resp.headers.set('Cache-Control', 'max-age=600')
+    resp.headers.set('Cache-Control', 'max-age=120')
     return resp
   })
 
