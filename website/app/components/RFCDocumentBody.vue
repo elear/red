@@ -11,7 +11,7 @@
 
   <Heading
     level="1"
-    class="mb-2 ml-2 px-0 print:mt-5 print:text-lg print:border-b-2 print:border-black print:text-center"
+    class="mb-2 ml-2 px-0 print:mt-5 print:text-lg print:border-b-2 print:border-black print:text-center font-feature-settings-calt-off"
   >
     <RFCTitle
       :rfc="props.rfcBucketHtmlDocument.rfc"
@@ -37,7 +37,7 @@
     </span>
   </Heading>
 
-  <ul class="block ml-2 print:text-center">
+  <ul class="block ml-2 print:text-center font-feature-settings-calt-off">
     <li
       v-for="(author, authorIndex) in props.rfcBucketHtmlDocument.rfc.authors"
       :key="authorIndex"
@@ -100,7 +100,7 @@
     </div>
   </Alert>
 
-  <div :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDocument.documentHtmlType} relative mt-5 sm:text-base lg:text-base ${
+  <div :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDocument.documentHtmlType} relative mt-5 sm:text-base lg:text-base font-feature-settings-calt-off ${
     //
     ' leading-[1.75] ' // WCAG requires 1.5 minimum
     }`">

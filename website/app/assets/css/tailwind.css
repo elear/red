@@ -349,3 +349,7 @@ html.dark .toc-highlight {
 .wrap-normal {
   overflow-wrap: normal;
 }
+
+.font-feature-settings-calt-off {
+  font-feature-settings: "calt" off;
+}
