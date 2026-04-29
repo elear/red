@@ -52,8 +52,8 @@ export async function blobsRfc(req, env) {
   const { origin } = new URL(req.url)
   let canonicalUrl = ''
   const rfcParts = objectPath.match(/(rfc(\d+))/)
-  if (rfcParts && rfcParts[1]) {
-    canonicalUrl = `https://${origin}/info/rfc${rfcParts[1]}/`
+  if (rfcParts && rfcParts[2]) {
+    canonicalUrl = `${origin}/info/rfc${rfcParts[2]}/`
   }
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
