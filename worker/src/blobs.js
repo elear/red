@@ -49,12 +49,12 @@ export async function blobsRfc(req, env) {
   // apply this to `/refs/refN` as that has distinct content. It's always a judgement
   // call whether the content is sufficiently similar or distinct.
   //
-  // const { origin } = new URL(request.url)
-  // let canonicalUrl = undefined
-  // const rfcParts = objectPath.match(/(rfc(\d+))/)
-  // if (rfcParts && rfcParts[1]) {
-  //   canonicalUrl = `https://${origin}/info/rfc${rfcParts[1]}/`
-  // }
+  const { origin } = new URL(request.url)
+  let canonicalUrl = ''
+  const rfcParts = objectPath.match(/(rfc(\d+))/)
+  if (rfcParts && rfcParts[1]) {
+    canonicalUrl = `https://${origin}/info/rfc${rfcParts[1]}/`
+  }
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
     if (objectPath.endsWith('.html')) {
@@ -65,7 +65,8 @@ export async function blobsRfc(req, env) {
     }
   } else if (
     // -> Fetch R2 object from RFC bucket
-    ['.html', '.json', '.pdf', '.txt', '.xml'].some((ft) => objectPath.endsWith(ft))) {
+    ['.html', '.json', '.pdf', '.txt', '.xml'].some((ft) => objectPath.endsWith(ft))
+  ) {
     const fileType = objectPath.split('.').at(-1)
     const object = await env.RFC_BUCKET.get(`${fileType}/${objectPath}`)
     if (object) {
