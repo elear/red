@@ -251,7 +251,7 @@
               ">
                 Individual Submission
               </template>
-              <template v-if="props.rfcBucketHtmlDocument.rfc.group?.type === 'area'">
+              <template v-else-if="props.rfcBucketHtmlDocument.rfc.group?.type === 'area'">
                 Individual Submission in the
                 <abbr :title="props.rfcBucketHtmlDocument.rfc.group?.name.replace(/ Area$/i, '')">
                   {{ props.rfcBucketHtmlDocument.rfc.group?.acronym?.toUpperCase() }}
@@ -301,7 +301,7 @@
           <dt class="font-bold mt-2">
             {{ streamName }}
           </dt>
-          <dd>
+          <dd v-if="shouldShowStreamValue(props.rfcBucketHtmlDocument.rfc)">
             <template v-if="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)">
               <Anchor
                 :href="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)"
@@ -530,6 +530,16 @@ const shouldShowArea = (rfc: RfcCommon): boolean => {
     return true
   }
   return false
+}
+
+const shouldShowStreamValue = (rfc: RfcCommon): boolean => {
+  if (
+    // https://github.com/ietf-tools/red/issues/147#issuecomment-4337849819  
+    rfc.stream.slug === 'Legacy'
+  ) {
+    return false
+  }
+  return true
 }
 
 const shouldShowGroup = (rfc: RfcCommon): boolean => {
