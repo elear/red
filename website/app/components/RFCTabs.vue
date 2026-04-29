@@ -522,9 +522,6 @@ const shouldShowArea = (rfc: RfcCommon): boolean => {
   if (!rfc.area) {
     return false
   }
-  if (rfc.stream.slug === 'IRTF') {
-    return false
-  }
   if (
     rfc.stream.slug === 'IETF' &&
     (rfc.group?.type === 'wg' || rfc.group?.type === 'ag')
