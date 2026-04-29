@@ -4,7 +4,7 @@
     props.isFixed && 'fixed bottom-0 left-0 right-0 lg:hidden print:hidden'
   ]">
     <div :class="[
-      'leading-5 sm:leading-6',
+      'leading-5 sm:leading-6 font-feature-settings-calt-off',
       props.isFixed && 'container mx-auto px-2 md:px-2',
       !props.isFixed && 'p-2'
     ]">
