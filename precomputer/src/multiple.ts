@@ -1,5 +1,7 @@
 import { PromisePool } from '@supercharge/promise-pool'
-import { processExitFromUploadResults, processRfcUploadTask } from './utilities/task.ts'
+import { processExitFromUploadResults, processRfcUploadTask, taskItemWasSuccessful } from './utilities/task.ts'
+import { indices } from './tasks/indices.ts'
+import { getApiClient } from './utilities/api.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
 
@@ -7,9 +9,25 @@ const main = async (rfcNumbers: number[]): Promise<void> => {
   console.log(
     `Processing RFCs ${rfcNumbers.join(', ')}. Using ${NUMBER_OF_CONCURRENT_RFC_PROCESSORS} concurrent promises (results may appear out of order).`
   )
-  const { results, errors } = await PromisePool.for(rfcNumbers)
-    .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
-    .process(processRfcUploadTask)
+
+  const api = getApiClient()
+
+  const [rfcUploadTasks, indicesUploadTasks] = await Promise.all([
+    PromisePool.for(rfcNumbers)
+      .withConcurrency(NUMBER_OF_CONCURRENT_RFC_PROCESSORS)
+      .process(processRfcUploadTask),
+    indices({ api })
+  ])
+
+  if (taskItemWasSuccessful(indicesUploadTasks)) {
+    console.log('[multiple.ts] Indices updated successfully.')
+  } else {
+    console.error(
+      '[multiple.ts] Indices finished with error(s)' // these errors should be already printed to console
+    )
+  }
+
+  const { results, errors } = rfcUploadTasks
 
   processExitFromUploadResults({
     uploadResults: results,

@@ -20,7 +20,7 @@ type Props = {
   api: ApiClient
 }
 
-export const indices = async ({ api, }: Props): AsyncTaskItem => {
+export const indices = async ({ api }: Props): AsyncTaskItem => {
   console.log("Generating indices for ", process.env.NUXT_PUBLIC_SITE_BASE)
   const [allRfcs, allSubseries,] = await Promise.all([
     getAllRFCs({ api }),
@@ -46,7 +46,6 @@ export const indices = async ({ api, }: Props): AsyncTaskItem => {
     uploadRfcIndexXsd(),
     uploadFavicons(),
   ] satisfies AsyncTaskItem[])
-
 
   resultsArray.forEach((result, i) => {
     if (result.includes(false)) {
