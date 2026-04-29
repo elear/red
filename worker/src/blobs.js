@@ -49,7 +49,7 @@ export async function blobsRfc(req, env) {
   // apply this to `/refs/refN` as that has distinct content. It's always a judgement
   // call whether the content is sufficiently similar or distinct.
   //
-  const { origin } = new URL(request.url)
+  const { origin } = new URL(req.url)
   let canonicalUrl = ''
   const rfcParts = objectPath.match(/(rfc(\d+))/)
   if (rfcParts && rfcParts[1]) {
