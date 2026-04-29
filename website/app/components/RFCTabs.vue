@@ -555,9 +555,9 @@ const shouldShowGroup = (rfc: RfcCommon): boolean => {
 const streamName = computed(() => {
   switch (props.rfcBucketHtmlDocument.rfc.stream.slug) {
     case 'IAB':
-      return 'IAB stream'
+      return 'IAB Stream'
     case 'INDEPENDENT':
-      return 'Independent Submission'
+      return 'Independent Stream'
     case 'Editorial':
       return 'Editorial Stream'
     case 'Legacy':

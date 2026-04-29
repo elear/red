@@ -199,7 +199,8 @@ export const filterRFCsByBucketContentExisting = async ({ rfcs }: CheckRfcConten
     .toSorted(
       // The best indicator of RFCs that need content checking is the `published` date,
       // not the RFC number.
-      sortByRfcPublish)
+      sortByRfcPublish
+    )
     .slice(0, CHECK_RFC_NUMBER_LARGEST_MINUS_N)
     .map(rfc => rfc.number)
     .sort((a, b) => b - a)
