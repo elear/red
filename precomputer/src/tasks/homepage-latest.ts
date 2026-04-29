@@ -57,7 +57,18 @@ export const renderHomepageLatest = async (
 
         const aPublished = DateTime.fromISO(a.published)
         const bPublished = DateTime.fromISO(b.published)
-        return aPublished.toMillis() - bPublished.toMillis()
+
+        const difference = aPublished.toMillis() - bPublished.toMillis()
+
+        if (
+          // If the publishing dates are different use that
+          difference !== 0
+        ) {
+          return difference
+        }
+
+        // otherwise order by rfc number, largest wins
+        return a.number - b.number
       })
       .slice(-NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE)
       .map(redactRfc),
