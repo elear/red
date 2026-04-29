@@ -358,9 +358,9 @@
             </template>
           </template>
 
-          <template v-if="props.rfcBucketHtmlDocument.rfc.formats?.length > 0">
+          <template v-if="formats.length > 0">
             <dt class="font-bold mt-2">
-              <template v-if="props.rfcBucketHtmlDocument.rfc.formats.length === 1">
+              <template v-if="formats.length === 1">
                 Format
               </template>
               <template v-else> Formats </template>
@@ -386,7 +386,7 @@
                   >{{ formatItem.format.toUpperCase() }}</a>
                   <template v-if="
                     formatIndex <
-                    props.rfcBucketHtmlDocument.rfc.formats.length - 1
+                    formats.length - 1
                   ">
                     {{ COMMA }}
                     {{ SPACE }}
