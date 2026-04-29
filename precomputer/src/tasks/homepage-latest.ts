@@ -33,44 +33,43 @@ export const renderHomepageLatest = async (
   allRfcs: Readonly<RfcCommon[]>
 ): Promise<HomepageLatest> => {
   const response: HomepageLatest = {
-    homepageLatest: allRfcs.toSorted()
-      .sort((a, b) => {
-        // The homepage latest list is of the latest PUBLISHED rfcs
-        // not the largest RFC number
+    homepageLatest: allRfcs.toSorted((a, b) => {
+      // The homepage latest list is of the latest PUBLISHED rfcs
+      // not the largest RFC number
 
-        if (!a.published && !b.published) {
-          return 0
-        }
-        if (a.published && !b.published) {
-          return -1
-        }
-        if (!a.published && b.published) {
-          return 1
-        }
+      if (!a.published && !b.published) {
+        return 0
+      }
+      if (a.published && !b.published) {
+        return -1
+      }
+      if (!a.published && b.published) {
+        return 1
+      }
 
-        if (
-          // this shouldn't be possible with the previous checks
-          // so this is only for TS benefit to narrow types to string
-          !a.published || !b.published) {
-          throw Error('internal error. bad sorting')
-        }
+      if (
+        // this shouldn't be possible with the previous checks
+        // so this check is only to help TS narrow types
+        !a.published || !b.published) {
+        throw Error('internal error. bad sorting')
+      }
 
-        const aPublished = DateTime.fromISO(a.published)
-        const bPublished = DateTime.fromISO(b.published)
+      const aPublished = DateTime.fromISO(a.published)
+      const bPublished = DateTime.fromISO(b.published)
 
-        const difference = aPublished.toMillis() - bPublished.toMillis()
+      const difference = bPublished.toMillis() - aPublished.toMillis()
 
-        if (
-          // If the publishing dates are different use that
-          difference !== 0
-        ) {
-          return difference
-        }
+      if (
+        // If the publishing dates are different prefer that for sorting
+        difference !== 0
+      ) {
+        return difference
+      }
 
-        // otherwise order by rfc number, largest wins
-        return a.number - b.number
-      })
-      .slice(-NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE)
+      // otherwise order by rfc number, largest wins
+      return a.number - b.number
+    })
+      .slice(0, NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE)
       .map(redactRfc),
     timestampIso: DateTime.now().toUTC().toISO()
   }
