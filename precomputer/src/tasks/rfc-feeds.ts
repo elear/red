@@ -9,8 +9,11 @@ import {
   saveToS3
 } from '../utilities/s3.ts'
 import { type AsyncTaskItem } from '../utilities/task.ts'
+import { sortByRfcPublish } from '../utilities/rfc-sorting.ts'
 
 const NUMBER_OF_RFCS_IN_FEED = 15
+
+const cannotUseUnpublishedMessage = 'Cannot add unpublished RFCs to feed. These should have been removed earlier.'
 
 export const uploadFeeds = async (
   allRfcs: Readonly<RfcCommon[]>
@@ -36,16 +39,14 @@ export const renderFeeds = async (
     )
   }
 
-  const feedRfcs = Array.from(allRfcs)
-    .filter(rfc => rfc.published)
-    .sort(sortByPublished)
+  const feedRfcs = allRfcs
+    .toSorted(sortByRfcPublish)
     .slice(0, NUMBER_OF_RFCS_IN_FEED)
 
-  const latestRfc = feedRfcs[0]
-  const { published: latestRfcPublished } = latestRfc
-  if (latestRfcPublished === undefined) {
-    console.error('latestRfc.published error', JSON.stringify(latestRfc))
-    throw Error('expected published to be available')
+  // validate we've got valid data
+  if (feedRfcs.some(feedRfc => feedRfc.published === undefined)) {
+    console.error(cannotUseUnpublishedMessage, JSON.stringify(feedRfcs))
+    throw Error(cannotUseUnpublishedMessage)
   }
 
   const feedOptions: FeedOptions = {
@@ -64,14 +65,14 @@ export const renderFeeds = async (
   feedRfcs.forEach((feedRfc) => {
     const { published } = feedRfc
     if (published === undefined) {
-      throw Error('Cannot add unpublished RFCs to feed. These should have been removed earlier.')
+      throw Error(cannotUseUnpublishedMessage)
     }
     const url = `${PUBLIC_SITE_URL_ORIGIN}${infoRfcPathBuilder(feedRfc)}`
     feed.addItem({
       title: `RFC ${feedRfc.number}: ${feedRfc.title}`,
       link: url,
       description: feedRfc.abstract,
-      date: makeJsDateFromPublished(published)
+      date: DateTime.fromISO(published).toJSDate()
     })
   })
 
@@ -79,24 +80,4 @@ export const renderFeeds = async (
     rss2: feed.rss2(),
     atom1: feed.atom1()
   }
-}
-
-const makeLuxonDateFromPublished = (published: string): DateTime => {
-  return DateTime.fromISO(published)
-}
-
-const makeJsDateFromPublished = (published: string): Date => {
-  return makeLuxonDateFromPublished(published).toJSDate()
-}
-
-const sortByPublished = (a: RfcCommon, b: RfcCommon): number => {
-  const { published: aPublished } = a
-  const { published: bPublished } = b
-  if (aPublished === undefined || bPublished === undefined) {
-    console.error("Can't sort", JSON.stringify(a), JSON.stringify(b))
-    throw Error("Can't sort rfcs without 'published'. They should have been filtered earlier. See console for more")
-  }
-  const aPublishedDate = makeLuxonDateFromPublished(aPublished)
-  const bPublishedDate = makeLuxonDateFromPublished(bPublished)
-  return bPublishedDate.toMillis() - aPublishedDate.toMillis()
 }

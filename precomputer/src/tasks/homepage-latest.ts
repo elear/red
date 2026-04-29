@@ -7,6 +7,7 @@ import { validateDocument } from '../utilities/validate-zod.ts'
 import { redactRfc, uploadRfcData } from './rfc.ts'
 import { type AsyncTaskItem } from '../utilities/task.ts'
 import { assertIsString } from '../utilities/typescript.ts'
+import { sortByRfcPublish } from '../utilities/rfc-sorting.ts'
 
 export const NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE = 3
 
@@ -33,42 +34,16 @@ export const renderHomepageLatest = async (
   allRfcs: Readonly<RfcCommon[]>
 ): Promise<HomepageLatest> => {
   const response: HomepageLatest = {
-    homepageLatest: allRfcs.toSorted((a, b) => {
-      // The homepage latest list is of the latest PUBLISHED rfcs
-      // not the largest RFC number
-
-      if (!a.published && !b.published) {
-        return 0
-      }
-      if (a.published && !b.published) {
-        return -1
-      }
-      if (!a.published && b.published) {
-        return 1
-      }
-
-      if (
-        // this shouldn't be possible with the previous checks
-        // so this check is only to help TS narrow types
-        !a.published || !b.published) {
-        throw Error('internal error. bad sorting')
-      }
-
-      const aPublished = DateTime.fromISO(a.published)
-      const bPublished = DateTime.fromISO(b.published)
-
-      const difference = bPublished.toMillis() - aPublished.toMillis()
-
-      if (
-        // If the publishing dates are different prefer that for sorting
-        difference !== 0
-      ) {
-        return difference
-      }
-
-      // otherwise order by rfc number, largest wins
-      return a.number - b.number
-    })
+    homepageLatest: allRfcs
+      .toSorted(
+        // The homepage latest list is of the latest PUBLISHED rfcs
+        // not the largest RFC number
+        sortByRfcPublish
+        // sorting all RFCs then slicing off NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE
+        // seems very inefficient so this could be optimised. Not sure it's worth making
+        // a less thorough version of it though, and sorting 10k+ things is very fast
+        // so maybe it's ok to leave this unoptimised.
+      )
       .slice(0, NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE)
       .map(redactRfc),
     timestampIso: DateTime.now().toUTC().toISO()
