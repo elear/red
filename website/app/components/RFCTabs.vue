@@ -260,8 +260,7 @@
               </template>
               <Anchor
                 v-else
-                :href="useWorkingGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.group)
-                  "
+                :href="useWorkingGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.group)"
                 :class="ANCHOR_COLOR_TAILWIND_STYLE"
               >
                 {{ props.rfcBucketHtmlDocument.rfc.group?.name }}
@@ -521,6 +520,9 @@ const shouldShowArea = (rfc: RfcCommon): boolean => {
   // https://github.com/ietf-tools/red/issues/201
   // https://github.com/ietf-tools/red/issues/147#issuecomment-3300346145
   if (!rfc.area) {
+    return false
+  }
+  if (rfc.stream.slug === 'IRTF') {
     return false
   }
   if (

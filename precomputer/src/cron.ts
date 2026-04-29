@@ -26,7 +26,6 @@ export const main = async (): Promise<void> => {
     )
     process.exit(1)
   }
-
 }
 
 main()
