@@ -58,7 +58,7 @@ export const renderHomepageLatest = async (
         const aPublished = DateTime.fromISO(a.published)
         const bPublished = DateTime.fromISO(b.published)
 
-        const difference = aPublished.toMillis() - bPublished.toMillis()
+        const difference = bPublished.toMillis() - aPublished.toMillis()
 
         if (
           // If the publishing dates are different use that
