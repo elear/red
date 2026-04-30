@@ -65,7 +65,7 @@ export const useRfcEditorHead = (props: UseRfcEditorProps) => {
          **/
         'data-nosnippet': "true",
         tagPosition: 'bodyOpen',
-        innerHTML: 'Your browser JavaScript is disabled. Most of this site works without it, but some features —like search— require it. Please enable JavaScript and reload the page.',
+        innerHTML: 'JavaScript is disabled. Most of this site works without JS, but some features, like search, require it. If something seems broken please try enabling JavaScript and reloading the page.',
       }
     ]
   })
