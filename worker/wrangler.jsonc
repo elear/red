@@ -43,6 +43,11 @@
           "binding": "RED_BUCKET",
           "bucket_name": "red-staging",
           "preview_bucket_name": "red-staging"
+        },
+        {
+          "binding": "INLINE_ERRATA_BUCKET",
+          "bucket_name": "inline-errata",
+          "preview_bucket_name": "inline-errata"
         }
       ],
       "vars": {

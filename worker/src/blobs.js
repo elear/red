@@ -58,7 +58,7 @@ export async function blobsRfc(req, env) {
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
     if (objectPath.endsWith('.html')) {
-      const object = await env.RFC_BUCKET.get(objectPath)
+      const object = await env.INLINE_ERRATA_BUCKET.get(objectPath)
       if (object) {
         return createBlobResponse(object, detectContentType(objectPath))
       }
