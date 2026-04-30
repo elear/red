@@ -75,9 +75,9 @@
         wrapper-class="min-h-0 pt-4 pb-2 px-4"
         list-class="mr-1"
         nested-list-class="pl-2"
-        :links-class="`block text-sm py-2 dark:border-t-gray-500 no-underline hover:underline focus:underline toc-highlight-transition ${ANCHOR_COLOR_TAILWIND_STYLE}`"
+        :links-class="`block text-sm py-2 dark:border-t-gray-500 toc-highlight-transition ${ANCHOR_COLOR_TAILWIND_STYLE}`"
         links-active-class="toc-highlight"
-        link-class="block no-underline hover:underline"
+        link-class="block no-underline hover:underline no-underline hover:underline focus:underline"
         last-link-class="flex-1"
       >
         <Heading
