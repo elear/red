@@ -63,7 +63,7 @@ export async function blobsRfc(req, env) {
     if (['.html'].some((ft) => objectPath.endsWith(ft))) {
       const object = await env.INLINE_ERRATA_BUCKET.get(objectPath)
       if (object) {
-        return createBlobResponse(object, detectContentType(objectPath))
+        return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
       }
     } else if (
       objectPath.startsWith(inlineErrataCssPrefix) &&
