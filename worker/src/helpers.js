@@ -79,6 +79,13 @@ export function detectContentType(path) {
       return 'text/plain;charset=utf-8'
     case '.png':
       return 'image/png'
+    case '.css':
+      return 'text/css; charset=utf-8'
+    case '.js':
+      // should this be limited to specific trusted paths in buckets?
+      // if we host JS that was exploited (eg buckets have build artifacts, dependencies,
+      // out of our control) that would gain access to the cookies etc of that domain (origin).
+      return 'text/javascript; charset=utf-8'
     case '.xml':
       if (path.endsWith('rfcatom.xml')) {
         // Atom has a specific mime type
