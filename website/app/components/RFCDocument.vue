@@ -155,7 +155,7 @@ const isModalOpen = ref(false)
 
 const canonicalPath = infoSeriesPathBuilder(sanitisedId.value)
 
-if (route.fullPath !== canonicalPath) {
+if (route.path !== canonicalPath) {
   await navigateTo({
     path: canonicalPath
   })
