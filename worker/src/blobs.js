@@ -13,6 +13,9 @@ import { createBlobResponse, createBlobNotFoundResponse, detectContentType } fro
 export async function blobsRfc(req, env) {
   const RFC_PREFIX = '/rfc/'
   const INLINE_ERRATA_PREFIX = 'inline-errata/'
+  const INLINE_ERRATA_CSS_BUCKET_PREFIX = 'inline-errata/css/css/'
+
+  const inlineErrataCssPrefix = `${INLINE_ERRATA_PREFIX}css/`
 
   // -> Strip /rfc/ from path
   const objectPath = req.normalizedPath.substring(RFC_PREFIX.length)
@@ -57,8 +60,17 @@ export async function blobsRfc(req, env) {
   }
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
-    if (['.html', '.js', '.png'].some((ft) => objectPath.endsWith(ft))) {
+        if (['.html', '.js', '.png'].some((ft) => objectPath.endsWith(ft))     ) {
       const object = await env.INLINE_ERRATA_BUCKET.get(objectPath)
+      if (object) {
+        return createBlobResponse(object, detectContentType(objectPath))
+      }
+    } else if (
+      objectPath.startsWith(inlineErrataCssPrefix) &&
+      ['.css', '.png', '.js'].some((ft) => objectPath.endsWith(ft))
+    ) {
+      const cssBucketPath = `${INLINE_ERRATA_CSS_BUCKET_PREFIX}${objectPath.substring(INLINE_ERRATA_CSS_BUCKET_PREFIX.length)}`
+      const object = await env.INLINE_ERRATA_BUCKET.get(cssBucketPath)
       if (object) {
         return createBlobResponse(object, detectContentType(objectPath))
       }
