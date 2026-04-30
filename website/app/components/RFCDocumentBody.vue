@@ -53,7 +53,7 @@
   <RFCDocumentBodyPill :rfc="props.rfcBucketHtmlDocument.rfc" />
 
   <Alert
-    v-if="props.rfcBucketHtmlDocument.rfc.obsoleted_by?.length"
+    v-if="obsoleted_by"
     variant="warning"
     heading="This RFC is now obsolete"
     class="ml-1"
@@ -62,7 +62,7 @@
       For more information, please refer to
       <ul class="mt-1 flex flex-col gap-2">
         <li
-          v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfcBucketHtmlDocument.rfc.obsoleted_by"
+          v-for="(obsoletedByItem, obsoletedByItemIndex) in obsoleted_by"
           :key="obsoletedByItemIndex"
         >
           <AMaybeRFCLink
@@ -77,7 +77,7 @@
   </Alert>
 
   <Alert
-    v-if="props.rfcBucketHtmlDocument.rfc.updated_by?.length"
+    v-if="updated_by"
     variant="info"
     heading="This RFC was updated"
     class="ml-1"
@@ -86,7 +86,7 @@
       See also
       <ul class="flex flex-col gap-2">
         <li
-          v-for="(updatedByItem, updatedByItemIndex) in props.rfcBucketHtmlDocument.rfc.updated_by"
+          v-for="(updatedByItem, updatedByItemIndex) in updated_by"
           :key="updatedByItemIndex"
         >
           <AMaybeRFCLink
@@ -270,6 +270,14 @@ const maxPreformattedLineLength = computed(
 const isAprilFool = computed(() =>
   isAprilFoolsRfc(props.rfcBucketHtmlDocument.rfc)
 )
+
+const obsoleted_by = computed(() => {
+  return props.rfcBucketHtmlDocument.rfc.obsoleted_by?.toSorted((a, b) => a.number - b.number)
+})
+
+const updated_by = computed(() => {
+  return props.rfcBucketHtmlDocument.rfc.updated_by?.toSorted((a, b) => a.number - b.number)
+})
 </script>
 
 <style lang="postcss">
