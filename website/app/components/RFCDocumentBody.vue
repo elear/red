@@ -53,7 +53,7 @@
   <RFCDocumentBodyPill :rfc="props.rfcBucketHtmlDocument.rfc" />
 
   <Alert
-    v-if="obsoleted_by"
+    v-if="obsoleted_by && obsoleted_by.length > 0"
     variant="warning"
     heading="This RFC is now obsolete"
     class="ml-1"
@@ -77,7 +77,7 @@
   </Alert>
 
   <Alert
-    v-if="updated_by"
+    v-if="updated_by && updated_by.length > 0"
     variant="info"
     heading="This RFC was updated"
     class="ml-1"
