@@ -60,7 +60,7 @@ export async function blobsRfc(req, env) {
   }
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
-        if (['.html', '.js', '.png'].some((ft) => objectPath.endsWith(ft))     ) {
+    if (['.html'].some((ft) => objectPath.endsWith(ft))) {
       const object = await env.INLINE_ERRATA_BUCKET.get(objectPath)
       if (object) {
         return createBlobResponse(object, detectContentType(objectPath))
@@ -69,7 +69,7 @@ export async function blobsRfc(req, env) {
       objectPath.startsWith(inlineErrataCssPrefix) &&
       ['.css', '.png', '.js'].some((ft) => objectPath.endsWith(ft))
     ) {
-      const cssBucketPath = `${INLINE_ERRATA_CSS_BUCKET_PREFIX}${objectPath.substring(INLINE_ERRATA_CSS_BUCKET_PREFIX.length)}`
+      const cssBucketPath = `${INLINE_ERRATA_CSS_BUCKET_PREFIX}${objectPath.substring(inlineErrataCssPrefix.length)}`
       const object = await env.INLINE_ERRATA_BUCKET.get(cssBucketPath)
       if (object) {
         return createBlobResponse(object, detectContentType(objectPath))
