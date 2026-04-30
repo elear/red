@@ -57,6 +57,10 @@ export const useMenuData = (mode: Mode) => {
             href: markdownPathBuilder('/series/rfc-tips/')
           },
           {
+            label: 'Browse all RFCs',
+            href: searchPathBuilder({}),
+          },
+          {
             label: 'Browse RFCs by Status:',
             children: [
               {
@@ -177,7 +181,7 @@ export const useMenuData = (mode: Mode) => {
           activeLabelFn: () =>
             colorMode.preference === colorPreference.value ?
               `Selected ${colorPreference.label}`
-            : `Not selected ${colorPreference.label}`,
+              : `Not selected ${colorPreference.label}`,
           isActiveFn: () => colorMode.preference === colorPreference.value,
           click: () => {
             colorMode.preference = colorPreference.value
