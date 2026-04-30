@@ -103,7 +103,10 @@ if (subseriesDocumentError.value) {
 
 const canonicalPath = infoSeriesPathBuilder(sanitisedId.value)
 
-if (route.path !== canonicalPath) {
+if (
+  // only compare route.path not route.fullPath as that will clobber ?search#id params
+  route.path !== canonicalPath
+) {
   await navigateTo({
     path: canonicalPath
   })

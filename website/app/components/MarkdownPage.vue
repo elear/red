@@ -73,7 +73,10 @@ if (error.value || page.value === null) {
 
 const canonicalPath = `/${normalizedSlug}/`
 
-if (route.fullPath !== canonicalPath) {
+if (
+  // only compare route.path not route.fullPath as that will clobber ?search#id params
+  route.path !== canonicalPath
+) {
   await navigateTo({
     path: canonicalPath
   })
