@@ -57,7 +57,7 @@ export async function blobsRfc(req, env) {
   }
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
-    if (objectPath.endsWith('.html')) {
+    if (['.html', '.js', '.png'].some((ft) => objectPath.endsWith(ft))) {
       const object = await env.INLINE_ERRATA_BUCKET.get(objectPath)
       if (object) {
         return createBlobResponse(object, detectContentType(objectPath))
