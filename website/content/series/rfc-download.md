@@ -31,7 +31,8 @@ Type `rsync -avz --delete rsync.rfc-editor.org::Module-Name Target-Directory`
 
 For example: To create a mirror of the text versions of all the RFCs, i.e.,
 
-```
+```text
+
 in-notes/*.txt
 in-notes/bcp/*.txt
 in-notes/fyi/*.txt
