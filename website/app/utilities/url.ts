@@ -98,11 +98,12 @@ export const useMaterialsPathBuilder = (materialsPath: string) => {
 export const useIadReportsPathBuilder = (IADPath: string) => {
   return `${useIadUrlOrigin()}${IADPath}` as const
 }
+const RFC_BLOBSTORE_PREFIX = '/rfc/'
 /**
  * this assumes that a PDF exists. It doesn't check in advance.
  */
 export const useRfcPdfPathBuilder = (rfcNumber: number) => {
-  return `/rfc/rfc${rfcNumber}.pdf` as const
+  return `${RFC_BLOBSTORE_PREFIX}rfc${rfcNumber}.pdf` as const
 }
 
 export const IETF_URL_ORIGIN = 'https://www.ietf.org'
@@ -238,7 +239,7 @@ export const rfcPathBuilder = (
   if (!seriesId) {
     throw Error(`Unable to parse ${JSON.stringify(rfcId)}`)
   }
-  return `/rfc/${seriesId.type.toLowerCase()}${seriesId.number}/${sectionHash ? (`#${sectionHash}` as const) : ''}` as const
+  return `${RFC_BLOBSTORE_PREFIX}${seriesId.type.toLowerCase()}${seriesId.number}/${sectionHash ? (`#${sectionHash}` as const) : ''}` as const
 }
 
 export const materialsTxtBuilder = (txtFile: `${string}.txt`) => {
@@ -279,7 +280,7 @@ export const rfcFormatPathBuilder = (rfcId: string, format: FormatCommon) => {
     throw Error(`Unable to parse ${JSON.stringify(rfcId)}.`)
   }
 
-  return `/rfc/${seriesId.type}${seriesId.number}.${format}` as const
+  return `${RFC_BLOBSTORE_PREFIX}${seriesId.type}${seriesId.number}.${format}` as const
 }
 
 export const wikiDokuPathBuilder = (wikiPath: string) => {
@@ -329,6 +330,22 @@ export const isRSSLink = (href?: string): boolean => !!href?.endsWith(RSS_PATH)
 
 export const isAtomLink = (href?: string): boolean =>
   !!href?.endsWith(ATOM_PATH)
+
+export const isRfcBlobstoreLink = (href?: string): boolean => !!href?.startsWith(RFC_BLOBSTORE_PREFIX)
+
+/**
+ * Links to files hosted in the blobstore shouldn't use Nuxt SPA links
+ * they should use conventional `<a href>` links.
+ */
+export const isBlobStoreLink = (href?: string): boolean => {
+  if (!href) {
+    return false
+  }
+  if (isRfcBlobstoreLink(href) || isRSSLink(href) || isAtomLink(href)) {
+    return true
+  }
+  return false
+}
 
 /**
  * Converts arbitrary text into a custom id that is DOMId compliant (ie no whitespace)

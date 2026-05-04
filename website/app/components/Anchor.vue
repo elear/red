@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    v-if="isInternal && !isHash && !isMailTo"
+    v-if="isInternal && !isHash && !isMailTo && !isBlobStore"
     v-bind="sanitisedAnchorProps"
     data-is-nuxt-link
   >
@@ -28,17 +28,18 @@
 import { computed } from 'vue'
 import { NuxtLink } from '#components'
 import { EXTERNAL_LINK_REL, TARGET_NEW_WINDOW } from '~/utilities/html'
-import { isHashLink, isInternalLink, isMailToLink } from '~/utilities/url'
+import { isHashLink, isInternalLink, isMailToLink, isBlobStoreLink } from '~/utilities/url'
 
 const props = defineProps<{ href?: string; id?: string }>()
 
 const isInternal = computed(() => isInternalLink(props.href))
 const isMailTo = computed(() => isMailToLink(props.href))
 const isHash = computed(() => isHashLink(props.href))
+const isBlobStore = computed(() => isBlobStoreLink(props.href))
 
 const sanitisedAnchorProps = computed(() => {
   const isNuxtLink =
-    props.href && isInternal.value && !isMailTo.value && !isHash.value
+    props.href && isInternal.value && !isMailTo.value && !isHash.value && !isBlobStore.value
   const isExternalLink =
     props.href && !isInternal.value && !isMailTo.value && !isHash.value
 
