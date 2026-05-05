@@ -60,6 +60,10 @@ export const useMenuData = (mode: Mode) => {
             label: 'Browse all RFCs',
             href: searchPathBuilder({}),
           },
+          //
+          // Submenu commented out
+          // See https://github.com/ietf-tools/red-beta/issues/38
+          //
           // {
           //   label: 'Browse RFCs by Status:',
           //   children: [
