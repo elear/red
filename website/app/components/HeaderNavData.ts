@@ -60,41 +60,41 @@ export const useMenuData = (mode: Mode) => {
             label: 'Browse all RFCs',
             href: searchPathBuilder({}),
           },
-          {
-            label: 'Browse RFCs by Status:',
-            children: [
-              {
-                label: 'Standards',
-                href: searchPathBuilder({ status: ['Internet Standard'] }),
-                noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
-              },
-              {
-                label: 'Best Current Practices (BCP)',
-                href: searchPathBuilder({ status: ['Best Current Practice'] }),
-                noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
-              },
-              {
-                label: 'Informational',
-                href: searchPathBuilder({ status: ['Informational'] }),
-                noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
-              },
-              {
-                label: 'Experimental',
-                href: searchPathBuilder({ status: ['Experimental'] }),
-                noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
-              },
-              {
-                label: 'Historic',
-                href: searchPathBuilder({ status: ['Historic'] }),
-                noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
-              },
-              {
-                label: 'Unknown',
-                href: searchPathBuilder({ status: ['Unknown'] }),
-                noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
-              }
-            ]
-          },
+          // {
+          //   label: 'Browse RFCs by Status:',
+          //   children: [
+          //     {
+          //       label: 'Standards',
+          //       href: searchPathBuilder({ status: ['Internet Standard'] }),
+          //       noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
+          //     },
+          //     {
+          //       label: 'Best Current Practices (BCP)',
+          //       href: searchPathBuilder({ status: ['Best Current Practice'] }),
+          //       noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
+          //     },
+          //     {
+          //       label: 'Informational',
+          //       href: searchPathBuilder({ status: ['Informational'] }),
+          //       noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
+          //     },
+          //     {
+          //       label: 'Experimental',
+          //       href: searchPathBuilder({ status: ['Experimental'] }),
+          //       noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
+          //     },
+          //     {
+          //       label: 'Historic',
+          //       href: searchPathBuilder({ status: ['Historic'] }),
+          //       noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
+          //     },
+          //     {
+          //       label: 'Unknown',
+          //       href: searchPathBuilder({ status: ['Unknown'] }),
+          //       noSpaLink: true, // workaround for search page bug where clicking on these links from the search page doesn't reset UIState correctly
+          //     }
+          //   ]
+          // },
           {
             label: 'Download RFCs',
             href: markdownPathBuilder('/series/rfc-download/')
