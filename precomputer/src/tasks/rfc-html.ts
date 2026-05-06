@@ -131,7 +131,6 @@ export const fetchSourceRfcHtml = async (
       : dirtyHtml
 
   // Sanitise HTML before returning it
-
   const SVG_STYLE_ATTRIBUTES = [
     'role',
 

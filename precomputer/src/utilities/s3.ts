@@ -9,9 +9,13 @@ import {
 import { PromisePool } from '@supercharge/promise-pool'
 import type { RfcCommon, SubseriesCommon } from '../../../website/app/utilities/rfc-validators.ts'
 import { assertIsString } from './typescript.ts'
-import { fetchSourceRfcHtml } from '../tasks/rfc-html.ts';
-import { fetchRfcPDF } from '../tasks/rfc-pdf.ts';
+import { fetchSourceRfcHtml } from '../tasks/rfc-html.ts'
+import { fetchRfcPDF } from '../tasks/rfc-pdf.ts'
 import { sortByRfcPublish } from './rfc-sorting.ts'
+import { sleep } from './sleep.ts'
+
+const NUMBER_OF_S3_RETRIES = 5
+const DELAY_BETWEEN_S3_RETRIES_MS = 1000
 
 let s3Ref: undefined | { s3RfcCli: S3Client; s3RedCli: S3Client } = undefined
 
@@ -98,28 +102,41 @@ export async function getFromS3(
 
   const s3Client = bucket === 'S3_RFC_BUCKET' ? s3RfcCli : s3RedCli
 
-  try {
-    const resp = await s3Client.send(
-      new GetObjectCommand({
-        Bucket: S3_BUCKET,
-        Key: key
-      })
-    )
-    switch (outputType) {
-      case 'base64': {
-        return (await resp.Body?.transformToString('base64')) ?? null
+  let attemptsRemaining = NUMBER_OF_S3_RETRIES
+
+  const errors: unknown[] = []
+  while (attemptsRemaining > 0) {
+    attemptsRemaining--
+    try {
+      const resp = await s3Client.send(
+        new GetObjectCommand({
+          Bucket: S3_BUCKET,
+          Key: key
+        })
+      )
+      if (resp.Body) {
+        switch (outputType) {
+          case 'base64': {
+            return (await resp.Body.transformToString('base64')) ?? null
+          }
+          default: {
+            return (await resp.Body.transformToString()) ?? null
+          }
+        }
       }
-      default: {
-        return (await resp.Body?.transformToString()) ?? null
-      }
+    } catch (err) {
+      console.warn(
+        prefixForDebug,
+        `S3 download problem. ${attemptsRemaining} attempts remaining. Retrying in ${DELAY_BETWEEN_S3_RETRIES_MS}ms`
+      )
+      await sleep(DELAY_BETWEEN_S3_RETRIES_MS)
+      errors.push(err)
     }
-  } catch (err) {
-    const errorHeader = `[${prefixForDebug}] Failed to fetch ${JSON.stringify(key)} from ${JSON.stringify(S3_BUCKET)} bucket.`
-    console.error(errorHeader,
-      // err
-    )
-    return null
   }
+
+  const errorHeader = `[${prefixForDebug}] Failed to fetch ${JSON.stringify(key)} from ${JSON.stringify(S3_BUCKET)} bucket.`
+  console.error(errorHeader, ...errors)
+  return null
 }
 
 type StreamingBlobPayloadInputTypes = ConstructorParameters<
@@ -130,6 +147,7 @@ export async function saveToS3(
   key: string,
   contents: StreamingBlobPayloadInputTypes
 ): Promise<void> {
+  const prefixForDebug = `[S3 Upload ${key}]`
   const S3_RED_BUCKET = process.env.S3_RED_BUCKET
   assertIsString(
     S3_RED_BUCKET,
@@ -137,13 +155,38 @@ export async function saveToS3(
   )
   // console.log(`[${S3_RED_BUCKET}] saving ${key}`, ' with contents ', contents)
   const { s3RedCli } = getS3Singleton()
-  await s3RedCli.send(
-    new PutObjectCommand({
-      Bucket: S3_RED_BUCKET,
-      Key: key,
-      Body: contents
-    })
-  )
+  let attemptsRemaining = NUMBER_OF_S3_RETRIES
+
+  const errors: unknown[] = []
+  while (attemptsRemaining > 0) {
+    attemptsRemaining--
+    try {
+      const putResult = await s3RedCli.send(
+        new PutObjectCommand({
+          Bucket: S3_RED_BUCKET,
+          Key: key,
+          Body: contents
+        })
+      )
+      if (putResult.$metadata.httpStatusCode === 200) {
+        console.log(prefixForDebug, `succeeded`)
+        return
+      }
+      throw Error(String(putResult))
+    } catch (err: unknown) {
+      console.warn(
+        prefixForDebug,
+        `Failure. ${attemptsRemaining} attempts remaining. Retrying in ${DELAY_BETWEEN_S3_RETRIES_MS}ms`
+      )
+      await sleep(DELAY_BETWEEN_S3_RETRIES_MS)
+      errors.push(err)
+    }
+  }
+
+  const errorHeader = `[${prefixForDebug}] All attempts to upload ${JSON.stringify(key)} to ${JSON.stringify(S3_RED_BUCKET)} bucket failed.`
+  console.error(errorHeader, ...errors)
+  return
+
 }
 
 export const listS3Files = async () => {
@@ -153,11 +196,11 @@ export const listS3Files = async () => {
     S3_RED_BUCKET,
     `process.env.S3_RED_BUCKET wasn't a string. Was ${typeof S3_RED_BUCKET}`
   )
-  const keys = [];
+  const keys = []
   for await (const data of paginateListObjectsV2({ client: s3RedCli }, { Bucket: S3_RED_BUCKET })) {
-    keys.push(...(data.Contents ?? []));
+    keys.push(...(data.Contents ?? []))
   }
-  keys.sort();
+  keys.sort()
   return keys
 }
 
