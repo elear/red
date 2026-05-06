@@ -27,7 +27,10 @@ export type UploadResult = [
 type ProcessExitFromUploadResultsProps = {
   filename: string
   uploadResults: UploadResult[]
-  exceptions: any[]
+  exceptions: PromisePoolError<
+    number, // rfc number of exception
+    any // the exception
+  >[]
 }
 
 const NUMBER_OF_RFC_UPLOAD_ATTEMPTS = 3
@@ -102,19 +105,23 @@ export const processExitFromUploadResults = ({ filename, uploadResults, exceptio
   }
 }
 
-const stringifyExceptions = (exceptions: unknown[]): string[] => {
+const stringifyExceptions = (exceptions: ProcessExitFromUploadResultsProps['exceptions']): string[] => {
   return exceptions.flatMap((exception): string[] => {
     if (exception instanceof PromisePoolError) {
-      const { item, name, raw } = exception
+      const { item: rfcNumber, name, raw } = exception
+      const errorTitle = `RFC ${rfcNumber} exception:`
       if (raw instanceof AggregateError) {
         return [
-          item,
+          errorTitle,
           name,
           ...raw.errors.map((error) => String(error))
         ]
       }
-    } else if (exception instanceof Error) {
-      return [String(exception)]
+      return [
+        errorTitle,
+        name,
+        String(raw)
+      ]
     }
     return [String(exception)]
   })
