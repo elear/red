@@ -213,7 +213,7 @@ const handlePipes = (child: ChildProcess) => {
 }
 
 export const unPdfStats = {
-  numberOfForks: 0,
+  totalNumberOfForks: 0,
   concurrentChildProcessCount: 0,
   maxConcurrentChildProcessCount: 0
 }
@@ -223,6 +223,7 @@ type StatsEntry = { type: 'FORK', source: 'unpdf' } | { type: 'CLEANUP', source:
 const updateStats = (entry: StatsEntry): void => {
   switch (entry.type) {
     case 'FORK':
+      unPdfStats.totalNumberOfForks++
       unPdfStats.concurrentChildProcessCount++
       unPdfStats.maxConcurrentChildProcessCount = Math.max(
         unPdfStats.maxConcurrentChildProcessCount,
@@ -236,10 +237,10 @@ const updateStats = (entry: StatsEntry): void => {
 }
 
 export const logUnpdfStats = () => {
-  if (unPdfStats.numberOfForks === 0) {
+  if (unPdfStats.totalNumberOfForks === 0) {
     return
   }
   console.log(
-    `UNPDF forked ${unPdfStats.numberOfForks} time(s), with a maximum of ${unPdfStats.maxConcurrentChildProcessCount} concurrent child processes`
+    `UNPDF forked ${unPdfStats.totalNumberOfForks} time(s), with a maximum of ${unPdfStats.maxConcurrentChildProcessCount} concurrent child processes`
   )
 }

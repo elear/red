@@ -79,9 +79,6 @@ export const processExitFromUploadResults = ({ filename, uploadResults, exceptio
   const hasExceptions = exceptions.length > 0
   const hasErrors = uploadResultsWithErrors.length > 0
 
-
-
-
   if (!(hasExceptions || hasErrors)) {
     console.log(`[${filename}] finished successfully`)
     logUnpdfStats()
