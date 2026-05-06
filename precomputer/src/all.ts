@@ -2,7 +2,7 @@ import { PromisePool } from '@supercharge/promise-pool'
 import { range } from 'es-toolkit'
 import { processExitFromUploadResults, processRfcUploadTask } from './utilities/task.ts'
 
-const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 16
+const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
 
 const main = async (
   minRfcNumber: number,
