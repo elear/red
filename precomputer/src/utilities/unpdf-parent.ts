@@ -105,6 +105,7 @@ export const getTextDetails = async (
   base64Pdf: string
 ): Promise<z.infer<typeof GetTextSchema>> => {
   return new Promise((resolve) => {
+    updateStats({ type: 'FORK', source: 'unpdf' })
     const child = fork(forkPath, forkArgs)
     child.on('message', async (_message) => {
       const message = parseMessageFromChild(_message)
