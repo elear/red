@@ -39,7 +39,7 @@ const regenerateContentMetadata = async () => {
     contentMarkdownPaths.map(
       (contentMarkdownPath) =>
         new Promise<ContentMetadata>((resolve) => {
-          ;(async () => {
+          ; (async () => {
             const relativePath = contentMarkdownPath
               .substring(contentPath.length)
               .replace(/\.md$/, '/')
@@ -73,6 +73,8 @@ const regenerateContentMetadata = async () => {
   const _contentMetadata = Object.assign({}, ...markdownMetadataArray)
   // Verify shape of data before saving it
   const contentMetadata = ContentMetadataSchema.parse(_contentMetadata)
+
+  // TODO: order the keys in the JSON to make diffs clearer
 
   console.log(JSON.stringify(contentMetadata, null, 2))
 
