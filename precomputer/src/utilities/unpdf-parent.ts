@@ -7,6 +7,7 @@ import type { ChildProcess } from 'node:child_process'
 import type { ReceiveMessage, ScreenshotPageDone } from './unpdf-child.ts'
 import type { ImageDimensions } from './html.ts'
 import { ImageDimensionsSchema } from './html.ts'
+import { assertNever } from './typescript.ts'
 
 /**
  * Something in unpdf seems to leak memory, so taking eg 10 screenshots
@@ -70,6 +71,7 @@ type MetaScreenshotProps = {
 
 export const getMetaScreenshotOfPage = async ({ base64Pdf, pageNumber, fileName, shouldUploadToS3, dimensions }: MetaScreenshotProps): Promise<ScreenshotPageDone> => {
   return new Promise((resolve) => {
+    updateStats({ type: 'FORK', source: 'unpdf' })
     const child = fork(forkPath, forkArgs)
     child.on('message', async (_message) => {
       const message = parseMessageFromChild(_message)
@@ -229,11 +231,12 @@ const updateStats = (entry: StatsEntry): void => {
         unPdfStats.maxConcurrentChildProcessCount,
         unPdfStats.concurrentChildProcessCount
       )
-      break
+      return
     case 'CLEANUP':
       unPdfStats.concurrentChildProcessCount--
-      break;
+      return
   }
+  assertNever(entry)
 }
 
 export const logUnpdfStats = () => {
