@@ -169,7 +169,7 @@ export async function saveToS3(
         })
       )
       if (putResult.$metadata.httpStatusCode === 200) {
-        console.log(prefixForDebug, `succeeded`)
+        // console.log(prefixForDebug, `succeeded`)
         return
       }
       throw Error(String(putResult))
