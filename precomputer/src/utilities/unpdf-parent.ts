@@ -30,6 +30,7 @@ type ScreenshotProps = {
 
 export const takeScreenshotOfPage = async ({ base64Pdf, pageNumber, fileName, shouldUploadToS3, widthPx }: ScreenshotProps): Promise<ScreenshotPageDone> => {
   return new Promise((resolve) => {
+    updateStats({ type: 'FORK', source: 'unpdf' })
     const child = fork(forkPath, forkArgs)
     child.on('message', async (_message) => {
       const message = parseMessageFromChild(_message)
@@ -162,6 +163,8 @@ const parseMessageFromChild = (message: unknown) => {
 }
 
 const cleanupChild = async (child: ChildProcess) => {
+  updateStats({ type: 'CLEANUP', source: 'unpdf' })
+
   await sleep(50)
 
   // Remove all event listeners
@@ -207,4 +210,36 @@ const handlePipes = (child: ChildProcess) => {
     const txt = data.toString()
     console.log('STDERR: unpdf child', txt)
   })
+}
+
+export const unPdfStats = {
+  numberOfForks: 0,
+  concurrentChildProcessCount: 0,
+  maxConcurrentChildProcessCount: 0
+}
+
+type StatsEntry = { type: 'FORK', source: 'unpdf' } | { type: 'CLEANUP', source: 'unpdf' }
+
+const updateStats = (entry: StatsEntry): void => {
+  switch (entry.type) {
+    case 'FORK':
+      unPdfStats.concurrentChildProcessCount++
+      unPdfStats.maxConcurrentChildProcessCount = Math.max(
+        unPdfStats.maxConcurrentChildProcessCount,
+        unPdfStats.concurrentChildProcessCount
+      )
+      break
+    case 'CLEANUP':
+      unPdfStats.concurrentChildProcessCount--
+      break;
+  }
+}
+
+export const logUnpdfStats = () => {
+  if (unPdfStats.numberOfForks === 0) {
+    return
+  }
+  console.log(
+    `UNPDF forked ${unPdfStats.numberOfForks} time(s), with a maximum of ${unPdfStats.maxConcurrentChildProcessCount} concurrent child processes`
+  )
 }

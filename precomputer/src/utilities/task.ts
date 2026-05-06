@@ -1,5 +1,6 @@
 import { PromisePoolError } from "@supercharge/promise-pool"
 import { uploadRfcData } from "../tasks/rfc.ts"
+import { logUnpdfStats, unPdfStats } from "./unpdf-parent.ts"
 
 /**
  * Use taskItemWasSuccessful() and taskItemWasSkipped() to analyse results
@@ -78,31 +79,36 @@ export const processExitFromUploadResults = ({ filename, uploadResults, exceptio
   const hasExceptions = exceptions.length > 0
   const hasErrors = uploadResultsWithErrors.length > 0
 
-  if (hasExceptions || hasErrors) {
-    console.error(`[${filename}] finished with ${[
-      hasExceptions ? 'exceptions thrown' : undefined,
-      hasErrors ? 'errors' : undefined,
-    ].filter(Boolean).join(', ')}.`)
 
-    if (hasExceptions) {
-      console.error(...stringifyExceptions(exceptions))
-    }
 
-    if (hasErrors) {
-      console.error(
-        uploadResultsWithErrors
-          .map(
-            ([rfcNumber, taskItem]) => {
-              return `RFC ${rfcNumber}: ${stringifyTaskItemErrors(taskItem)}`
-            })
-          .join('. '))
-    }
 
-    process.exit(1)
-  } else {
+  if (!(hasExceptions || hasErrors)) {
     console.log(`[${filename}] finished successfully`)
+    logUnpdfStats()
     process.exit(0)
   }
+
+  console.error(`[${filename}] finished with ${[
+    hasExceptions ? 'exceptions thrown' : undefined,
+    hasErrors ? 'errors' : undefined,
+  ].filter(Boolean).join(', ')}.`)
+  logUnpdfStats()
+
+  if (hasExceptions) {
+    console.error(...stringifyExceptions(exceptions))
+  }
+
+  if (hasErrors) {
+    console.error(
+      uploadResultsWithErrors
+        .map(
+          ([rfcNumber, taskItem]) => {
+            return `RFC ${rfcNumber}: ${stringifyTaskItemErrors(taskItem)}`
+          })
+        .join('. '))
+  }
+
+  process.exit(1)
 }
 
 const stringifyExceptions = (exceptions: ProcessExitFromUploadResultsProps['exceptions']): string[] => {
