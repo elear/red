@@ -124,9 +124,14 @@ export async function getFromS3(
           }
         }
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err && typeof err === 'object' && 'Code' in err && err.Code === 'NoSuchKey') {
+        // The file doesn't exist so there's no need to retry
+        return null
+      }
+
       console.warn(
-        prefixForDebug,
+        `[${prefixForDebug}]`,
         `S3 download problem. ${attemptsRemaining} attempts remaining. Retrying in ${DELAY_BETWEEN_S3_RETRIES_MS}ms`
       )
       await sleep(DELAY_BETWEEN_S3_RETRIES_MS)
