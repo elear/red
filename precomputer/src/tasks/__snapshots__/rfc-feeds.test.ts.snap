@@ -67,11 +67,11 @@ exports[`feeds (rss, atom) 1`] = `
         <summary type="html"><![CDATA[This document specifies a new Network Address Translator (NAT) traversal mode for the Host Identity Protocol (HIP).  The new mode is based on the Interactive Connectivity Establishment (ICE) methodology and UDP encapsulation of data and signaling traffic.  The main difference from the previously specified modes is the use of HIP messages instead of ICE for all NAT traversal procedures due to the kernel-space dependencies of HIP.]]></summary>
     </entry>
     <entry>
-        <title type="html"><![CDATA[RFC 9039: Uniform Resource Names for Device Identifiers]]></title>
-        <id>https://www.rfc-editor.org/info/rfc9039/</id>
-        <link href="https://www.rfc-editor.org/info/rfc9039/"/>
+        <title type="html"><![CDATA[RFC 9046: Babel Information Model]]></title>
+        <id>https://www.rfc-editor.org/info/rfc9046/</id>
+        <link href="https://www.rfc-editor.org/info/rfc9046/"/>
         <updated>2021-06-30T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[This document describes a new Uniform Resource Name (URN) namespace for hardware device identifiers.  A general representation of device identity can be useful in many applications, such as in sensor data streams and storage or in equipment inventories.  A URN-based representation can be passed along in applications that need the information.]]></summary>
+        <summary type="html"><![CDATA[The Babel information model provides structured data elements for a Babel implementation reporting its current state and may allow limited configuration of some such data elements.  This information model can be used as a basis for creating data models under various data modeling regimes.  This information model only includes parameters and parameter values useful for managing Babel over IPv6.]]></summary>
     </entry>
     <entry>
         <title type="html"><![CDATA[RFC 9042: Sieve Email Filtering: Delivery by MAILBOXID]]></title>
@@ -83,11 +83,11 @@ exports[`feeds (rss, atom) 1`] = `
  This document extends the Sieve email filtering language (RFC 5228) to allow using that same unique identifier as a target for fileinto rules and for testing the existence of mailboxes.]]></summary>
     </entry>
     <entry>
-        <title type="html"><![CDATA[RFC 9046: Babel Information Model]]></title>
-        <id>https://www.rfc-editor.org/info/rfc9046/</id>
-        <link href="https://www.rfc-editor.org/info/rfc9046/"/>
+        <title type="html"><![CDATA[RFC 9039: Uniform Resource Names for Device Identifiers]]></title>
+        <id>https://www.rfc-editor.org/info/rfc9039/</id>
+        <link href="https://www.rfc-editor.org/info/rfc9039/"/>
         <updated>2021-06-30T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[The Babel information model provides structured data elements for a Babel implementation reporting its current state and may allow limited configuration of some such data elements.  This information model can be used as a basis for creating data models under various data modeling regimes.  This information model only includes parameters and parameter values useful for managing Babel over IPv6.]]></summary>
+        <summary type="html"><![CDATA[This document describes a new Uniform Resource Name (URN) namespace for hardware device identifiers.  A general representation of device identity can be useful in many applications, such as in sensor data streams and storage or in equipment inventories.  A URN-based representation can be passed along in applications that need the information.]]></summary>
     </entry>
     <entry>
         <title type="html"><![CDATA[RFC 9049: Path Aware Networking: Obstacles to Deployment (A Bestiary of Roads Not Taken)]]></title>
@@ -113,20 +113,18 @@ exports[`feeds (rss, atom) 1`] = `
         <summary type="html"><![CDATA[This document specifies a new type for the 6LoWPAN routing header containing the deadline time for data packets, designed for use over constrained networks.  The deadline time enables forwarding and scheduling decisions for time-critical machine-to-machine (M2M) applications running on Internet-enabled devices that operate within time-synchronized networks.  This document also specifies a representation for the deadline time values in such networks.]]></summary>
     </entry>
     <entry>
-        <title type="html"><![CDATA[RFC 9015: BGP Control Plane for the Network Service Header in Service Function Chaining]]></title>
-        <id>https://www.rfc-editor.org/info/rfc9015/</id>
-        <link href="https://www.rfc-editor.org/info/rfc9015/"/>
+        <title type="html"><![CDATA[RFC 9045: Algorithm Requirements Update to the Internet X.509 Public Key Infrastructure Certificate Request Message Format (CRMF)]]></title>
+        <id>https://www.rfc-editor.org/info/rfc9045/</id>
+        <link href="https://www.rfc-editor.org/info/rfc9045/"/>
         <updated>2021-06-08T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[This document describes the use of BGP as a control plane for networks that support service function chaining. The document introduces a new BGP address family called the "Service Function Chain (SFC) Address Family Identifier / Subsequent Address Family Identifier" (SFC AFI/SAFI) with two Route Types. One Route Type is originated by a node to advertise that it hosts a particular instance of a specified service function. This Route Type also provides "instructions" on how to send a packet to the hosting node in a way that indicates that the service function has to be applied to the packet. The other Route Type is used by a controller to advertise the paths of "chains" of service functions and give a unique designator to each such path so that they can be used in conjunction with the Network Service Header (NSH) defined in RFC 8300.
-
- This document adopts the service function chaining architecture described in RFC 7665.]]></summary>
+        <summary type="html"><![CDATA[This document updates the cryptographic algorithm requirements for the Password-Based Message Authentication Code in the Internet X.509 Public Key Infrastructure Certificate Request Message Format (CRMF) specified in RFC 4211.]]></summary>
     </entry>
     <entry>
-        <title type="html"><![CDATA[RFC 9023: Deterministic Networking (DetNet) Data Plane: IP over IEEE 802.1 Time-Sensitive Networking (TSN)]]></title>
-        <id>https://www.rfc-editor.org/info/rfc9023/</id>
-        <link href="https://www.rfc-editor.org/info/rfc9023/"/>
+        <title type="html"><![CDATA[RFC 9044: Using the AES-GMAC Algorithm with the Cryptographic Message Syntax (CMS)]]></title>
+        <id>https://www.rfc-editor.org/info/rfc9044/</id>
+        <link href="https://www.rfc-editor.org/info/rfc9044/"/>
         <updated>2021-06-08T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[This document specifies the Deterministic Networking IP data plane when operating over a Time-Sensitive Networking (TSN) sub-network.  This document does not define new procedures or processes.  Whenever this document makes statements or recommendations, these are taken from normative text in the referenced RFCs.]]></summary>
+        <summary type="html"><![CDATA[This document specifies the conventions for using the AES-GMAC Message Authentication Code algorithm with the Cryptographic Message Syntax (CMS) as specified in RFC 5652.]]></summary>
     </entry>
 </feed>"
 `;
@@ -200,11 +198,11 @@ exports[`feeds (rss, atom) 2`] = `
             <description><![CDATA[This document specifies a new Network Address Translator (NAT) traversal mode for the Host Identity Protocol (HIP).  The new mode is based on the Interactive Connectivity Establishment (ICE) methodology and UDP encapsulation of data and signaling traffic.  The main difference from the previously specified modes is the use of HIP messages instead of ICE for all NAT traversal procedures due to the kernel-space dependencies of HIP.]]></description>
         </item>
         <item>
-            <title><![CDATA[RFC 9039: Uniform Resource Names for Device Identifiers]]></title>
-            <link>https://www.rfc-editor.org/info/rfc9039/</link>
-            <guid isPermaLink="true">https://www.rfc-editor.org/info/rfc9039/</guid>
+            <title><![CDATA[RFC 9046: Babel Information Model]]></title>
+            <link>https://www.rfc-editor.org/info/rfc9046/</link>
+            <guid isPermaLink="true">https://www.rfc-editor.org/info/rfc9046/</guid>
             <pubDate>Wed, 30 Jun 2021 00:00:00 GMT</pubDate>
-            <description><![CDATA[This document describes a new Uniform Resource Name (URN) namespace for hardware device identifiers.  A general representation of device identity can be useful in many applications, such as in sensor data streams and storage or in equipment inventories.  A URN-based representation can be passed along in applications that need the information.]]></description>
+            <description><![CDATA[The Babel information model provides structured data elements for a Babel implementation reporting its current state and may allow limited configuration of some such data elements.  This information model can be used as a basis for creating data models under various data modeling regimes.  This information model only includes parameters and parameter values useful for managing Babel over IPv6.]]></description>
         </item>
         <item>
             <title><![CDATA[RFC 9042: Sieve Email Filtering: Delivery by MAILBOXID]]></title>
@@ -216,11 +214,11 @@ exports[`feeds (rss, atom) 2`] = `
  This document extends the Sieve email filtering language (RFC 5228) to allow using that same unique identifier as a target for fileinto rules and for testing the existence of mailboxes.]]></description>
         </item>
         <item>
-            <title><![CDATA[RFC 9046: Babel Information Model]]></title>
-            <link>https://www.rfc-editor.org/info/rfc9046/</link>
-            <guid isPermaLink="true">https://www.rfc-editor.org/info/rfc9046/</guid>
+            <title><![CDATA[RFC 9039: Uniform Resource Names for Device Identifiers]]></title>
+            <link>https://www.rfc-editor.org/info/rfc9039/</link>
+            <guid isPermaLink="true">https://www.rfc-editor.org/info/rfc9039/</guid>
             <pubDate>Wed, 30 Jun 2021 00:00:00 GMT</pubDate>
-            <description><![CDATA[The Babel information model provides structured data elements for a Babel implementation reporting its current state and may allow limited configuration of some such data elements.  This information model can be used as a basis for creating data models under various data modeling regimes.  This information model only includes parameters and parameter values useful for managing Babel over IPv6.]]></description>
+            <description><![CDATA[This document describes a new Uniform Resource Name (URN) namespace for hardware device identifiers.  A general representation of device identity can be useful in many applications, such as in sensor data streams and storage or in equipment inventories.  A URN-based representation can be passed along in applications that need the information.]]></description>
         </item>
         <item>
             <title><![CDATA[RFC 9049: Path Aware Networking: Obstacles to Deployment (A Bestiary of Roads Not Taken)]]></title>
@@ -246,20 +244,18 @@ exports[`feeds (rss, atom) 2`] = `
             <description><![CDATA[This document specifies a new type for the 6LoWPAN routing header containing the deadline time for data packets, designed for use over constrained networks.  The deadline time enables forwarding and scheduling decisions for time-critical machine-to-machine (M2M) applications running on Internet-enabled devices that operate within time-synchronized networks.  This document also specifies a representation for the deadline time values in such networks.]]></description>
         </item>
         <item>
-            <title><![CDATA[RFC 9015: BGP Control Plane for the Network Service Header in Service Function Chaining]]></title>
-            <link>https://www.rfc-editor.org/info/rfc9015/</link>
-            <guid isPermaLink="true">https://www.rfc-editor.org/info/rfc9015/</guid>
+            <title><![CDATA[RFC 9045: Algorithm Requirements Update to the Internet X.509 Public Key Infrastructure Certificate Request Message Format (CRMF)]]></title>
+            <link>https://www.rfc-editor.org/info/rfc9045/</link>
+            <guid isPermaLink="true">https://www.rfc-editor.org/info/rfc9045/</guid>
             <pubDate>Tue, 08 Jun 2021 00:00:00 GMT</pubDate>
-            <description><![CDATA[This document describes the use of BGP as a control plane for networks that support service function chaining. The document introduces a new BGP address family called the "Service Function Chain (SFC) Address Family Identifier / Subsequent Address Family Identifier" (SFC AFI/SAFI) with two Route Types. One Route Type is originated by a node to advertise that it hosts a particular instance of a specified service function. This Route Type also provides "instructions" on how to send a packet to the hosting node in a way that indicates that the service function has to be applied to the packet. The other Route Type is used by a controller to advertise the paths of "chains" of service functions and give a unique designator to each such path so that they can be used in conjunction with the Network Service Header (NSH) defined in RFC 8300.
-
- This document adopts the service function chaining architecture described in RFC 7665.]]></description>
+            <description><![CDATA[This document updates the cryptographic algorithm requirements for the Password-Based Message Authentication Code in the Internet X.509 Public Key Infrastructure Certificate Request Message Format (CRMF) specified in RFC 4211.]]></description>
         </item>
         <item>
-            <title><![CDATA[RFC 9023: Deterministic Networking (DetNet) Data Plane: IP over IEEE 802.1 Time-Sensitive Networking (TSN)]]></title>
-            <link>https://www.rfc-editor.org/info/rfc9023/</link>
-            <guid isPermaLink="true">https://www.rfc-editor.org/info/rfc9023/</guid>
+            <title><![CDATA[RFC 9044: Using the AES-GMAC Algorithm with the Cryptographic Message Syntax (CMS)]]></title>
+            <link>https://www.rfc-editor.org/info/rfc9044/</link>
+            <guid isPermaLink="true">https://www.rfc-editor.org/info/rfc9044/</guid>
             <pubDate>Tue, 08 Jun 2021 00:00:00 GMT</pubDate>
-            <description><![CDATA[This document specifies the Deterministic Networking IP data plane when operating over a Time-Sensitive Networking (TSN) sub-network.  This document does not define new procedures or processes.  Whenever this document makes statements or recommendations, these are taken from normative text in the referenced RFCs.]]></description>
+            <description><![CDATA[This document specifies the conventions for using the AES-GMAC Message Authentication Code algorithm with the Cryptographic Message Syntax (CMS) as specified in RFC 5652.]]></description>
         </item>
     </channel>
 </rss>"
