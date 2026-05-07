@@ -333,6 +333,14 @@ export const isAtomLink = (href?: string): boolean =>
 
 export const isRfcBlobstoreLink = (href?: string): boolean => !!href?.startsWith(RFC_BLOBSTORE_PREFIX)
 
+export const isApiLink = (href?: string): boolean => {
+  if (!href) {
+    return false
+  }
+  return href.startsWith('/api/')
+}
+
+
 /**
  * Links to files hosted in the blobstore shouldn't use Nuxt SPA links
  * they should use conventional `<a href>` links.
