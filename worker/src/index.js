@@ -98,6 +98,7 @@ router
   })
   .get('/in-notes/:extra+', (req) => Response.redirect(`https://in-notes.rfc-editor.org/${req.params.extra}`, 302))
   .get('/materials/:extra+', (req) => Response.redirect(`https://materials.rfc-editor.org/${req.params.extra}`, 302))
+  .get('/errata/:extra+', (req) => Response.redirect(`https://errata${env.ENV_DOMAIN}.rfc-editor.org/${req.params.extra}`, 302))
 
   // Auth
   // -> enable to restrict some paths to datatracker login
