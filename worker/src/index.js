@@ -62,6 +62,8 @@ router
   .get('/how-to-verify', redirectTo('/series/rfc-errata/', 302))
   .get('/ien/ien-index.html', redirectTo('/ien/ien-index/', 302))
   .get('/current_queue.php', redirectTo(`https://queue${env.ENV_DOMAIN}.rfc-editor.org`, 302))
+  .get('/queue2.xml', redirectTo(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/api/v1/queue.xml`, 302))
+  .get('/queue.xml', redirectTo(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/api/v1/queue.xml`, 302))
 
   // Dynamic Redirects
   .get('/authors/:extra+', addNormalizedPath, (req) => {
