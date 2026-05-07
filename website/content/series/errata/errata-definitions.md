@@ -17,5 +17,5 @@ description: the meaning of status and type in the RFC errata system
 
 | Type Name | Description | Examples |
 | --- | --- | --- |
-| **Technical** | error in the technical content (note that changes to the usage of the key words described in [BCP 14](/info/bcp14 "Key words for use in RFCs to Indicate Requirement Levels") are considered technical) | - [Erratum ID 1456](https://errata.rfc-editor.org/eid1456/)<br>- [Erratum ID 1593](https://errata.rfc-editor.org/eid1593/) |
+| **Technical** | error in the technical content (note that changes to the usage of the key words described in [BCP 14](/info/bcp14/ "Key words for use in RFCs to Indicate Requirement Levels") are considered technical) | - [Erratum ID 1456](https://errata.rfc-editor.org/eid1456/)<br>- [Erratum ID 1593](https://errata.rfc-editor.org/eid1593/) |
 | **Editorial** | a spelling, grammar, punctuation, or syntax error that does not affect the technical meaning | - [Erratum ID 1557](https://errata.rfc-editor.org/eid1557/)<br>- [Erratum ID 1579](https://errata.rfc-editor.org/eid1579/) |

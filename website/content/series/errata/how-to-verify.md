@@ -11,7 +11,7 @@ These instructions are for verifiers to log in and verify, reject, hold, or edit
    * **Original Text:** the text as it appears in the RFC
    * **Corrected Text:** the text as it should appear
    * **Notes:** any notes or rationale that are relevant to this report
-5. Evaluate the accuracy and choose one option for the report (please see the full [status definitions](/errata/errata-definitions)):
+5. Evaluate the accuracy and choose one option for the report (please see the full [status definitions](/series/errata/errata-definitions)):
    * **Save and Continue Editing** to edit the content without changing the status.
    * **Save and Mark Verified** if the report is necessary and valid.
    * **Save and Mark Rejected** if the report is invalid.

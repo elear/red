@@ -43,6 +43,8 @@ const normalizedSlug = slug.replace(/^\//, '').replace(/\/$/, '')
 
 const markdownPath = `/${normalizedSlug}`
 
+console.log('|||||||||||||||||||||||', markdownPath, '?????????????????')
+
 // Changing this schema? Be sure to copy changes to generate-content-metadata.ts
 const ContentMetadataSchema = z.record(
   /**
