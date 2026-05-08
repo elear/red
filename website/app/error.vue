@@ -2,7 +2,6 @@
 <template>
   <Header />
   <main class="pt-10 pb-20 text-center max-w-100 mx-auto">
-
     <h1 class="text-5xl">Error {{ props.error.status ?? props.error.statusCode }}</h1>
     <p class="mt-4">{{ props.error.message ?? props.error.statusMessage }}</p>
 
@@ -16,7 +15,7 @@
         <template v-if="props.error.data?.linkUrl">
           or
         </template>
-        <a :href="HOME_PATH" @click="handleHomepage" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'underline']">
+        <a :href="HOME_PATH" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'underline']" @click="handleHomepage">
           <template v-if="props.error.data?.linkUrl">
             go
           </template>
@@ -28,7 +27,7 @@
       </li>
       <li>
         or
-        <a :href="SEARCH_PATH" @click="handleSearch" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'underline']">
+        <a :href="SEARCH_PATH" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'underline']" @click="handleSearch">
           go to search.
         </a>
       </li>
@@ -39,13 +38,13 @@
 
 <script setup lang="ts">
 import type { NuxtError } from '#app'
-import { ANCHOR_COLOR_TAILWIND_STYLE } from './utilities/theme';
-import { HOME_PATH, SEARCH_PATH } from './utilities/url';
+import { ANCHOR_COLOR_TAILWIND_STYLE } from './utilities/theme'
+import { HOME_PATH, SEARCH_PATH } from './utilities/url'
 
 type Props = {
   error: NuxtError & {
     data: {
-      linkText: string,
+      linkText: string
       linkUrl: string
     }
   }
