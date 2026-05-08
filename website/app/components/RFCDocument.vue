@@ -25,7 +25,6 @@ import { RfcBucketHtmlDocumentSchema } from '~/utilities/rfc-validators'
 import {
   apiRfcBucketDocumentPathBuilder,
   infoSeriesPathBuilder,
-  rfcFormatPathBuilder,
   useApiV1UrlOrigin,
   usePublicSiteUrlOrigin
 } from '~/utilities/url'
@@ -41,7 +40,6 @@ const props = defineProps<Props>()
 
 const route = useRoute()
 
-const publicSiteUrlOrigin = usePublicSiteUrlOrigin()
 const apiV1UrlOrigin = useApiV1UrlOrigin()
 
 const sanitisedId = computed(() => `${props.rfcId.type}${props.rfcId.number}`)
