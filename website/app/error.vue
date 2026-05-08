@@ -1,24 +1,26 @@
 <!-- error.vue -->
 <template>
-  <Header />
-  <main class="pt-10 pb-20 text-center max-w-100 mx-auto">
-    <h1 class="text-5xl">Error {{ props.error.status ?? props.error.statusCode }}</h1>
-    <p class="mt-4">{{ props.error.message ?? props.error.statusMessage }}</p>
-    <ul class="pt-4 pl-6 flex flex-col gap-3">
-      <li>
-        <a :href="HOME_PATH" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'underline']" @click="handleHomepage">
-          Go to homepage.
-        </a>
-      </li>
-      <li>
-        or
-        <a :href="SEARCH_PATH" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'underline']" @click="handleSearch">
-          go to search.
-        </a>
-      </li>
-    </ul>
-  </main>
-  <Footer />
+  <div class="flex flex-col min-h-[100vh]">
+    <Header />
+    <main class="flex-1 pt-10 pb-20 text-center max-w-100 mx-auto">
+      <h1 class="text-5xl">Error {{ props.error.status ?? props.error.statusCode }}</h1>
+      <p class="mt-4">{{ props.error.message ?? props.error.statusMessage }}</p>
+      <ul class="pt-4 pl-6 flex flex-col gap-3">
+        <li>
+          <a :href="HOME_PATH" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'underline']" @click="handleHomepage">
+            Go to homepage.
+          </a>
+        </li>
+        <li>
+          or
+          <a :href="SEARCH_PATH" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'underline']" @click="handleSearch">
+            go to search.
+          </a>
+        </li>
+      </ul>
+    </main>
+    <Footer />
+  </div>
 </template>
 
 <script setup lang="ts">
