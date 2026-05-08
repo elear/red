@@ -1,36 +1,21 @@
 <template>
   <BodyLayoutDocument>
     <template #sidebar>
-      <RFCDocumentSidebar
-        v-if="rfcBucketHtmlDocument"
-        v-model:selected-tab="selectedTab"
-        v-model:is-modal-open="isModalOpen"
-        :rfc-bucket-html-document="rfcBucketHtmlDocument"
-        :has-table-of-contents="hasToc"
-        :goto-errata="gotoErrata"
-        :change-tab="changeTab"
-      />
+      <RFCDocumentSidebar v-if="rfcBucketHtmlDocument" v-model:selected-tab="selectedTab"
+        v-model:is-modal-open="isModalOpen" :rfc-bucket-html-document="rfcBucketHtmlDocument"
+        :has-table-of-contents="hasToc" :goto-errata="gotoErrata" :change-tab="changeTab" />
     </template>
     <template v-if="rfcBucketHtmlDocumentError">
       <div class="container mx-auto">
-        <Alert
-          level="1"
-          variant="warning"
-          heading="Error"
-        >
+        <Alert level="1" variant="warning" heading="Error">
           {{ rfcBucketHtmlDocumentError }}
         </Alert>
       </div>
     </template>
 
-    <RFCDocumentBody
-      v-if="rfcBucketHtmlDocument"
-      v-model:is-modal-open="isModalOpen"
-      :rfc-bucket-html-document="rfcBucketHtmlDocument"
-      :breadcrumb-items="breadcrumbItems"
-      :goto-errata="gotoErrata"
-      :change-tab="changeTab"
-    />
+    <RFCDocumentBody v-if="rfcBucketHtmlDocument" v-model:is-modal-open="isModalOpen"
+      :rfc-bucket-html-document="rfcBucketHtmlDocument" :breadcrumb-items="breadcrumbItems" :goto-errata="gotoErrata"
+      :change-tab="changeTab" />
   </BodyLayoutDocument>
 </template>
 
@@ -104,9 +89,13 @@ const { data: rfcBucketHtmlDocument, error: rfcBucketHtmlDocumentError } =
 if (rfcBucketHtmlDocumentError.value) {
   console.error(rfcBucketHtmlDocumentError.value)
   throw createError({
-    statusCode: 404,
-    statusMessage: `No ${sanitisedId.value} content found. If this is a recently published RFC please try again later. Try also ${publicSiteUrlOrigin}${rfcFormatPathBuilder(sanitisedId.value, 'html')}`,
-    fatal: true
+    status: 404,
+    statusText: `No ${sanitisedId.value} content found. If this is a recently published RFC please try again later.`,
+    fatal: true,
+    data: {
+      linkText: `Try also ${rfcFormatPathBuilder(sanitisedId.value, 'html')}`,
+      linkUrl: `${publicSiteUrlOrigin}${rfcFormatPathBuilder(sanitisedId.value, 'html')}`
+    }
   })
 }
 

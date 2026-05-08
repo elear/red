@@ -1,26 +1,12 @@
 <template>
-  <VerticalScrollable
-    v-if="props"
-    ref="vertical-scrollable"
-    :class="`overflow-y-auto min-h-0 flex flex-col ${props.wrapperClass}`"
-  >
+  <VerticalScrollable v-if="props" ref="vertical-scrollable"
+    :class="`overflow-y-auto min-h-0 flex flex-col ${props.wrapperClass}`">
     <slot />
-    <TableOfContentsHighlightSection
-      :sections="props.toc.sections"
-      :depth="0"
-      :list-type-element="listTypeElement"
-      :active-id="activeId"
-      :handle-click="handleClick"
-      :make-toc-id="makeTocId"
-      :is-ssr="isSSR"
-      :list-class="props.listClass"
-      :nested-list-class="props.nestedListClass"
-      :links-class="props.linksClass"
-      :links-active-class="props.linksActiveClass"
-      :link-class="props.linkClass"
-      :last-link-class="props.lastLinkClass"
-      :show-last-link-icon="props.showLastLinkIcon"
-    />
+    <TableOfContentsHighlightSection :sections="props.toc.sections" :depth="0" :list-type-element="listTypeElement"
+      :active-id="activeId" :handle-click="handleClick" :make-toc-id="makeTocId" :is-ssr="isSSR"
+      :list-class="props.listClass" :nested-list-class="props.nestedListClass" :links-class="props.linksClass"
+      :links-active-class="props.linksActiveClass" :link-class="props.linkClass" :last-link-class="props.lastLinkClass"
+      :show-last-link-icon="props.showLastLinkIcon" />
   </VerticalScrollable>
 </template>
 
@@ -123,7 +109,7 @@ useScrollTocContainer({
 const isSSR = ref(true)
 onMounted(() => {
   console.log('tableofcontentshighlight onmounted')
-  if(activeId.value) {
+  if (activeId.value) {
     handleClick(activeId.value)
   }
   isSSR.value = false

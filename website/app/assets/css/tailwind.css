@@ -328,14 +328,6 @@ html.dark::selection {
   -webkit-text-stroke-width: 0.7px;
 }
 
-.toc-highlight-transition {
-  transition: all 150ms;
-}
-
-.text-fake-bold {
-  -webkit-text-stroke: 0.5px bold;
-}
-
 .wrap-anywhere {
   overflow-wrap: anywhere;
 }

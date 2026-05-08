@@ -3,7 +3,6 @@ import { throttle, clamp } from 'es-toolkit'
 import { watchDebounced } from '@vueuse/core'
 import { prefersReducedMotion } from './accessibility'
 import { isProd } from './url'
-import type { shouldPropagateTraceHeaders } from '@opentelemetry/sdk-trace-web'
 
 /**
  * RFCs for testing:
@@ -333,9 +332,6 @@ export const useScrollTocContainer = ({
     const isLessThanBottom =
       tocLinkRect.bottom <= wrapperRect.bottom - SCROLL_BUFFER_PX
     const isVisible = isMoreThanTop && isLessThanBottom // is visible within viewport
-
-
-    console.log({ shouldScrollImmediately })
 
     if (!shouldScrollImmediately && isVisible) {
       // no scrolling is required. There's nothing to do in this loop
