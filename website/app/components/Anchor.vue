@@ -40,7 +40,7 @@ const isApi = computed(() => isApiLink(props.href))
 
 const sanitisedAnchorProps = computed(() => {
   const isNuxtLink =
-    props.href && isInternal.value && !isMailTo.value && !isHash.value && !isBlobStore.value && !isApi
+    props.href && isInternal.value && !isMailTo.value && !isHash.value && !isBlobStore.value && !isApi.value
   const isExternalLink =
     props.href && !isInternal.value && !isMailTo.value && !isHash.value
 

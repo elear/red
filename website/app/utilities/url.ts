@@ -340,7 +340,6 @@ export const isApiLink = (href?: string): boolean => {
   return href.startsWith('/api/')
 }
 
-
 /**
  * Links to files hosted in the blobstore shouldn't use Nuxt SPA links
  * they should use conventional `<a href>` links.
