@@ -46,7 +46,10 @@ export function createBlobResponse(object, contentType, canonicalUrl) {
     headers.set('Content-Type', contentType)
   }
   if (canonicalUrl) {
-    headers.set('Link', `<${canonicalUrl}>; rel="canonical"`)
+    const formattedCanonicalUrl = formatCanonicalHeader(canonicalUrl)
+    if (formattedCanonicalUrl) {
+      headers.set('Link', formattedCanonicalUrl)
+    }
   }
 
   return new Response(object.body, {
@@ -99,5 +102,21 @@ export function detectContentType(path) {
         // per RFC 7303 don't use `text/xml` and instead use `application/xml`.
         return 'application/xml;charset=utf-8'
       }
+  }
+}
+
+function formatCanonicalHeader(url) {
+  try {
+      const sanitisedUrl = new URL(url).toString() // can throw on invalid urls, which is preferable over adding an http header that might exploit some syntax quirk
+      // canonical header is surrounded by '<' and '>' chars, so special characters must be escaped.
+      // encodeURI handles spaces, special characters, but not / : ? = &, so protocol prefix is left
+      // untouched
+      const encodedUrl = encodeURI(url)
+        .replace(/</g, '%3C') // manually replace < and > just in case they are in the URL string
+        .replace(/>/g, '%3E')
+
+      return `<${encodedUrl}>; rel="canonical"`;
+  } catch (e) {
+    return undefined
   }
 }
