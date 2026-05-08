@@ -355,7 +355,7 @@ export const isBlobStoreLink = (href?: string): boolean => {
 }
 
 /**
- * Converts arbitrary text into a custom id that is DOMId compliant (ie no whitespace)
+ * Converts arbitrary string into a custom id that is DOMId compliant (ie no whitespace)
  *
  * WARNING: this does not ensure unique DOM ids. It's not a uuid/useId hook. It just derives
  * an id from the input string.

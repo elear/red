@@ -3,6 +3,7 @@ import { throttle, clamp } from 'es-toolkit'
 import { watchDebounced } from '@vueuse/core'
 import { prefersReducedMotion } from './accessibility'
 import { isProd } from './url'
+import type { shouldPropagateTraceHeaders } from '@opentelemetry/sdk-trace-web'
 
 /**
  * RFCs for testing:
@@ -149,7 +150,13 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
   const throttledUpdateElements = throttle(updateElements, 100)
   watch(ids, throttledUpdateElements)
 
-  const animateActiveIndex = () => {
+  const animateActiveIndex = (shouldScrollImmediately: boolean) => {
+    if (shouldScrollImmediately) {
+      console.log('scroll.ts animateActiveIndex ', targetIdIndex)
+      setActiveIdByIndex(targetIdIndex)
+      return
+    }
+
     const direction = targetIdIndex > activeIdIndex ? 1 : -1
 
     let newActiveIdIndex = activeIdIndex + Math.round(velocity)
@@ -185,12 +192,12 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
   const animateSoon = () => {
     clearTimeouts()
     timers.push(setTimeout(
-      animateActiveIndex,
+      () => animateActiveIndex(false),
       1000 / ANIMATE_INDEX_FPS
     ))
   }
 
-  const handleScroll = () => {
+  const handleScroll = (shouldScrollImmediately: boolean) => {
     const { scrollY } = window
     targetIdIndex = getIdsIndexOfClosestTop(scrollY)
     const targetElement = elements[targetIdIndex]
@@ -200,6 +207,10 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
     if (targetIdIndex === activeIdIndex) {
       // nothing to do, exit early
       // console.log('No activeId change needed')
+      return
+    }
+    if (shouldScrollImmediately) {
+      animateActiveIndex(shouldScrollImmediately)
       return
     }
     // console.log(
@@ -216,7 +227,7 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
     animateSoon()
   }
 
-  const throttledHandleScroll = throttle(handleScroll, 1000 / SCROLL_FPS, {
+  const throttledHandleScroll = throttle(() => handleScroll(false), 1000 / SCROLL_FPS, {
     // leading because we want this to fire as early as possible but not again for FPS
     edges: ["leading"]
   })
@@ -224,13 +235,14 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
   const throttledHandleResize = throttle(
     () => {
       updateElements()
-      handleScroll()
+      handleScroll(false)
     },
     100,
     { edges: ['leading'] }
   )
 
   onMounted(() => {
+    updateElements()
     nextTick(updateElements)
     document.addEventListener('scroll', throttledHandleScroll, {
       passive: true
@@ -245,7 +257,8 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
     document.addEventListener('resize', throttledHandleResize, {
       passive: true
     })
-    handleScroll()
+    handleScroll(true)
+    console.log('scroll.ts:useTocActiveId() on mounted', activeIdRef.value)
   })
 
   onUnmounted(() => {
@@ -278,106 +291,116 @@ export const useScrollTocContainer = ({
 }: UseScrollTocContainerProps) => {
   let previousTargetId = toTargetIdRef.value
 
+  const scrollToTargetId = (shouldScrollImmediately: boolean) => {
+    /**
+     * Scrolls the TOC in an attempt to make the active item always visible to the user
+     */
+    const { value: wrapper } = wrapperRef
+
+    if (!toTargetIdRef.value) {
+      console.info('No activeIdRef', toTargetIdRef.value)
+      return
+    }
+
+    if (!previousTargetId) {
+      console.info('No previousActiveId', previousTargetId)
+      return
+    }
+    const previousTocLink = document.getElementById(
+      makeTocId(previousTargetId)
+    )
+    const tocLink = document.getElementById(makeTocId(toTargetIdRef.value))
+
+    if (!tocLink || !wrapper || !previousTocLink) {
+      // because this function is in a debounced callback it can execute
+      // after the Vue component was removed from the DOM.
+      // So this state isn't necessarily an error, even though it could
+      // mask errors.
+      console.info('useScrollTocContainer() element(s) not found. This can happen if component was quickly unmounted', {
+        tocLink,
+        wrapper,
+        previousTocLink
+      })
+      return
+    }
+
+    const tocLinkRect = tocLink.getBoundingClientRect()
+
+    const wrapperRect = wrapper.getBoundingClientRect()
+
+    const isMoreThanTop =
+      tocLinkRect.top >= wrapperRect.top + SCROLL_BUFFER_PX
+    const isLessThanBottom =
+      tocLinkRect.bottom <= wrapperRect.bottom - SCROLL_BUFFER_PX
+    const isVisible = isMoreThanTop && isLessThanBottom // is visible within viewport
+
+
+    console.log({ shouldScrollImmediately })
+
+    if (!shouldScrollImmediately && isVisible) {
+      // no scrolling is required. There's nothing to do in this loop
+      //
+      // console.log(
+      //   "Checked whether TOC needed scrolling but it didn't (active option was already visible)",
+      //   {
+      //     isVisible,
+      //     isMoreThanTop,
+      //     isLessThanBottom,
+      //     SCROLL_BUFFER_PX,
+      //     tocLinkRect,
+      //     wrapperRect
+      //   }
+      // )
+    } else {
+      const middleOfScrollableAreaPx = wrapper.offsetHeight / 2
+
+      const previousTocLinkRect = previousTocLink.getBoundingClientRect()
+      const direction =
+        previousTocLinkRect.top === tocLinkRect.top ? 0
+          : previousTocLinkRect.top > tocLinkRect.top ? 1
+            : -1
+      /**
+       * The simplest way to bring a TOC item into view is to scroll it into the middle.
+       *
+       * A more sophisticated approach is to consider a directional bias. Use knowledge of the
+       * scroll direction (based on previous activeId scroll) to offset the middle by %, either
+       * above or below the middle depending on the direction.
+       */
+      const scrollDirectionalBiasPx =
+        wrapperRect.height * SCROLL_DIRECTIONAL_BIAS_VH_RATIO
+      const directionalBiasPx = scrollDirectionalBiasPx * -direction
+
+      const targetTopPx =
+        wrapper.scrollTop +
+        tocLinkRect.top -
+        middleOfScrollableAreaPx +
+        directionalBiasPx
+
+      wrapper.scrollTo({
+        top: targetTopPx,
+        behavior: shouldScrollImmediately || prefersReducedMotion() ? 'instant' : 'smooth'
+      })
+    }
+
+    previousTargetId = toTargetIdRef.value
+  }
+
   watchDebounced(
     [toTargetIdRef, wrapperRef],
-    () => {
-      /**
-       * Scrolls the TOC in an attempt to make the active item always visible to the user
-       */
-      const { value: wrapper } = wrapperRef
-
-      if (!toTargetIdRef.value) {
-        console.info('No activeIdRef', toTargetIdRef.value)
-        return
-      }
-
-      if (!previousTargetId) {
-        console.info('No previousActiveId', previousTargetId)
-        return
-      }
-      const previousTocLink = document.getElementById(
-        makeTocId(previousTargetId)
-      )
-      const tocLink = document.getElementById(makeTocId(toTargetIdRef.value))
-
-      if (!tocLink || !wrapper || !previousTocLink) {
-        // because this function is in a debounced callback it can execute
-        // after the Vue component was removed from the DOM.
-        // So this state isn't necessarily an error, even though it could
-        // mask errors.
-        console.info('useScrollTocContainer() element(s) not found. This can happen if component was quickly unmounted', {
-          tocLink,
-          wrapper,
-          previousTocLink
-        })
-        return
-      }
-
-      const tocLinkRect = tocLink.getBoundingClientRect()
-
-      const wrapperRect = wrapper.getBoundingClientRect()
-
-      const isMoreThanTop =
-        tocLinkRect.top >= wrapperRect.top + SCROLL_BUFFER_PX
-      const isLessThanBottom =
-        tocLinkRect.bottom <= wrapperRect.bottom - SCROLL_BUFFER_PX
-      const isVisible = isMoreThanTop && isLessThanBottom // is visible within viewport
-
-      if (isVisible) {
-        // no scrolling is required. There's nothing to do in this loop
-        //
-        // console.log(
-        //   "Checked whether TOC needed scrolling but it didn't (active option was already visible)",
-        //   {
-        //     isVisible,
-        //     isMoreThanTop,
-        //     isLessThanBottom,
-        //     SCROLL_BUFFER_PX,
-        //     tocLinkRect,
-        //     wrapperRect
-        //   }
-        // )
-      } else {
-        const middleOfScrollableAreaPx = wrapper.offsetHeight / 2
-
-        const previousTocLinkRect = previousTocLink.getBoundingClientRect()
-        const direction =
-          previousTocLinkRect.top === tocLinkRect.top ? 0
-            : previousTocLinkRect.top > tocLinkRect.top ? 1
-              : -1
-        /**
-         * The simplest way to bring a TOC item into view is to scroll it into the middle.
-         *
-         * A more sophisticated approach is to consider a directional bias. Use knowledge of the
-         * scroll direction (based on previous activeId scroll) to offset the middle by %, either
-         * above or below the middle depending on the direction.
-         */
-        const scrollDirectionalBiasPx =
-          wrapperRect.height * SCROLL_DIRECTIONAL_BIAS_VH_RATIO
-        const directionalBiasPx = scrollDirectionalBiasPx * -direction
-
-        const targetTopPx =
-          wrapper.scrollTop +
-          tocLinkRect.top -
-          middleOfScrollableAreaPx +
-          directionalBiasPx
-
-        wrapper.scrollTo({
-          top: targetTopPx,
-          behavior: prefersReducedMotion() ? 'instant' : 'smooth'
-        })
-      }
-
-      previousTargetId = toTargetIdRef.value
-    },
+    () => scrollToTargetId(false),
     { debounce: 200, maxWait: 400 }
   )
+
+  onMounted(() => {
+    console.log('scroll.ts:useScrollTocContainer() on mounted')
+    scrollToTargetId(true)
+  })
 }
 
 /**
- *  There have been subtle bugs in Vue rendering HTML that affect DOM ids,
+ *  There have been subtle bugs in rendering HTML that affect DOM ids,
  *  so --in the browser-- we check whether the ids given to useActiveScroll()
- *  actually exist and log some feedback.
+ *  actually exist in the DOM and, if not, log some feedback.
  *
  *  The possible reasons for an id missing are many, but so far
  *

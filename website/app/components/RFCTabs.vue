@@ -75,8 +75,8 @@
         wrapper-class="min-h-0 pt-4 pb-2 px-4"
         list-class="mr-1"
         nested-list-class="pl-2"
-        :links-class="`block text-sm py-2 dark:border-t-gray-500 toc-highlight-transition ${ANCHOR_COLOR_TAILWIND_STYLE}`"
-        links-active-class="toc-highlight"
+        :links-class="`block text-sm py-2 dark:border-t-gray-500 ${ANCHOR_COLOR_TAILWIND_STYLE}`"
+        links-active-class="text-bold-without-layout-shift"
         link-class="block no-underline hover:underline no-underline hover:underline focus:underline"
         last-link-class="flex-1"
       >
@@ -96,7 +96,7 @@
         list-class="mt-2 mr-1 pl-0 -ml-1"
         nested-list-class="pl-2"
         :list-item-class="`block text-sm py-2 dark:border-t-gray-500 ${ANCHOR_COLOR_TAILWIND_STYLE}`"
-        links-active-class="text-shadow-bold"
+        links-active-class="text-bold-without-layout-shift"
         link-class="block no-underline hover:underline"
         last-link-class="flex-1"
       >
@@ -582,6 +582,6 @@ const TAB_CONTENT_CLASS = 'flex flex-col min-h-0 text-black dark:text-white'
 const DEFAULT_CLASS =
   'py-4 px-[1px] whitespace-nowrap border-b-2 hover:bg-gray-100 dark:hover:bg-gray-900 text-sm md:text-md cursor-pointer'
 const SELECTED_CLASS =
-  'text-shadow-bold text-gray-900 dark:text-gray-100 border-b-blue-900 dark:border-b-white font-medium'
+  'text-bold-without-layout-shift text-gray-900 dark:text-gray-100 border-b-blue-900 dark:border-b-white font-medium'
 const UNSELECTED_CLASS = 'border-b-transparent text-gray-800 dark:text-gray-300'
 </script>

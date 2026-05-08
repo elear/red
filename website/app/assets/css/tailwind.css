@@ -296,46 +296,40 @@ html.dark::selection {
   -webkit-print-color-adjust: exact !important;
 }
 
-.text-shadow-bold {
+.text-bold-without-layout-shift {
   /*
     AKA fake bold.
 
     This is an alternative to real bold that doesn't cause reflow,
     so that elements can be toggled bold without causing a distracting reflow.
 
-    Arguably this causes poor text rendering, but is considered less
-    worse than the alternatives, which are:
-    1) toggling bold can cause line wrapping, bumping following TOC items further
-       down the page when bold which creates a lot of distracting movement;
-    2) preallocating layout space for bold like
-       https://css-tricks.com/bold-on-hover-without-the-layout-shift/ 
-       succesfully prevents one TOC item from affecting the layout of the next,
-       but that only works for particular layouts (eg horizontal) where
-       preallocating an extra empty line of text for the bold version wouldn't
-       look odd, but in a vertical list of TOC items then having some have extra
-       whitespace between them does look odd.
-    3) using monospaced font, which isn't per the design
-    4) using `-webkit-text-stroke`
+    Bold reflow could cause enough width to cause an additional line break, causing
+    significant jitter as text is bolded. Sometimes we want to avoid that.
+
+    Arguably the CSS properties chosen cause poor text rendering, however sometimes
+    this is worse than UX jitters, so we want text bold without layout shift.
+    
+    Our options    
+    1)  Using CSS property `text-shadow` to make it look bold. eg,
+          text-shadow: -0.5px -0.5px 0.5px currentColor;
+    2)  Preallocating layout space for bold like
+        https://css-tricks.com/bold-on-hover-without-the-layout-shift/ 
+        succesfully prevents one TOC item from affecting the layout of the next,
+        but that only works for particular layouts (eg horizontal) where
+        preallocating an extra empty line of text for the bold version wouldn't
+        look odd, but in a vertical list of TOC items then having some have extra
+        whitespace between them does look odd so we really can't preallocate space.
+    3)  using a specific font that doesn't vary width by boldness, which isn't per
+        the design.
+    4)  using `-webkit-text-stroke`
 
     So this is the least worst approach until a better one comes along.
    */
-  text-shadow: -0.5px -0.5px 0.5px currentColor;
+  -webkit-text-stroke-width: 0.7px;
 }
 
 .toc-highlight-transition {
-  transition: text-shadow 150ms;
-}
-
-.toc-highlight {
-  text-shadow:
-    -0.5px -0.5px 0.5px currentColor,
-    -0.5px 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-html.dark .toc-highlight {
-  text-shadow:
-    -0.5px 0px 0.5px currentColor,
-    -0.5px 1px 5px rgba(255, 255, 255, 0.7);
+  transition: all 150ms;
 }
 
 .text-fake-bold {

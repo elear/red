@@ -56,6 +56,13 @@ export default defineNuxtConfig({
           preserveModules: true
         }
       }
+    },
+    optimizeDeps: {
+      include: [
+        'es-toolkit',
+        'luxon',
+        'zod',
+      ]
     }
   },
   nitro: {

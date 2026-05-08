@@ -122,6 +122,10 @@ useScrollTocContainer({
 
 const isSSR = ref(true)
 onMounted(() => {
+  console.log('tableofcontentshighlight onmounted')
+  if(activeId.value) {
+    handleClick(activeId.value)
+  }
   isSSR.value = false
 })
 
