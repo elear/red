@@ -1,18 +1,20 @@
 /**
  * Create a redirect response handler
  *
- * @param {string} urlPath Redirect path or full URL
+ * @param {string} targetUrl Redirect path or full URL
  * @param {number} status Status code
  * @returns {Response} Redirect response
  */
-export function redirectTo(urlPath, status = 302) {
+export function redirectTo(targetUrl, status = 302) {
   return (req, _env) => {
-    if (urlPath.startsWith('/')) {
-      const newUrl = new URL(req.url)
-      newUrl.pathname = urlPath
+    if (
+      // is it a relative url
+      targetUrl.startsWith('/')
+    ) {      
+      const newUrl = new URL(targetUrl, req.url)
       return Response.redirect(newUrl.href, status)
     } else {
-      return Response.redirect(urlPath, status)
+      return Response.redirect(targetUrl, status)
     }
   }
 }
