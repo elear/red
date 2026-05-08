@@ -7,7 +7,7 @@ Please see the following for information on RFC style:
 - [RFC 7322: "RFC Style Guide"](/info/rfc7322/)
   - [Updates to RFC Style Guide](#updates-to-the-rfc-style-guide)
 - [RFC Series Editor statement on authorship](https://mailarchive.ietf.org/arch/msg/rfc-interest/SHM7dHZd_S1a-CkW2JCBvxdKmcs/) (May 2015)
-- [Status of This Memo Boilerplate](#rfc-headers-and-boilerplate) – "Status of This Memo" text as defined by [RFC 7841](/info/rfc7841/) and [RFC 9280](/info/rfc9280/) (all permutations of the text are listed [here](/materials/status-memos.txt))
+- [Status of This Memo Boilerplate](#rfc-headers-and-boilerplate) – "Status of This Memo" text as defined by [RFC 7841](/info/rfc7841/) and [RFC 9920](/info/rfc9920/) (all permutations of the text are listed [here](/materials/status-memos.txt))
 - [Abbreviations List](/rpc/wiki/doku.php?id=abbrev_list) – A non-exhaustive list of expansions of abbreviations (and acronyms) in RFCs
 - [Terms List](https://materials.rfc-editor.org/terms-online.txt) – A non-exhaustive list of decisions on consistent usage of terms in RFCs
 - [IAB Format](https://wiki.ietf.org/en/group/iab/iab-stream-rfc-format) – IAB-specific formatting information for RFCs from the IAB Stream
@@ -155,7 +155,7 @@ How frequently terms should be linked is circumstantial depending on context and
 
 ## RFC Headers and Boilerplate
 
-Per [RFC 9280](/info/rfc9280/), the RFC Production Center (RPC) is now maintaining the RFC boilerplates as part of the RFC Style Guide. Therefore, this page provides instructions for constructing header and boilerplate text for RFCs, as specified by [RFC 7841](/info/rfc7841/). The boilerplate may be updated per the process described in [RFC 9280](/info/rfc9280/).
+Per [RFC 9920](/info/rfc9920/), the RFC Production Center (RPC) is now maintaining the RFC boilerplates as part of the RFC Style Guide. Therefore, this page provides instructions for constructing header and boilerplate text for RFCs, as specified by [RFC 7841](/info/rfc7841/). The boilerplate may be updated per the process described in [RFC 9920](/info/rfc9920/).
 
 ### 1\. RFC Title Page Header
 
@@ -177,7 +177,7 @@ For example, a sample earlier RFC header is as follows:
 
 ### 2\. Constructing a Status of this Memo Section
 
-The following sections describe mandated text for use in specific parts of the Status of this Memo portion of an RFC. For convenience, expansions of all permutations of the paragraphs described in this document and [RFC 9280](/info/rfc9280/) are available; see [status memos](/materials/status-memos.txt). When in conflict, these following sections are authoritative.
+The following sections describe mandated text for use in specific parts of the Status of this Memo portion of an RFC. For convenience, expansions of all permutations of the paragraphs described in this document and [RFC 9920](/info/rfc9920/) are available; see [status memos](/materials/status-memos.txt). When in conflict, these following sections are authoritative.
 
 ### 2.1. First Paragraph
 
@@ -237,7 +237,7 @@ This RFC represents the individual opinion(s) of one or more members of the `<in
 
 **Independent Submission Stream:** This is a contribution to the RFC Series, independently of any other RFC stream. The RFC Editor has chosen to publish this document at its discretion and makes no statement about its value for implementation or deployment.
 
-**Editorial Stream** (as defined by [Section 6.3 of RFC 9280](/rfc/rfc9280/#section-6.3)): This document is a product of the RFC Series Policy Definition Process. It represents the consensus of the RFC Series Working Group approved by the RFC Series Approval Board. Such documents are not candidates for any level of Internet Standard; see Section 2 of RFC 7841.
+**Editorial Stream** (as defined by [Section 6.3 of RFC 9920](/rfc/rfc9920/#section-6.3)): This document is a product of the RFC Series Policy Definition Process. It represents the consensus of the RFC Series Working Group approved by the RFC Series Approval Board. Such documents are not candidates for any level of Internet Standard; see Section 2 of RFC 7841.
 
 For non-IETF stream documents a reference to [Section 2 of RFC 7841](/rfc/rfc7841/#section-2) is added with the following sentence:
 

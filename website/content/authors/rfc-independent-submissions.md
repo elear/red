@@ -4,7 +4,7 @@ description: Other issues relevant to the Internet community
 
 # Independent Submissions
 
-The Independent Submission Stream allows RFC publication for some documents that are outside the official processes of the [IETF](https://www.ietf.org/), [IAB](https://www.iab.com/), and [IRTF](https://www.irtf.org/) but are relevant to the Internet community and achieve reasonable levels of technical and editorial quality. [RFC 8730, "Independent Submission Editor Model"](/info/rfc8730/), as updated by [RFC 9280](/info/rfc9280/), describes the roles of
+The Independent Submission Stream allows RFC publication for some documents that are outside the official processes of the [IETF](https://www.ietf.org/), [IAB](https://www.iab.com/), and [IRTF](https://www.irtf.org/) but are relevant to the Internet community and achieve reasonable levels of technical and editorial quality. [RFC 8730, "Independent Submission Editor Model"](/info/rfc8730/), as updated by [RFC 9920](/info/rfc9920/), describes the roles of
 
 - the Independent Submissions Editor (ISE) and
 - the [Independent Submissions Editorial Board](#independent-submissions-editorial-board), which provides review for the ISE.
