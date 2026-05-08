@@ -92,10 +92,6 @@ if (rfcBucketHtmlDocumentError.value) {
     status: 404,
     statusText: `No ${sanitisedId.value} content found. If this is a recently published RFC please try again later.`,
     fatal: true,
-    data: {
-      linkText: `Try also ${rfcFormatPathBuilder(sanitisedId.value, 'html')}`,
-      linkUrl: `${publicSiteUrlOrigin}${rfcFormatPathBuilder(sanitisedId.value, 'html')}`
-    }
   })
 }
 
