@@ -1,4 +1,4 @@
-import { createBlobResponse, createBlobNotFoundResponse, detectContentType } from './helpers'
+import { createBlobResponse, createBlobNotFoundResponse, detectContentType, redirectTo } from './helpers'
 
 /**
  * RFC blobs
@@ -30,7 +30,7 @@ export async function blobsRfc(req, env) {
   //    should be indexed and ranked by search engines"
   //    -- https://developers.google.com/search/docs/crawling-indexing/canonicalization
   //
-  // rfc-editor.org have a lot of duplicated content. Eg,
+  // rfc-editor.org has a lot of duplicated content. Eg,
   //   * /info/rfcN/
   //   * /rfc/rfcN.html
   //   * /rfc/rfcN.pdf
@@ -54,7 +54,13 @@ export async function blobsRfc(req, env) {
   //
   const { origin } = new URL(req.url)
   let canonicalUrl = ''
-  const rfcParts = objectPath.match(/(rfc(\d+))/)
+  // Handle many file format paths by matching the rfcN part; paths like:
+  //  * '/rfc/rfc1234'
+  //  * '/rfc/rfc1234/'
+  //  * '/rfc/rfc1234.html'
+  //  * '/rfc/rfc1234.pdf'
+  //  * '/rfc/inline-errata/rfc9953.html'
+  const rfcParts = objectPath.match(/(rfc(\d+))/i)
   if (rfcParts && rfcParts[2]) {
     canonicalUrl = `${origin}/info/rfc${rfcParts[2]}/`
   }
@@ -84,6 +90,18 @@ export async function blobsRfc(req, env) {
     if (object) {
       return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
     }
+  }
+
+  // Handle extensionless rfc links like:
+  //  * '/rfc/rfc1234'
+  //  * '/rfc/rfc1234/'
+  // by redirecting to `/info/rfc1234/`.
+  // The objectPath is the path without a `/rfc/` prefix,
+  // so we're testing again 'rfc1234' and 'rfc1234/' anchored to start and end of string
+  const extensionlessMatch = objectPath.match(/^(rfc(\d+)\/?)$/i)
+  if (extensionlessMatch && canonicalUrl) {
+    redirectTo(canonicalUrl, 302)
+    return
   }
 
   return createBlobNotFoundResponse()
