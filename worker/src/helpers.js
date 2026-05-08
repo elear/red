@@ -111,7 +111,7 @@ function formatCanonicalHeader(url) {
       // canonical header is surrounded by '<' and '>' chars, so special characters must be escaped.
       // encodeURI handles spaces, special characters, but not / : ? = &, so protocol prefix is left
       // untouched
-      const encodedUrl = encodeURI(url)
+      const encodedUrl = encodeURI(sanitisedUrl)
         .replace(/</g, '%3C') // manually replace < and > just in case they are in the URL string
         .replace(/>/g, '%3E')
 
