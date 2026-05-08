@@ -88,7 +88,7 @@ if (rfcBucketHtmlDocumentError.value) {
   console.error(rfcBucketHtmlDocumentError.value)
   throw createError({
     status: 404,
-    statusText: `No ${sanitisedId.value} content found. If this is a recently published RFC please try again later.`,
+    statusText: `No ${props.rfcId.type.toUpperCase()} ${props.rfcId.number} content found. If this is a recently published RFC please try again later.`,
     fatal: true,
   })
 }
