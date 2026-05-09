@@ -110,7 +110,7 @@ export async function blobsRfc(req, env) {
   // so we're testing again 'rfc1234' and 'rfc1234/' anchored to start and end of string.
   const extensionlessMatch = objectPath.match(/^(rfc(\d+)\/?)$/i)
   if (extensionlessMatch && canonicalUrl) {
-    return redirectTo(canonicalUrl, 302)
+    return Response.redirect(canonicalUrl, 302)
   }
 
   return createBlobNotFoundResponse()
