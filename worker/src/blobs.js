@@ -5,6 +5,8 @@ import { createBlobResponse, createBlobNotFoundResponse, detectContentType, redi
  * 
  * Should handle urls like,
  * 
+ *   "/rfc/rfc9000"
+ *   "/rfc/rfc9000/"
  *   "/rfc/rfc9000.html"
  *   "/rfc/rfc9000.pdf"
  *   "/rfc/inline-errata/rfc9000.html"
@@ -62,7 +64,8 @@ export async function blobsRfc(req, env) {
   //  * '/rfc/inline-errata/rfc9953.html'
   const rfcParts = objectPath.match(/(rfc(\d+))/i)
   if (rfcParts && rfcParts[2]) {
-    canonicalUrl = `${origin}/info/rfc${rfcParts[2]}/`
+    const rfcNumber = parseInt(rfcParts[2], 10)
+    canonicalUrl = `${origin}/info/rfc${rfcNumber}/`
   }
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
@@ -96,8 +99,17 @@ export async function blobsRfc(req, env) {
   //  * '/rfc/rfc1234'
   //  * '/rfc/rfc1234/'
   // by redirecting to `/info/rfc1234/`.
-  // The objectPath is the path without a `/rfc/` prefix,
-  // so we're testing again 'rfc1234' and 'rfc1234/' anchored to start and end of string
+  //
+  // The previous version of the site used this route as an alias that served HTML,
+  // '/rfc/rfc1234' was essentially an alias for '/rfc/rfc1234.html'.
+  // That meant RFC 8 (which only has PDF, no HTML) would 404 at this route.
+  //
+  // In this version we're instead consolidating routes that serve identical content,
+  // by redirecting to '/info/rfcN/' where readers can choose from all the file formats
+  // available.
+  //
+  // `objectPath` is the path without a `/rfc/` prefix,
+  // so we're testing again 'rfc1234' and 'rfc1234/' anchored to start and end of string.
   const extensionlessMatch = objectPath.match(/^(rfc(\d+)\/?)$/i)
   if (extensionlessMatch && canonicalUrl) {
     redirectTo(canonicalUrl, 302)
