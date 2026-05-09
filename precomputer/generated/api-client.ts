@@ -76,7 +76,7 @@ export class ApiClient {
     const headers = new Headers({ ...configHeaders, ...opts.headers })
     const ct = headers.get('content-type') ?? 'application/json'
 
-    let body: FormData | URLSearchParams | string | undefined = undefined
+    let body: FormData | URLSearchParams | string | null = null
 
     if (
       ct === 'multipart/form-data' ||
