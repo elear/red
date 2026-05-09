@@ -46,13 +46,11 @@ export async function blobsRfc(req, env) {
   //     indicate that the PDF version of the .docx version should be canonical"
   //     -- https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#rel-canonical-header-method
   // 
-  // So RFCs in HTML or PDF or TXT should have a canonical URL.
-  // And the entry page for RFCs should be the /info/rfcN route which is what we'll
-  // link to.
+  // So RFCs in HTML or PDF or TXT should have a canonical URL for search engine users,
+  // as a friendly entry point to the various file formats etc.
+  // We'll use /info/rfcN/ route as the canonical url for search engine users.
   //
-  // Note that this doesn't apply to anything with `rfcN` in the URL. We don't want to
-  // apply this to `/refs/refN` as that has distinct content. It's always a judgement
-  // call whether the content is sufficiently similar or distinct.
+  // It's always a judgement call whether the content is sufficiently similar or distinct.
   //
   const { origin } = new URL(req.url)
   let canonicalUrl = ''
@@ -112,8 +110,7 @@ export async function blobsRfc(req, env) {
   // so we're testing again 'rfc1234' and 'rfc1234/' anchored to start and end of string.
   const extensionlessMatch = objectPath.match(/^(rfc(\d+)\/?)$/i)
   if (extensionlessMatch && canonicalUrl) {
-    redirectTo(canonicalUrl, 302)
-    return
+    return redirectTo(canonicalUrl, 302)
   }
 
   return createBlobNotFoundResponse()
