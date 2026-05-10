@@ -562,6 +562,13 @@ const parseGroup = (
   group: Rfc['group'] | RfcMetadata['group'],
   rfcNumberForDebug?: number
 ): RfcCommon['group'] => {
+  if (
+    // https://github.com/ietf-tools/red/issues/337
+    !group
+  ) {
+    return undefined
+  }
+
   const { acronym, name, type } = group
   const { data: parsedType, error } = RfcCommonGroupTypeSchema.safeParse(type)
   if (error) {
