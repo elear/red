@@ -2,47 +2,38 @@
   "/status-changes/": {
     "mtime": "2026-04-17T16:37:18-05:00"
   },
-  "/errata/errata-definitions/": {
-    "mtime": "2026-05-07T11:30:33+12:00"
-  },
-  "/errata/how-to-report/": {
-    "mtime": "2026-05-06T18:57:00-07:00"
-  },
-  "/errata/how-to-verify/": {
-    "mtime": "2026-05-06T18:57:00-07:00"
-  },
-  "/errata/index/": {
-    "mtime": "2026-05-06T18:57:00-07:00"
-  },
   "/about/contact/": {
     "mtime": "2026-05-01T12:58:56-07:00"
   },
   "/about/rfc-editor/": {
-    "mtime": "2025-10-21T09:09:58+13:00"
+    "mtime": "2026-05-08T17:45:18-07:00"
   },
   "/about/rpc-reports/": {
     "mtime": "2025-10-21T09:09:58+13:00"
   },
   "/authors/rfc-edit/": {
-    "mtime": "2025-10-21T09:09:58+13:00"
+    "mtime": "2026-05-08T21:16:58+12:00"
+  },
+  "/authors/rfc-editor/": {
+    "mtime": "2026-05-08T21:16:58+12:00"
   },
   "/authors/rfc-how-to/": {
     "mtime": "2026-04-30T19:28:03-07:00"
   },
   "/authors/rfc-independent-submissions/": {
-    "mtime": "2025-10-21T09:09:58+13:00"
+    "mtime": "2026-05-08T21:16:58+12:00"
   },
   "/authors/rfc-style-guide/": {
-    "mtime": "2026-04-28T15:56:43-05:00"
+    "mtime": "2026-05-08T17:16:32-07:00"
   },
   "/series/rfc-download/": {
     "mtime": "2026-05-05T11:00:11+12:00"
   },
   "/series/rfc-errata/": {
-    "mtime": "2026-04-07T08:20:09+12:00"
+    "mtime": "2026-05-08T17:35:30-07:00"
   },
   "/series/rfc-faq/": {
-    "mtime": "2026-04-22T12:08:35+12:00"
+    "mtime": "2026-05-11T12:18:12-07:00"
   },
   "/series/rfc-tips/": {
     "mtime": "2025-10-22T11:29:09+13:00"
@@ -61,5 +52,11 @@
   },
   "/authors/rfc-edit/pub-queue/": {
     "mtime": "2026-04-07T08:20:09+12:00"
+  },
+  "/series/errata/how-to-verify/": {
+    "mtime": "2026-05-08T17:35:30-07:00"
+  },
+  "/series/errata/index/": {
+    "mtime": "2026-05-08T17:35:30-07:00"
   }
 }
