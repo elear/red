@@ -26,6 +26,8 @@ const excludeAuthorRedirects = [
   '/authors/rfc-edit/pub-queue'
 ]
 
+const excludeInNotesRedirects = ['/in-notes/rfc-ref.txt']
+
 const router = IttyRouter()
 
 router
@@ -97,9 +99,15 @@ router
       return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/final-review/rfc${match.groups.num}`, 302)
     }
   })
-  .get('/in-notes/:extra+', (req) => Response.redirect(`https://in-notes.rfc-editor.org/${req.params.extra}`, 302))
+  .get('/in-notes/:extra+', addNormalizedPath, (req) => {
+    if (!excludeInNotesRedirects.some((p) => req.normalizedPath.startsWith(p))) {
+      Response.redirect(`https://in-notes.rfc-editor.org/${req.params.extra}`, 302)
+    }
+  })
   .get('/materials/:extra+', (req) => Response.redirect(`https://materials.rfc-editor.org/${req.params.extra}`, 302))
-  .get('/errata/:extra+', (req) => Response.redirect(`https://errata${env.ENV_DOMAIN}.rfc-editor.org/${req.params.extra}`, 302))
+  .get('/errata/:extra+', (req) =>
+    Response.redirect(`https://errata${env.ENV_DOMAIN}.rfc-editor.org/${req.params.extra}`, 302)
+  )
 
   // Auth
   // -> enable to restrict some paths to datatracker login
