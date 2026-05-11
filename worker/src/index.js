@@ -49,7 +49,7 @@ router
   .get('/styleguide/part2/', redirectTo('/authors/rfc-style-guide/', 302))
   .get('/styleguide/tips/', redirectTo('/authors/rfc-style-guide/', 302))
   .get('/other/', redirectTo('https://authors.ietf.org', 302))
-  .get('/errata.json', redirectTo('c', 302))
+  .get('/errata.json', redirectTo('/api/v1/errata.json', 302))
   .get('/rfc-index.html', redirectTo('/search/', 302))
   .get('/rfc-index2.html', redirectTo('/search/', 302))
   .get('/rfc-index-100a.html', redirectTo('/search/', 302))
