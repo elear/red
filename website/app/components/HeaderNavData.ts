@@ -125,24 +125,6 @@ export const useMenuData = (mode: Mode) => {
             href: markdownPathBuilder('/authors/rfc-independent-submissions/')
           },
           {
-            label: 'RFC Editorial Process',
-            href: markdownPathBuilder('/authors/rfc-edit/'),
-            children: [
-              {
-                label: 'Current Publication Queue',
-                href: markdownPathBuilder('/authors/rfc-edit/pub-queue/')
-              },
-              {
-                label: 'Document Clusters in Queue',
-                href: markdownPathBuilder('/authors/rfc-edit/doc-clusters/')
-              },
-              {
-                label: 'Authors Final Review (AUTH48)',
-                href: markdownPathBuilder('/authors/rfc-edit/auth48/')
-              }
-            ]
-          },
-          {
             label: 'Style Guide',
             href: markdownPathBuilder('/authors/rfc-style-guide/')
           }
