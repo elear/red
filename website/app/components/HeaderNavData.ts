@@ -1,8 +1,10 @@
 import {
   IETF_PRIVACY_STATEMENT_URL,
+  INTERNET_DRAFT_AUTHOR_RESOURCES_RFC_PUBLICATION_PROCESS_URL,
   markdownPathBuilder,
   SEARCH_PATH,
-  searchPathBuilder
+  searchPathBuilder,
+  useQueueUrlOrigin
 } from '~/utilities/url'
 import type { VueClick } from '~/utilities/vue'
 
@@ -38,6 +40,7 @@ type Mode = 'desktop' | 'mobile'
 
 export const useMenuData = (mode: Mode) => {
   const colorMode = useColorMode()
+  const queueUrlOrigin = useQueueUrlOrigin()
 
   const menuData = computed(() => {
     const data: MenuItem[] = [
@@ -127,6 +130,14 @@ export const useMenuData = (mode: Mode) => {
           {
             label: 'Style Guide',
             href: markdownPathBuilder('/authors/rfc-style-guide/')
+          },
+          {
+            label: 'RFC Publication Process',
+            href: INTERNET_DRAFT_AUTHOR_RESOURCES_RFC_PUBLICATION_PROCESS_URL
+          },
+          {
+            label: 'Document Queue',
+            href: queueUrlOrigin
           }
         ]
       },

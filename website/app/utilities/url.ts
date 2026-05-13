@@ -115,6 +115,8 @@ export const INTERNET_DRAFT_AUTHOR_RESOURCES_URL_ORIGIN =
 export const IETF_PRIVACY_STATEMENT_URL =
   'https://www.ietf.org/privacy-statement/'
 
+export const INTERNET_DRAFT_AUTHOR_RESOURCES_RFC_PUBLICATION_PROCESS_URL = `${INTERNET_DRAFT_AUTHOR_RESOURCES_URL_ORIGIN}/rfc-publication-process`
+
 export const HOME_PATH = '/'
 export const CONTACT_PATH = '/about/contact/'
 export const SEARCH_PATH = '/search/'
