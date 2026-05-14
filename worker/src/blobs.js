@@ -60,6 +60,7 @@ export async function blobsRfc(req, env) {
   //  * '/rfc/rfc1234.html'
   //  * '/rfc/rfc1234.pdf'
   //  * '/rfc/inline-errata/rfc9953.html'
+  //  * '/rfc/pdfrfc/rfc5492.txt.pdf
   const rfcParts = objectPath.match(/(rfc(\d+))/i)
   if (rfcParts && rfcParts[2]) {
     const rfcNumber = parseInt(rfcParts[2], 10)
@@ -86,7 +87,7 @@ export async function blobsRfc(req, env) {
     // double-barrel file extension
     objectPath.endsWith('.txt.pdf')
   ) {
-    const object = await env.RFC_BUCKET.get(`txtpdf/${objectPath}`)
+    const object = await env.RFC_BUCKET.get(`pdfrfc/${objectPath}`)
     if (object) {
       return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
     }
