@@ -2,15 +2,15 @@ import { createBlobResponse, createBlobNotFoundResponse, detectContentType, redi
 
 /**
  * RFC blobs
- * 
+ *
  * Should handle urls like,
- * 
+ *
  *   "/rfc/rfc9000"
  *   "/rfc/rfc9000/"
  *   "/rfc/rfc9000.html"
  *   "/rfc/rfc9000.pdf"
  *   "/rfc/inline-errata/rfc9000.html"
- * 
+ *
  */
 export async function blobsRfc(req, env) {
   const RFC_PREFIX = '/rfc/'
@@ -45,7 +45,7 @@ export async function blobsRfc(req, env) {
   //     Googlebot what is the canonical URL for the non-HTML files. For example, to
   //     indicate that the PDF version of the .docx version should be canonical"
   //     -- https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls#rel-canonical-header-method
-  // 
+  //
   // So RFCs in HTML or PDF or TXT should have a canonical URL for search engine users,
   // as a friendly entry point to the various file formats etc.
   // We'll use /info/rfcN/ route as the canonical url for search engine users.
@@ -81,6 +81,14 @@ export async function blobsRfc(req, env) {
       if (object) {
         return createBlobResponse(object, detectContentType(objectPath))
       }
+    }
+  } else if (
+    // double-barrel file extension
+    objectPath.endsWith('.txt.pdf')
+  ) {
+    const object = await env.RFC_BUCKET.get(`txtpdf/${objectPath}`)
+    if (object) {
+      return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
     }
   } else if (
     // -> Fetch R2 object from RFC bucket
