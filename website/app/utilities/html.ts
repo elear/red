@@ -44,3 +44,14 @@ export const preformattedTextToHtml = (
     })
   )
 }
+
+export const sanitiseHtml = (untrustedHtml: string): string => {
+  const el = document.createElement('div')
+  if (typeof window === 'undefined' || !window.Sanitizer || !('setHTML' in el) || typeof el.setHTML !== 'function') {
+    el.innerHTML = untrustedHtml // TODO: in this scenario what should we do? strip all HTML elements? escape them all? 
+    return el.innerHTML
+  }
+  const sanitizer = new Sanitizer({ elements: ['p'] })
+  el.setHTML(untrustedHtml, { sanitizer })
+  return el.innerHTML
+}

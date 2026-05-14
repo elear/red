@@ -12,6 +12,7 @@ import {
   TypesenseSearchItemStatusSchema
 } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
+import { sanitiseHtml } from './html'
 
 export const typeSenseSearchItemToRFCCommon = (
   unverifiedTypeSenseSearchItem: TypeSenseSearchItem
@@ -150,7 +151,7 @@ export const typeSenseSearchItemToRFCCommon = (
     })) ?? []
 
   return {
-    abstract: item.abstract,
+    abstract: sanitiseHtml(item.abstract),
     area: parseTypesenseArea(item.area),
     authors,
     formats: [],
