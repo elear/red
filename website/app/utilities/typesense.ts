@@ -78,6 +78,7 @@ export const TypeSenseSearchItemSchema = z.object({
   title: z.string(),
 
   status: TypesenseSearchItemStatusSchema,
+  /** Abstract should be pseudo-HTML, either a text node or several `<p>` tags but no other elements/attributes */
   abstract: z.string(),
 
   adName: z.string().optional(),

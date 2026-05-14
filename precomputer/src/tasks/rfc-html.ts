@@ -1,6 +1,5 @@
 import path from 'path'
 import fsPromises from 'fs/promises'
-import sanitizeHtml from 'sanitize-html'
 import { DateTime } from 'luxon'
 import { createSSRApp } from 'vue'
 import { renderToString } from 'vue/server-renderer'
@@ -39,7 +38,7 @@ import { validateDocument } from '../utilities/validate-zod.ts'
 import { getFromS3, rfcBucketHtmlPathBuilder } from '../utilities/s3.ts'
 import { redactRfc } from './rfc.ts'
 import { renderHtmlToImage } from '../utilities/html-screenshot.ts'
-import { OPENGRAPH_IMAGE_DIMENSIONS } from '../utilities/html.ts'
+import { OPENGRAPH_IMAGE_DIMENSIONS, sanitiseHtml } from '../utilities/html.ts'
 import { getRfcCommonCached } from '../utilities/api.ts'
 import sharp from 'sharp'
 
@@ -90,7 +89,13 @@ export const rfcBucketHtmlToRfcDocument = async (
       break
   }
 
-  const baseUrl = new URL(`/rfc/rfc${rfcNumber}.html`, PUBLIC_SITE_URL_ORIGIN)
+  // the HTML was written assuming it will be published to this URL.
+  // so relative links are relative to this URL.
+
+  const baseUrl = new URL(
+    `/rfc/rfc${rfcNumber}.html`,
+    PUBLIC_SITE_URL_ORIGIN // This should not change per-environment.
+  )
 
   convertHrefs(rfcDocument, baseUrl, rfcNumber)
   ensureWordBreaks(rfcDocument)
@@ -124,146 +129,12 @@ export const fetchSourceRfcHtml = async (
     )
     return null
   }
-
-  const dirtyHtmlString =
-    dirtyHtml instanceof Uint8Array ?
-      new TextDecoder().decode(dirtyHtml)
-      : dirtyHtml
+  const decoder = new TextDecoder();
+  const dirtyHtmlString: string = dirtyHtml instanceof Uint8Array ?
+    decoder.decode(dirtyHtml) : dirtyHtml
 
   // Sanitise HTML before returning it
-  const SVG_STYLE_ATTRIBUTES = [
-    'role',
-
-    'fill',
-    'fill-rule',
-
-    'clip-rule',
-
-    'stroke',
-    'stroke-width',
-    'stroke-linecap',
-    'stroke-linejoin',
-    'stroke-miterlimit',
-
-    'transform',
-    'transform-origin',
-
-    'rotate',
-
-    // Text attributes
-    'text-anchor',
-    'font-family',
-    'font-size',
-    'text-anchor'
-  ]
-
-  const sanitisedHtml = sanitizeHtml(dirtyHtmlString, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-      'html',
-      'head',
-      'body',
-      'meta',
-      'title',
-      'link',
-      'img',
-      'svg',
-      'g',
-      'defs',
-      'stop',
-      'path',
-      'rect',
-      'circle',
-      'ellipse',
-      'polygon',
-      'polyline',
-      'line',
-      'text',
-      'tspan',
-      'tbreak',
-      'textPath',
-      'image',
-      'use',
-      'clipPath',
-      'mask',
-      'pattern',
-      'solidColor',
-      'linearGradient',
-      'radialGradient',
-    ]),
-    allowedAttributes: {
-      '*': ['id', 'class', 'style', 'dir'],
-      a: ['href', 'rel'],
-      meta: ['name', 'content'],
-      time: ['datetime'],
-      td: ['colspan', 'rowspan'],
-      th: ['colspan', 'rowspan'],
-      ol: ['start', 'type', 'reversed'],
-      link: ['rel', 'href'],
-      svg: [
-        'xmlns',
-        'version',
-        'width',
-        'height',
-        'viewBox',
-        'preserveAspectRatio',
-        ...SVG_STYLE_ATTRIBUTES
-      ],
-      desc: [...SVG_STYLE_ATTRIBUTES],
-      use: [
-        'x',
-        'y',
-        'width',
-        'height',
-        'href',
-        'xlink:href',
-        ...SVG_STYLE_ATTRIBUTES
-      ],
-      g: ['label', ...SVG_STYLE_ATTRIBUTES],
-      path: ['d', 'pathLength', ...SVG_STYLE_ATTRIBUTES],
-      text: ['x', 'y', ...SVG_STYLE_ATTRIBUTES],
-      circle: ['cx', 'cy', 'r', ...SVG_STYLE_ATTRIBUTES],
-      ellipse: ['cx', 'cy', 'rx', 'ry', ...SVG_STYLE_ATTRIBUTES],
-      textPath: ['href', 'startOffset', ...SVG_STYLE_ATTRIBUTES],
-      tspan: ['x', 'y', 'startOffset', ...SVG_STYLE_ATTRIBUTES],
-      polygon: ['points', ...SVG_STYLE_ATTRIBUTES],
-      polyline: ['points', ...SVG_STYLE_ATTRIBUTES],
-      linearGradient: [
-        'x1',
-        'x2',
-        'y1',
-        'y2',
-        'gradientUnits',
-        'spreadMethod',
-        ...SVG_STYLE_ATTRIBUTES
-      ],
-      rect: ['x', 'y', 'width', 'height', 'rx', 'ry', ...SVG_STYLE_ATTRIBUTES],
-      radialGradient: [
-        'cx',
-        'cy',
-        'r',
-        'fx',
-        'fy',
-        'fr',
-        'gradientUnits',
-        'spreadMethod',
-        ...SVG_STYLE_ATTRIBUTES
-      ]
-    },
-    allowedSchemes: [
-      'data',
-      'http',
-      'https',
-      'tel',
-      'ftp',
-      'mailto',
-      'urn' // eg RFC9000 has <link rel="alternate" href="urn:issn:2070-1721">
-    ],
-    parser: {
-      lowerCaseTags: false,
-      lowerCaseAttributeNames: false
-    }
-  })
-  return sanitisedHtml
+  return sanitiseHtml(dirtyHtmlString, 'rfc-html')
 }
 
 export type RfcAndToc = {

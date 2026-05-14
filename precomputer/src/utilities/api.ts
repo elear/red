@@ -12,6 +12,7 @@ import type {
 import { assertIsString } from './typescript.ts'
 import { sleep } from './sleep.ts'
 import { isRecovereableFetchError } from './fetch.ts'
+import { sanitiseHtml } from './html.ts'
 
 type Api = InstanceType<typeof ApiClient>
 type RedApi = Api['red']
@@ -279,7 +280,7 @@ export const rfcToRfcCommon = (rfc: Rfc): RfcCommon => {
       })) ?? [],
     subseries: parseSubseries(rfc.subseries),
     number: rfc.number,
-    abstract: rfc.abstract,
+    abstract: rfc.abstract ? sanitiseHtml(rfc.abstract, 'abstract') : undefined,
     published: rfc.published,
     status: parseStatus(rfc.status, rfc.number),
     pages: rfc.pages ?? undefined,
@@ -311,7 +312,7 @@ export const rfcMetadataToRfcCommon = (rfcMetadata: RfcMetadata): RfcCommon => {
         path: format.name
       })) ?? [],
     number: rfcMetadata.number,
-    abstract: rfcMetadata.abstract,
+    abstract: rfcMetadata.abstract ? sanitiseHtml(rfcMetadata.abstract, 'abstract') : undefined,
     published: rfcMetadata.published,
     status: parseStatus(rfcMetadata.status, rfcMetadata.number),
     pages: rfcMetadata.pages ?? undefined,

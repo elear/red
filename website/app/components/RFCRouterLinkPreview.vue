@@ -1,41 +1,19 @@
 <template>
-  <GraphicsIETFMotif
-    class="absolute text-black w-[110px] h-[100px] right-0 top-0 print:hidden"
-    :opacity="0.04"
-  />
+  <GraphicsIETFMotif class="absolute text-black w-[110px] h-[100px] right-0 top-0 print:hidden" :opacity="0.04" />
   <p class="text-base text-blue-900 dark:text-white font-bold leading-5">
     {{ props.rfc.title }}
   </p>
-  <ul
-    v-if="list1"
-    class="text-base text-blue-900 dark:text-white"
-  >
-    <li
-      v-for="(part, index) in list1"
-      :key="index"
-      class="inline"
-    >
+  <ul v-if="list1" class="text-base text-blue-900 dark:text-white">
+    <li v-for="(part, index) in list1" :key="index" class="inline">
       <GraphicsDiamond v-if="index > 0" />{{ part }}
     </li>
   </ul>
-  <p
-    class="leading-5 pt-2 text-xs text-pretty"
-    v-html="props.rfc.abstract"
-  ></p>
+  <p class="leading-5 pt-2 text-xs text-pretty" v-html="props.rfc.abstract // this should already be sanitised
+    "></p>
 
-  <ul
-    v-if="list2"
-    class="text-base text-gray-800 mt-1 dark:text-white"
-  >
-    <li
-      v-for="(part, index) in list2"
-      :key="index"
-      class="inline"
-    >
-      <GraphicsDiamond
-        v-if="index > 0"
-        class="align-middle"
-      />{{ part }}
+  <ul v-if="list2" class="text-base text-gray-800 mt-1 dark:text-white">
+    <li v-for="(part, index) in list2" :key="index" class="inline">
+      <GraphicsDiamond v-if="index > 0" class="align-middle" />{{ part }}
     </li>
   </ul>
 
@@ -48,10 +26,8 @@
   </p>
 
   <p class="clear-both text-right mt-6 mb-10">
-    <Anchor
-      :href="rfcPathBuilder(`RFC${props.rfc.number}`)"
-      class="flex-inline rounded no-underline hover:underline focus:underline justify-center items-center bg-gray-100 dark:bg-gray-700 text-blue-400 dark:text-white px-4 pt-3 pb-4 mr-6"
-    >
+    <Anchor :href="rfcPathBuilder(`RFC${props.rfc.number}`)"
+      class="flex-inline rounded no-underline hover:underline focus:underline justify-center items-center bg-gray-100 dark:bg-gray-700 text-blue-400 dark:text-white px-4 pt-3 pb-4 mr-6">
       <component :is="formattedTitle" />
       <GraphicsChevron class="ml-2 inline -rotate-90" />
     </Anchor>

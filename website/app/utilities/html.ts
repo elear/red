@@ -45,13 +45,27 @@ export const preformattedTextToHtml = (
   )
 }
 
+/**
+ * It is expected that this only runs clientside with full DOM Sanitizer support,
+ * typically on Typesense HTML strings.
+ */
 export const sanitiseHtml = (untrustedHtml: string): string => {
   const el = document.createElement('div')
-  if (typeof window === 'undefined' || !window.Sanitizer || !('setHTML' in el) || typeof el.setHTML !== 'function') {
+  if (
+    typeof window === 'undefined' ||
+    !('Sanitizer' in window) ||
+    typeof window.Sanitizer !== 'function' ||
+    !('setHTML' in el) ||
+    typeof el.setHTML !== 'function'
+  ) {
+    console.warn('Rendering HTML direct to DOM due to lack of browser window.Sanitizer or related functionality. HTML was:', console.log(JSON.stringify(untrustedHtml)))
     el.innerHTML = untrustedHtml // TODO: in this scenario what should we do? strip all HTML elements? escape them all? 
     return el.innerHTML
   }
-  const sanitizer = new Sanitizer({ elements: ['p'] })
+  // TS in server nuxt rendering doesn't know about window.Sanitizer and errors on this, but the preceding
+  // code ensures we're only ever getting this far if it's clientside not server so we can ignore this error.
+  // @ts-ignore
+  const sanitizer = new window.Sanitizer({ elements: ['p'] })
   el.setHTML(untrustedHtml, { sanitizer })
   return el.innerHTML
 }
