@@ -68,6 +68,8 @@ export async function blobsRfc(req, env) {
     canonicalUrl = `${origin}/info/rfc${rfcNumber}/`
   }
 
+  console.log('rfc handling', objectPath)
+
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
     if (['.html'].some((ft) => objectPath.endsWith(ft))) {
       const object = await env.INLINE_ERRATA_BUCKET.get(objectPath)
@@ -86,6 +88,7 @@ export async function blobsRfc(req, env) {
     }
   } else if (objectPath.startsWith(PDFRFC_PREFIX)) {
     const filename = objectPath.substring(PDFRFC_PREFIX.length)
+    console.log({ PDFRFC_PREFIX, filename })
     const object = await env.RFC_BUCKET.get(`pdfrfc/${filename}`)
     if (object) {
       return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
