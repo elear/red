@@ -71,7 +71,7 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
     // so we have to uniquely select elements, and map them back onto the array of
     // elements with duplicates so that array indexes line up between `ids` and
     // `elementTops`
-    const uniqueIds = Array.from(new Set([...ids.value]))
+    const uniqueIds = Array.from(new Set(ids.value))
     const selector = uniqueIds.map((id) => `#${CSS.escape(id)}`).join(',')
     elements =
       selector.length > 0 ? Array.from(document.querySelectorAll(selector)) : []

@@ -53,7 +53,7 @@ const wrapperRef = computed(() => {
 })
 
 const flattenSectionLinkIds = (section: Section): string[] =>
-  [...(section.links ?? []).map((link) => link.id)].concat(
+  (section.links ?? []).map((link) => link.id).concat(
     section.sections ? section.sections.flatMap(flattenSectionLinkIds) : []
   )
 

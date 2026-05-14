@@ -14,7 +14,6 @@ export default defineNuxtConfig({
     '@nuxt/content',
     'reka-ui/nuxt',
     '@nuxt/test-utils/module',
-    '@nuxt/eslint',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/color-mode',
@@ -36,11 +35,6 @@ export default defineNuxtConfig({
     classSuffix: '',
     preference: 'system',
     fallback: 'light'
-  },
-  eslint: {
-    config: {
-      stylistic: true
-    }
   },
   css: ['~/assets/css/tailwind.css'],
   vitalizer: {
