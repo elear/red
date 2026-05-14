@@ -1,13 +1,7 @@
 <template>
   <ul class="flex flex-col gap-4 computedHeadingWidth">
     <li v-for="rfc in rfcs" :key="rfc.number" class="flex flex-col">
-      <RFCCardSearchItem
-        heading-level="3"
-        :rfc="rfc"
-        :density="searchStore.density"
-        show-abstract
-        show-tag-date
-      />
+      <RFCCardSearchItem heading-level="3" :rfc="rfc" :density="searchStore.density" show-abstract show-tag-date />
     </li>
   </ul>
 </template>
@@ -60,7 +54,7 @@ watchDebounced(
   () => rfcs,
   () => {
     maxHeadingWidth.value = calculateMaxHeadingWidth(rfcs.value)
-    console.log('recomputing max width', maxHeadingWidth.value)
+    // console.log('recomputing max width', maxHeadingWidth.value)
   },
   {
     debounce: 200,
