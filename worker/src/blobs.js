@@ -16,6 +16,7 @@ export async function blobsRfc(req, env) {
   const RFC_PREFIX = '/rfc/'
   const INLINE_ERRATA_PREFIX = 'inline-errata/'
   const INLINE_ERRATA_CSS_BUCKET_PREFIX = 'inline-errata/css/css/'
+  const PDFRFC_PREFIX = 'pdfrfc/'
 
   const inlineErrataCssPrefix = `${INLINE_ERRATA_PREFIX}css/`
 
@@ -83,11 +84,9 @@ export async function blobsRfc(req, env) {
         return createBlobResponse(object, detectContentType(objectPath))
       }
     }
-  } else if (
-    // double-barrel file extension
-    objectPath.endsWith('.txt.pdf')
-  ) {
-    const object = await env.RFC_BUCKET.get(`pdfrfc/${objectPath}`)
+  } else if (objectPath.startsWith(PDFRFC_PREFIX)) {
+    const filename = objectPath.substring(PDFRFC_PREFIX.length)
+    const object = await env.RFC_BUCKET.get(`pdfrfc/${filename}`)
     if (object) {
       return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
     }
