@@ -89,7 +89,7 @@ export async function blobsRfc(req, env) {
   } else if (objectPath.startsWith(PDFRFC_PREFIX)) {
     const filename = objectPath.substring(PDFRFC_PREFIX.length)
     console.log({ PDFRFC_PREFIX, filename })
-    const object = await env.RFC_BUCKET.get(`pdfrfc/${filename}`)
+    const object = await env.RFC_BUCKET.get(`pdf/${filename}`)
     if (object) {
       return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
     }
