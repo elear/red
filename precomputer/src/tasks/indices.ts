@@ -1,5 +1,5 @@
 import { uploadHomepageLatest } from './homepage-latest.ts'
-import { uploadInNotesRfcRefDotTxt } from './in-notes-rfc-ref-txt.ts'
+import { uploadRfcRefDotTxt } from './rfc-ref-txt.ts'
 import { uploadFeeds } from './rfc-feeds.ts'
 import { uploadRfcMiniIndexJson } from './rfc-mini-index-json.ts'
 import { uploadAllSubseries } from './info-subseries.ts'
@@ -38,7 +38,7 @@ export const indices = async ({ api }: Props): AsyncTaskItem => {
     uploadHomepageLatest(allRfcsWithContent),
     uploadRfcMiniIndexJson(allRfcsWithContent),
     uploadFeeds(allRfcsWithContent),
-    uploadInNotesRfcRefDotTxt(allRfcsWithContent, RFC_NUMBER_MINIMUM_CHAR_WIDTH),
+    uploadRfcRefDotTxt(allRfcsWithContent, RFC_NUMBER_MINIMUM_CHAR_WIDTH),
     uploadAllSubseries(allSubseries),
     uploadRobotsTxt(websiteOrigin),
     uploadSitemapXmls(websiteOrigin, allRfcsWithContent, allSubseries),

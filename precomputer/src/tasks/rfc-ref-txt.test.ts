@@ -1,5 +1,5 @@
 import { vi, describe, test, expect } from 'vitest'
-import { renderInNotesRfcRefDotTxt } from './in-notes-rfc-ref-txt'
+import { renderInNotesRfcRefDotTxt } from './rfc-ref-txt'
 import { testMockAllRfcs } from '../utilities/rfcs-test-data'
 
 describe('renderInNotesRfcRefDotTxt', () => {
@@ -11,7 +11,7 @@ describe('renderInNotesRfcRefDotTxt', () => {
 
     // basic sanity check on the response
     expect(str.length).toBeGreaterThan(1000)
-    
+
     expect(str).toMatchSnapshot()
   })
 

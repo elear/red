@@ -8,8 +8,9 @@ import type { RfcCommon } from '../../../website/app/utilities/rfc-validators.ts
 import { IN_NOTES_RFC_REF_DOT_TXT_PATH, saveToS3 } from '../utilities/s3.ts'
 import { PUBLIC_SITE_URL_ORIGIN } from '../utilities/url.ts'
 import { type AsyncTaskItem } from '../utilities/task.ts'
+import { formatAuthorsPerStyleGuide } from '../utilities/authors.ts'
 
-export const uploadInNotesRfcRefDotTxt = async (
+export const uploadRfcRefDotTxt = async (
   allRfcs: Readonly<RfcCommon[]>,
   rfcNumberColumnMinimumCharWidth: number
 ): AsyncTaskItem => {
@@ -99,9 +100,7 @@ const stringifyRFC = (rfc: RfcCommon): string => {
 
     doi = formatIdentifiers(rfc.identifiers, ' ').join(' ')
 
-    return `${rfc.authors
-      .map((author) => formatAuthor(author, 'reverse'))
-      .join(', ')}, "${rfc.title}", ${also}RFC ${rfc.number}, ${doi},${rfcdate ? ` ${rfcdate},` : ''
+    return `${formatAuthorsPerStyleGuide(rfc.authors)}, "${rfc.title}", ${also}RFC ${rfc.number}, ${doi},${rfcdate ? ` ${rfcdate},` : ''
       } <${PUBLIC_SITE_URL_ORIGIN}/info/rfc${rfc.number}/>.`
   }
 }
