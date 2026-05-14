@@ -69,7 +69,7 @@ export const sanitiseHtml = (untrustedHtml: string | undefined | null): string =
   // TS in server nuxt rendering doesn't know about window.Sanitizer and errors on this, but the preceding
   // code ensures we're only ever getting this far if it's clientside not server so we can ignore this error.
   // @ts-ignore
-  const sanitizer = window.Sanitizer({ elements: ['p'] })
+  const sanitizer = new window.Sanitizer({ elements: ['p'] })
   el.setHTML(untrustedHtml, { sanitizer })
   return el.innerHTML
 }
