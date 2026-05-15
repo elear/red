@@ -16,7 +16,7 @@ export async function blobsRfc(req, env) {
   const RFC_PREFIX = '/rfc/'
   const INLINE_ERRATA_PREFIX = 'inline-errata/'
   const INLINE_ERRATA_CSS_BUCKET_PREFIX = 'inline-errata/css/css/'
-  const PDFRFC_PREFIX = 'pdfrfc/'
+  // const PDFRFC_PREFIX = 'pdfrfc/'
 
   const inlineErrataCssPrefix = `${INLINE_ERRATA_PREFIX}css/`
 
@@ -86,14 +86,17 @@ export async function blobsRfc(req, env) {
         return createBlobResponse(object, detectContentType(objectPath))
       }
     }
-  } else if (objectPath.startsWith(PDFRFC_PREFIX)) {
-    const filename = objectPath.substring(PDFRFC_PREFIX.length)
-    console.log({ PDFRFC_PREFIX, filename })
-    const object = await env.RFC_BUCKET.get(`pdf/${filename}`)
-    if (object) {
-      return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
-    }
-  } else if (
+  }
+  // Serving .txt.pdf files isn't MVP
+  // else if (objectPath.startsWith(PDFRFC_PREFIX)) {
+  //   const filename = objectPath.substring(PDFRFC_PREFIX.length)
+  //   console.log({ PDFRFC_PREFIX, filename })
+  //   const object = await env.RFC_BUCKET.get(`pdf/${filename}`)
+  //   if (object) {
+  //     return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
+  //   }
+  // }
+  else if (
     // -> Fetch R2 object from RFC bucket
     ['.html', '.json', '.pdf', '.txt', '.xml'].some((ft) => objectPath.endsWith(ft))
   ) {
