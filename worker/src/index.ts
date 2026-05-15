@@ -1,5 +1,5 @@
 import { env } from 'cloudflare:workers'
-import { IttyRouter } from 'itty-router'
+import { IttyRouter, StatusError } from 'itty-router'
 import type { IRequest } from 'itty-router'
 // import * as oidc from './oidc'
 import {
@@ -94,6 +94,9 @@ router
       )
     }
   })
+  .get('/in-notes/museum/:extra+', addNormalizedPath, (req: IRequest) => {
+    return Response.redirect(`https://history.rfc-editor.org/${req.params.extra}`, 302)
+  })
   .get('/auth48/*', addNormalizedPath, (req: IRequest) => {
     let match = req.normalizedPath.match(/^\/auth48\/c(?<num>\d+)$/i)
     if (match?.groups?.num) {
@@ -107,7 +110,7 @@ router
   })
   .get('/in-notes/:extra+', addNormalizedPath, (req: IRequest) => {
     if (!excludeInNotesRedirects.some((p) => req.normalizedPath.startsWith(p))) {
-      Response.redirect(`https://in-notes.rfc-editor.org/${req.params.extra}`, 302)
+      throw new StatusError(404)
     }
   })
   .get('/materials/:extra+', (req: IRequest) => Response.redirect(`https://materials.rfc-editor.org/${req.params.extra}`, 302))
