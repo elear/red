@@ -1,5 +1,6 @@
 import { env } from 'cloudflare:workers'
 import { IttyRouter } from 'itty-router'
+import type { IRequest } from 'itty-router'
 // import * as oidc from './oidc'
 import {
   blobsApiFavicon,
@@ -14,6 +15,9 @@ import {
   blobsStatics
 } from './blobs'
 import { addNormalizedPath, redirectTo } from './helpers'
+import { legacySearchRedirectPathBuilder } from './legacy-search-redirect'
+
+import { legacyErrataSearchRedirectUrlBuilder } from './legacy-errata-search-redirect'
 
 // Temporary - Exclude the paths from being redirected to auth48-transition.rfc-editor.org
 const excludeAuthorRedirects = [
@@ -71,17 +75,17 @@ router
   .get('/queue2.html', redirectTo(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/`, 302))
 
   // Dynamic Redirects
-  .get('/authors/:extra+', addNormalizedPath, (req) => {
+  .get('/authors/:extra+', addNormalizedPath, (req: IRequest) => {
     if (!excludeAuthorRedirects.some((p) => req.normalizedPath.startsWith(p))) {
       Response.redirect(`https://auth48-transition.rfc-editor.org/authors/${req.params.extra}`, 302)
     }
   })
-  .get('/cluster_info.php', (req) => {
-    if (req.query?.cid?.startsWith('C')) {
+  .get('/cluster_info.php', (req: IRequest) => {
+    if (typeof req.query?.cid === 'string' && req.query.cid.startsWith('C')) {
       return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/clusters/${req.query.cid.slice(1)}`, 302)
     }
   })
-  .get('/in-notes/prerelease/*', addNormalizedPath, (req) => {
+  .get('/in-notes/prerelease/*', addNormalizedPath, (req: IRequest) => {
     const match = req.normalizedPath.match(/^\/in-notes\/prerelease\/rfc(?<num>\d+)\.notprepped\.xml$/i)
     if (match?.groups?.num) {
       return Response.redirect(
@@ -90,7 +94,7 @@ router
       )
     }
   })
-  .get('/auth48/*', addNormalizedPath, (req) => {
+  .get('/auth48/*', addNormalizedPath, (req: IRequest) => {
     let match = req.normalizedPath.match(/^\/auth48\/c(?<num>\d+)$/i)
     if (match?.groups?.num) {
       return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/final-review/C${match.groups.num}`, 302)
@@ -101,14 +105,23 @@ router
       return Response.redirect(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/final-review/rfc${match.groups.num}`, 302)
     }
   })
-  .get('/in-notes/:extra+', addNormalizedPath, (req) => {
+  .get('/in-notes/:extra+', addNormalizedPath, (req: IRequest) => {
     if (!excludeInNotesRedirects.some((p) => req.normalizedPath.startsWith(p))) {
       Response.redirect(`https://in-notes.rfc-editor.org/${req.params.extra}`, 302)
     }
   })
-  .get('/materials/:extra+', (req) => Response.redirect(`https://materials.rfc-editor.org/${req.params.extra}`, 302))
-  .get('/errata/:extra+', (req) =>
+  .get('/materials/:extra+', (req: IRequest) => Response.redirect(`https://materials.rfc-editor.org/${req.params.extra}`, 302))
+  .get('/errata/:extra+', (req: IRequest) =>
     Response.redirect(`https://errata${env.ENV_DOMAIN}.rfc-editor.org/${req.params.extra}`, 302)
+  )
+  .get('/search/rfc_search_detail.php', (req: IRequest) =>
+    Response.redirect(legacySearchRedirectPathBuilder(new URL(req.url).search), 302)
+  )
+  .get('/search/rfc_search.php', (req: IRequest) =>
+    Response.redirect(legacySearchRedirectPathBuilder(new URL(req.url).search), 302)
+  )
+  .get('/search/errata_search.php', (req: IRequest) =>
+    Response.redirect(legacyErrataSearchRedirectUrlBuilder(new URL(req.url).search), 302)
   )
 
   // Auth
@@ -129,7 +142,7 @@ router
   .get('/*', addNormalizedPath, blobsStatics)
 
   // Fallback to origin
-  .all('*', async (req) => {
+  .all('*', async (req: IRequest) => {
     let resp = await fetch(req, {
       cf: {
         cacheTtl: 60,

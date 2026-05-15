@@ -1,4 +1,4 @@
-import { createBlobResponse, createBlobNotFoundResponse, detectContentType, redirectTo } from './helpers'
+import { createBlobResponse, createBlobNotFoundResponse, detectContentType } from './helpers'
 
 /**
  * RFC blobs
@@ -67,8 +67,6 @@ export async function blobsRfc(req, env) {
     const rfcNumber = parseInt(rfcParts[2], 10)
     canonicalUrl = `${origin}/info/rfc${rfcNumber}/`
   }
-
-  console.log('rfc handling', objectPath)
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
     if (['.html'].some((ft) => objectPath.endsWith(ft))) {
