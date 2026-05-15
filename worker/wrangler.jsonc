@@ -5,7 +5,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "rfced-worker",
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "compatibility_date": "2025-06-16",
   "account_id": "57b7b70cdced62fd97661d0dc4ed1239",
   "workers_dev": false,
@@ -18,14 +18,10 @@
       "destinations": ["heimdall-otlp"]
     }
   },
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   "env": {
     "staging": {
-      "routes": [
-        { "pattern": "www.staging.rfc-editor.org/*", "zone_name": "rfc-editor.org" }
-      ],
+      "routes": [{ "pattern": "www.staging.rfc-editor.org/*", "zone_name": "rfc-editor.org" }],
       "kv_namespaces": [
         {
           "binding": "KV_STATE",
@@ -60,9 +56,7 @@
       }
     },
     "demo": {
-      "routes": [
-        { "pattern": "www.demo.rfc-editor.org/*", "zone_name": "rfc-editor.org" }
-      ],
+      "routes": [{ "pattern": "www.demo.rfc-editor.org/*", "zone_name": "rfc-editor.org" }],
       "kv_namespaces": [
         {
           "binding": "KV_STATE",
