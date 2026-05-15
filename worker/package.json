@@ -6,15 +6,19 @@
     "deploy": "wrangler deploy --env staging",
     "dev": "wrangler dev --env staging",
     "dev-remote": "wrangler dev --env staging --remote",
-    "cf-typegen": "wrangler types --env staging"
+    "cf-typegen": "wrangler types --env staging",
+    "test:types": "tsc --noEmit"
   },
   "dependencies": {
     "cookie": "1.0.2",
     "itty-router": "5.0.22",
+    "luxon": "3.7.2",
     "rfc4648": "1.5.4",
-    "typescript": "5.5.2"
+    "typescript": "5.5.2",
+    "zod": "4.4.3"
   },
   "devDependencies": {
+    "@types/luxon": "3.7.1",
     "@types/node": "25.7.0",
     "oxfmt": "0.45.0",
     "oxlint": "1.60.0",

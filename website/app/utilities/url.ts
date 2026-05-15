@@ -492,10 +492,6 @@ export const datatrackerAuthorUrlBuilder = (
 
 /**
  * TypeSense wants spaces encoded as '+' char not '%20'.
- * This is questionable but necessary for integation with our search engine.
- * See also:
- *  * RFC 1866
- *  * https://stackoverflow.com/a/29948396
  */
 export const typeSenseEncodeUriComponent = (uriComponent: string) =>
   encodeURIComponent(uriComponent).replace(/%20/g, '+')

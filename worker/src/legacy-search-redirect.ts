@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { DateTime } from 'luxon'
-import { monthNames } from './strings'
-import { searchPathBuilder } from './url'
+import { monthNames, searchPathBuilder } from './helpers'
 
 const LegacySearchParamsSchema = z.object({
   rfc: z.string().optional(),
@@ -80,7 +79,7 @@ export const buildSearchRedirect = (
     const pubstatus =
       Array.isArray(legacySearchObj['pubstatus[]']) ?
         legacySearchObj['pubstatus[]']
-      : [legacySearchObj['pubstatus[]']]
+        : [legacySearchObj['pubstatus[]']]
     searchParam.statuses = pubstatus
       .map((pubstatus) => {
         for (const [key, value] of sortedStatusMappingFromLegacyToNew) {

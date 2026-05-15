@@ -86,3 +86,69 @@ function formatCanonicalHeader(url: string): string | undefined {
     return undefined
   }
 }
+
+export const monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+]
+
+/**
+ * TypeSense wants spaces encoded as '+' char not '%20'.
+ */
+export const typeSenseEncodeUriComponent = (uriComponent: string) =>
+  encodeURIComponent(uriComponent).replace(/%20/g, '+')
+
+const SEARCH_PATH = '/search/'
+type Status =
+  | 'Internet Standard'
+  | 'Proposed Standard'
+  | 'Draft Standard'
+  | 'Best Current Practice'
+  | 'Informational'
+  | 'Experimental'
+  | 'Historic'
+  | 'Unknown'
+type SearchPathBuilderProps = {
+  q: string
+  area: string
+  stream: string
+  statuses: string[]
+  status: Status[]
+  from: string
+  to: string
+  showObsoleted?: '1'
+}
+
+export const searchPathBuilder = (
+  searchParams: Partial<SearchPathBuilderProps>
+): `${typeof SEARCH_PATH}${string}` => {
+  const hasParams = Object.values(searchParams).join('').trim().length > 0
+  return `${SEARCH_PATH}${hasParams ? '?' : ''}${hasParams ?
+    Object.keys(searchParams)
+      .sort() // normalize order
+      .map((searchKey) => {
+        const typesenseSearchKey = searchKey
+        const searchValue =
+          searchParams[searchKey as keyof SearchPathBuilderProps]
+
+        return searchValue ?
+          `${encodeURIComponent(typesenseSearchKey)}=${typeSenseEncodeUriComponent(
+            Array.isArray(searchValue) ? searchValue.join(',') : searchValue
+          )}`
+          : ''
+      })
+      .filter(Boolean)
+      .join('&')
+    : ''
+    }`
+}
