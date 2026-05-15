@@ -7,6 +7,9 @@
     "dev": "wrangler dev --env staging",
     "dev-remote": "wrangler dev --env staging --remote",
     "cf-typegen": "wrangler types --env staging",
+    "test": "npm run test:unittests && npm run test:types",
+    "test:unittests": "TZ=UTC vitest run",
+    "test:unittests:watch": "TZ=UTC vitest",
     "test:types": "tsc --noEmit"
   },
   "dependencies": {
@@ -15,9 +18,11 @@
     "luxon": "3.7.2",
     "rfc4648": "1.5.4",
     "typescript": "5.5.2",
+    "vitest": "4.1.6",
     "zod": "4.4.3"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "0.16.3",
     "@types/luxon": "3.7.1",
     "@types/node": "25.7.0",
     "oxfmt": "0.45.0",

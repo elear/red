@@ -1,4 +1,4 @@
-// @vitest-environment nuxt
+// @vitest-environment node
 import { test, expect, describe, beforeEach, afterEach, vi } from 'vitest'
 import { legacySearchRedirectPathBuilder } from './legacy-search-redirect'
 

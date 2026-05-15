@@ -11,7 +11,7 @@ export function redirectTo(targetUrl: string, status = 302): (req: IRequest) => 
   }
 }
 
-export function addNormalizedPath(req: IRequest): void {
+export function addNormalizedPath(req: IRequest, ..._args: unknown[]): void {
   const url = new URL(req.url)
   req.normalizedPath = decodeURIComponent(url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname)
 }
@@ -152,3 +152,5 @@ export const searchPathBuilder = (
     : ''
     }`
 }
+
+export const rfcEditorErrataSearchUrl = (envDomain: string = '') => `https://errata${envDomain}.rfc-editor.org`

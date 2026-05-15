@@ -32,7 +32,7 @@ const excludeAuthorRedirects = [
 
 const excludeInNotesRedirects = ['/in-notes/rfc-ref.txt']
 
-const router = IttyRouter()
+const router = IttyRouter<IRequest, [Env]>()
 
 router
   // Static Redirects
@@ -121,7 +121,7 @@ router
     Response.redirect(legacySearchRedirectPathBuilder(new URL(req.url).search), 302)
   )
   .get('/search/errata_search.php', (req: IRequest) =>
-    Response.redirect(legacyErrataSearchRedirectUrlBuilder(new URL(req.url).search), 302)
+    Response.redirect(legacyErrataSearchRedirectUrlBuilder(new URL(req.url).search, env.ENV_DOMAIN), 302)
   )
 
   // Auth

@@ -1,6 +1,5 @@
-import { env } from 'cloudflare:workers'
 import { z } from 'zod'
-import { typeSenseEncodeUriComponent } from './helpers'
+import { rfcEditorErrataSearchUrl, typeSenseEncodeUriComponent } from './helpers'
 
 const LegacyErrataSearchParamsSchema = z.object({
   rfc: z.string().optional(), // RFC number
@@ -52,9 +51,7 @@ const LegacyErrataSearchParamsSchema = z.object({
     .optional()
 })
 
-const rfcEditorErrataSearchUrl = () => `https://errata${env.ENV_DOMAIN}.rfc-editor.org`
-
-export const legacyErrataSearchRedirectUrlBuilder = (url: string): string => {
+export const legacyErrataSearchRedirectUrlBuilder = (url: string, envDomain = ''): string => {
   // FIXME: ensure the redirect works correctly (the target doesn't exist yet)
 
   const legacyURLParams = new URL(url, 'https://localhost/').searchParams
@@ -82,13 +79,14 @@ export const legacyErrataSearchRedirectUrlBuilder = (url: string): string => {
     return buildSearchRedirect(legacySearchParams.data)
   }
 
-  return rfcEditorErrataSearchUrl()
+  return rfcEditorErrataSearchUrl(envDomain)
 }
 
 type LegacyErrataSearchParams = z.infer<typeof LegacyErrataSearchParamsSchema>
 
 export const buildSearchRedirect = (
-  legacyErrataSearchObj: z.infer<typeof LegacyErrataSearchParamsSchema>
+  legacyErrataSearchObj: z.infer<typeof LegacyErrataSearchParamsSchema>,
+  envDomain = ''
 ): string => {
   const hasParams =
     Object.values(legacyErrataSearchObj).join('').trim().length > 0
@@ -112,5 +110,5 @@ export const buildSearchRedirect = (
         .join('&')
       : ''
 
-  return `${rfcEditorErrataSearchUrl()}${params ? '?' : ''}${params}`
+  return `${rfcEditorErrataSearchUrl(envDomain)}${params ? '?' : ''}${params}`
 }
