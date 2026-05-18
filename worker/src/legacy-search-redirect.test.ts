@@ -83,7 +83,5 @@ test('translateParamsString: complex example', () => {
 test('translateParamsString: complex example (2)', () => {
   const url = '/search/rfc_search_detail.php?title=mail&pubstatus[]=Standards+Track&std_trk=Internet+Standard&pub_date_type=any'
 
-  expect(legacySearchRedirectPathBuilder(url)).toEqual(
-    `${origin}/search/?q=mail&status=Internet+Standard`
-  )
+  expect(legacySearchRedirectPathBuilder(url)).toEqual(`${origin}/search/?q=mail&status=Internet+Standard`)
 })
