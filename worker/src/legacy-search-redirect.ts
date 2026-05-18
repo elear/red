@@ -76,24 +76,52 @@ export const buildSearchRedirect = (
     searchParam.to = now.toFormat('yyyy-M')
   }
 
-  if (legacySearchObj['pubstatus[]']) {
-    const pubstatus =
-      Array.isArray(legacySearchObj['pubstatus[]']) ?
-        legacySearchObj['pubstatus[]']
-        : [legacySearchObj['pubstatus[]']]
-    searchParam.statuses = pubstatus
+  const legacySearchObjPubstatus = legacySearchObj['pubstatus[]']
+  const pubstatusArray = Array.isArray(legacySearchObjPubstatus) ? legacySearchObjPubstatus : [legacySearchObjPubstatus]
+  if (pubstatusArray) {
+    searchParam.statuses = pubstatusArray
       .map((pubstatus) => {
-        for (const [key, value] of sortedStatusMappingFromLegacyToNew) {
-          if (typeof value === 'string' && pubstatus === value) {
-            return key
-          } else if (Array.isArray(value) && value.includes(pubstatus)) {
-            return key
+        if (pubstatus) {
+          for (const [newValue, legacyValuesArray] of sortedStatusMappingFromLegacyToNew) {
+            if (legacyValuesArray.includes(pubstatus)) {
+              return newValue
+            }
           }
         }
         return undefined
       })
       .filter(status => typeof status === 'string')
       .sort()
+  }
+
+  if (legacySearchObj.std_trk) {
+    if (
+      // this param is a subcategory of `pubstatus[] === 'Standards Track'` so it only applies if that was checked
+      pubstatusArray && pubstatusArray.includes('Standards Track')
+    ) {
+      searchParam.statuses = searchParam.statuses ?? []
+
+      switch (legacySearchObj.std_trk.toLowerCase()) {
+        case 'all':
+          searchParam.statuses.push('Proposed Standard')
+          searchParam.statuses.push('Draft Standard')
+          searchParam.statuses.push('Internet Standard')
+          break
+        case 'proposed standard':
+          searchParam.statuses.push('Proposed Standard')
+          break
+        case 'draft standard':
+          searchParam.statuses.push('Draft Standard')
+          break
+        case 'internet standard':
+          searchParam.statuses.push('Internet Standard')
+          break
+      }
+    }
+  }
+
+  if (searchParam.statuses && searchParam.statuses.length === 0) {
+    searchParam.statuses = undefined
   }
 
   if (legacySearchObj.area_acronym) {
@@ -132,20 +160,16 @@ const monthNameToNumber = (
   return index + 1 // index is zero based but we want +1 because Jan=1, Feb=2, etc
 }
 
-const statusMappingFromLegacyToNew: Record<string, string | string[]> = {
-  any: 'Any',
-  standard: [
-    'Standards Track',
-    'Proposed Standard',
-    'Draft Standard',
-    'Internet Standard'
-  ],
-  bcp: 'Best Current Practice',
-  informational: 'Informational',
-  experimental: 'Experimental',
-  historic: 'Historic',
-  unknown: 'Unknown',
-  'not-issued': 'Not Issued'
+const statusMappingFromLegacyToNew: Record<string, string[]> = {
+  'Proposed Standard': ['Proposed Standard'],
+  'Draft Standard': ['Draft Standard'],
+  'Internet Standard': ['Internet Standard', 'standard'],
+  'Best Current Practice': ['Best Current Practice', 'bcp'],
+  'Informational': ['Informational', 'fyi'],
+  'Experimental': ['Experimental', 'exp'],
+  'Historic': ['Historic', 'his'],
+  'Unknown': ['Unknown', 'unk'],
+  'Not Issued': ['Not Issued']
 }
 
 const sortedStatusMappingFromLegacyToNew = Object.entries(

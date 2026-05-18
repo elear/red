@@ -30,7 +30,7 @@ test('translateParamsString: pubstatus', () => {
     legacySearchRedirectPathBuilder(
       '?pubstatus[]=Standards Track&pubstatus[]=Best Current Practice'
     )
-  ).toEqual(`${origin}/search/?statuses=bcp%2Cstandard`)
+  ).toEqual(`${origin}/search/?statuses=Best+Current+Practice`)
 })
 
 describe('translateParamsString: dates', () => {
@@ -72,10 +72,18 @@ describe('translateParamsString: dates', () => {
 })
 
 test('translateParamsString: complex example', () => {
-  const path =
+  const url =
     '/search/rfc_search_detail.php?rfc=900&title=q&pubstatus%5B%5D=Standards+Track&std_trk=Proposed+Standard&pubstatus%5B%5D=Best+Current+Practice&pubstatus%5B%5D=Experimental&pub_date_type=range&from_month=January&from_year=1970&to_month=May&to_year=1971&stream_name=IETF&area_acronym=art'
 
-  expect(legacySearchRedirectPathBuilder(path)).toEqual(
-    `${origin}/search/?area=art&from=1970-1&q=900+q&statuses=bcp%2Cexperimental%2Cstandard&stream=ietf&to=1971-5`
+  expect(legacySearchRedirectPathBuilder(url)).toEqual(
+    `${origin}/search/?area=art&from=1970-1&q=900+q&statuses=Best+Current+Practice%2CExperimental%2CProposed+Standard&stream=ietf&to=1971-5`
+  )
+})
+
+test('translateParamsString: complex example (2)', () => {
+  const url = '/search/rfc_search_detail.php?title=mail&pubstatus[]=Standards+Track&std_trk=Internet+Standard&pub_date_type=any'
+
+  expect(legacySearchRedirectPathBuilder(url)).toEqual(
+    `${origin}/search/?q=mail&statuses=Internet+Standard`
   )
 })
