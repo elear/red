@@ -16,7 +16,7 @@ const LegacySearchParamsSchema = z.object({
   area_acronym: z.string().optional()
 })
 
-export const legacySearchRedirectPathBuilder = (url: string): string => {
+export const legacySearchRedirectPathBuilder = (url: string, envDomain = ''): string => {
   const legacyURLParams = new URL(url, 'https://localhost/').searchParams
   const legacyObj: Record<string, string | string[]> = {}
 
@@ -39,16 +39,17 @@ export const legacySearchRedirectPathBuilder = (url: string): string => {
   const legacySearchParams = LegacySearchParamsSchema.safeParse(legacyObj)
 
   if (legacySearchParams.data) {
-    return buildSearchRedirect(legacySearchParams.data)
+    return buildSearchRedirect(legacySearchParams.data, envDomain)
   }
 
-  return ''
+  return searchPathBuilder({}, envDomain)
 }
 
 type SearchPathBuilderParams = Parameters<typeof searchPathBuilder>[0]
 
 export const buildSearchRedirect = (
-  legacySearchObj: z.infer<typeof LegacySearchParamsSchema>
+  legacySearchObj: z.infer<typeof LegacySearchParamsSchema>,
+  envDomain = ''
 ): string => {
   const searchParam: SearchPathBuilderParams = {}
 
@@ -111,7 +112,7 @@ export const buildSearchRedirect = (
     }
   }
 
-  return searchPathBuilder(searchParam)
+  return searchPathBuilder(searchParam, envDomain)
 }
 
 const lowercaseMonthNames = monthNames.map((monthName) =>

@@ -130,10 +130,11 @@ type SearchPathBuilderProps = {
 }
 
 export const searchPathBuilder = (
-  searchParams: Partial<SearchPathBuilderProps>
-): `${typeof SEARCH_PATH}${string}` => {
+  searchParams: Partial<SearchPathBuilderProps>,
+  envDomain: string = '',
+): string => {
   const hasParams = Object.values(searchParams).join('').trim().length > 0
-  return `${SEARCH_PATH}${hasParams ? '?' : ''}${hasParams ?
+  return `https://www${envDomain}.rfc-editor.org${SEARCH_PATH}${hasParams ? '?' : ''}${hasParams ?
     Object.keys(searchParams)
       .sort() // normalize order
       .map((searchKey) => {
