@@ -1,0 +1,33 @@
+name: Worker Vitest, TypeScript check
+
+on:
+  push:
+    paths:
+      - 'worker/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './worker'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 24.x
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./worker
+
+      - name: Run all tests
+        run: npm run test
+        working-directory: ./worker
