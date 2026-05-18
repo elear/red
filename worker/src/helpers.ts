@@ -1,3 +1,4 @@
+import z from 'zod'
 import type { IRequest } from 'itty-router'
 
 export function redirectTo(targetUrl: string, status = 302): (req: IRequest) => Response {
@@ -109,20 +110,21 @@ export const typeSenseEncodeUriComponent = (uriComponent: string) =>
   encodeURIComponent(uriComponent).replace(/%20/g, '+')
 
 const SEARCH_PATH = '/search/'
-type Status =
-  | 'Internet Standard'
-  | 'Proposed Standard'
-  | 'Draft Standard'
-  | 'Best Current Practice'
-  | 'Informational'
-  | 'Experimental'
-  | 'Historic'
-  | 'Unknown'
+export const statusSchema = z.union([
+  z.literal('Internet Standard'),
+  z.literal('Proposed Standard'),
+  z.literal('Draft Standard'),
+  z.literal('Best Current Practice'),
+  z.literal('Informational'),
+  z.literal('Experimental'),
+  z.literal('Historic'),
+  z.literal('Unknown')
+])
+type Status = z.infer<typeof statusSchema>
 type SearchPathBuilderProps = {
   q: string
   area: string
   stream: string
-  statuses: string[]
   status: Status[]
   from: string
   to: string

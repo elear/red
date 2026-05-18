@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { DateTime } from 'luxon'
-import { monthNames, searchPathBuilder } from './helpers'
+import { monthNames, searchPathBuilder, statusSchema } from './helpers'
 
 const LegacySearchParamsSchema = z.object({
   rfc: z.string().optional(),
@@ -79,7 +79,7 @@ export const buildSearchRedirect = (
   const legacySearchObjPubstatus = legacySearchObj['pubstatus[]']
   const pubstatusArray = Array.isArray(legacySearchObjPubstatus) ? legacySearchObjPubstatus : [legacySearchObjPubstatus]
   if (pubstatusArray) {
-    searchParam.statuses = pubstatusArray
+    searchParam.status = pubstatusArray
       .map((pubstatus) => {
         if (pubstatus) {
           for (const [newValue, legacyValuesArray] of sortedStatusMappingFromLegacyToNew) {
@@ -92,6 +92,7 @@ export const buildSearchRedirect = (
       })
       .filter(status => typeof status === 'string')
       .sort()
+      .map(maybeStatus => statusSchema.parse(maybeStatus))
   }
 
   if (legacySearchObj.std_trk) {
@@ -99,29 +100,30 @@ export const buildSearchRedirect = (
       // this param is a subcategory of `pubstatus[] === 'Standards Track'` so it only applies if that was checked
       pubstatusArray && pubstatusArray.includes('Standards Track')
     ) {
-      searchParam.statuses = searchParam.statuses ?? []
+      searchParam.status = searchParam.status ?? []
 
       switch (legacySearchObj.std_trk.toLowerCase()) {
         case 'all':
-          searchParam.statuses.push('Proposed Standard')
-          searchParam.statuses.push('Draft Standard')
-          searchParam.statuses.push('Internet Standard')
+          searchParam.status.push('Proposed Standard')
+          searchParam.status.push('Draft Standard')
+          searchParam.status.push('Internet Standard')
           break
         case 'proposed standard':
-          searchParam.statuses.push('Proposed Standard')
+          searchParam.status.push('Proposed Standard')
           break
         case 'draft standard':
-          searchParam.statuses.push('Draft Standard')
+          searchParam.status.push('Draft Standard')
           break
         case 'internet standard':
-          searchParam.statuses.push('Internet Standard')
+        case 'standard':
+          searchParam.status.push('Internet Standard')
           break
       }
     }
   }
 
-  if (searchParam.statuses && searchParam.statuses.length === 0) {
-    searchParam.statuses = undefined
+  if (searchParam.status && searchParam.status.length === 0) {
+    searchParam.status = undefined
   }
 
   if (legacySearchObj.area_acronym) {
