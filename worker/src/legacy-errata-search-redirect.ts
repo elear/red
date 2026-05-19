@@ -57,18 +57,19 @@ export const legacyErrataSearchRedirectUrlBuilder = (url: string, envDomain = ''
   // FIXME: ensure the redirect works correctly (the target doesn't exist yet)
 
   const legacyURLParams = new URL(url, 'https://localhost/').searchParams
-  const legacyObj: Record<string, string | string[]> = {}
+  const legacyObj: Record<string, string> = {}
 
-  // convert URL into object so we can validate it
-  for (const [key, value] of legacyURLParams.entries()) {
+  Array.from(legacyURLParams.entries()).forEach(([key, value]) => {
     // this will clobber duplicate keys but afaik those don't exist in the legacy errata search
     legacyObj[key] = value
-  }
+  })
 
   const { data, error } = LegacyErrataSearchParamsSchema.safeParse(legacyObj)
 
+  console.log('legacy redirect validtion', JSON.stringify(legacyObj), JSON.stringify(error), JSON.stringify(data))
+
   if (data) {
-    return buildSearchRedirect(data, envDomain)
+    return `${buildSearchRedirect(data, envDomain)}`
   }
 
   // otherwise there was parse bug, so we'll redirect without params
