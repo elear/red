@@ -61,18 +61,8 @@ export const legacyErrataSearchRedirectUrlBuilder = (url: string, envDomain = ''
 
   // convert URL into object so we can validate it
   for (const [key, value] of legacyURLParams.entries()) {
-    if (Object.prototype.hasOwnProperty.call(legacyObj, key)) {
-      const legacyObjValue = legacyObj[key]
-      if (typeof legacyObjValue === 'string') {
-        legacyObj[key] = [legacyObjValue]
-      }
-      if (!Array.isArray(legacyObj[key])) {
-        throw Error(`Expected array but was ${typeof legacyObj[key]}`)
-      }
-      legacyObj[key].push(value)
-    } else {
-      legacyObj[key] = value
-    }
+    // this will clobber duplicate keys but afaik those don't exist in the legacy errata search
+    legacyObj[key] = value
   }
 
   const { data, error } = LegacyErrataSearchParamsSchema.safeParse(legacyObj)
@@ -187,9 +177,8 @@ export const buildSearchRedirect = (
           return aKey.localeCompare(bKey)
         })
         .map(([searchKey, searchValue]) => {
-          const typesenseSearchKey = searchKey
           return searchValue ?
-            `${encodeURIComponent(typesenseSearchKey)}=${typeSenseEncodeUriComponent(
+            `${encodeURIComponent(searchKey)}=${typeSenseEncodeUriComponent(
               Array.isArray(searchValue) ? searchValue.join(',') : searchValue
             )}`
             : ''
