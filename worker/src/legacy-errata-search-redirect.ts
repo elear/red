@@ -172,7 +172,7 @@ export const buildSearchRedirect = (
   const params =
     hasParams ?
       Object.entries(newSearchParam)
-        .sort(([aKey], [bKey]) => {
+        .toSorted(([aKey], [bKey]) => {
           // normalize order
           return aKey.localeCompare(bKey)
         })
