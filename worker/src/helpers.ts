@@ -138,7 +138,7 @@ export const searchPathBuilder = (
   const hasParams = Object.values(searchParams).join('').trim().length > 0
   return `https://www${envDomain}.rfc-editor.org${SEARCH_PATH}${hasParams ? '?' : ''}${hasParams ?
     Object.keys(searchParams)
-      .sort() // normalize order
+      .toSorted() // normalize order
       .map((searchKey) => {
         const typesenseSearchKey = searchKey
         const searchValue =
@@ -156,4 +156,4 @@ export const searchPathBuilder = (
     }`
 }
 
-export const rfcEditorErrataSearchUrl = (envDomain: string = '') => `https://errata${envDomain}.rfc-editor.org`
+export const rfcEditorErrataSearchUrl = (envDomain: string = '') => `https://errata${envDomain}.rfc-editor.org/search/`

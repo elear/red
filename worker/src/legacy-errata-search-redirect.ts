@@ -98,8 +98,6 @@ export const buildSearchRedirect = (
   const hasParams =
     Object.values(legacyErrataSearchObj).join('').trim().length > 0
 
-  console.log({ hasParams })
-
   if (!hasParams) {
     return rfcEditorErrataSearchUrl(envDomain)
   }
@@ -184,8 +182,6 @@ export const buildSearchRedirect = (
     })
     .filter(Boolean)
     .join('&')
-
-  console.log({ params })
 
   return `${rfcEditorErrataSearchUrl(envDomain)}${params ? `?${params}` : ''}`
 }
