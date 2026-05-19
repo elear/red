@@ -66,8 +66,6 @@ export const legacyErrataSearchRedirectUrlBuilder = (url: string, envDomain = ''
 
   const { data, error } = LegacyErrataSearchParamsSchema.safeParse(legacyObj)
 
-  console.log('legacy redirect validtion', JSON.stringify(legacyObj), JSON.stringify(error), JSON.stringify(data))
-
   if (data) {
     return `${buildSearchRedirect(data, envDomain)}`
   }
@@ -99,6 +97,8 @@ export const buildSearchRedirect = (
 ): string => {
   const hasParams =
     Object.values(legacyErrataSearchObj).join('').trim().length > 0
+
+  console.log({ hasParams })
 
   if (!hasParams) {
     return rfcEditorErrataSearchUrl(envDomain)
@@ -170,23 +170,22 @@ export const buildSearchRedirect = (
     newSearchParam.stream = legacyErrataSearchObj.stream_name
   }
 
-  const params =
-    hasParams ?
-      Object.entries(newSearchParam)
-        .toSorted(([aKey], [bKey]) => {
-          // normalize order
-          return aKey.localeCompare(bKey)
-        })
-        .map(([searchKey, searchValue]) => {
-          return searchValue ?
-            `${encodeURIComponent(searchKey)}=${typeSenseEncodeUriComponent(
-              Array.isArray(searchValue) ? searchValue.join(',') : searchValue
-            )}`
-            : ''
-        })
-        .filter(Boolean)
-        .join('&')
-      : ''
+  const params = Object.entries(newSearchParam)
+    .toSorted(([aKey], [bKey]) => {
+      // normalize order
+      return aKey.localeCompare(bKey)
+    })
+    .map(([searchKey, searchValue]) => {
+      return searchValue ?
+        `${encodeURIComponent(searchKey)}=${typeSenseEncodeUriComponent(
+          Array.isArray(searchValue) ? searchValue.join(',') : searchValue
+        )}`
+        : ''
+    })
+    .filter(Boolean)
+    .join('&')
 
-  return `${rfcEditorErrataSearchUrl(envDomain)}${params ? '?' : ''}${params}`
+  console.log({ params })
+
+  return `${rfcEditorErrataSearchUrl(envDomain)}${params ? `?${params}` : ''}`
 }
