@@ -31,7 +31,7 @@ export const useFooterMenuData = (): MenuItem[] => {
     {
       label: 'Contact Us',
       children: [
-        { label: 'RFC Editor at IETF', href: CONTACT_PATH },
+        { label: 'RFC Editor', href: CONTACT_PATH },
         {
           label: 'rfc-dist Info Page',
           href: 'http://mailman.rfc-editor.org/mailman/listinfo/rfc-dist'
