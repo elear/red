@@ -12,5 +12,5 @@ test('translateParamsString: just a redirect', () => {
 
 test('translateParamsString: rfc number', () => {
   const errataSearchUrl = rfcEditorErrataSearchUrl()
-  expect(legacyErrataSearchRedirectUrlBuilder('?rfc=9000')).toEqual(`${errataSearchUrl}?rfc=9000`)
+  expect(legacyErrataSearchRedirectUrlBuilder('?rfc=9000')).toEqual(`${errataSearchUrl}?rfc_number=9000`)
 })

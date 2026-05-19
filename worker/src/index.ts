@@ -123,7 +123,7 @@ router
   .get('/search/rfc_search.php', (req: IRequest) =>
     Response.redirect(legacySearchRedirectPathBuilder(req.url, env.ENV_DOMAIN), 302)
   )
-  .get('/search/errata_search.php', (req: IRequest) =>
+  .get('/errata_search.php', (req: IRequest) =>
     Response.redirect(legacyErrataSearchRedirectUrlBuilder(req.url, env.ENV_DOMAIN), 302)
   )
 

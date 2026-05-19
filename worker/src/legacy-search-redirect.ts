@@ -36,11 +36,14 @@ export const legacySearchRedirectPathBuilder = (url: string, envDomain = ''): st
     }
   }
 
-  const legacySearchParams = LegacySearchParamsSchema.safeParse(legacyObj)
+  const { data, error } = LegacySearchParamsSchema.safeParse(legacyObj)
 
-  if (legacySearchParams.data) {
-    return buildSearchRedirect(legacySearchParams.data, envDomain)
+  if (data) {
+    return buildSearchRedirect(data, envDomain)
   }
+
+  // otherwise there was parse bug, so we'll redirect without params
+  console.error('Unable to parse redirect', JSON.stringify(legacyObj), error)
 
   return searchPathBuilder({}, envDomain)
 }

@@ -18,6 +18,7 @@ const LegacyErrataSearchParamsSchema = z.object({
   errata_type: z
     .union([
       z.literal(''), // All/Any
+      z.literal('1'), // Editorial
       z.literal('2') // Technical
     ])
     .optional(),
@@ -48,7 +49,8 @@ const LegacyErrataSearchParamsSchema = z.object({
       z.literal('Legacy'),
       z.literal('Editorial')
     ])
-    .optional()
+    .optional(),
+  presentation: z.string().optional()
 })
 
 export const legacyErrataSearchRedirectUrlBuilder = (url: string, envDomain = ''): string => {
@@ -73,33 +75,119 @@ export const legacyErrataSearchRedirectUrlBuilder = (url: string, envDomain = ''
     }
   }
 
-  const legacySearchParams = LegacyErrataSearchParamsSchema.safeParse(legacyObj)
+  const { data, error } = LegacyErrataSearchParamsSchema.safeParse(legacyObj)
 
-  if (legacySearchParams.data) {
-    return buildSearchRedirect(legacySearchParams.data)
+  if (data) {
+    return buildSearchRedirect(data, envDomain)
   }
+
+  // otherwise there was parse bug, so we'll redirect without params
+  console.error('Unable to parse redirect', error)
 
   return rfcEditorErrataSearchUrl(envDomain)
 }
 
 type LegacyErrataSearchParams = z.infer<typeof LegacyErrataSearchParamsSchema>
 
+type ErrataSearchPathBuilderParams = {
+  rfc_number?: string,
+  errata_id?: string,
+  status?: 'any' | 'verified_reported' | 'verified' | 'reported' | 'held' | 'rejected'
+  errata_type?: 'any' | 'editorial' | 'technical'
+  area?: string
+  wg_acronyn?: string
+  submit_date?: string
+  submitter_name?: string
+  presentation?: string
+  stream?: string
+}
+
 export const buildSearchRedirect = (
-  legacyErrataSearchObj: z.infer<typeof LegacyErrataSearchParamsSchema>,
+  legacyErrataSearchObj: LegacyErrataSearchParams,
   envDomain = ''
 ): string => {
   const hasParams =
     Object.values(legacyErrataSearchObj).join('').trim().length > 0
 
+  if (!hasParams) {
+    return rfcEditorErrataSearchUrl(envDomain)
+  }
+
+  const newSearchParam: ErrataSearchPathBuilderParams = {}
+
+  newSearchParam.rfc_number = legacyErrataSearchObj.rfc
+  newSearchParam.errata_id = legacyErrataSearchObj.eid
+
+  if (legacyErrataSearchObj.rec_status) {
+    switch (legacyErrataSearchObj.rec_status) {
+      case '0':
+        newSearchParam.status = 'verified_reported'
+        break
+      case '1':
+        newSearchParam.status = 'verified'
+        break
+      case '2':
+        newSearchParam.status = 'reported'
+        break
+      case '9':
+        newSearchParam.status = 'rejected'
+        break
+      case '3':
+        newSearchParam.status = 'held'
+        break
+      case '15':
+        newSearchParam.status = 'any'
+        break
+    }
+  }
+
+  if (legacyErrataSearchObj.errata_type) {
+    switch (legacyErrataSearchObj.errata_type) {
+      case '1':
+        newSearchParam.errata_type = 'editorial'
+        break
+      case '2':
+        newSearchParam.errata_type = 'technical'
+        break
+      default:
+        newSearchParam.errata_type = 'any'
+        break
+    }
+  }
+
+  if (legacyErrataSearchObj.area_acronym) {
+    newSearchParam.area = legacyErrataSearchObj.area_acronym
+  }
+
+  if (legacyErrataSearchObj.wg_acronym) {
+    newSearchParam.wg_acronyn = legacyErrataSearchObj.wg_acronym
+  }
+
+  if (legacyErrataSearchObj.submit_date) {
+    newSearchParam.submit_date = legacyErrataSearchObj.submit_date
+  }
+
+  if (legacyErrataSearchObj.submitter_name) {
+    newSearchParam.submitter_name = legacyErrataSearchObj.submitter_name
+  }
+
+  if (legacyErrataSearchObj.presentation) {
+    newSearchParam.presentation = legacyErrataSearchObj.presentation
+  }
+
+  if (legacyErrataSearchObj.stream_name) {
+    newSearchParam.stream = legacyErrataSearchObj.stream_name
+  }
+
   const params =
     hasParams ?
-      Object.keys(legacyErrataSearchObj)
-        .sort() // normalize order
-        .map((searchKey) => {
+      Object.entries(newSearchParam)
+        .sort(([aKey], [bKey]) => {
+          // normalize order
+          return aKey.localeCompare(bKey)
+        })
+        .map(([searchKey, searchValue]) => {
           const typesenseSearchKey = searchKey
-          const searchValue =
-            legacyErrataSearchObj[searchKey as keyof LegacyErrataSearchParams]
-
           return searchValue ?
             `${encodeURIComponent(typesenseSearchKey)}=${typeSenseEncodeUriComponent(
               Array.isArray(searchValue) ? searchValue.join(',') : searchValue
