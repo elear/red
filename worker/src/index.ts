@@ -73,6 +73,14 @@ router
   .get('/queue.xml', redirectTo(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/api/v1/queue.xml`, 302))
   .get('/queue.html', redirectTo(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/`, 302))
   .get('/queue2.html', redirectTo(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/`, 302))
+  .get('/staff/', redirectTo(`https://purple${env.ENV_DOMAIN}.rfc-editor.org/`, 302))
+  // Purple redirects
+  .get('/staff/add_draft.php', redirectTo(`https://purple${env.ENV_DOMAIN}.rfc-editor.org/`, 302))
+  .get('/staff/list_drafts.php', redirectTo(`https://purple${env.ENV_DOMAIN}.rfc-editor.org/`, 302))
+  .get('/staff/index_controls.php', redirectTo(`https://purple${env.ENV_DOMAIN}.rfc-editor.org/`, 302))
+  .get('/staff/current_queue.php', redirectTo(`https://purple${env.ENV_DOMAIN}.rfc-editor.org/`, 302))
+  .get('/staff/track_by_editor.php', redirectTo(`https://purple${env.ENV_DOMAIN}.rfc-editor.org/team`, 302))
+  .get('/staff/auth48_edit.php', redirectTo(`https://purple${env.ENV_DOMAIN}.rfc-editor.org/final-review`, 302))
 
   // Dynamic Redirects
   .get('/authors/:extra+', addNormalizedPath, (req: IRequest) => {
