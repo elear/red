@@ -1,12 +1,9 @@
 <template>
   <ais-clear-refinements :excluded-attributes="['type', 'flags.hiddenDefault', 'flags.updated']">
     <template #default="{ canRefine, refine }">
-      <button
-        v-show="canRefine"
-        type="button"
+      <button v-show="canRefine" type="reset"
         class="underline text-sky-700 dark:text-blue-100 px-3 py-0 -ml-3 cursor-pointer"
-        @click.prevent="handleClick(refine)"
-      >
+        @click.prevent="handleClick(refine)">
         Clear all
       </button>
     </template>
