@@ -1,5 +1,5 @@
 import { env } from 'cloudflare:workers'
-import { IttyRouter, StatusError } from 'itty-router'
+import { IttyRouter, StatusError, error } from 'itty-router'
 import type { IRequest } from 'itty-router'
 // import * as oidc from './oidc'
 import {
@@ -118,7 +118,7 @@ router
   })
   .get('/in-notes/:extra+', addNormalizedPath, (req: IRequest) => {
     if (!excludeInNotesRedirects.some((p) => req.normalizedPath.startsWith(p))) {
-      throw new StatusError(404)
+      return error(404)
     }
   })
   .get('/materials/:extra+', (req: IRequest) => Response.redirect(`https://materials.rfc-editor.org/${req.params.extra}`, 302))
