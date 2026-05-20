@@ -63,11 +63,15 @@ These files will no longer be served. Instead, use rsync.
 
 #### `/ref/*` and `/refs/*`
 
+The path will redirect to a path without leading zeros.
+
 These txt files were previously 4 digits (with leading zeros as padding), but are now 1-5+ digits without leading zeroes. A redirect is expected.
 
 Any URL references in the txt file may have trailing slashes `/` added.
 
 #### `/rfc/*`
+
+The path will redirect to a path without leading zeros.
 
 The HTML in these routes should not change as a result of the new site.
 
