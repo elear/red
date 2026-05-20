@@ -23,7 +23,7 @@ export async function blobsRfc(req: IRequest, env: Env): Promise<Response | unde
       rfcParts[2].startsWith('0')
     ) {
       const withoutLeadingZeros = req.normalizedPath.replace(/rfc0+/gi, 'rfc').replace(/ref0+/gi, 'ref')
-      return Response.redirect(withoutLeadingZeros, 302)
+      return Response.redirect(`${origin}${withoutLeadingZeros}`, 302)
     }
   }
 
@@ -74,6 +74,7 @@ export async function blobsRefs(req: IRequest, env: Env): Promise<Response | und
   const REFS_PREFIX = '/refs/ref'
 
   if (req.normalizedPath.startsWith(REFS_PREFIX)) {
+    const { origin } = new URL(req.url)
     const objectPath = req.normalizedPath.substring(REFS_PREFIX.length)
 
     if (
@@ -82,7 +83,7 @@ export async function blobsRefs(req: IRequest, env: Env): Promise<Response | und
       objectPath.startsWith('0')
     ) {
       const withoutLeadingZeros = req.normalizedPath.replace(/ref0+/gi, 'ref')
-      return Response.redirect(withoutLeadingZeros, 302)
+      return Response.redirect(`${origin}${withoutLeadingZeros}`, 302)
     }
 
     if (objectPath.endsWith('.txt')) {
