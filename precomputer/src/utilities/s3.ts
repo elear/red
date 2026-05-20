@@ -332,6 +332,7 @@ export const HOMEPAGE_LATEST_PATH = `other/homepage-latest.json` as const
 
 export const RFC_INDEX_TXT_PATH = 'other/rfc-index.txt' as const
 
+// This file isn't created by Red anymore. It's created by Datatracker.
 export const RFC_INDEX_XML_PATH = 'other/rfc-index.xml' as const
 
 export const RFC_MINI_INDEX_JSON_PATH = 'other/rfc-mini-index.json' as const
