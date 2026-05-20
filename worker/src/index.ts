@@ -144,6 +144,9 @@ router
   .get('/rfc/bcp-ref.txt', redirectTo('/std/bcp-index.txt', 302))
   // note that /rfc/fyi-ref.txt doesn't exist, and /rfc/rfc-ref.txt is not a redirect and is a blob still served
 
+  .get('/rfc/rfc-index.txt', redirectTo('/rfc-index.txt', 302))
+  .get('/rfc/rfc-index.xml', redirectTo('/rfc-index.xml', 302))
+
   // Blobs
   .get('/rfc/*', addNormalizedPath, blobsRfc)
   .get('/refs/*', addNormalizedPath, blobsRefs)
