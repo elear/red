@@ -226,7 +226,8 @@ export async function blobsStatics(req: IRequest, env: Env): Promise<Response | 
     { from: '/robots.txt', to: 'other/robots.txt' },
     { from: '/sitemap.xml', to: 'other/sitemap.xml' },
     { from: '/reports/CurrQstats.txt', to: 'other/reports/CurrQstats.txt' },
-    { from: '/api/v1/unusable-rfc-numbers.json', to: 'other/unusable-rfc-numbers.json' }
+    { from: '/api/v1/unusable-rfc-numbers.json', to: 'other/unusable-rfc-numbers.json' },
+    { from: '/js/metadata.min.js', to: 'other/js/metadata.min.js' },
   ]
 
   const mapping = mappings.find((mapping) => mapping.from === req.normalizedPath)
