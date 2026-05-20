@@ -85,7 +85,7 @@ router
   // Dynamic Redirects
   .get('/authors/:extra+', addNormalizedPath, (req: IRequest) => {
     if (!excludeAuthorRedirects.some((p) => req.normalizedPath.startsWith(p))) {
-      Response.redirect(`https://auth48-transition.rfc-editor.org/authors/${req.params.extra}`, 302)
+      return Response.redirect(`https://auth48-transition.rfc-editor.org/authors/${req.params.extra}`, 302)
     }
   })
   .get('/cluster_info.php', (req: IRequest) => {
