@@ -7,7 +7,8 @@ type RfcAuthor = RfcCommon['authors'][number]
 export const EDITOR_SUFFIX = ', Ed.'
 
 /**
- * No longer done, but some early RFCs had authors as organisations not individuals.
+ * Some early RFCs had authors as organisations not individuals.
+ * This is no longer done, so it's unlikely to need to update this list.
  */
 const organisationsAsUsers = [
   'Information Sciences Institute University of Southern California', // RFC 212
