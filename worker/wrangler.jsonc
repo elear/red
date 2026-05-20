@@ -89,7 +89,7 @@
     },
     "production": {
       "routes": [
-        { "pattern": "www.rfc-editor.org/*", "zone_name": "rfc-editor.org" }
+        { "pattern": "northdakota.rfc-editor.org/*", "zone_name": "rfc-editor.org" }
       ],
       "kv_namespaces": [
         {
