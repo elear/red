@@ -1,11 +1,12 @@
 import type { IRequest } from 'itty-router'
 import { createBlobResponse, createBlobNotFoundResponse, detectContentType } from './helpers'
 
-export async function blobsRfc(req: IRequest, env: Env): Promise<Response | undefined> {
-  const RFC_PREFIX = '/rfc/'
-  const INLINE_ERRATA_PREFIX = 'inline-errata/'
-  const INLINE_ERRATA_CSS_BUCKET_PREFIX = 'inline-errata/css/css/'
+const RFC_PREFIX = '/rfc/'
+const INLINE_ERRATA_PREFIX = 'inline-errata/'
+const INLINE_ERRATA_CSS_BUCKET_PREFIX = 'inline-errata/css/css/'
+const RFC_REF_TXT = 'rfc-ref.txt'
 
+export async function blobsRfc(req: IRequest, env: Env): Promise<Response | undefined> {
   const inlineErrataCssPrefix = `${INLINE_ERRATA_PREFIX}css/`
 
   const objectPath = req.normalizedPath.substring(RFC_PREFIX.length)
@@ -34,6 +35,14 @@ export async function blobsRfc(req: IRequest, env: Env): Promise<Response | unde
         return createBlobResponse(object, detectContentType(objectPath))
       }
     }
+  } else if (objectPath === RFC_REF_TXT) {
+    // Keep bucket path in sync with precomputer upload bucket path. Same variable name used
+    const IN_NOTES_RFC_REF_DOT_TXT_PATH = 'other/in-notes/rfc-ref.txt' as const
+    // Note RED bucket usage
+    const object = await env.RED_BUCKET.get(IN_NOTES_RFC_REF_DOT_TXT_PATH)
+    if (object) {
+      return createBlobResponse(object, detectContentType(objectPath), canonicalUrl)
+    }
   } else if (
     ['.html', '.json', '.pdf', '.txt', '.xml'].some((ft) => objectPath.endsWith(ft))
   ) {
@@ -44,6 +53,7 @@ export async function blobsRfc(req: IRequest, env: Env): Promise<Response | unde
     }
   }
 
+  // Links to `/rfc/rfc1234` without a file extension should redirect to the `/info/rfc1234/` page
   const extensionlessMatch = objectPath.match(/^(rfc(\d+)\/?)$/i)
   if (extensionlessMatch && canonicalUrl) {
     return Response.redirect(canonicalUrl, 302)
