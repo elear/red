@@ -648,14 +648,23 @@ const parseAuthors = (
 ): RfcCommon['authors'] => {
   return authors ?
     authors.map((author): RfcCommon['authors'][number] => {
+      const { titlepage_name,
+        is_editor,
+        person,
+        email,
+        affiliation,
+        country,
+        datatracker_person_path
+      } = author
+
       return {
-        titlepage_name: author.titlepage_name,
-        is_editor: author.is_editor,
-        person: author.person ?? undefined,
-        email: author.email ?? undefined,
-        affiliation: author.affiliation,
-        country: author.country,
-        datatracker_person_path: author.datatracker_person_path
+        titlepage_name,
+        is_editor,
+        person: person ?? undefined,
+        email,
+        affiliation,
+        country,
+        datatracker_person_path
       }
     })
     : []
