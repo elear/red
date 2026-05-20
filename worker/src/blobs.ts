@@ -17,6 +17,14 @@ export async function blobsRfc(req: IRequest, env: Env): Promise<Response | unde
   if (rfcParts && rfcParts[2]) {
     const rfcNumber = parseInt(rfcParts[2], 10)
     canonicalUrl = `${origin}/info/rfc${rfcNumber}/`
+    if (
+      // if rfc has leading zeros we might need to redirect
+      // ie `/rfc/rfc0100.pdf` should redirect to `/rfc/rfc100.pdf`
+      rfcParts[2].startsWith('0')
+    ) {
+      const withoutLeadingZeros = req.normalizedPath.replace(/rfc0+/gi, 'rfc').replace(/ref0+/gi, 'ref')
+      return Response.redirect(withoutLeadingZeros, 302)
+    }
   }
 
   if (objectPath.startsWith(INLINE_ERRATA_PREFIX)) {
@@ -67,6 +75,15 @@ export async function blobsRefs(req: IRequest, env: Env): Promise<Response | und
 
   if (req.normalizedPath.startsWith(REFS_PREFIX)) {
     const objectPath = req.normalizedPath.substring(REFS_PREFIX.length)
+
+    if (
+      // if ref has leading zeros we might need to redirect
+      // ie `/refs/ref0212.txt` should redirect to `/refs/ref212.txt`
+      objectPath.startsWith('0')
+    ) {
+      const withoutLeadingZeros = req.normalizedPath.replace(/ref0+/gi, 'ref')
+      return Response.redirect(withoutLeadingZeros, 302)
+    }
 
     if (objectPath.endsWith('.txt')) {
       const object = await env.RED_BUCKET.get(`rfc-ref/${objectPath}`)
