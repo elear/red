@@ -89,7 +89,7 @@
     },
     "production": {
       "routes": [
-        // { "pattern": "www.rfc-editor.org/*", "zone_name": "rfc-editor.org" }
+        { "pattern": "www.rfc-editor.org/*", "zone_name": "rfc-editor.org" }
       ],
       "kv_namespaces": [
         {
@@ -100,11 +100,11 @@
       "r2_buckets": [
         {
           "binding": "RFC_BUCKET",
-          "bucket_name": "rfc"
+          "bucket_name": "shadow-rfc"
         },
         {
           "binding": "RED_BUCKET",
-          "bucket_name": "red"
+          "bucket_name": "red-prod"
         },
         {
           "binding": "INLINE_ERRATA_BUCKET",
