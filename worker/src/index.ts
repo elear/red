@@ -140,6 +140,10 @@ router
   // .get('/oidc', oidc.login)
   // .get('/oidc/callback', oidc.callback)
 
+  .get('/rfc/std-ref.txt', redirectTo('/std/std-index.txt', 302))
+  .get('/rfc/bcp-ref.txt', redirectTo('/std/bcp-index.txt', 302))
+  // note that /rfc/fyi-ref.txt doesn't exist, and /rfc/rfc-ref.txt is not a redirect and is a blob still served
+
   // Blobs
   .get('/rfc/*', addNormalizedPath, blobsRfc)
   .get('/refs/*', addNormalizedPath, blobsRefs)
