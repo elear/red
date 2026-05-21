@@ -1,45 +1,28 @@
 <template>
     <div class="bg-blue-900 dark:bg-blue-950">
-        <Heading
-            level="1"
-            style-level="1"
-            class="container mx-auto px-2 py-1 text-white dark:text-gray-300 text-balance"
-        >
+        <Heading level="1" style-level="1"
+            class="container mx-auto px-2 py-1 text-white dark:text-gray-300 text-balance">
             Search RFCs
         </Heading>
     </div>
-    <div
-        :id="INSTANTSEARCH_STICKY_CONTAINER_DOM_ID"
-        class="lg:sticky lg:top-0 lg:z-60 bg-blue-900 dark:bg-blue-950 text-white mt-0"
-    >
+    <div :id="INSTANTSEARCH_STICKY_CONTAINER_DOM_ID"
+        class="lg:sticky lg:top-0 lg:z-60 bg-blue-900 dark:bg-blue-950 text-white mt-0">
         <div class="flex flex-row items-center pt-4 pb-4 container mx-auto">
             <div class="w-full md:w-2/3">
-                <ais-search-box
-                    autofocus
-                    placeholder="Find an RFC (number, subseries, title, author, etc.)"
-                    :class-names="{
-                        'ais-SearchBox-form': 'w-full flex ml-1',
-                        'ais-SearchBox-input': aisSearchboxInputClass,
-                        'ais-SearchBox-submit':
-                            'bg-blue-200 px-2 flex items-center rounded-r-xs',
-                        'ais-SearchBox-reset': 'hidden',
-                        'ais-SearchBox-loadingIndicator':
-                            'bg-yellow-400 px-2 flex items-center text-white'
-                    }"
-                    show-loading-indicator
-                    @input="scrollUpToNewSearchResults"
-                >
+                <ais-search-box autofocus :placeholder="SEARCH_PLACEHOLDER" :class-names="{
+                    'ais-SearchBox-form': 'w-full flex ml-1',
+                    'ais-SearchBox-input': aisSearchboxInputClass,
+                    'ais-SearchBox-submit':
+                        'bg-blue-200 px-2 flex items-center rounded-r-xs',
+                    'ais-SearchBox-reset': 'hidden',
+                    'ais-SearchBox-loadingIndicator':
+                        'bg-yellow-400 px-2 flex items-center text-white'
+                }" show-loading-indicator @input="scrollUpToNewSearchResults">
                     <template #submit-icon>
-                        <Icon
-                            name="fluent:search-12-filled"
-                            size="2em"
-                        />
+                        <Icon name="fluent:search-12-filled" size="2em" />
                     </template>
                     <template #loading-indicator>
-                        <Icon
-                            name="eos-icons:loading"
-                            size="2em"
-                        />
+                        <Icon name="eos-icons:loading" size="2em" />
                     </template>
                 </ais-search-box>
             </div>
@@ -63,6 +46,7 @@
 <script setup lang="ts">
 import { AisSearchBox } from 'vue-instantsearch/vue3/es'
 import { INSTANTSEARCH_STICKY_CONTAINER_DOM_ID, scrollUpToNewSearchResults } from '../utilities/typesense'
+import { SEARCH_PLACEHOLDER } from '~/utilities/search';
 
 const aisSearchboxInputClass = 'flex-1 min-w-0 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2 h-12 rounded-l-xs'
 </script>
