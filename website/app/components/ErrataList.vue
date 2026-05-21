@@ -3,40 +3,27 @@
     <form v-if="props.errataList && props.errataList.length > 0">
       <label class="text-sm">
         <span class="inline-block font-bold mb-2">Show only</span><br />
-        <SelectNeue
-          v-model="selectedStatusType"
-          @change="
-            (event: Event) => {
-              const select = event.target
-              if (!isSelectElement(select)) {
-                return
-              }
-              selectedStatusType = select.value as ErrataStatus
+        <SelectNeue v-model="selectedStatusType" @change="
+          (event: Event) => {
+            const select = event.target
+            if (!isSelectElement(select)) {
+              return
             }
-          "
-        >
-          <option
-            v-for="option in allStatusTypes"
-            :key="option"
-            :value="option"
-          >
+            selectedStatusType = select.value as ErrataStatus
+          }
+        ">
+          <option v-for="option in allStatusTypes" :key="option" :value="option">
             {{ option }}
             {{
               typeof statusCounts[option] === 'number' ?
                 `(${statusCounts[option]})`
-              : '(0)'
+                : '(0)'
             }}
           </option>
         </SelectNeue>
       </label>
-      <ul
-        v-if="filteredErrataList && filteredErrataList.length > 0"
-        class="mt-3 mr-2 flex flex-col gap-2"
-      >
-        <li
-          v-for="errataItemForTab in filteredErrataList"
-          :key="errataItemForTab.errata_id"
-        >
+      <ul v-if="filteredErrataList && filteredErrataList.length > 0" class="mt-3 mr-2 flex flex-col gap-2">
+        <li v-for="errataItemForTab in filteredErrataList" :key="errataItemForTab.errata_id">
           <ErrataListItem :errata-item-for-tab="errataItemForTab" />
         </li>
       </ul>
@@ -88,14 +75,23 @@ const statusCounts = computed<Record<ErrataStatus, number>>(() => {
   )
 })
 
-const firstStatusWithACount = Object.entries(statusCounts.value).find(
-  ([_key, count]) => count > 0
-)
+const preferredOrder: ErrataStatus[] = ['Verified', 'Held for Document Update', 'Reported', 'Rejected']
+
+const firstStatusWithACount = Object.entries(statusCounts.value)
+  .toSorted(([_keyA], [_keyB]) => {
+    const keyA = _keyA as ErrataStatus
+    const keyB = _keyB as ErrataStatus
+    return preferredOrder.indexOf(keyA) - preferredOrder.indexOf(keyB)
+  })
+  .find(
+    // find first one with some results
+    ([_key, count]) => count > 0
+  )
 
 const selectedStatusType = ref(
   firstStatusWithACount ?
     (firstStatusWithACount[0] as ErrataStatus)
-  : (allStatusTypes.value[0] as ErrataStatus)
+    : (allStatusTypes.value[0] as ErrataStatus)
 )
 
 const errataItemsForTab = ref<ErrataItemForTab[] | undefined>(
