@@ -44,10 +44,21 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
     build: {
+      cssCodeSplit: false,
       rollupOptions: {
         preserveEntrySignatures: 'strict',
         output: {
-          preserveModules: true
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('search') || id.includes('typesense')) {
+                return 'vendor-search'
+              } else {
+                return 'vendor'
+              }
+            } else if (id.includes('app/components')) {
+              return 'components'
+            }
+          }
         }
       }
     },
