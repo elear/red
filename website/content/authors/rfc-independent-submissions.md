@@ -7,31 +7,11 @@ description: How the Independent Submission Stream works.
 The Independent Submission Stream allows RFC publication for some documents that are outside the official processes of the [IETF](https://www.ietf.org/), [IAB](https://www.iab.com/), and [IRTF](https://www.irtf.org/) but are relevant to the Internet community and achieve reasonable levels of technical and editorial quality. Note that RFCs published as independent submissions do not require, nor do they carry, community consensus, and they are not standards or best practices. [RFC 8730, "Independent Submission Editor Model"](/info/rfc8730/), as updated by [RFC 9920](/info/rfc9920/), describes the roles of
 
 - the Independent Submissions Editor (ISE) and
-- the [Independent Submissions Editorial Board](#independent-submissions-editorial-board), which provides review for the ISE.
+- the [Independent Submissions Editorial Board](ise/iseb.md), which provides review for the ISE.
 
 The Independent Submissions Editor (ISE) is currently [Eliot Lear](https://datatracker.ietf.org/person/lear@lear.ch), who can be reached at [rfc-ise@rfc-editor.org](mailto:rfc-ise@rfc-editor.org).
 
-## Independent Submissions Editorial Board
-
-The Independent Submissions Editorial Board (ISEB) provides reviews of independent submissions and offers advice to the Independent Submissions Editor (ISE). The ISEB can be reached at rfc-ed-board@rfc-editor.org.
-
-The present board includes (in alphabetical order):
-
-- Harald Alvestrand
-- Scott Bradner
-- Nevil Brownlee
-- Richard Clayton
-- Aaron Falk
-- Adrian Farrel
-- Stephen Farrell
-- Sharon Goldberg
-- Joel Halpern
-- Sue Hares
-- John Klensin
-- Subramanian Moonesamy (SM)
-- Kathleen Moriarty
-- Craig Partridge
-- Martin Thomson
+[Click here for steps to start the publication process](ise/ise-checklist.md).
 
 ## Publishing an Independent Submission
 
@@ -41,7 +21,6 @@ The present board includes (in alphabetical order):
 - [What if a document isn’t appropriate as an independent submission?](#what-if-a-document-isnt-appropriate-as-an-independent-submission)
 - [What about Intellectual Property Rights (IPR)?](#what-about-intellectual-property-rights-ipr)
 - [What’s the process?](#whats-the-process)
-- [How does one submit a draft for consideration as an independent submission RFC?](#how-does-one-submit-a-draft-for-consideration-as-an-independent-submission-rfc)
 - [At what stage is a document?](#at-what-stage-is-a-document)
 - [Who makes decisions about independent submissions?](#who-makes-decisions-about-independent-submissions)
 - [Who reviews submissions?](#who-reviews-submissions)
@@ -110,21 +89,6 @@ The rest of the process is summarized as follows:
 
 It’s important to note that many drafts do not make it past Step 4, and that every step after submission may be iterated or repeated. For instance, if external review indicates that substantial amounts of work are needed, authors are expected to improve the document in discussions with reviewers and the Independent Submissions Editor.
 
-#### How does one submit a draft for consideration as an independent submission RFC?
-
-To be considered for publishing as an RFC, a document must first be posted online as an Internet-Draft. (The exception is a document that is submitted for consideration as an [April 1st RFC](#how-can-i-submit-an-april-1st-rfc). See [I-D Author Resources](https://authors.ietf.org/) for guidance on posting an Internet-Draft.
-
-After posting the document as an Internet-Draft, the author should send an email message to the ISE: [rfc-ise@rfc-editor.org](mailto:rfc-ise@rfc-editor.org). This message should include the following information:
-
-- The file name of the published Internet-Draft that is being submitted.
-- The desired category (Informational or Experimental).
-- A summary of related discussion of this document, if any, that has occurred in an IETF working group or in the IESG.
-- An assertion that no IANA allocation in the document requires IETF Review or Standards Action. See [RFC 8126](/info/rfc8126/) for a definition of these terms and [RFC 8726](/info/rfc8726/) for more information about how IANA requests are handled for Independent Submission Stream documents.
-- A statement describing the purpose, intended audience, merits, and significance of the document.
-- An acknowledgment that the IPR rules of RFCs [4846](/info/rfc4846/) and [5744](/info/rfc5744/) apply, and that unless the authors state otherwise, permission is granted to produce derivative works, in whole or in part, as stated in those RFCs.
-Suggestions for one or more competent and independent potential reviewers for the document, including contact information. This can speed the review and approval process.
-
-The ISE uses the [IETF Datatracker](https://datatracker.ietf.org) through all stages of Independent Submission Stream document handling. The Datatracker page for a given draft shows its ISE state. [RFC 6322](/info/rfc6322/) provides descriptions of these states. In addition, a complete list showing the ISE state for all documents in the Independent Submission Stream is available in the [Datatracker](https://datatracker.ietf.org/stream/ise/).
 
 #### At what stage is a document?
 
