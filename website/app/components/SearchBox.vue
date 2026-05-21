@@ -18,7 +18,13 @@ const apiV1UrlOrigin = useApiV1UrlOrigin()
 
 const searchQuery = ref('')
 
+/**
+ * If a user types something that looks like an RFC number or seriesId then just redirect to /info/*
+ * 
+ * But otherwise just redirect to search with url params etc.
+ */
 const handleSearch = async () => {
+
   const { value } = searchQuery
   const normalizedValue = value.trim().replace(/\s/g, '')
   if (normalizedValue.match(/^[0-9]+$/)) {
