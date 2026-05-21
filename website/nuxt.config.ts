@@ -56,6 +56,7 @@ export default defineNuxtConfig({
         'es-toolkit',
         'luxon',
         'zod',
+        '@vueuse/core'
       ]
     }
   },
