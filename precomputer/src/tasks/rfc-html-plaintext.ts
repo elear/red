@@ -43,11 +43,11 @@ const parsePlaintextToc = (
     return parseInt(h.charAt(h.length - 1), 10)
   }
 
-  const headingSelector = 'h2, h3, h4, h5, h6'
-  const headingClassSelector = '.h2, .h3, .h4, .h5, .h6'
+  const HEADING_SELECTOR = 'h2, h3, h4, h5, h6'
+  const HEADING_CLASS_SELECTOR = '.h2, .h3, .h4, .h5, .h6'
+  const ID_SELECTOR = '[id]'
 
-
-  const tocSelector = [headingSelector, headingClassSelector].join(', ')
+  const tocSelector = [HEADING_SELECTOR, HEADING_CLASS_SELECTOR].join(', ')
 
   const headings = body.querySelectorAll<HTMLElement>(tocSelector)
 
@@ -73,12 +73,11 @@ const parsePlaintextToc = (
     const title = getInnerText(heading)
     let targetElement = heading
     if (!targetElement.id) {
-      if (targetElement.matches(headingClassSelector)) {
-        const descendantElementWithId = targetElement.querySelector<HTMLElement>('[id]')
-        if (descendantElementWithId) {
-          targetElement = descendantElementWithId
-        }
+      const descendantElementWithId = targetElement.querySelector<HTMLElement>(ID_SELECTOR)
+      if (descendantElementWithId) {
+        targetElement = descendantElementWithId
       }
+
       if (!targetElement.id) {
         targetElement.id = `autoid-${++n}`
       }
