@@ -31,7 +31,7 @@ fastify.get('/api/v1/rfc-html/:rfcNumber.json', async (request, reply) => {
   if (request.params && typeof request.params === 'object' && 'rfcNumber' in request.params) {
     const { rfcNumber } = request.params
     const rfcFloaty = parseFloat(String(rfcNumber))
-    return getRfcBucketHtmlDocument(rfcFloaty)
+    return getRfcBucketHtmlDocument(rfcFloaty, mockLocalBucket)
   }
   console.log('bad params?', request.params)
   throw Error(`bad param? ${JSON.stringify(request.params)}`)

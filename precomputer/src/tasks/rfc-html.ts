@@ -42,12 +42,19 @@ import { OPENGRAPH_IMAGE_DIMENSIONS, sanitiseHtml } from '../utilities/html.ts'
 import { getRfcCommonCached } from '../utilities/api.ts'
 import sharp from 'sharp'
 
-export const rfcBucketHtmlToRfcDocument = async (
+type Props = {
   rfcBucketHtml: string,
   rfcNumber: number,
   getRfcCommon: (rfcNumber: number) => Promise<RfcCommon | null>,
   getErrataList: (rfcNumber: number) => Promise<ErrataList>
-): Promise<RfcBucketHtmlDocument | null> => {
+}
+
+export const rfcBucketHtmlToRfcDocument = async ({
+  rfcBucketHtml,
+  rfcNumber,
+  getRfcCommon,
+  getErrataList,
+}: Props): Promise<RfcBucketHtmlDocument | null> => {
   const parser = await getDOMParser()
   const dom = parser.parseFromString(rfcBucketHtml, 'text/html')
 

@@ -6,9 +6,9 @@ import {
 
 let _errataListCache: ErrataList | undefined = undefined
 
-export const getAllErrataCached = async () => {
+export const getAllErrataCached = async (getBucket: typeof getFromS3 = getFromS3) => {
   if (!_errataListCache) {
-    const data = await getFromS3('S3_RED_BUCKET', ERRATA_JSON_PATH, 'default', ERRATA_JSON_PATH)
+    const data = await getBucket('S3_RED_BUCKET', ERRATA_JSON_PATH, 'default', ERRATA_JSON_PATH)
     if (typeof data !== 'string') {
       throw Error(
         `Unable to get ${JSON.stringify(ERRATA_JSON_PATH)}. Response was ${typeof data}`
@@ -21,8 +21,8 @@ export const getAllErrataCached = async () => {
   return _errataListCache
 }
 
-export const getErrataForRfc = async (rfcNumber: number) => {
-  const errataList = await getAllErrataCached()
+export const getErrataForRfc = async (rfcNumber: number, getBucket: typeof getFromS3 = getFromS3) => {
+  const errataList = await getAllErrataCached(getBucket)
 
   return errataList.filter(
     (errataItem) => errataItem['doc-id'] === `RFC${rfcNumber}`

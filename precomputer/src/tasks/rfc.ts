@@ -61,16 +61,17 @@ export const uploadRfcHtml = async (rfcNumber: number): AsyncTaskItem => {
 }
 
 export const getRfcBucketHtmlDocument = async (
-  rfcNumber: number
+  rfcNumber: number,
+  getBucket: typeof getFromS3 = getFromS3
 ): Promise<RfcBucketHtmlDocument | false> => {
-  const html = await fetchSourceRfcHtml(rfcNumber, getFromS3)
-  if (html !== null) {
-    const rfcDocFromHtml = await rfcBucketHtmlToRfcDocument(
-      html,
+  const rfcBucketHtml = await fetchSourceRfcHtml(rfcNumber, getBucket)
+  if (rfcBucketHtml !== null) {
+    const rfcDocFromHtml = await rfcBucketHtmlToRfcDocument({
+      rfcBucketHtml,
       rfcNumber,
-      getRfcCommonCached,
-      getErrataForRfc
-    )
+      getRfcCommon: getRfcCommonCached,
+      getErrataList: (rfcNumber: number) => getErrataForRfc(rfcNumber, getBucket)
+    })
     if (rfcDocFromHtml === null) {
       return false
     }

@@ -37,12 +37,12 @@ const processRfcBucketHtml = async (rfcNumber: number) => {
     )
 
   if (html) {
-    return rfcBucketHtmlToRfcDocument(
-      html,
+    return rfcBucketHtmlToRfcDocument({
+      rfcBucketHtml: html,
       rfcNumber,
       getRfcCommon,
-      getErrataByRfcNumber
-    )
+      getErrataList: getErrataByRfcNumber
+    })
   }
 }
 

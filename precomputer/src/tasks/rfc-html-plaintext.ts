@@ -43,7 +43,11 @@ const parsePlaintextToc = (
     return parseInt(h.charAt(h.length - 1), 10)
   }
 
-  const tocSelector = 'h2, h3, h4, h5, h6, .h2, .h3, .h4, .h5, .h6'
+  const headingSelector = 'h2, h3, h4, h5, h6'
+  const headingClassSelector = '.h2, .h3, .h4, .h5, .h6'
+
+
+  const tocSelector = [headingSelector, headingClassSelector].join(', ')
 
   const headings = body.querySelectorAll<HTMLElement>(tocSelector)
 
@@ -67,8 +71,18 @@ const parsePlaintextToc = (
   headings.forEach((heading) => {
     const level = get_level(heading) - min_level
     const title = getInnerText(heading)
-    if (!heading.id) {
-      heading.id = `autoid-${++n}`
+    let targetElement = heading
+    if (!targetElement.id) {
+      if (targetElement.matches(headingClassSelector)) {
+        const descendantElementWithId = heading.querySelector<HTMLElement>('[id]')
+        if (descendantElementWithId) {
+          targetElement = descendantElementWithId
+        }
+      }
+      if (!heading.id) {
+        heading.id = `autoid-${++n}`
+      }
+
     }
 
     if (level < currentLevel) {
@@ -111,7 +125,7 @@ const parsePlaintextToc = (
     }
 
     const link: TocLink = {
-      id: heading.id,
+      id: targetElement.id,
       title
     }
 
@@ -134,7 +148,7 @@ export const getPlaintextRfcDocument = (dom: Document): Node[] => {
   let hasPassedPreTag = false
   return Array.from(dom.body.childNodes).filter((node) => {
     if (isHtmlElement(node)) {
-      switch(node.nodeName.toLowerCase()) {
+      switch (node.nodeName.toLowerCase()) {
         case 'br':
           // see https://www.rfc-editor.org/rfc/rfc2000.html for leading <br>s that we want to filter
           // but only those before the first `<pre>` tag
