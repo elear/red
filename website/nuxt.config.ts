@@ -69,9 +69,9 @@ export default defineNuxtConfig({
         'luxon',
         'zod',
         '@vueuse/core',
-        'core-js/actual/array/to-sorted',
-        'vue-instantsearch/vue3/es',
-        'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js',
+        // 'core-js/actual/array/to-sorted',
+        // 'vue-instantsearch/vue3/es',
+        // 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js',
       ]
     }
   },

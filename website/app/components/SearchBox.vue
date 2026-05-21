@@ -21,9 +21,9 @@ const searchInputRef = useTemplateRef('search-input')
 const searchQuery = ref(searchInputRef.value?.value ?? '')
 
 /**
- * If a user types something that looks like an RFC number or seriesId then just redirect to /info/*
+ * If a user types something that looks like an RFC number or seriesId then redirect to /info/*
  * 
- * But otherwise just redirect to search with url params etc.
+ * Otherwise treat as an arbitrary search string: redirect to search with url params etc.
  */
 const handleSearch = async () => {
   const { value } = searchQuery
