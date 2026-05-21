@@ -74,15 +74,14 @@ const parsePlaintextToc = (
     let targetElement = heading
     if (!targetElement.id) {
       if (targetElement.matches(headingClassSelector)) {
-        const descendantElementWithId = heading.querySelector<HTMLElement>('[id]')
+        const descendantElementWithId = targetElement.querySelector<HTMLElement>('[id]')
         if (descendantElementWithId) {
           targetElement = descendantElementWithId
         }
       }
-      if (!heading.id) {
-        heading.id = `autoid-${++n}`
+      if (!targetElement.id) {
+        targetElement.id = `autoid-${++n}`
       }
-
     }
 
     if (level < currentLevel) {
