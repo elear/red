@@ -13,7 +13,7 @@ pre {
     
     Here are some notes from a previous dev. Please feel free to update to keep relevant.
 
-    THE PROBLEM
+    THE ISSUE
     Plaintext RFCs are fixed-width, which means they have an optimal font-size (based on their
     max line length) to fit their container's width, and the container width changes responsively
     from mobile to desktop etc.
@@ -210,9 +210,7 @@ pre {
     min() supported in Chrome 96/Firefox 75
     so this is 2020 era CSS that supporting browsers will use instead of the previous one
     */
-  font-size: min(var(--responsive-font-size),
-      /* max font-size on desktop */
-      1rem);
+  font-size: min(var(--responsive-font-size), /* max font-size on desktop */ 1rem);
 }
 
 @media only screen {
@@ -233,9 +231,9 @@ pre {
 }
 
 a {
-  color: var(--color-blue-700, #050);
+  color: var(--color-blue-150, #22e);
 }
 
 html.dark a {
-  color: var(--color-blue-300, #050);
+  color: var(--color-blue-50, #b3b3ff);
 }
