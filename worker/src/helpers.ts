@@ -17,7 +17,7 @@ export function addNormalizedPath(req: IRequest, ..._args: unknown[]): void {
   req.normalizedPath = decodeURIComponent(url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname)
 }
 
-export function createBlobResponse(object: R2ObjectBody, contentType?: string, canonicalUrl?: string): Response {
+export function createBlobResponse(object: R2ObjectBody, contentType?: string, canonicalUrl?: string, cacheControl?: number): Response {
   const headers = new Headers()
   object.writeHttpMetadata(headers)
   headers.set('etag', object.httpEtag)
@@ -32,6 +32,9 @@ export function createBlobResponse(object: R2ObjectBody, contentType?: string, c
     if (formattedCanonicalUrl) {
       headers.set('Link', formattedCanonicalUrl)
     }
+  }
+  if (cacheControl) {
+    headers.set('Cache-Control', `public, max-age=${cacheControl}`)
   }
 
   return new Response(object.body, {

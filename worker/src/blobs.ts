@@ -215,7 +215,7 @@ export async function blobsNuxtAssets(req: IRequest, env: Env): Promise<Response
   const bucketPath = `other/nuxt-assets/${objectPath}`
   const object = await env.RED_BUCKET.get(bucketPath)
   if (object) {
-    return createBlobResponse(object, detectContentType(objectPath))
+    return createBlobResponse(object, detectContentType(objectPath), undefined, 3600)
   }
 }
 
