@@ -208,6 +208,17 @@ export async function blobsSitemap(req: IRequest, env: Env): Promise<Response | 
   }
 }
 
+export async function blobsNuxtAssets(req: IRequest, env: Env): Promise<Response | undefined> {
+  const NUXT_ASSETS_PREFIX = '/_nuxt/'
+
+  const objectPath = req.normalizedPath.substring(NUXT_ASSETS_PREFIX.length)
+  const bucketPath = `other/nuxt-assets/${objectPath}`
+  const object = await env.RED_BUCKET.get(bucketPath)
+  if (object) {
+    return createBlobResponse(object, detectContentType(objectPath))
+  }
+}
+
 export async function blobsStatics(req: IRequest, env: Env): Promise<Response | undefined> {
   const mappings = [
     { from: '/favicon.ico', to: 'other/favicon-32x32.png' },

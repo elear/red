@@ -9,6 +9,7 @@ import {
   blobsApiRfcCommon,
   blobsApiRfcHtml,
   blobsApiRfcJson,
+  blobsNuxtAssets,
   blobsRefs,
   blobsRfc,
   blobsSitemap,
@@ -158,6 +159,7 @@ router
   .get('/api/v1/meta-thumbnail/*', addNormalizedPath, blobsApiMetaThumbnail)
   .get('/api/v1/favicon/*', addNormalizedPath, blobsApiFavicon)
   .get('/api/v1/rfc/*', addNormalizedPath, blobsApiRfcJson)
+  .get('/_nuxt/*', addNormalizedPath, blobsNuxtAssets)
   .get('/*', addNormalizedPath, blobsSitemap)
   .get('/*', addNormalizedPath, blobsStatics)
 
