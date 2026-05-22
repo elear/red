@@ -7,11 +7,11 @@ description: How the Independent Submission Stream works.
 The Independent Submission Stream allows RFC publication for some documents that are outside the official processes of the [IETF](https://www.ietf.org/), [IAB](https://www.iab.com/), and [IRTF](https://www.irtf.org/) but are relevant to the Internet community and achieve reasonable levels of technical and editorial quality. Note that RFCs published as independent submissions do not require, nor do they carry, community consensus, and they are not standards or best practices. [RFC 8730, "Independent Submission Editor Model"](/info/rfc8730/), as updated by [RFC 9920](/info/rfc9920/), describes the roles of
 
 - the Independent Submissions Editor (ISE) and
-- the [Independent Submissions Editorial Board](ise/iseb.md), which provides review for the ISE.
+- the [Independent Submissions Editorial Board](/authors/ise/iseb), which provides review for the ISE.
 
 The Independent Submissions Editor (ISE) is currently [Eliot Lear](https://datatracker.ietf.org/person/lear@lear.ch), who can be reached at [rfc-ise@rfc-editor.org](mailto:rfc-ise@rfc-editor.org).
 
-[Click here for steps to start the publication process](ise/ise-checklist.md).
+[Click here for steps to start the publication process](/authors/ise/ise-checklist).
 
 ## Publishing an Independent Submission
 
@@ -100,11 +100,11 @@ Note that a document can sometimes appear to go "backwards" in the process. This
 
 The Independent Submissions Editor is responsible for making decisions about each submission, in accordance with the guidance set forth in [RFC 4846](/info/rfc4846/). The Independent Submissions Editor is appointed by the [Internet Architecture Board (IAB)](https://iab.org/), and serves at their pleasure. Anyone may send comments to the IAB about the Independent Submissions Editor.
 
-The Independent Submissions Editor is ably assisted by the [Independent Submissions Editorial Board](#independent-submissions-editorial-board).
+The Independent Submissions Editor is ably assisted by the [Independent Submissions Editorial Board](/authors/ise/iseb).
 
 #### Who reviews submissions?
 
-The Independent Submissions Editor seeks review of the work through individuals who are knowledgeable about the topic discussed in the draft. Authors are encouraged to submit suggestions, but some reviews will be conducted outside of that list. The ISE often relies on the [Independent Submissions Editorial Board](#independent-submissions-editorial-board) to provide reviews. In addition, the ISE welcomes comments from **anyone** on a draft that is being considered by the ISE.
+The Independent Submissions Editor seeks review of the work through individuals who are knowledgeable about the topic discussed in the draft. Authors are encouraged to submit suggestions, but some reviews will be conducted outside of that list. The ISE often relies on the [Independent Submissions Editorial Board](/authors/ise/iseb) to provide reviews. In addition, the ISE welcomes comments from **anyone** on a draft that is being considered by the ISE.
 
 #### Where can reviews be found?
 
@@ -134,7 +134,7 @@ No. RFCs are all but immutable. However, anyone may submit an erratum about any 
 
 From time to time, the Independent Submissions Editor may have a conflict of interest, or the appearance of a conflict of interest, with regard to a particular draft. This can occur for a number of reasons, for example, a document submitted by an author that is employed by the same employer as the ISE or one of its competitors. Such relationships in and of themselves may not lead to variance in the editorial process, but they must be disclosed.
 
-When the ISE believes that there may be a conflict of interest, or if authors or others believe that there may be a conflict of interest, the matter will be referred to the [Independent Submissions Editorial Board](#independent-submissions-editorial-board). They will advise the ISE as to what should happen at the various stages of the publication process. The ISE will inform the community and authors of such conflicts, and any actions to be taken as a result.
+When the ISE believes that there may be a conflict of interest, or if authors or others believe that there may be a conflict of interest, the matter will be referred to the [Independent Submissions Editorial Board](/authors/ise/iseb). They will advise the ISE as to what should happen at the various stages of the publication process. The ISE will inform the community and authors of such conflicts, and any actions to be taken as a result.
 
 #### How can I submit an April 1st RFC?
 
