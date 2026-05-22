@@ -19,6 +19,15 @@
             />
           </Anchor>
         </div>
+        <div class="flex gap-2 items-center mt-2 pl-3 lg:mt-5 text-sm">
+          <a href="https://status.ietf.org" target="_blank">System Status</a>
+          <span class="text-gray-300">&middot;</span>
+          <a href="https://github.com/ietf-tools/red/issues" target="_blank">Report a Bug</a>
+          <template v-if="websiteVersion">
+            <span class="text-gray-300">&middot;</span>
+            <span class="text-gray-300">Version {{ websiteVersion }}</span>
+          </template>
+        </div>
       </div>
       <div class="flex-1 flex flex-col lg:flex-row gap-10 p-3 lg:p-0">
         <div
@@ -56,4 +65,9 @@
 <script setup lang="ts">
 import { IETF_URL_ORIGIN } from '../utilities/url'
 import { useFooterMenuData } from './FooterNavData'
+
+const websiteVersion = computed(() => {
+  const runtimeConfig = useRuntimeConfig()
+  return runtimeConfig.public.websiteVersion ?? ''
+})
 </script>

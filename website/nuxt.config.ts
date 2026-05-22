@@ -118,6 +118,7 @@ export default defineNuxtConfig({
       matomoSiteId: '12', // 12 is Red non-production ie local dev. Otherwise will be provided by env var NUXT_PUBLIC_MATOMO_SITE_ID
       typesenseApiKey: '2Ic06V287miUyJ32ee25q0ccXK0Dr3RO', // NUXT_PUBLIC_TYPESENSE_API_KEY Be sure to use an API key that only allows search operations
       typesenseHost: 'typesense.ietf.org', // NUXT_PUBLIC_TYPESENSE_HOST
+      websiteVersion: version
     }
   },
   postcss: {

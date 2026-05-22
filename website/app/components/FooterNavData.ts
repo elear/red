@@ -34,11 +34,11 @@ export const useFooterMenuData = (): MenuItem[] => {
         { label: 'RFC Editor', href: CONTACT_PATH },
         {
           label: 'rfc-dist Info Page',
-          href: 'http://mailman.rfc-editor.org/mailman/listinfo/rfc-dist'
+          href: 'https://mailman.rfc-editor.org/mailman/listinfo/rfc-dist'
         },
         {
           label: 'rfc-interest Info Page',
-          href: 'http://mailman.rfc-editor.org/mailman/listinfo/rfc-interest'
+          href: 'https://mailman.rfc-editor.org/mailman/listinfo/rfc-interest'
         }
       ]
     }
