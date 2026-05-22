@@ -48,17 +48,7 @@ export default defineNuxtConfig({
       rollupOptions: {
         preserveEntrySignatures: 'strict',
         output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              if (id.includes('search') || id.includes('typesense')) {
-                return 'vendor-search'
-              } else {
-                return 'vendor'
-              }
-            } else if (id.includes('app/components')) {
-              return 'components'
-            }
-          }
+
         }
       }
     },

@@ -1,5 +1,5 @@
 <template>
-  <form method="get" :action="SEARCH_PATH" class="flex flex-row pt-4 pb-4 md:pb-8" @submit.stop.prevent="handleSearch">
+  <form method="get" :action="SEARCH_PATH" class="flex flex-row pt-6 pb-2 md:pb-3" @submit.stop.prevent="handleSearch">
     <input id="search" ref="search-input" v-model="searchQuery" type="search" name="q"
       class="min-w-[0px] w-full bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 md:pl-6 py-3"
       :placeholder="SEARCH_PLACEHOLDER" aria-label="Find an RFC (number, subseries, title, author, etc.)" />
@@ -7,65 +7,122 @@
       <Icon name="fluent:search-12-filled" size="2em" />
     </button>
   </form>
+  <div class="text-sm italic">
+    <Anchor v-if="didYouMean" :href="infoSeriesPathBuilder(`${didYouMean.type}${didYouMean.number}`)"
+      class="no-underline hover:text-blue-100 dark:text-blue-100">
+      go directly to
+      <span class="underline">
+        <SubseriesTitle :series="didYouMean" />
+      </span>?
+    </Anchor>
+    {{ NONBREAKING_SPACE }}
+  </div>
 </template>
 
 <script setup lang="ts">
-import { parseSeriesId } from '~/utilities/rfc'
+import { watchDebounced } from '@vueuse/core'
+import { parseSeriesId, type SeriesId } from '~/utilities/rfc'
 import { SEARCH_PLACEHOLDER } from '~/utilities/search'
+import { NONBREAKING_SPACE } from '~/utilities/strings'
 import { apiRfcBucketDocumentPathBuilder, apiSubseriesPathBuilder, infoSeriesPathBuilder, SEARCH_PATH, searchPathBuilder, useApiV1UrlOrigin } from '~/utilities/url'
-
-const apiV1UrlOrigin = useApiV1UrlOrigin()
+import SubseriesTitle from './SubseriesTitle.vue'
 
 const searchInputRef = useTemplateRef('search-input')
 
 const searchQuery = ref(searchInputRef.value?.value ?? '')
 
-/**
- * If a user types something that looks like an RFC number or seriesId then redirect to /info/*
- * 
- * Otherwise treat as an arbitrary search string: redirect to search with url params etc.
- */
-const handleSearch = async () => {
+const isDidYouMeanActive = ref(false)
+
+const didYouMean = ref<SeriesId | undefined>()
+
+let abortController: AbortController | undefined = undefined
+
+const checkSearchForSeriesId = async () => {
   const { value } = searchQuery
-  const normalizedValue = value.trim().replace(/\s/g, '')
-  if (normalizedValue.match(/^[0-9]+$/)) {
-    // if it's just a number assume they want to go to an RFC
-    const rfcNumber = parseInt(normalizedValue, 10)
-    if (rfcNumber > 0) {
-      const rfcDataPath = apiRfcBucketDocumentPathBuilder(rfcNumber)
-      try {
-        const maybeRfcBucketDocument = await $fetch(rfcDataPath, {
-          method: 'GET',
-          baseURL: import.meta.server ? apiV1UrlOrigin : undefined,
-        })
-        if (maybeRfcBucketDocument) {
-          await navigateTo(infoSeriesPathBuilder(`rfc${rfcNumber}`))
-          return
-        }
-      } catch (e: unknown) {
-        console.info(`[Homepage search] RFC ${rfcNumber} doesn't exist so using search`, rfcDataPath, normalizedValue, value, e)
-      }
-    }
+  if (value === '/allow suggestions') {
+    isDidYouMeanActive.value = true
   }
-  const seriesId = parseSeriesId(normalizedValue)
-  if (seriesId) {
-    const subseriesPath = apiSubseriesPathBuilder(seriesId.type, seriesId.number)
-    try {
-      const maybeSubseriesDocument = await $fetch(subseriesPath, {
-        method: 'GET',
-        baseURL: import.meta.server ? apiV1UrlOrigin : undefined,
-      })
-      if (maybeSubseriesDocument) {
-        await navigateTo(infoSeriesPathBuilder(`${seriesId.type}${seriesId.number}`))
-        return
-      }
-    } catch (e: unknown) {
-      console.info(`[Homepage search] ${seriesId.type} ${seriesId.number} doesn't exist so using search`, subseriesPath, normalizedValue, value, e)
+  if (isDidYouMeanActive.value === false) {
+    return
+  }
+
+  if (abortController) {
+    abortController.abort()
+  }
+
+  didYouMean.value = undefined
+  abortController = new AbortController()
+  const signal = abortController.signal;
+
+  const normalizedValue = value.trim().replace(/\s/g, '')
+  let seriesId = parseSeriesId(normalizedValue)
+
+  if (
+    // if it's just a number assume RFC number
+    normalizedValue.match(/^[0-9]+$/)
+  ) {
+    const rfcNumber = parseInt(normalizedValue, 10)
+    seriesId = {
+      type: 'rfc',
+      number: rfcNumber
     }
   }
 
+  if (seriesId && seriesId.number > 0) {
+    if (seriesId.type === 'rfc') {
+      const rfcDataPath = apiRfcBucketDocumentPathBuilder(seriesId.number)
+      try {
+        const response = await fetch(rfcDataPath, {
+          method: 'GET',
+          signal
+        })
+        if (response.ok) {
+          didYouMean.value = seriesId
+          return
+        }
+      } catch (e: unknown) {
+        console.info(`[Homepage search] RFC ${seriesId.number} doesn't exist so using search`, rfcDataPath, normalizedValue, value, e)
+      }
+
+    } else {
+      const subseriesPath = apiSubseriesPathBuilder(seriesId.type, seriesId.number)
+      try {
+        const response = await fetch(subseriesPath, {
+          method: 'GET',
+          signal
+        })
+        if (response.ok) {
+          didYouMean.value = seriesId
+          return
+        }
+      } catch (e: unknown) {
+        console.info(`[Homepage search] ${seriesId.type} ${seriesId.number} doesn't exist so using search`, subseriesPath, normalizedValue, value, e)
+      }
+    }
+  }
+
+  didYouMean.value = undefined
+}
+
+/**
+ * If a user types something that looks like an RFC number or seriesId then offer a link to go directly to an RFC
+ * 
+ */
+watchDebounced(
+  () => searchQuery.value,
+  checkSearchForSeriesId,
+  {
+    debounce: 200,
+    maxWait: 400,
+    immediate: true,
+    deep: true
+  }
+)
+
+const handleSearch = async () => {
+  const { value } = searchQuery
   const searchPath = searchPathBuilder({
-    q: searchQuery.value
+    q: value
   })
   navigateTo(searchPath)
 }
