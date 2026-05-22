@@ -51,7 +51,7 @@
           <Icon name="fluent:window-new-20-regular" class="text-lg align-middle ml-1" />
         </AValidHref>, which collectively form the authoritative source for RFCs.
       </p>
-      <SearchBox class="mt-2 mb-0 md:mb-4" />
+      <IndexSubheaderSearchBox class="mt-2 mb-0 md:mb-4" />
     </div>
   </div>
 </template>

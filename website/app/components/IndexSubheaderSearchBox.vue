@@ -116,8 +116,8 @@ watchDebounced(
   {
     debounce: 200,
     maxWait: 400,
-    immediate: true,
-    deep: true
+    immediate: false,
+    deep: true,
   }
 )
 

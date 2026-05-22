@@ -51,7 +51,21 @@ export default defineNuxtConfig({
       rollupOptions: {
         preserveEntrySignatures: 'strict',
         output: {
-
+          preserveModules: false,
+          manualChunks(id) {
+            if (id.includes('app/components/content')) {
+              return 'components-content'
+            }
+            if (id.includes('app/components/search')) {
+              return 'components-search'
+            }
+            if (id.includes('app/components/Graphics')) {
+              return 'components-graphics'
+            }
+            if (id.includes('app/components')) {
+              return 'components'
+            }
+          }
         }
       }
     },
@@ -62,9 +76,9 @@ export default defineNuxtConfig({
         'luxon',
         'zod',
         '@vueuse/core',
-        // 'core-js/actual/array/to-sorted',
-        // 'vue-instantsearch/vue3/es',
-        // 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js',
+        'core-js/actual/array/to-sorted',
+        'vue-instantsearch/vue3/es',
+        'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js',
       ]
     }
   },
