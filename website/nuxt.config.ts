@@ -53,6 +53,9 @@ export default defineNuxtConfig({
         output: {
           preserveModules: false,
           manualChunks(id) {
+            if (id.includes('node-modules')) {
+              return 'vendor'
+            }
             if (id.includes('app/components/content')) {
               return 'components-content'
             }
@@ -62,9 +65,9 @@ export default defineNuxtConfig({
             if (id.includes('app/components/Graphics')) {
               return 'components-graphics'
             }
-            if (id.includes('app/components')) {
-              return 'components'
-            }
+            // if (id.includes('app/components')) {
+            //   return 'components'
+            // }
           }
         }
       }
