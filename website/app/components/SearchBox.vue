@@ -39,7 +39,9 @@ let abortController: AbortController | undefined = undefined
 
 const checkSearchForSeriesId = async () => {
   const { value } = searchQuery
-  if (value === '/allow suggestions') {
+  if (
+    // require this value to enable suggestions  
+    value === '/allow suggestions') {
     isDidYouMeanActive.value = true
   }
   if (isDidYouMeanActive.value === false) {
