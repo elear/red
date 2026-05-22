@@ -10,6 +10,8 @@ spec:
   selector:
     matchLabels:
       app: red
+  strategy:
+    type: DEPLOY_STRATEGY
   template:
     metadata:
       labels:

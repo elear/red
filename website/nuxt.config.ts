@@ -1,4 +1,7 @@
 import tailwindcss from '@tailwindcss/vite'
+import { readFileSync } from 'fs'
+
+const { version } = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
 // inserted in the <head> some inline JS to determine scrollbar width so that CSS can use it in calc()
 // this is intentionally inserted in the <head> so that it runs immediately in the browser
@@ -114,6 +117,7 @@ export default defineNuxtConfig({
     // '~/plugins/telemetry/instrumentation'
   ],
   app: {
+    buildAssetsDir: `/_nuxt/${version}/`,
     head: {
       htmlAttrs: {
         lang: 'en'
