@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@source inline('text-blue-100  dark:text-blue-50 dark:text-blue-100 text-blue-300 dark:text-blue-300 color-blue-50 color-blue-100 color-blue-300');
+@source inline('text-blue-100 dark:text-blue-50 dark:text-blue-100 text-blue-300 dark:text-blue-300 color-blue-50 color-blue-100 color-blue-300');
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -19,6 +19,7 @@
   --color-blue-400: #18539B;
   --color-blue-900: #002D3C;
   --color-blue-950: #00101C;
+  --color-blue-975: #00070f;
   --color-yellow-100: #FFEE66;
   --color-yellow-200: #FFE459;
   --color-yellow-400: #FFD13E;
@@ -279,7 +280,7 @@ html {
 }
 
 html.dark {
-  background: var(--color-black);
+  background: var(--color-blue-975);
   color: var(--color-white);
 }
 

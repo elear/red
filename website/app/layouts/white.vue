@@ -3,7 +3,7 @@
     <Header>
       <slot name="subheader"></slot>
     </Header>
-    <div class="bg-white dark:bg-black flex-1">
+    <div class="bg-white dark:bg-blue-975 flex-1">
       <Main>
         <slot />
       </Main>

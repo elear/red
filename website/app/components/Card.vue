@@ -1,6 +1,6 @@
 <template>
   <div :class="[
-    'bg-white dark:bg-black relative dark:border-1 dark:border-gray-500 pl-5 pr-7 py-4 rounded shadow-xs print:border-2 print:border-black',
+    'bg-white dark:bg-blue-950 relative dark:border dark:border-gray-500 pl-5 pr-7 py-4 rounded shadow-xs print:border-2 print:border-black',
     props.class
   ]">
     <div :class="props.containerClass">
