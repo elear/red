@@ -1,4 +1,4 @@
-FROM node:22
+FROM node:24
 LABEL maintainer="IETF Tools Team <tools-discuss@ietf.org>"
 
 RUN mkdir -p /app && \

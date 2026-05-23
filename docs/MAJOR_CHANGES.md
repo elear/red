@@ -1,4 +1,4 @@
-# CHANGE LOG
+# MAJOR CHANGES
 
 ## RFC Editor.org
 
