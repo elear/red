@@ -7,6 +7,7 @@ export interface ColorModeInstance {
 
 export type ColorModeStorage = 'localStorage' | 'sessionStorage' | 'cookie'
 
+// @ts-ignore
 declare module '#app' {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface NuxtApp extends PluginInjection { }
