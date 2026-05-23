@@ -53,9 +53,12 @@ export default defineNuxtConfig({
         output: {
           preserveModules: false,
           manualChunks(id) {
-            if (id.includes('node-modules')) {
-              return 'vendor'
+            if (id.includes('node_modules/luxon')) {
+              return 'vendor-luxon'
             }
+            // if (id.includes('node_modules/nuxt') || id.includes('node_modules/@nuxt')) {
+            //   return 'vendor-nuxt'
+            // }
             if (id.includes('app/components/content')) {
               return 'components-content'
             }
@@ -65,9 +68,18 @@ export default defineNuxtConfig({
             if (id.includes('app/components/Graphics')) {
               return 'components-graphics'
             }
-            // if (id.includes('app/components')) {
-            //   return 'components'
-            // }
+            if (id.includes('app/components/RFC')) {
+              return 'components-rfc'
+            }
+            if (id.includes('app/components/TableOf')) {
+              return 'components-tableof'
+            }
+            if (id.includes('app/components/Table')) {
+              return 'components-table'
+            }
+            if (id.includes('app/components/Vertical') || id.includes('app/components/Horizontal')) {
+              return 'components-vertical-horizontal'
+            }
           }
         }
       }

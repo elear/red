@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "analyze": "npx --no nuxt analyze",
     "build": "npm run build:nuxt",
     "build:nuxt": "npx --no nuxt build",
     "build:dev": "npm run build:nuxt:dev",
@@ -12,7 +13,7 @@
     "dev:nuxt": "nuxt dev",
     "cleanup": "nuxt cleanup",
     "preview": "npm run build:nuxt && nuxt preview",
-    "preview:dev": " npm run build:nuxt:dev && nuxt preview",
+    "preview:dev": "npm run build:nuxt:dev && nuxt preview",
     "postinstall": "nuxt prepare",
     "test": "TZ=UTC npm run test:unittests && npm run test:types && npm run test:lint",
     "test:lint": "oxlint",
