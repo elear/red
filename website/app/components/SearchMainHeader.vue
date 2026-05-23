@@ -1,13 +1,13 @@
 <template>
     <div class="bg-blue-900 dark:bg-blue-950">
         <Heading level="1" style-level="1"
-            class="container mx-auto px-2 py-1 text-white dark:text-gray-300 text-balance">
+            class="container mx-auto pl-5 pr-3 py-1 text-white text-balance">
             Search RFCs
         </Heading>
     </div>
     <div :id="INSTANTSEARCH_STICKY_CONTAINER_DOM_ID"
         class="lg:sticky lg:top-0 lg:z-60 bg-blue-900 dark:bg-blue-950 text-white mt-0">
-        <div class="flex flex-row items-center pt-4 pb-4 container mx-auto">
+        <div class="flex flex-row items-center pt-4 pb-4 container mx-auto pl-5 pr-3">
             <div class="w-full md:w-2/3">
                 <ais-search-box autofocus :placeholder="SEARCH_PLACEHOLDER" :class-names="{
                     'ais-SearchBox-form': 'w-full flex ml-1',

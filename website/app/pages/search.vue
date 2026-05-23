@@ -4,7 +4,7 @@
       :future="{ preserveSharedStateOnUnmount: true }" :routing="routing">
       <NuxtLayout name="default">
         <SearchMainHeader />
-        <div class="container mx-auto flex flex-row items-start py-5 lg:min-h-screen md:px-2">
+        <div class="container mx-auto flex flex-row items-start py-5 lg:min-h-screen pl-5 pr-3"">
           <ClientOnly>
             <template #fallback>
               <p class="w-full text-center">
