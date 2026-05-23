@@ -19,7 +19,7 @@ export default defineNuxtConfig({
     '@nuxt/test-utils/module',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
-    '@nuxtjs/color-mode',
+    './modules/color-mode/module.ts',
     '@nuxt/icon',
     'nuxt-vitalizer'
   ],

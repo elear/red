@@ -2,22 +2,13 @@
   <div class="min-h-[100vh] mb-16">
     <BodyLayoutDocument :class="{ 'lg:pr-[300px]': !showToc }">
       <template #sidebar>
-        <TableOfContentsMarkdownDesktop
-          v-if="showToc && toc"
-          :toc="toc"
-        />
+        <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
       </template>
       <div class="wrap-anywhere leading-[1.75]">
         <Breadcrumbs :breadcrumb-items="breadcrumbItems" />
-        <ContentRenderer
-          v-if="page"
-          :value="page"
-        />
+        <ContentRenderer v-if="page" :value="page" />
       </div>
-      <ContentDocModifiedDateTime
-        v-if="modifiedDateTime"
-        :modified-date-time="modifiedDateTime"
-      />
+      <ContentDocModifiedDateTime v-if="modifiedDateTime" :modified-date-time="modifiedDateTime" />
     </BodyLayoutDocument>
   </div>
 </template>
@@ -42,8 +33,6 @@ const slug = route.path
 const normalizedSlug = slug.replace(/^\//, '').replace(/\/$/, '')
 
 const markdownPath = `/${normalizedSlug}`
-
-console.log('|||||||||||||||||||||||', markdownPath, '?????????????????')
 
 // Changing this schema? Be sure to copy changes to generate-content-metadata.ts
 const ContentMetadataSchema = z.record(

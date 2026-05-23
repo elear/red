@@ -33,7 +33,6 @@
     "@internationalized/date": "3.12.1",
     "@nuxt/content": "3.13.0",
     "@nuxt/icon": "2.2.2",
-    "@nuxtjs/color-mode": "4.0.0",
     "@opentelemetry/auto-instrumentations-web": "0.53.0",
     "@opentelemetry/context-zone": "2.2.0",
     "@opentelemetry/exporter-trace-otlp-proto": "0.207.0",
