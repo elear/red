@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Contact the RFC Production Center
+    url: https://www.rfc-editor.org/about/contact/
+    about: For any questions about RFCs, the process, legal, etc.

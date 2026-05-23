@@ -2,7 +2,7 @@
 name: Site Content
 about: Report an issue with the site content (NOT RFC contents)
 title: ''
-labels: site-content
+labels: ['site-content', 'awaiting-triage']
 assignees: ''
 
 ---
