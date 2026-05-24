@@ -1,5 +1,5 @@
 <template>
-  <TableCellHeader>
+  <TableCellHeader background="transparent">
     <slot />
   </TableCellHeader>
 </template>

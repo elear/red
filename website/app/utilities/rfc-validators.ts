@@ -229,11 +229,6 @@ export const HomepageLatestSchema = z.object({
 
 export type HomepageLatest = z.infer<typeof HomepageLatestSchema>
 
-/**
- * TODO:
- * Was used on the Rfc Index nuxt route
- * but afaik isn't used any more and should be deleted
- */
 export type RfcMini = Pick<
   RfcCommon,
   | 'number'

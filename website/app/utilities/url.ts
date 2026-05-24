@@ -16,7 +16,7 @@ export type ValidHrefs =
   | `https://${string}` // any external link is treated as valid (even if it might 404 we don't verify further)
   | typeof HOME_PATH
   | typeof RFC_INDEX_XML_PATH
-  | typeof RFC_INDEX_ALL_ASCENDING_PATH
+  | typeof RFC_INDEX_PATH
   | typeof RSS_PATH
   | typeof ATOM_PATH
   | typeof IN_NOTES_BCP_REF_TXT
@@ -120,12 +120,12 @@ export const INTERNET_DRAFT_AUTHOR_RESOURCES_RFC_PUBLICATION_PROCESS_URL = `${IN
 export const HOME_PATH = '/'
 export const CONTACT_PATH = '/about/contact/'
 export const SEARCH_PATH = '/search/'
+export const RFC_INDEX_PATH = '/rfc-index/'
 
 export const API_HOMEPAGE_LATEST_PATH = `/api/v1/homepage-latest.json`
 export const API_RFC_MINI_INDEX_PATH = `/api/v1/rfc-mini-index.json`
 
 export const RFC_INDEX_XML_PATH = '/rfc-index.xml'
-export const RFC_INDEX_ALL_ASCENDING_PATH = '/rfc-index/'
 export const REPORTS_CURRENT_QUEUE_STATS_TXT_PATH = '/reports/CurrQstats.txt'
 
 export const RSS_PATH = '/rfcrss.xml'
