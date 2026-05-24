@@ -42,14 +42,14 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import TableCell from '~/components/TableCell.vue'
 import { useRfcEditorHead } from '~/utilities/head'
 import { parseSeriesId } from '~/utilities/rfc'
 import { RfcMiniIndexSchema } from '~/utilities/rfc-validators'
 import { ANCHOR_COLOR_TAILWIND_STYLE } from '~/utilities/theme'
-import { API_RFC_MINI_INDEX_PATH, infoSeriesPathBuilder, RFC_INDEX_PATH } from '~/utilities/url'
+import { API_RFC_MINI_INDEX_PATH, infoSeriesPathBuilder, RFC_INDEX_PATH, useApiV1UrlOrigin } from '~/utilities/url'
 
 const route = useRoute()
+const apiV1UrlOrigin = useApiV1UrlOrigin()
 
 const canonicalPath = RFC_INDEX_PATH
 
@@ -63,7 +63,10 @@ if (
 }
 
 const { data: rfcIndex, error } = useAsyncData('rfc-index-html', async () => {
-  const json = await $fetch(API_RFC_MINI_INDEX_PATH)
+  const json = await $fetch(API_RFC_MINI_INDEX_PATH, {
+    method: 'GET',
+    baseURL: import.meta.server ? apiV1UrlOrigin : undefined,
+  })
   const { data: validatedRfcMiniIndex, error: validationError } = RfcMiniIndexSchema.safeParse(json)
   if (validationError) {
     const errorTitle = 'Unable to parse rfc-mini-index'
