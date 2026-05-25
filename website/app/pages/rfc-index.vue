@@ -41,13 +41,13 @@
               <TableCellHeader background="solid">
                 Title
               </TableCellHeader>
-              <TableCellHeader background="solid" class="w-[8em] text-nowrap">
+              <TableCellHeader background="solid" class="w-[10em] text-nowrap">
                 Publish date
               </TableCellHeader>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="rfc in rfcIndex.miniIndex">
+            <tr v-for="rfc in rfcIndex">
               <TableCell class="border-b border-gray-300 dark:border-neutral-600 text-nowrap">
                 <Anchor :href="infoSeriesPathBuilder(`rfc${rfc.number}`)"
                   :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'scroll-m-16']" :id="`rfc${rfc.number}`">
@@ -58,7 +58,7 @@
                 {{ rfc.title }}
               </TableCell>
               <TableCell class="border-b border-gray-300 dark:border-neutral-600 text-nowrap">
-                {{ rfc.published }}
+                <component :is="rfc.publishedComponent" />
               </TableCell>
             </tr>
           </tbody>
@@ -72,12 +72,14 @@
 import { groupBy, uniqBy } from 'es-toolkit'
 import { DateTime } from 'luxon'
 import { useRfcEditorHead } from '~/utilities/head'
-import { parseSeriesId } from '~/utilities/rfc'
+import { isAprilFoolsRfc, parseSeriesId } from '~/utilities/rfc'
 import { formatTitleAsVNode } from '~/utilities/rfc-title'
 import { RfcMiniIndexSchema } from '~/utilities/rfc-validators'
 import { COMMA, FULLSTOP, SPACE } from '~/utilities/strings'
 import { ANCHOR_COLOR_TAILWIND_STYLE } from '~/utilities/theme'
+import { formatDatePublished } from '~/utilities/rfc-converters-utils'
 import { API_RFC_MINI_INDEX_PATH, infoSeriesPathBuilder, RFC_INDEX_PATH, useApiV1UrlOrigin } from '~/utilities/url'
+import { AprilFools } from '#components'
 
 const route = useRoute()
 const apiV1UrlOrigin = useApiV1UrlOrigin()
@@ -93,7 +95,7 @@ if (
   })
 }
 
-const { data: rfcIndex, error } = useAsyncData('rfc-index-html', async () => {
+const { data, error } = useAsyncData('rfc-index-html', async () => {
   const json = await $fetch(API_RFC_MINI_INDEX_PATH, {
     method: 'GET',
     baseURL: import.meta.server ? apiV1UrlOrigin : undefined,
@@ -119,13 +121,33 @@ if (error.value) {
   })
 }
 
+const rfcIndex = computed(() => {
+  if (!data.value || error.value) {
+    return []
+  }
+
+  return data.value.miniIndex.map(rfc => {
+    const dateTimePublished = rfc.published ? DateTime.fromISO(rfc.published) : undefined
+
+    return {
+      ...rfc,
+      publishedComponent: dateTimePublished ?
+        h('span', {}, [
+          formatDatePublished(dateTimePublished, false),
+          // isAprilFoolsRfc(rfc) ? h(AprilFools) : undefined,
+        ]) :
+        h('i', '(unknown)'),
+    }
+  })
+})
+
 const TABLE_OF_CONTENTS_CHUNK_SIZE = 1000
 
 const tableOfContents = computed(() => {
-  if (error.value || !rfcIndex.value) {
+  if (error.value || !data.value) {
     return undefined
   }
-  const { value: mini } = rfcIndex
+  const { value: mini } = data
   const allRfcNumbers = mini.miniIndex.map(rfc => rfc.number)
   const largestRfcNumber = Math.max(...allRfcNumbers)
   const groups = groupBy(mini.miniIndex, (item) => Math.floor(item.number / TABLE_OF_CONTENTS_CHUNK_SIZE))
@@ -170,8 +192,8 @@ definePageMeta({
 })
 
 const modifiedDateTime =
-  rfcIndex.value ?
-    DateTime.fromISO(rfcIndex.value.createdOn)
+  data.value ?
+    DateTime.fromISO(data.value.createdOn)
     : undefined
 
 useRfcEditorHead({

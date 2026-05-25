@@ -83,7 +83,7 @@ export const getRfcPillText = (rfc: RfcCommon): string[] => {
 
 export type RfcBucketHtmlDocument = z.infer<typeof RfcBucketHtmlDocumentSchema>
 
-export const isAprilFoolsRfc = (rfc: RfcCommon): boolean => {
+export const isAprilFoolsRfc = (rfc: Pick<RfcCommon, 'published' | 'stream' | 'group'>): boolean => {
   if (rfc.published === undefined) return false
   const datetime = DateTime.fromISO(rfc.published)
   return (
