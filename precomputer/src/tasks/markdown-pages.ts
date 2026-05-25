@@ -18,7 +18,7 @@ const CONTENT_DIR = path.resolve(import.meta.dirname, '../../../website/content'
 
 export const uploadAllMarkdownPages = async (): AsyncTaskItem => {
   const mdPattern = '**/*.md'
-  const markdownGlob = await fsPromises.glob(mdPattern, { cwd: CONTENT_DIR })
+  const markdownGlob = fsPromises.glob(mdPattern, { cwd: CONTENT_DIR })
   const relativePaths: string[] = []
   for await (const file of markdownGlob) {
     relativePaths.push(file)

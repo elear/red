@@ -5,6 +5,7 @@ on:
     paths:
       - 'precomputer/**'
       - 'website/app/utilities/rfc-validators.ts'
+      - 'website/content/**'
   workflow_dispatch:
 
 jobs:
