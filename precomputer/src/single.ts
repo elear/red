@@ -1,15 +1,18 @@
-import { ApiClient } from '../generated/api-client.ts'
 import { indices } from './tasks/indices.ts'
 import { uploadRfcData } from './tasks/rfc.ts'
+import { getApiClient } from './utilities/api.ts'
 import { taskItemWasSkipped, taskItemWasSuccessful } from './utilities/task.ts'
 
 const main = async (rfcNumber: number): Promise<void> => {
   console.log(`Processing RFC ${rfcNumber}...`)
   try {
-    const api = new ApiClient()
     const uploadResults = await uploadRfcData(rfcNumber)
+
+    const api = getApiClient()
     const indicesResults = await indices({ api })
+
     const results = [...uploadResults, ...indicesResults]
+
     if (taskItemWasSkipped(results)) {
       console.log(`[RFC ${rfcNumber}] skipped`)
     } else if (taskItemWasSuccessful(results)) {

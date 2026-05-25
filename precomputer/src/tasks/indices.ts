@@ -23,7 +23,7 @@ type Props = {
 
 export const indices = async ({ api }: Props): AsyncTaskItem => {
   console.log("Generating indices for ", process.env.NUXT_PUBLIC_SITE_BASE)
-  const [allRfcs, allSubseries,] = await Promise.all([
+  const [allRfcs, allSubseries] = await Promise.all([
     getAllRFCs({ api }),
     getAllSubseries({ api }),
   ])
