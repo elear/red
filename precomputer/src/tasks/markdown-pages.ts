@@ -107,6 +107,8 @@ export const renderMarkdownPage = async (filePath: string, contentMetadata: Cont
 
   const htmlObj = rfcDocumentToPojo(Array.from(dom.body.childNodes))
 
+  const contentMetadataKey = `/${slug}/`
+
   const page: MarkdownPage = {
     slug,
     title,
@@ -114,7 +116,7 @@ export const renderMarkdownPage = async (filePath: string, contentMetadata: Cont
     showToc,
     toc,
     htmlObj,
-    timestampIso: contentMetadata[`/${slug}/`]?.mtime ?? DateTime.now().toUTC().toISO()
+    timestampIso: contentMetadata[contentMetadataKey]?.mtime ?? DateTime.now().toUTC().toISO()
   }
 
   validateDocument(page, MarkdownPageSchema)

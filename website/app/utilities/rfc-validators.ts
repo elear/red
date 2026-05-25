@@ -407,20 +407,22 @@ export type HeadingInfo = { id: string; title: string; level: number }
 /**
  * Builds a two-level TableOfContents from an ordered list of heading infos.
  * h2 headings become top-level sections; h3 headings nest under the preceding h2.
- * h1 and h4+ are ignored.
+ * h3 headings with no preceding h2 become top-level siblings. h1 and h4+ are ignored.
  */
 export const buildMarkdownToc = (headings: HeadingInfo[]): TableOfContents => {
   const sections: TableOfContents['sections'] = []
+  let currentH2Section: TableOfContents['sections'][0] | null = null
 
   for (const heading of headings) {
     const link = { id: heading.id, title: heading.title }
 
     if (heading.level === 2) {
-      sections.push({ links: [link] })
+      const section = { links: [link] }
+      sections.push(section)
+      currentH2Section = section
     } else if (heading.level === 3) {
-      const lastSection = sections[sections.length - 1]
-      if (lastSection) {
-        lastSection.sections = [...(lastSection.sections ?? []), { links: [link] }]
+      if (currentH2Section) {
+        currentH2Section.sections = [...(currentH2Section.sections ?? []), { links: [link] }]
       } else {
         sections.push({ links: [link] })
       }
