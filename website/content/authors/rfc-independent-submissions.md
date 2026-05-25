@@ -62,7 +62,7 @@ Documents must be well written, understandable, and appropriate for the readersh
 
 #### What if a document isn’t appropriate as an independent submission?
 
-If a document is not appropriate as an independent submission, the Independent Submissions Editor will attempt to assist the authors to find a more appropriate home. That could be the IETF, the [IRTF](https://irtf.org/), some other standards organization, a blog, or an academic publication. 
+If a document is not appropriate as an independent submission, the Independent Submissions Editor will attempt to assist the authors to find a more appropriate home. That could be the IETF, the [IRTF](https://irtf.org/), some other standards organization, a blog, or an academic publication.
 
 #### What about Intellectual Property Rights (IPR)?
 
@@ -88,7 +88,6 @@ The rest of the process is summarized as follows:
 12. Publication
 
 It’s important to note that many drafts do not make it past Step 4, and that every step after submission may be iterated or repeated. For instance, if external review indicates that substantial amounts of work are needed, authors are expected to improve the document in discussions with reviewers and the Independent Submissions Editor.
-
 
 #### At what stage is a document?
 
