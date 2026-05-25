@@ -10,6 +10,7 @@ WORKDIR /app
 
 COPY website/app/utilities/rfc-validators.ts ./website/app/utilities/rfc-validators.ts
 COPY website/content/ ./website/content/
+COPY website/generated/content-metadata.json ./website/generated/content-metadata.json
 COPY precomputer/generated/api-client.ts ./precomputer/generated/api-client.ts
 COPY website/package.json ./website/package.json
 COPY website/package-lock.json ./website/package-lock.json

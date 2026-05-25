@@ -19,6 +19,9 @@ import { saveToS3, markdownPagePathBuilder } from '../utilities/s3.ts'
 import { type AsyncTaskItem } from '../utilities/task.ts'
 
 const CONTENT_DIR = path.resolve(import.meta.dirname, '../../../website/content')
+const CONTENT_METADATA_PATH = path.resolve(import.meta.dirname, '../../../website/generated/content-metadata.json')
+
+type ContentMetadata = Record<string, { mtime: string } | undefined>
 
 export const uploadAllMarkdownPages = async (): AsyncTaskItem => {
   const mdPattern = '**/*.md'
@@ -31,13 +34,16 @@ export const uploadAllMarkdownPages = async (): AsyncTaskItem => {
     throw Error(`[markdown-pages] Expected at least one markdown page but in ${JSON.stringify(CONTENT_DIR)} with ${JSON.stringify(mdPattern)} got zero.`)
   }
 
+  const contentMetadataRaw = await fsPromises.readFile(CONTENT_METADATA_PATH, 'utf-8')
+  const contentMetadata: ContentMetadata = JSON.parse(contentMetadataRaw)
+
   const results = await Promise.all(
     relativePaths.map(async (relativePath): Promise<string | false> => {
       const filePath = path.join(CONTENT_DIR, relativePath)
       const slug = relativePath.replace(/\.md$/, '')
       const s3Key = markdownPagePathBuilder(slug)
       try {
-        const page = await renderMarkdownPage(filePath)
+        const page = await renderMarkdownPage(filePath, contentMetadata)
         await saveToS3(s3Key, JSON.stringify(page))
         console.log('Uploaded', s3Key)
         return s3Key
@@ -60,7 +66,7 @@ const extractFrontmatterYaml = (fileContent: string): Record<string, unknown> =>
 const extractMarkdownTitle = (html: string): string | undefined =>
   html.match(/<h1>([\s\S]*?)<\/h1>/)?.[1]?.trim()
 
-export const renderMarkdownPage = async (filePath: string): Promise<MarkdownPage> => {
+export const renderMarkdownPage = async (filePath: string, contentMetadata: ContentMetadata): Promise<MarkdownPage> => {
   const slug = path.relative(CONTENT_DIR, filePath).replace(/\.md$/, '')
 
   const fileContent = await fsPromises.readFile(filePath, 'utf-8')
@@ -108,7 +114,7 @@ export const renderMarkdownPage = async (filePath: string): Promise<MarkdownPage
     showToc,
     toc,
     htmlObj,
-    timestampIso: DateTime.now().toUTC().toISO()
+    timestampIso: contentMetadata[`/${slug}/`]?.mtime ?? DateTime.now().toUTC().toISO()
   }
 
   validateDocument(page, MarkdownPageSchema)

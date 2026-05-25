@@ -10,6 +10,7 @@ on:
       - precomputer/Dockerfile
       - website/app/utilities/rfc-validators.ts
       - website/content/**
+      - website/generated/content-metadata.json
   workflow_dispatch:
 
 jobs:
