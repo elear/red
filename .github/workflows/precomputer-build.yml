@@ -9,6 +9,7 @@ on:
       - precomputer/package.json
       - precomputer/Dockerfile
       - website/app/utilities/rfc-validators.ts
+      - website/content/**
   workflow_dispatch:
 
 jobs:

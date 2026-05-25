@@ -17,10 +17,14 @@ import { type AsyncTaskItem } from '../utilities/task.ts'
 const CONTENT_DIR = path.resolve(import.meta.dirname, '../../../website/content')
 
 export const uploadAllMarkdownPages = async (): AsyncTaskItem => {
-  const markdownGlob = fsPromises.glob('**/*.md', { cwd: CONTENT_DIR })
+  const mdPattern = '**/*.md'
+  const markdownGlob = await fsPromises.glob(mdPattern, { cwd: CONTENT_DIR })
   const relativePaths: string[] = []
   for await (const file of markdownGlob) {
     relativePaths.push(file)
+  }
+  if (relativePaths.length === 0) {
+    throw Error(`[markdown-pages] Expected at least one markdown page but in ${JSON.stringify(CONTENT_DIR)} with ${JSON.stringify(mdPattern)} got zero.`)
   }
 
   const results = await Promise.all(
