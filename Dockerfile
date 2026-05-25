@@ -6,7 +6,6 @@ RUN mkdir -p /app && \
 WORKDIR /app
 
 COPY website/.output ./
-COPY website/.data/content/contents.sqlite ./server/
 
 USER node:node
 CMD ["node", "server/index.mjs"]
