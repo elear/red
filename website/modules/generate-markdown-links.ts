@@ -11,6 +11,7 @@ import { camelCase, kebabCase } from 'es-toolkit'
 import { XMLParser } from 'fast-xml-parser'
 import type { X2jOptions } from 'fast-xml-parser'
 import { defineNuxtModule, useLogger } from 'nuxt/kit'
+import { injectMarkdownHeadingIds } from '../app/utilities/rfc-validators'
 
 const __dirname = import.meta.dirname
 const websitePath = path.resolve(__dirname, '..')
@@ -195,10 +196,11 @@ const textToAnchorId = (text: string): string | undefined => {
 }
 
 const processMarkdown = (markdown: string): string => {
-  return micromark(markdown, {
+  const htmlRaw = micromark(markdown, {
     extensions: [frontmatter(), gfm()],
     htmlExtensions: [frontmatterHtml(), gfmHtml()]
   })
+  return injectMarkdownHeadingIds(htmlRaw)
 }
 
 const generatedFileWarningHeader = `// Generated file by ${path.basename(import.meta.filename)} DO NOT EDIT\n`

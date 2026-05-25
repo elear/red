@@ -121,7 +121,9 @@ import { COMMA, NONBREAKING_SPACE, SPACE } from '~/utilities/strings'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 import type { RfcBucketHtmlDocument } from '~/utilities/rfc'
 import { ANCHOR_COLOR_TAILWIND_STYLE } from '~/utilities/theme'
-import { renderDocumentPojo } from '~/utilities/renderDocumentPojo'
+import { renderDocumentPojo, renderNodePojo, type ElementRenderers } from '~/utilities/renderDocumentPojo'
+import { AbsoluteHorizontalScrollable, AMaybeRFCLink, HorizontalScrollable, PdfPages } from '#components'
+import { nodePojoWalker } from '~/utilities/dom'
 
 type Props = {
   rfcBucketHtmlDocument: RfcBucketHtmlDocument
@@ -134,10 +136,66 @@ const props = defineProps<Props>()
 
 const isModalOpen = defineModel<boolean>('isModalOpen')
 
-const enrichedDocument = computed<VNode>(() =>
-  renderDocumentPojo(props.rfcBucketHtmlDocument.documentHtmlObj)
-)
+const rfcHtmlPojoRenderers: ElementRenderers = {
+  a: (node, childrenForVue) => h(AMaybeRFCLink, { href: '', ...node.attributes }, () => childrenForVue),
+  svg: (node, childrenForVue) => h(
+    node.nodeName,
+    {
+      ...node.attributes,
+      class: `dark:contrast-125 dark:brightness-85 dark:invert ${node.attributes.class ?? ''}`
+    },
+    childrenForVue
+  ),
+  HorizontalScrollable: (node, childrenForVue) => {
+    const ATTR_ABSOLUTE = 'data-component-absolute'
+    if (ATTR_ABSOLUTE in node.attributes) {
+      const isAbsolute = node.attributes[ATTR_ABSOLUTE] === true.toString()
+      if (isAbsolute) {
+        const ATTR_ABSOLUTE_CHILDWIDTH = 'data-component-childwidth'
+        const childWidthAttr = node.attributes[ATTR_ABSOLUTE_CHILDWIDTH]
+        const ATTR_ABSOLUTE_CHILDHEIGHT = 'data-component-childheight'
+        const childHeightAttr = node.attributes[ATTR_ABSOLUTE_CHILDHEIGHT]
+        if (childWidthAttr && childHeightAttr) {
+          const filteredAttributes = Object.fromEntries(
+            Object.entries(node.attributes).filter(([key]) => !key.startsWith('data-'))
+          )
+          return h(
+            AbsoluteHorizontalScrollable,
+            {
+              ...filteredAttributes,
+              childWidthAttr,
+              childHeightAttr,
+              innerClass: 'py-3 rfc-content-padding-left rfc-content-padding-right'
+            },
+            () => childrenForVue
+          )
+        } else {
+          console.warn(
+            `Unable to render AbsoluteHorizontalScrollable ${ATTR_ABSOLUTE} because attributes ${ATTR_ABSOLUTE_CHILDWIDTH}=${JSON.stringify(childWidthAttr)} ${ATTR_ABSOLUTE_CHILDHEIGHT}=${JSON.stringify(childHeightAttr)}`
+          )
+        }
+      }
+    }
+    return h(HorizontalScrollable, node.attributes, () => childrenForVue)
+  },
+  // FIXME: delete this case once the component is removed from the bucket
+  Placeholder: (node, childrenForVue) => h('div', node.attributes, childrenForVue),
+  PdfPages: (node) => {
+    const children = nodePojoWalker(node.children, (n) => {
+      if (n.type === 'Element' && n.nodeName.toLowerCase() === 'img') {
+        n.attributes['class'] =
+          'w-full min-w-[425px] max-w-[1000px] dark:contrast-125 dark:brightness-85 dark:invert'
+      }
+      return n
+    }).map((node) => renderNodePojo(node, rfcHtmlPojoRenderers))
+    return h(PdfPages, node.attributes, () => children)
+  },
+  __default: (node, childrenForVue) => h(node.nodeName, node.attributes, childrenForVue),
+}
 
+const enrichedDocument = computed<VNode>(() =>
+  renderDocumentPojo(props.rfcBucketHtmlDocument.documentHtmlObj, rfcHtmlPojoRenderers)
+)
 
 const maxPreformattedLineLength = computed(
   () => props.rfcBucketHtmlDocument.maxPreformattedLineLength.max

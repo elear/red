@@ -8,7 +8,8 @@ import { gfm, gfmHtml } from 'micromark-extension-gfm'
 import { getDOMParser, rfcDocumentToPojo } from '../utilities/dom.ts'
 import {
   MarkdownPageSchema,
-  type MarkdownPage
+  type MarkdownPage,
+  injectMarkdownHeadingIds
 } from '../../../website/app/utilities/rfc-validators.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
 import { saveToS3, markdownPagePathBuilder } from '../utilities/s3.ts'
@@ -67,10 +68,11 @@ export const renderMarkdownPage = async (filePath: string): Promise<MarkdownPage
     .pick({ description: true, showToc: true })
     .parse(frontmatterRaw)
 
-  const html = micromark(fileContent, {
+  const htmlRaw = micromark(fileContent, {
     extensions: [frontmatter(), gfm()],
     htmlExtensions: [frontmatterHtml(), gfmHtml()]
   })
+  const html = injectMarkdownHeadingIds(htmlRaw)
 
   const title = extractMarkdownTitle(html)
 
