@@ -69,7 +69,6 @@ import { parseMaybeRfcLink, rfcCommonPathBuilder, isBlobStoreLink } from '~/util
 import type { LoadingStatus } from '~/utilities/loading-status'
 import type { VueStyleClass } from '~/utilities/vue'
 import { RfcCommonSchema, type RfcCommon } from '~/utilities/rfc-validators'
-import { ANCHOR_COLOR_TAILWIND_STYLE } from '~/utilities/theme.js'
 
 const props = withDefaults(defineProps<{
   href: string
