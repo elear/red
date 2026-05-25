@@ -95,7 +95,7 @@ const markdownHtmlPojoRenderers: ElementRenderers = {
   th: (node, childrenForVue) => h(ProseTh, node.attributes, () => childrenForVue),
   tr: (node, childrenForVue) => h(ProseTr, node.attributes, () => childrenForVue),
   ul: (node, childrenForVue) => h(ProseUl, node.attributes, () => childrenForVue),
-  ErrataSiteSearchLink: (node, childrenForVue) => h(ErrataSiteSearchLink, node.attributes, () => childrenForVue),
+  erratasitesearchlink: (node, childrenForVue) => h(ErrataSiteSearchLink, node.attributes, () => childrenForVue),
   __default: (node, childrenForVue) => h(node.nodeName, node.attributes, childrenForVue),
 }
 
