@@ -40,6 +40,7 @@ import ProseTd from '~/components/content/ProseTd.vue'
 import ProseTh from '~/components/content/ProseTh.vue'
 import ProseTr from '~/components/content/ProseTr.vue'
 import ProseUl from '~/components/content/ProseUl.vue'
+import ErrataSiteSearchLink from '~/components/content/ErrataSiteSearchLink.vue'
 
 const route = useRoute()
 const apiV1UrlOrigin = useApiV1UrlOrigin()
@@ -94,6 +95,7 @@ const markdownHtmlPojoRenderers: ElementRenderers = {
   th: (node, childrenForVue) => h(ProseTh, node.attributes, () => childrenForVue),
   tr: (node, childrenForVue) => h(ProseTr, node.attributes, () => childrenForVue),
   ul: (node, childrenForVue) => h(ProseUl, node.attributes, () => childrenForVue),
+  ErrataSiteSearchLink: (node, childrenForVue) => h(ErrataSiteSearchLink, node.attributes, () => childrenForVue),
   __default: (node, childrenForVue) => h(node.nodeName, node.attributes, childrenForVue),
 }
 

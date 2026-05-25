@@ -60,11 +60,18 @@ export const uploadAllMarkdownPages = async (): AsyncTaskItem => {
 const extractFrontmatterYaml = (fileContent: string): Record<string, unknown> => {
   const match = fileContent.match(/^---\n([\s\S]*?)\n---/)
   if (!match) return {}
-  return (parseYaml(match[1]) as Record<string, unknown>) ?? {}
+  const frontmatterYamlString = match[1]
+  return parseYaml(frontmatterYamlString) ?? {}
 }
 
 const extractMarkdownTitle = (html: string): string | undefined =>
   html.match(/<h1>([\s\S]*?)<\/h1>/)?.[1]?.trim()
+
+export const markdownToHtml = (markdown: string): string =>
+  micromark(markdown, {
+    extensions: [frontmatter(), gfm()],
+    htmlExtensions: [frontmatterHtml(), gfmHtml()]
+  })
 
 export const renderMarkdownPage = async (filePath: string, contentMetadata: ContentMetadata): Promise<MarkdownPage> => {
   const slug = path.relative(CONTENT_DIR, filePath).replace(/\.md$/, '')
@@ -77,11 +84,9 @@ export const renderMarkdownPage = async (filePath: string, contentMetadata: Cont
     .pick({ description: true, showToc: true })
     .parse(frontmatterRaw)
 
-  const htmlRaw = micromark(fileContent, {
-    extensions: [frontmatter(), gfm()],
-    htmlExtensions: [frontmatterHtml(), gfmHtml()]
-  })
-  const html = injectMarkdownHeadingIds(htmlRaw)
+  let html = markdownToHtml(fileContent)
+  html = replaceComponentReferences(html)
+  html = injectMarkdownHeadingIds(html)
 
   const title = extractMarkdownTitle(html)
 
@@ -124,3 +129,35 @@ export const renderMarkdownPage = async (filePath: string, contentMetadata: Cont
   return page
 }
 
+/**
+ * Replaces Nuxt Content MDC block-component syntax that micromark leaves as literal
+ * text with real HTML elements, so downstream renderers can treat them as components.
+ * 
+ * Syntax that looks like
+ * 
+ * ```
+ * <p>::ComponentName{prop="value"}
+ * child
+ * ::
+ * </p>
+ * ```
+ * 
+ * replaced with
+ * 
+ * ```
+ * <p><ComponentName prop="value">child</ComponentName></p>
+ * ```
+ * 
+ * So that subsequent HTML -> HtmlPojo will have an easier format to use.
+ */
+export const replaceComponentReferences = (html: string): string => {
+  return html.replace(
+    /::([A-Za-z][A-Za-z0-9-]*)(?:\{([^}]*)\})?[ \n]?([\s\S]*?)[ \n]?::/g,
+    (_match, componentName: string, propsStr: string | undefined, content: string) => {
+      const decodedProps = propsStr?.replace(/&quot;/g, '"').replace(/&amp;/g, '&')
+      const attrs = decodedProps ? ` ${decodedProps}` : ''
+      const inner = content.trim()
+      return `<${componentName}${attrs}>${inner}</${componentName}>`
+    }
+  )
+}

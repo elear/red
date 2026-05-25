@@ -11,7 +11,6 @@
             Table of contents
           </Heading>
           <div class="text-balance">
-            <!-- <p class="inline pl-1">RFCs grouped by {{ TABLE_OF_CONTENTS_CHUNK_SIZE }}: </p> -->
             <ul v-if="tableOfContents" class="inline leading-6 mt-1 list-disc text-black dark:text-white">
               <li v-for="(item, index) in tableOfContents" class="inline">
                 <span class="text-nowrap">
@@ -72,14 +71,13 @@
 import { groupBy, uniqBy } from 'es-toolkit'
 import { DateTime } from 'luxon'
 import { useRfcEditorHead } from '~/utilities/head'
-import { isAprilFoolsRfc, parseSeriesId } from '~/utilities/rfc'
+import { parseSeriesId } from '~/utilities/rfc'
 import { formatTitleAsVNode } from '~/utilities/rfc-title'
 import { RfcMiniIndexSchema } from '~/utilities/rfc-validators'
 import { COMMA, FULLSTOP, SPACE } from '~/utilities/strings'
 import { ANCHOR_COLOR_TAILWIND_STYLE } from '~/utilities/theme'
 import { formatDatePublished } from '~/utilities/rfc-converters-utils'
 import { API_RFC_MINI_INDEX_PATH, infoSeriesPathBuilder, RFC_INDEX_PATH, useApiV1UrlOrigin } from '~/utilities/url'
-import { AprilFools } from '#components'
 
 const route = useRoute()
 const apiV1UrlOrigin = useApiV1UrlOrigin()
@@ -134,7 +132,6 @@ const rfcIndex = computed(() => {
       publishedComponent: dateTimePublished ?
         h('span', {}, [
           formatDatePublished(dateTimePublished, false),
-          // isAprilFoolsRfc(rfc) ? h(AprilFools) : undefined,
         ]) :
         h('i', '(unknown)'),
     }
