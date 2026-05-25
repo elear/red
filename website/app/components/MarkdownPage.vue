@@ -105,11 +105,9 @@ const renderedContent = computed(() => {
   return renderDocumentPojo(value.htmlObj, markdownHtmlPojoRenderers)
 })
 
-const AMOUNT_OF_HEADINGS_TO_SHOW_TOC = 4
-
 const toc = markdownPage.value.toc
 const showToc = markdownPage.value.showToc ?? // auto mode, try to detect if it has enough headings to be worth it
-    ((toc && toc.sections.length > AMOUNT_OF_HEADINGS_TO_SHOW_TOC) ?? false)
+    ((toc && toc.sections.length > 1) ?? false)
 
 provide(tocKey, { showToc, toc })
 
