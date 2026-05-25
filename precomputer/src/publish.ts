@@ -1,23 +1,10 @@
 import { PromisePool } from '@supercharge/promise-pool'
-import {
-  getApiClient,
-  rfcMetadataToRfcCommon,
-  safeDocList
-} from './utilities/api.ts'
-import {
-  uploadHomepageLatest,
-  NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE
-} from './tasks/homepage-latest.ts'
-import { ApiClient } from '../generated/api-client.ts'
+import { getApiClient } from './utilities/api.ts'
 import { safeURLParse } from './utilities/url.ts'
-import { processRfcUploadTask } from './utilities/task.ts'
-import { filterRFCsByBucketContentExisting } from './utilities/s3.ts'
+import { processRfcUploadTask, taskItemWasSuccessful } from './utilities/task.ts'
+import { indices } from './tasks/indices.ts'
 
 const NUMBER_OF_CONCURRENT_RFC_PROCESSORS = 8
-
-type Api = InstanceType<typeof ApiClient>
-type RedApi = Api['red']
-type DocListOptions = Parameters<RedApi['docList']>[0]
 
 const headers = {
   'Content-Type': 'application/json'
@@ -129,18 +116,10 @@ const main = async (
 
   try {
     const api = getApiClient()
-    const docListOptions: DocListOptions = {}
-    docListOptions.sort = ['-number'] // we start at the most recent RFC and walk back
-    docListOptions.limit = NUMBER_OF_LATEST_RFCS_ON_HOMEPAGE
-    const docListResult = await safeDocList(api, docListOptions)
-    const latestRfcs = docListResult.results.map(rfcMetadataToRfcCommon)
 
-    // we only want to use rfcs with content available in the bucket
-    const latestRfcsWithContent = await filterRFCsByBucketContentExisting({ rfcs: latestRfcs })
+    const result = await indices({ api })
 
-    const didUpdateHomepageSuccessfully = await uploadHomepageLatest(latestRfcsWithContent)
-
-    if (didUpdateHomepageSuccessfully) {
+    if (taskItemWasSuccessful(result)) {
       await sendSuccessAndExit(
         'publishing completed successfully: RFCs updated and homepage updated.'
       )
