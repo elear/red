@@ -4,6 +4,7 @@ import type { IRequest } from 'itty-router'
 // import * as oidc from './oidc'
 import {
   blobsApiFavicon,
+  blobsApiContentJson,
   blobsApiInfoSubseries,
   blobsApiMetaThumbnail,
   blobsApiRfcCommon,
@@ -153,6 +154,7 @@ router
   // Blobs
   .get('/rfc/*', addNormalizedPath, blobsRfc)
   .get('/refs/*', addNormalizedPath, blobsRefs)
+  .get('/api/v1/content/*', addNormalizedPath, blobsApiContentJson)
   .get('/api/v1/rfc-html/*', addNormalizedPath, blobsApiRfcHtml)
   .get('/api/v1/rfc-common/*', addNormalizedPath, blobsApiRfcCommon)
   .get('/api/v1/info-subseries/*', addNormalizedPath, blobsApiInfoSubseries)

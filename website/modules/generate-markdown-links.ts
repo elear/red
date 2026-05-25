@@ -3,7 +3,9 @@
  */
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
-import { parseMarkdown } from '@nuxtjs/mdc/runtime'
+import { micromark } from 'micromark'
+import { frontmatter, frontmatterHtml } from 'micromark-extension-frontmatter'
+import { gfm, gfmHtml } from 'micromark-extension-gfm'
 import { globby } from 'globby'
 import { camelCase, kebabCase } from 'es-toolkit'
 import { XMLParser } from 'fast-xml-parser'
@@ -192,66 +194,17 @@ const textToAnchorId = (text: string): string | undefined => {
   return kebabCase(normalized)
 }
 
-type MdcParserResult = Awaited<ReturnType<typeof parseMarkdown>>
-type MdcRoot = MdcParserResult['body']
-type MdcNode = MdcRoot['children'][number]
-const mdcParserResultToHtml = (mdcParserResult: MdcParserResult): string => {
-  const walk = (node: MdcNode | MdcRoot): string => {
-    switch (node.type) {
-      case 'root':
-        return node.children.map(walk).join('')
-      case 'text':
-        return node.value
-      case 'element':
-        if (
-          // self-closing element in HTML
-          ['img', 'br', 'hr', 'link'].includes(node.tag)
-        ) {
-          return `<${node.tag}>`
-        }
-        return `<${node.tag}${node.props ?
-          Object.entries(node.props)
-            .map(([key, value]) => ` ${key}="${value}"`)
-            .join('')
-          : ''
-          }>${node.children.map(walk).join('')}</${node.tag}>`
-      case 'comment':
-        return ''
-    }
-  }
-  return walk(mdcParserResult.body)
-}
-
-/**
- * A TRUSTING markdown to HTML converter using Nuxt libs
- * If you do not trust your markdown don't use this
- */
-const processMarkdown = async (markdown: string): Promise<string> => {
-  // const appConfig = useAppConfig()
-
-  const mdcParserResult = await parseMarkdown(markdown, {
-    remark: {
-      plugins: {
-        // TODO somehow derive this from nuxt.config.ts's remark plugins
-        'remark-heading-id': {
-          instance: await import(/* @vite-ignore */ 'remark-heading-id').then(
-            (m) => m.default || m
-          )
-        }
-      }
-    }
+const processMarkdown = (markdown: string): string => {
+  return micromark(markdown, {
+    extensions: [frontmatter(), gfm()],
+    htmlExtensions: [frontmatterHtml(), gfmHtml()]
   })
-
-  const html = mdcParserResultToHtml(mdcParserResult)
-
-  return html
 }
 
 const generatedFileWarningHeader = `// Generated file by ${path.basename(import.meta.filename)} DO NOT EDIT\n`
 
 const getMarkdownInit = async () => {
-  // Unfortunately Nuxt Content's queryCollection() utils can't run in tests or Node scripts, only in server routes,
-  // so we have to read the markdown files directly from the filesystem
+  // Read markdown files directly from the filesystem
   const markdownPaths = await globby(['**/*.md'], {
     cwd: contentPath
   })
@@ -262,11 +215,7 @@ const getMarkdownInit = async () => {
     )
   )
 
-  const htmls = await Promise.all(
-    markdownFilesData.map((markdownFileData) =>
-      processMarkdown(markdownFileData)
-    )
-  )
+  const htmls = markdownFilesData.map(processMarkdown)
 
   const docs = htmls.map((html) => parseHtml(html))
 

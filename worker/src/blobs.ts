@@ -190,6 +190,21 @@ export async function blobsApiRfcJson(req: IRequest, env: Env): Promise<Response
   }
 }
 
+export async function blobsApiContentJson(req: IRequest, env: Env): Promise<Response> {
+  const CONTENT_PREFIX = '/api/v1/content/'
+
+  const objectPath = req.normalizedPath.substring(CONTENT_PREFIX.length)
+
+  if (objectPath.endsWith('.json')) {
+    const object = await env.RED_BUCKET.get(`content/${objectPath}`)
+    if (object) {
+      return createBlobResponse(object, detectContentType(objectPath))
+    }
+  }
+
+  return createBlobNotFoundResponse()
+}
+
 export async function blobsSitemap(req: IRequest, env: Env): Promise<Response | undefined> {
   const SITEMAP_NUMBER_PREFIX = '/sitemap-'
 

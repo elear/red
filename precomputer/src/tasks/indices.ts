@@ -13,6 +13,7 @@ import { uploadSitemapXmls } from '../utilities/sitemap.ts'
 import { uploadRfcIndexXsd } from './rfc-index-xsd.ts'
 import { type AsyncTaskItem } from '../utilities/task.ts'
 import { filterRFCsByBucketContentExisting } from '../utilities/s3.ts'
+import { uploadAllMarkdownPages } from './markdown-pages.ts'
 
 const RFC_NUMBER_MINIMUM_CHAR_WIDTH = 5 // for Red the default width is 5 chars to handle eg RFC10000 (aka the RFC10k problem).
 
@@ -45,6 +46,7 @@ export const indices = async ({ api }: Props): AsyncTaskItem => {
     uploadMetaThumbnails(),
     uploadRfcIndexXsd(),
     uploadFavicons(),
+    uploadAllMarkdownPages(),
   ] satisfies AsyncTaskItem[])
 
   resultsArray.forEach((result, i) => {

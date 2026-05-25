@@ -405,10 +405,9 @@ export const useScrollTocContainer = ({
  *      render which confuses Vue (this might be incorrect usage of Vue) and
  *      Vue doesn't update attributes correctly.
  *    * Generating DOM ids with different algorithm:
- *      *  For markdown we're using the `remark-heading-id` plugin to support the
- *         Markdown `{#id}` syntax, for custom ids needed on the FAQ page, so we
- *         have to pass that `id` attribute. We're trying to maintain the existing
- *         page anchor links from a previous implementation.
+ *      *  For markdown pages, heading ids are derived from heading text by the
+ *         precomputer and embedded in the htmlObj. We're trying to maintain the
+ *         existing page anchor links from a previous implementation.
  *
  *  Verifying them as a way of surfacing bugs is what this function does.
  */

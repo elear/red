@@ -125,6 +125,9 @@ export const RFC_INDEX_PATH = '/rfc-index/'
 export const API_HOMEPAGE_LATEST_PATH = `/api/v1/homepage-latest.json`
 export const API_RFC_MINI_INDEX_PATH = `/api/v1/rfc-mini-index.json`
 
+export const apiMarkdownPagePathBuilder = (slug: string) =>
+  `/api/v1/content/${slug}.json` as const
+
 export const RFC_INDEX_XML_PATH = '/rfc-index.xml'
 export const REPORTS_CURRENT_QUEUE_STATS_TXT_PATH = '/reports/CurrQstats.txt'
 

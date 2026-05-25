@@ -14,7 +14,6 @@ export default defineNuxtConfig({
   typescript: { strict: true },
   modules: [
     // Note: don't use 'Nuxt Device' see note in responsiveMode.ts
-    '@nuxt/content',
     'reka-ui/nuxt',
     '@nuxt/test-utils/module',
     '@pinia/nuxt',
@@ -23,17 +22,6 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     'nuxt-vitalizer'
   ],
-  content: {
-    build: {
-      markdown: {
-        remarkPlugins: {
-          'remark-heading-id': {
-            /* Options */
-          }
-        }
-      }
-    }
-  },
   colorMode: {
     classSuffix: '',
     preference: 'system',

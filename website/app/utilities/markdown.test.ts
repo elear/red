@@ -18,8 +18,7 @@ const contentPath = path.resolve(clientPath, 'content')
 const publicPath = path.resolve(clientPath, 'public')
 
 test('Markdown links validation', async () => {
-  // Unfortunately Nuxt Content's queryCollection() utils can't run in tests, only in server routes,
-  // so we have to read the markdown files directly from the filesystem
+  // Read markdown files directly from the filesystem
   const markdownPaths = await globby(['**/*.md'], {
     cwd: contentPath
   })

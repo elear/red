@@ -354,6 +354,9 @@ export const REPORTS_CURRENT_QUEUE_STATS_DOT_TXT_PATH =
 export const siteMapXmlPathPrefixBuilder = (sitemapFilename: string) => {
   return `other${sitemapFilename}` as const
 }
+export const markdownPagePathBuilder = (slug: string) =>
+  `content/${slug}.json` as const
+
 export const UNUSABLE_RFC_NUMBERS_PATH = 'other/unusable-rfc-numbers.json'
 
 const UnusableRfcNumbersSchema = z.object({

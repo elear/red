@@ -360,3 +360,17 @@ export const isNodePojo = (maybeNode: unknown): maybeNode is NodePojo => {
     ['Element', 'Text'].includes(maybeNode.type)
   )
 }
+
+/**
+ * Markdown Page
+ */
+export const MarkdownPageSchema = z.object({
+  slug: z.string(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  showToc: z.boolean().optional(),
+  htmlObj: z.array(NodePojoSchema),
+  timestampIso: z.string()
+})
+
+export type MarkdownPage = z.infer<typeof MarkdownPageSchema>
