@@ -177,7 +177,7 @@ const modifiedDateTime =
 useRfcEditorHead({
   title: 'RFC Index',
   canonicalPath,
-  description: 'Every RFC listed in a single page.',
+  description: 'Every RFC listed on a single page.',
   modifiedDateTime,
   contentType: 'article',
 })
