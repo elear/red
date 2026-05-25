@@ -8,25 +8,27 @@
 
         <div class="mt-4 mb-8 pt-2 pb-3 px-4 sm:rounded-lg bg-gray-200 dark:bg-gray-800 text-sm max-w-md">
           <Heading level="2" style-level="5" class="text-left mt-1 pl-1">
-            Quick links to RFCs
-            <span class="font-medium">(grouped by {{ TABLE_OF_CONTENTS_CHUNK_SIZE }})</span>
+            Table of contents
           </Heading>
-          <ul v-if="tableOfContents" class="inline leading-6 mt-1 list-disc text-black dark:text-white text-balance">
-            <li v-for="(item, index) in tableOfContents" class="inline">
-              <span class="text-nowrap">
-                <a :href="item.href" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'inline-block px-1']">
-                  <component :is="item.labelComponent" />
-                </a>
-                <template v-if="index === tableOfContents.length - 1">
-                  {{ FULLSTOP }}
-                </template>
-                <template v-else>
-                  {{ COMMA }}
-                </template>
-              </span>
-              {{ SPACE }}
-            </li>
-          </ul>
+          <div class="text-balance">
+            <!-- <p class="inline pl-1">RFCs grouped by {{ TABLE_OF_CONTENTS_CHUNK_SIZE }}: </p> -->
+            <ul v-if="tableOfContents" class="inline leading-6 mt-1 list-disc text-black dark:text-white">
+              <li v-for="(item, index) in tableOfContents" class="inline">
+                <span class="text-nowrap">
+                  <a :href="item.href" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'inline-block px-1']">
+                    <component :is="item.labelComponent" />
+                  </a>
+                  <template v-if="index === tableOfContents.length - 1">
+                    {{ FULLSTOP }}
+                  </template>
+                  <template v-else>
+                    {{ COMMA }}
+                  </template>
+                </span>
+                {{ SPACE }}
+              </li>
+            </ul>
+          </div>
         </div>
 
         <table v-if="rfcIndex"
@@ -47,8 +49,8 @@
           <tbody>
             <tr v-for="rfc in rfcIndex.miniIndex">
               <TableCell class="border-b border-gray-300 dark:border-neutral-600 text-nowrap">
-                <Anchor :href="infoSeriesPathBuilder(`rfc${rfc.number}`)" :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'scroll-m-16']"
-                  :id="`rfc${rfc.number}`">
+                <Anchor :href="infoSeriesPathBuilder(`rfc${rfc.number}`)"
+                  :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'scroll-m-16']" :id="`rfc${rfc.number}`">
                   <SubseriesTitle :series="parseSeriesId(`rfc${rfc.number}`)" />
                 </Anchor>
               </TableCell>
