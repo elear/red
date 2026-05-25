@@ -1,11 +1,14 @@
 <template>
   <HoverCardRoot v-model:open="isHoverCardOpen">
     <HoverCardTrigger as-child>
-      <a v-if="props.href?.startsWith('#')" :id="props.id" :class="props.class" @focus="loadRfc" @mouseover="loadRfc"
+      <a v-if="props.href?.startsWith('#')" :id="props.id" data-is-hash-link :class="props.class" @focus="loadRfc" @mouseover="loadRfc"
         @blur="isHoverCardOpen = false">
         <slot />
       </a>
-      <NuxtLink v-else :id="props.id" :to="props.href" :class="props.class" @focus="loadRfc" @mouseover="loadRfc"
+      <a v-else-if="isBlobStoreLink(props.href)" :href="props.href" data-is-blobstore-link :class="props.class" @focus="loadRfc" @mouseover="loadRfc" @blur="isHoverCardOpen = false">
+        <slot />
+      </a>
+      <NuxtLink v-else :id="props.id" :to="props.href" data-is-nuxt-link :class="props.class" @focus="loadRfc" @mouseover="loadRfc"
         @blur="isHoverCardOpen = false">
         <slot />
       </NuxtLink>
@@ -62,10 +65,11 @@ import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
 import { NuxtLink } from '#components'
 import { RFC_TYPE_RFC } from '~/utilities/rfc'
 import { formatTitleAsVNode } from '~/utilities/rfc-title'
-import { parseMaybeRfcLink, rfcCommonPathBuilder } from '~/utilities/url'
+import { parseMaybeRfcLink, rfcCommonPathBuilder, isBlobStoreLink } from '~/utilities/url'
 import type { LoadingStatus } from '~/utilities/loading-status'
 import type { VueStyleClass } from '~/utilities/vue'
 import { RfcCommonSchema, type RfcCommon } from '~/utilities/rfc-validators'
+import { ANCHOR_COLOR_TAILWIND_STYLE } from '~/utilities/theme.js'
 
 const props = withDefaults(defineProps<{
   href: string
