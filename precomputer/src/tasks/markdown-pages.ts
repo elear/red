@@ -9,7 +9,10 @@ import { getDOMParser, rfcDocumentToPojo } from '../utilities/dom.ts'
 import {
   MarkdownPageSchema,
   type MarkdownPage,
-  injectMarkdownHeadingIds
+  injectMarkdownHeadingIds,
+  textToAnchorId,
+  buildMarkdownToc,
+  type HeadingInfo
 } from '../../../website/app/utilities/rfc-validators.ts'
 import { validateDocument } from '../utilities/validate-zod.ts'
 import { saveToS3, markdownPagePathBuilder } from '../utilities/s3.ts'
@@ -78,6 +81,24 @@ export const renderMarkdownPage = async (filePath: string): Promise<MarkdownPage
 
   const parser = await getDOMParser()
   const dom = parser.parseFromString(html, 'text/html')
+
+  const headingInfos: HeadingInfo[] = []
+  for (const el of Array.from(dom.body.querySelectorAll('h2, h3'))) {
+    let id = el.getAttribute('id') ?? ''
+    if (!id) {
+      const generated = textToAnchorId(el.textContent ?? '')
+      if (generated) {
+        id = generated
+        el.setAttribute('id', id)
+      }
+    }
+    if (id) {
+      headingInfos.push({ id, title: el.textContent?.trim() ?? '', level: parseInt(el.tagName[1], 10) })
+    }
+  }
+
+  const toc = headingInfos.length > 0 ? buildMarkdownToc(headingInfos) : undefined
+
   const htmlObj = rfcDocumentToPojo(Array.from(dom.body.childNodes))
 
   const page: MarkdownPage = {
@@ -85,6 +106,7 @@ export const renderMarkdownPage = async (filePath: string): Promise<MarkdownPage
     title,
     description,
     showToc,
+    toc,
     htmlObj,
     timestampIso: DateTime.now().toUTC().toISO()
   }

@@ -105,8 +105,12 @@ const renderedContent = computed(() => {
   return renderDocumentPojo(value.htmlObj, markdownHtmlPojoRenderers)
 })
 
-const showToc = false
-const toc = undefined
+const AMOUNT_OF_HEADINGS_TO_SHOW_TOC = 4
+
+const toc = markdownPage.value.toc
+const showToc = markdownPage.value.showToc ?? // auto mode, try to detect if it has enough headings to be worth it
+    ((toc && toc.sections.length > AMOUNT_OF_HEADINGS_TO_SHOW_TOC) ?? false)
+
 provide(tocKey, { showToc, toc })
 
 let modifiedDateTime: DateTime | undefined = undefined

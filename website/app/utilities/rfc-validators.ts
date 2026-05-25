@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { kebabCase } from 'es-toolkit'
 
 /**
  * Rule: Never make Zod schemas strict() if they run in the website (nuxt / client side) as this would prevent additional keys which should be harmless.
@@ -369,6 +370,7 @@ export const MarkdownPageSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   showToc: z.boolean().optional(),
+  toc: TableOfContentsSchema.optional(),
   htmlObj: z.array(NodePojoSchema),
   timestampIso: z.string()
 })
@@ -385,3 +387,45 @@ export const injectMarkdownHeadingIds = (html: string): string =>
     /<(h[1-6])([^>]*)>([\s\S]*?)\s*\{#([a-zA-Z0-9_-]+)\}\s*<\/(h[1-6])>/g,
     (_, tag, attrs, content, id) => `<${tag} id="${id}"${attrs}>${content}</${tag}>`
   )
+
+/**
+ * Converts heading text to a URL-safe anchor id.
+ * Shared between precomputer and website to ensure consistent heading ids.
+ */
+export const textToAnchorId = (text: string): string | undefined => {
+  const normalized = text
+    .trim()
+    .toLowerCase()
+    .replace(/\./g, '-')
+    .replace(/[^0-9\-a-zA-Z\s]/g, '')
+  if (!normalized) return undefined
+  return kebabCase(normalized)
+}
+
+export type HeadingInfo = { id: string; title: string; level: number }
+
+/**
+ * Builds a two-level TableOfContents from an ordered list of heading infos.
+ * h2 headings become top-level sections; h3 headings nest under the preceding h2.
+ * h1 and h4+ are ignored.
+ */
+export const buildMarkdownToc = (headings: HeadingInfo[]): TableOfContents => {
+  const sections: TableOfContents['sections'] = []
+
+  for (const heading of headings) {
+    const link = { id: heading.id, title: heading.title }
+
+    if (heading.level === 2) {
+      sections.push({ links: [link] })
+    } else if (heading.level === 3) {
+      const lastSection = sections[sections.length - 1]
+      if (lastSection) {
+        lastSection.sections = [...(lastSection.sections ?? []), { links: [link] }]
+      } else {
+        sections.push({ links: [link] })
+      }
+    }
+  }
+
+  return { title: 'Table of Contents', sections }
+}
