@@ -1,6 +1,6 @@
 import { PromisePoolError } from "@supercharge/promise-pool"
 import { uploadRfcData } from "../tasks/rfc.ts"
-import { logUnpdfStats, unPdfStats } from "./unpdf-parent.ts"
+import { logUnpdfStats } from "./unpdf-parent.ts"
 
 /**
  * Use taskItemWasSuccessful() and taskItemWasSkipped() to analyse results
