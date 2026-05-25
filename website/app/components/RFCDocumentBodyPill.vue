@@ -1,5 +1,5 @@
 <template>
-    <div class="flex ml-[1px] flex-row justify-between items-center flex-wrap print:justify-center">
+    <div class="flex flex-row justify-between items-center flex-wrap print:justify-center">
         <div class="flex items-center gap-4 print:text-center">
             <Pill
                 v-if="tagText.length > 0"

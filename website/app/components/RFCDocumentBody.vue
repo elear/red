@@ -1,110 +1,112 @@
 <template>
-  <div class="flex flex-col">
-    <Breadcrumbs
-      :breadcrumb-items="breadcrumbItems"
-      class="flex-1"
-    />
-    <RFCDocumentMobileInfoButton @click="isModalOpen = true">
-      Info
-    </RFCDocumentMobileInfoButton>
-  </div>
+  <div class="px-2">
+    <div class="flex flex-col">
+      <Breadcrumbs
+        :breadcrumb-items="breadcrumbItems"
+        class="flex-1"
+      />
+      <RFCDocumentMobileInfoButton @click="isModalOpen = true">
+        Info
+      </RFCDocumentMobileInfoButton>
+    </div>
 
-  <Heading
-    level="1"
-    class="mb-2 ml-2 px-0 print:mt-5 print:text-lg print:border-b-2 print:border-black print:text-center font-feature-settings-calt-off"
-  >
-    <RFCTitle
-      :rfc="props.rfcBucketHtmlDocument.rfc"
-      hide-title
-    />
-    {{ SPACE }}
-    <RFCTitleSubseries
-      :rfc="props.rfcBucketHtmlDocument.rfc"
-      has-trailing-colon
-      has-underline
-    />
-    {{ SPACE }}
-    <span class="font-normal">{{ props.rfcBucketHtmlDocument.rfc.title }}</span>
-  </Heading>
-
-  <Heading
-    v-if="isAprilFool"
-    level="2"
-    class="mb-2 ml-2 px-3 xs:px-0 print:text-center"
-  >
-    <span class="inline pr-2">
-      <AprilFools />
-    </span>
-  </Heading>
-
-  <ul class="block ml-2 print:text-center font-feature-settings-calt-off">
-    <li
-      v-for="(author, authorIndex) in props.rfcBucketHtmlDocument.rfc.authors"
-      :key="authorIndex"
-      class="inline-block"
+    <Heading
+      level="1"
+      class="mb-2 px-0 mt-5 ml-2 print:text-lg print:border-b-2 print:border-black print:text-center font-feature-settings-calt-off"
     >
-      <RFCDocumentAuthor :author="author" />
-      <template v-if="authorIndex < props.rfcBucketHtmlDocument.rfc.authors.length - 1">
-        {{ COMMA }} {{ NONBREAKING_SPACE }}
-      </template>
-    </li>
-  </ul>
+      <RFCTitle
+        :rfc="props.rfcBucketHtmlDocument.rfc"
+        hide-title
+      />
+      {{ SPACE }}
+      <RFCTitleSubseries
+        :rfc="props.rfcBucketHtmlDocument.rfc"
+        has-trailing-colon
+        has-underline
+      />
+      {{ SPACE }}
+      <span class="font-normal">{{ props.rfcBucketHtmlDocument.rfc.title }}</span>
+    </Heading>
 
-  <RFCDocumentBodyPill :rfc="props.rfcBucketHtmlDocument.rfc" />
+    <Heading
+      v-if="isAprilFool"
+      level="2"
+      class="mb-2 px-3 xs:px-0 print:text-center"
+    >
+      <span class="inline pr-2">
+        <AprilFools />
+      </span>
+    </Heading>
 
-  <Alert
-    v-if="obsoleted_by && obsoleted_by.length > 0"
-    variant="warning"
-    heading="This RFC is now obsolete"
-    class="ml-1"
-  >
-    <div class="text-base">
-      For more information, please refer to
-      <ul class="mt-1 flex flex-col gap-2">
-        <li
-          v-for="(obsoletedByItem, obsoletedByItemIndex) in obsoleted_by"
-          :key="obsoletedByItemIndex"
-        >
-          <AMaybeRFCLink
-            :href="infoSeriesPathBuilder(`RFC${obsoletedByItem.number}`)"
-            :class="ANCHOR_COLOR_TAILWIND_STYLE"
+    <ul class="block print:text-center font-feature-settings-calt-off ml-2.5">
+      <li
+        v-for="(author, authorIndex) in props.rfcBucketHtmlDocument.rfc.authors"
+        :key="authorIndex"
+        class="inline-block"
+      >
+        <RFCDocumentAuthor :author="author" />
+        <template v-if="authorIndex < props.rfcBucketHtmlDocument.rfc.authors.length - 1">
+          {{ COMMA }} {{ NONBREAKING_SPACE }}
+        </template>
+      </li>
+    </ul>
+
+    <RFCDocumentBodyPill :rfc="props.rfcBucketHtmlDocument.rfc" />
+
+    <Alert
+      v-if="obsoleted_by && obsoleted_by.length > 0"
+      variant="warning"
+      heading="This RFC is now obsolete"
+      class="ml-1"
+    >
+      <div class="text-base">
+        For more information, please refer to
+        <ul class="mt-1 flex flex-col gap-2">
+          <li
+            v-for="(obsoletedByItem, obsoletedByItemIndex) in obsoleted_by"
+            :key="obsoletedByItemIndex"
           >
-            <RFCTitle :rfc="obsoletedByItem" />
-          </AMaybeRFCLink>
-        </li>
-      </ul>
-    </div>
-  </Alert>
+            <AMaybeRFCLink
+              :href="infoSeriesPathBuilder(`RFC${obsoletedByItem.number}`)"
+              :class="ANCHOR_COLOR_TAILWIND_STYLE"
+            >
+              <RFCTitle :rfc="obsoletedByItem" />
+            </AMaybeRFCLink>
+          </li>
+        </ul>
+      </div>
+    </Alert>
 
-  <Alert
-    v-if="updated_by && updated_by.length > 0"
-    variant="info"
-    heading="This RFC was updated"
-    class="ml-1"
-  >
-    <div class="text-base mt-1">
-      See also
-      <ul class="flex flex-col gap-2">
-        <li
-          v-for="(updatedByItem, updatedByItemIndex) in updated_by"
-          :key="updatedByItemIndex"
-        >
-          <AMaybeRFCLink
-            :href="infoSeriesPathBuilder(`RFC${updatedByItem.number}`)"
-            :class="ANCHOR_COLOR_TAILWIND_STYLE"
+    <Alert
+      v-if="updated_by && updated_by.length > 0"
+      variant="info"
+      heading="This RFC was updated"
+      class="ml-1"
+    >
+      <div class="text-base mt-1">
+        See also
+        <ul class="flex flex-col gap-2">
+          <li
+            v-for="(updatedByItem, updatedByItemIndex) in updated_by"
+            :key="updatedByItemIndex"
           >
-            <RFCTitle :rfc="updatedByItem" />
-          </AMaybeRFCLink>
-        </li>
-      </ul>
-    </div>
-  </Alert>
+            <AMaybeRFCLink
+              :href="infoSeriesPathBuilder(`RFC${updatedByItem.number}`)"
+              :class="ANCHOR_COLOR_TAILWIND_STYLE"
+            >
+              <RFCTitle :rfc="updatedByItem" />
+            </AMaybeRFCLink>
+          </li>
+        </ul>
+      </div>
+    </Alert>
 
-  <div :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDocument.documentHtmlType} relative mt-5 sm:text-base lg:text-base font-feature-settings-calt-off ${
-    //
-    ' leading-[1.75] ' // WCAG requires 1.5 minimum
-    }`">
-    <component :is="enrichedDocument" />
+    <div :class="`rfc-content rfc-content-type-${props.rfcBucketHtmlDocument.documentHtmlType} relative mt-5 sm:text-base lg:text-base font-feature-settings-calt-off ${
+      //
+      ' leading-[1.75] ' // WCAG requires 1.5 minimum
+      }`">
+      <component :is="enrichedDocument" />
+    </div>
   </div>
 
   <RFCMobileBanner
