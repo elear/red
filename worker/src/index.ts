@@ -60,6 +60,7 @@ router
   .get('/about/iseb', redirectTo('/authors/rfc-independent-submissions/', 302))
   .get('/retrieve/', redirectTo('/search/', 302))
   .get('/retrieve/rsync/', redirectTo('/series/rfc-download/', 302))
+  .get('/retrieve/bulk', redirectTo('/series/rfc-download/', 302))  
   .get('/source-definitions/', redirectTo('/series/rfc-tips/', 302))
   .get('/how-to-report/', redirectTo('/series/rfc-errata/', 302))
   .get('/history/', redirectTo('https://history.rfc-editor.org', 302))
