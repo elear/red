@@ -4,15 +4,15 @@
       <div v-if="subseriesDocument" class="lg:min-w-[300px]">
         <p v-if="subseriesDocument.type === 'bcp'">
           BCPs are stable identifiers for Best Current Practices. A BCP may consist of a single RFC or a group of RFCs
-          related to a specific IETF process or recommended guidelines.
+          related to a specific IETF process or recommended guidelines. The collection may become empty as the BCP evolves.
         </p>
         <p v-else-if="subseriesDocument.type === 'std'">
           STDs are stable identifiers for "Internet Standards." An STD may consist of a single RFC or a group of RFCs
-          related to a specific protocol.
+          related to a specific protocol. The collection may become empty as the STD evolves.
         </p>
         <p v-else-if="subseriesDocument.type === 'fyi'">
           FYIs are stable identifiers for a series of "For Your Information" documents. An FYI consists of a single RFC
-          on general interest topics relating to the Internet. The FYI subseries was retired in 2011.
+          on general interest topics relating to the Internet. The collection may also be empty. The FYI subseries was retired in 2011.
         </p>
       </div>
     </template>
@@ -26,9 +26,15 @@
 
     <div class="min-h-screen">
       <div v-if="subseriesDocument" class="mt-3 flex flex-col gap-4">
-        <RFCCard v-for="rfc in subseriesDocument.contents" :key="rfc.number" :rfc="rfc" heading-level="3"
+        <RFCCard v-if="subseriesDocument.contents.length > 0" v-for="rfc in subseriesDocument.contents" :key="rfc.number" :rfc="rfc" heading-level="3"
           :show-abstract="true" />
-      </div>
+        <div v-else class="pl-6 pt-6">
+            <i>
+              <Component :is="formattedTitle" />
+              currently contains no RFCs.
+            </i>
+        </div>
+      </div>      
     </div>
   </BodyLayoutDocument>
 </template>
@@ -43,6 +49,7 @@ import {
 } from '~/utilities/url'
 import { useRfcEditorHead } from '~/utilities/head'
 import type { SeriesId } from '~/utilities/rfc'
+import { formatTitleAsVNode } from '~/utilities/rfc-title'
 
 type Props = {
   subseriesId: SeriesId
@@ -97,6 +104,8 @@ if (
   })
 }
 
+const formattedTitle = computed(() => formatTitleAsVNode(`${props.subseriesId.type}${props.subseriesId.number}`))
+
 const lastRfcPublished = computed(() => {
   if (!subseriesDocument.value) return ''
   const lastRfc = subseriesDocument.value.contents[subseriesDocument.value.contents.length - 1]
@@ -107,7 +116,7 @@ const lastRfcPublished = computed(() => {
 // see https://github.com/ietf-tools/red/issues/196
 const pageTitle = subseriesDocument.value ? `${subseriesDocument.value.type.toUpperCase()} ${subseriesDocument.value.number} subseries contains ${subseriesDocument.value.contents.length} RFC${subseriesDocument.value.contents.length === 1 ? '' : 's'}` : ''
 
-const pageDescription = subseriesDocument.value ? `${subseriesDocument.value.type.toUpperCase()}${subseriesDocument.value.number} contains ${subseriesDocument.value.contents.map(item => `RFC ${item.number}`).join(', ')}.` : ''
+const pageDescription = subseriesDocument.value ? `${subseriesDocument.value.type.toUpperCase()}${subseriesDocument.value.number} contains ${subseriesDocument.value.contents.length === 0 ? '0 RFCs' : subseriesDocument.value.contents.map(item => `RFC ${item.number}`).join(', ')}.` : ''
 
 useRfcEditorHead({
   title: pageTitle,

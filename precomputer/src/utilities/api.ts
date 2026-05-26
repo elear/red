@@ -167,6 +167,11 @@ export const safeSubseriesList = async (
       // HTTP 200 and text/html or text/plain. So we'll do a quick
       // test of the shape of the response before using it
       if (typeof data === 'object') {
+        // Don't filter out subseries without members
+        // eg STD1 is empty but compare these URLs,
+        //  * https://datatracker.ietf.org/doc/std1/ this is HTTP 200 and says it has no members
+        //  * https://datatracker.ietf.org/doc/std314159/ this 404s
+        // so we don't want to filter empty subseries
         return data
       }
       console.error('Unexpected API response: ', typeof data, data)
