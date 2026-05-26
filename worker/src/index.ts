@@ -33,7 +33,7 @@ const excludeAuthorRedirects = [
 ]
 
 const subseriesRedirect = (req: IRequest) => {
-  const url = new URL(req.url)
+  const url = new URL(req.normalizedPath, req.url)
   // handle paths like
   //  * `/bcp/bcp78`
   //  * `/fyi/fyi3`
@@ -42,7 +42,7 @@ const subseriesRedirect = (req: IRequest) => {
   if(url.pathname.match(/^\/bcp\/bcp[0-9]+$/) || url.pathname.match(/^\/std\/std[0-9]+$/) || url.pathname.match(/^\/fyi\/fyi[0-9]+$/)) {
     url.pathname = url.pathname.replace(/^\/(bcp|std|fyi)\//, '/info/')
     url.pathname += '/' // add the trailing space expected on the new site
-    return redirectTo(url.toString(), 302)
+    return redirectTo(url.toString(), 302)(req)
   }
 }
 
