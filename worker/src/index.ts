@@ -32,6 +32,20 @@ const excludeAuthorRedirects = [
   '/authors/rfc-edit/pub-queue'
 ]
 
+const subseriesRedirect = (req: IRequest) => {
+  const url = new URL(req.url)
+  // handle paths like
+  //  * `/bcp/bcp78`
+  //  * `/fyi/fyi3`
+  //  * `/std/std3`
+  // by redirecting to /info/bcp78/ etc
+  if(url.pathname.match(/^\/bcp\/bcp[0-9]+$/) || url.pathname.match(/^\/std\/std[0-9]+$/) || url.pathname.match(/^\/fyi\/fyi[0-9]+$/)) {
+    url.pathname = url.pathname.replace(/^\/(bcp|std|fyi)\//, '/info/')
+    url.pathname += '/' // add the trailing space expected on the new site
+    return redirectTo(url.toString(), 302)
+  }
+}
+
 const excludeInNotesRedirects = ['/in-notes/rfc-ref.txt']
 
 const router = IttyRouter<IRequest, [Env]>()
@@ -149,7 +163,16 @@ router
   .get('/rfc/rfc-index.txt', redirectTo('/rfc-index.txt', 302))
   .get('/rfc/rfc-index.xml', redirectTo('/rfc-index.xml', 302))
 
+  // Many RFCs at /rfc/rfc* refer to this CSS file.
+  // Apparently it was added so that devs could override the path and add custom CSS when displaying RFCs,
+  // but in the 2026-era there are other ways of inserting CSS (via UserScripts, Greasemonkey etc)
   .get('/rfc/rfc-local.css', addNormalizedPath, emptyFileResponse)
+
+  .get('/bcp/*', addNormalizedPath, subseriesRedirect)
+  .get('/fyi/*', addNormalizedPath, subseriesRedirect)
+  .get('/std/*', addNormalizedPath, subseriesRedirect)
+
+  .get('/refs/bibxml/:extra+', (req: IRequest) => Response.redirect(`https://bib.ietf.org/public/rfc/bibxml/${req.params.extra}`, 302))
 
   // Blobs
   .get('/rfc/*', addNormalizedPath, blobsRfc)
