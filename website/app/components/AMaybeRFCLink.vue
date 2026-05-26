@@ -1,6 +1,6 @@
 <template>
   <RFCRouterLink
-    v-if="isRfcEditor && isRfcLink"
+    v-if="!isOutsideNuxt && isRfcLink"
     v-bind="props"
   >
     <slot />
@@ -21,9 +21,9 @@
  */
 import RFCRouterLink from './RFCRouterLink.vue'
 import Anchor from './Anchor.vue'
-import { isRfcEditorSite, parseMaybeRfcLink } from '~/utilities/url'
+import { isOutsideNuxtLink, parseMaybeRfcLink } from '~/utilities/url'
 
 const props = defineProps<{ href: string; id?: string }>()
-const isRfcEditor = computed(() => isRfcEditorSite(props.href))
+const isOutsideNuxt = computed(() => isOutsideNuxtLink(props.href))
 const isRfcLink = computed(() => !!parseMaybeRfcLink(props.href))
 </script>

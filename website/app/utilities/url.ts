@@ -336,27 +336,51 @@ export const isRSSLink = (href?: string): boolean => !!href?.endsWith(RSS_PATH)
 export const isAtomLink = (href?: string): boolean =>
   !!href?.endsWith(ATOM_PATH)
 
-export const isRfcBlobstoreLink = (href?: string): boolean => !!href?.startsWith(RFC_BLOBSTORE_PREFIX)
+/**
+ * Links outside Nuxt (eg blobstore or links to paths that HTTP redirect)
+ * shouldn't use Nuxt SPA links, they should use conventional `<a href>` links.
+ */
+export const isOutsideNuxtLink = (href?: string): boolean => {
+  if (!href) {
+    return false
+  }
+  if (href.startsWith(RFC_BLOBSTORE_PREFIX)) {
+    return true
+  }
+  if (
+    /**
+     * previous site paths like
+     *  * https://www.rfc-editor.org/bcp/bcp47
+     *  * https://www.rfc-editor.org/fyi/fyi2
+     *  * https://www.rfc-editor.org/std/std3
+     */
+    // 
+    href.startsWith('/bcp/') || href.startsWith('/fyi/') || href.startsWith('/std/')) {
+    return true
+  }
+  if (isExternalLink(href)) {
+    return true
+  }
+  if (isApiLink(href)) {
+    return true
+  }
+  if (isRSSLink(href) || isAtomLink(href)) {
+    return true
+  }
+  if (isMailToLink(href)) {
+    return true
+  }
+  if (isHashLink(href)) {
+    return true
+  }
+  return false
+}
 
 export const isApiLink = (href?: string): boolean => {
   if (!href) {
     return false
   }
   return href.startsWith('/api/')
-}
-
-/**
- * Links to files hosted in the blobstore shouldn't use Nuxt SPA links
- * they should use conventional `<a href>` links.
- */
-export const isBlobStoreLink = (href?: string): boolean => {
-  if (!href) {
-    return false
-  }
-  if (isRfcBlobstoreLink(href) || isRSSLink(href) || isAtomLink(href)) {
-    return true
-  }
-  return false
 }
 
 /**
@@ -401,16 +425,6 @@ export const needsCloudflareHeaderForApi = (apiBaseUrl: string): boolean =>
  */
 export const isProd = (): boolean => !import.meta.dev
 
-export const isRfcEditorSite = (href?: string): boolean => {
-  if (href === undefined) {
-    return false
-  }
-  return (
-    href.startsWith('/') ||
-    href.startsWith('#')
-  )
-}
-
 const RFC_REGEX = /(rfc[0-9]+)/i
 
 export const parseMaybeRfcLink = (
@@ -427,7 +441,7 @@ export const parseMaybeRfcLink = (
      * If an internal link is "#rfc1234" then we'll parse that as an RFC Link.
      * E.g. the link to https://www.rfc-editor.org/rfc/rfc9794.html#RFC9370 is
      * linking to a reference to an RFC, not the RFC directly. Regardless we'll
-     * treat it as a RFC Link Preview.
+     * treat it as a RFC Link Preview for RFC 9370.
      *
      * However hrefs are relative links and so we resolve them relative to the
      * current location, which means that if eg. the page '/info/rfc9000/' had
@@ -440,8 +454,7 @@ export const parseMaybeRfcLink = (
     if (!rfcMatch) return undefined
     return parseSeriesId(rfcMatch[0])
   }
-  const isRfcEditor = isRfcEditorSite(href)
-  if (isRfcEditor) {
+  if (isInternalLink(href)) {
     const rfcMatch = href.match(RFC_REGEX)
     if (!rfcMatch) return undefined
     return parseSeriesId(rfcMatch[0])
