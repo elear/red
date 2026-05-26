@@ -30,8 +30,10 @@
           </div>
         </div>
 
-        <NuxtIsland v-if="data" name="RfcIndexPageTable" :props="{ rfcs: data.miniIndex }" />
-       
+        <div @click="handleAnchorClick">
+          <NuxtIsland v-if="data" name="RfcIndexPageTable" :props="{ rfcs: data.miniIndex }" />
+        </div>
+
       </div>
     </NuxtLayout>
   </div>
@@ -132,6 +134,32 @@ const tableOfContents = computed(() => {
     item => item.href
   )
 })
+
+const router = useRouter()
+
+/**
+ * Using NuxtIsland means that SPA nav <a> links will be conventional href navigation,
+ * not SPA nav links, so we'll capture bubbling events and navigate via SPA
+ */
+const handleAnchorClick = (e: Event) => {
+  const { target } = e
+  if (!(target instanceof HTMLElement)) {
+    console.log("Click from non-HTMLElement, ignoring")
+    return
+  }
+  const anchor = target.closest('a')
+  if (!(anchor instanceof HTMLAnchorElement)) {
+    console.log("Click from non-<a>, ignoring")
+    return
+  }
+  const href = anchor.getAttribute('href')
+  if (!href) {
+    return
+  }
+  console.log('Intercepted <a> click from island. Overriding with SPA navigation')
+  e.preventDefault()
+  router.push(href)
+}
 
 definePageMeta({
   layout: false
