@@ -6,8 +6,8 @@
       :attribute="props.attribute"
       :limit="200"
       :class-names="{
-        'ais-MenuSelect': 'w-full text-base bg-white border border-gray-400 hover:border-black dark:bg-black dark:border-white dark:hover:border-gray-300 dark:text-white px-1 rounded-xs shadow-sm scheme-light dark:scheme-dark',
-        'ais-MenuSelect-select': 'w-full px-1 py-2'
+        'ais-MenuSelect': 'w-full text-base border border-gray-400 hover:border-black dark:bg-black dark:border-white dark:hover:border-gray-300 px-1 rounded-xs shadow-sm',
+        'ais-MenuSelect-select': 'bg-white text-black dark:bg-black dark:text-white w-full px-1 py-2'
       }"
       :transform-items="transformItems"
     >
