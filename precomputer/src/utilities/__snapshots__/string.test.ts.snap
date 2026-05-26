@@ -87,12 +87,6 @@ exports[`can break words (2) 1`] = `
                 "textContent": "/rfc9618",
                 "type": "Text",
               },
-              {
-                "attributes": {},
-                "children": [],
-                "nodeName": "wbr",
-                "type": "Element",
-              },
             ],
             "nodeName": "a",
             "type": "Element",

@@ -177,12 +177,6 @@ test('can break words', async () => {
           type: 'Text',
           textContent: '/rfc9618'
         },
-        {
-          type: 'Element',
-          nodeName: 'wbr',
-          attributes: {},
-          children: []
-        }
       ]
     }
   ])
