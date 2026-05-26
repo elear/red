@@ -30,38 +30,8 @@
           </div>
         </div>
 
-        <table v-if="rfcIndex"
-          class="table-fixed w-full divide-y divide-gray-700 dark:divide-neutral-600 shadow border-1 border-separate border-gray-400 dark:border-gray-500 ml-2 mr-2">
-          <thead>
-            <tr>
-              <TableCellHeader background="solid" class="w-[8em] text-nowrap">
-                RFC Number
-              </TableCellHeader>
-              <TableCellHeader background="solid">
-                Title
-              </TableCellHeader>
-              <TableCellHeader background="solid" class="w-[10em] text-nowrap">
-                Publish date
-              </TableCellHeader>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="rfc in rfcIndex">
-              <TableCell class="border-b border-gray-300 dark:border-neutral-600 text-nowrap">
-                <Anchor :href="infoSeriesPathBuilder(`rfc${rfc.number}`)"
-                  :class="[ANCHOR_COLOR_TAILWIND_STYLE, 'scroll-m-16']" :id="`rfc${rfc.number}`">
-                  <SubseriesTitle :series="parseSeriesId(`rfc${rfc.number}`)" />
-                </Anchor>
-              </TableCell>
-              <TableCell class="border-b border-gray-400 dark:border-neutral-600">
-                {{ rfc.title }}
-              </TableCell>
-              <TableCell class="border-b border-gray-300 dark:border-neutral-600 text-nowrap">
-                <component :is="rfc.publishedComponent" />
-              </TableCell>
-            </tr>
-          </tbody>
-        </table>
+        <NuxtIsland v-if="data" name="RfcIndexPageTable" :props="{ rfcs: data.miniIndex }" />
+       
       </div>
     </NuxtLayout>
   </div>
@@ -71,13 +41,11 @@
 import { groupBy, uniqBy } from 'es-toolkit'
 import { DateTime } from 'luxon'
 import { useRfcEditorHead } from '~/utilities/head'
-import { parseSeriesId } from '~/utilities/rfc'
 import { formatTitleAsVNode } from '~/utilities/rfc-title'
 import { RfcMiniIndexSchema } from '~/utilities/rfc-validators'
 import { COMMA, FULLSTOP, SPACE } from '~/utilities/strings'
 import { ANCHOR_COLOR_TAILWIND_STYLE } from '~/utilities/theme'
-import { formatDatePublished } from '~/utilities/rfc-converters-utils'
-import { API_RFC_MINI_INDEX_PATH, infoSeriesPathBuilder, RFC_INDEX_PATH, useApiV1UrlOrigin } from '~/utilities/url'
+import { API_RFC_MINI_INDEX_PATH, RFC_INDEX_PATH, useApiV1UrlOrigin } from '~/utilities/url'
 
 const route = useRoute()
 const apiV1UrlOrigin = useApiV1UrlOrigin()
@@ -118,25 +86,6 @@ if (error.value) {
     fatal: true,
   })
 }
-
-const rfcIndex = computed(() => {
-  if (!data.value || error.value) {
-    return []
-  }
-
-  return data.value.miniIndex.map(rfc => {
-    const dateTimePublished = rfc.published ? DateTime.fromISO(rfc.published) : undefined
-
-    return {
-      ...rfc,
-      publishedComponent: dateTimePublished ?
-        h('span', {}, [
-          formatDatePublished(dateTimePublished, false),
-        ]) :
-        h('i', '(unknown)'),
-    }
-  })
-})
 
 const TABLE_OF_CONTENTS_CHUNK_SIZE = 1000
 
