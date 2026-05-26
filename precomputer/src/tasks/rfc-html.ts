@@ -314,7 +314,7 @@ const convertHrefs = (
  * work better than unicode approaches (zero-width spaces etc) because being non-characters they
  * aren't copied to the clipboard.
  * 
- * This also means we can control potential line breaks so if the text looks like a URL we can
+ * This also means we can control potential line breaks so if the 'word' looks like a URL we can
  * insert <wbr> at appropriate points, eg https://<wbr>domain/<wbr>path1/<wbr>path2?<wbr>query1=1
  * etc which is more readable than artitrary line break points.
  **/
@@ -333,7 +333,7 @@ export const ensureWordBreaks = (rfcDocument: Node[]): void => {
         return
       }
 
-      const wordIndexes = getAllIndexes(textContent, /[\s]/g)
+      const wordIndexes = getAllIndexes(textContent, /[\s\n]/g)
       wordIndexes.sort((a, b) => a - b)
 
       const words = []
@@ -362,18 +362,22 @@ export const ensureWordBreaks = (rfcDocument: Node[]): void => {
               word,
               REQUIRE_WORDBREAK_AFTER_CHARS_LENGTH
             )
-            return wordParts.flatMap((wordPart) => {
+            return wordParts.flatMap((wordPart, i, arr) => {
               if (wordPart.length === 0) {
                 return []
               }
+              const textNode = node.ownerDocument.createTextNode(wordPart)
 
-              return [
-                node.ownerDocument.createTextNode(wordPart),
-                node.ownerDocument.createElement(
-                  // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/wbr
-                  WORD_BREAK_ELEMENT
-                )
-              ]
+              if (i === arr.length - 1) {
+                return [textNode]
+              }
+
+              const wbrElement = node.ownerDocument.createElement(
+                // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/wbr
+                WORD_BREAK_ELEMENT
+              )
+
+              return [textNode, wbrElement]
             })
           }
           return node.ownerDocument.createTextNode(word)
