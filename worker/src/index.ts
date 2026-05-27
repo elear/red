@@ -68,6 +68,7 @@ router
   .get('/about/pubprocess/', redirectTo('/authors/rfc-edit/', 302))
   .get('/about/queue/', redirectTo('/authors/rfc-edit/pub-queue/', 302))
   .get('/about/queue/flowchart/', redirectTo('/authors/rfc-edit/pub-queue/', 302))
+  .get('/styleguide.html', redirectTo('/authors/rfc-style-guide/', 302))
   .get('/styleguide/', redirectTo('/authors/rfc-style-guide/', 302))
   .get('/styleguide/part2/', redirectTo('/authors/rfc-style-guide/', 302))
   .get('/styleguide/tips/', redirectTo('/authors/rfc-style-guide/', 302))
