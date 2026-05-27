@@ -9,11 +9,10 @@
   </form>
   <div class="text-sm italic">
     <Anchor v-if="didYouMean" :href="infoSeriesPathBuilder(`${didYouMean.type}${didYouMean.number}`)"
-      class="no-underline hover:text-blue-100 dark:text-blue-100">
+      class="underline hover:text-blue-100 dark:text-blue-100">
       go directly to
-      <span class="underline">
-        <SubseriesTitle :series="didYouMean" />
-      </span>?
+      <SubseriesTitle :series="didYouMean" />
+      ?
     </Anchor>
     {{ NONBREAKING_SPACE }}
   </div>
@@ -42,7 +41,7 @@ const didYouMean = ref<SeriesId | undefined>()
 
 let abortController: AbortController | undefined = undefined
 
-const { featureFlagsRef } = useFeatureFlags()
+const featureFlags  = useFeatureFlags()
 
 watchInputForFeatureFlagExperiments({
   inputValueRef: searchQuery,
@@ -50,13 +49,9 @@ watchInputForFeatureFlagExperiments({
 })
 
 const checkSearchForSeriesId = async () => {
-  if (!featureFlagsRef) {
-    return
-  }
-  const { isDidYouMeanActive } = featureFlagsRef.value
   const value = searchQuery.value
-  console.log({ value, isDidYouMeanActive })
-  if (!value || isDidYouMeanActive === false) {
+
+  if (!value || featureFlags.value.isDidYouMeanActive === false) {
     return
   }
 

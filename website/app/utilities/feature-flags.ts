@@ -4,7 +4,8 @@ import { type Ref } from 'vue'
 export const FeatureFlagsSchema = z.object({
   // Ensure all top-level fields are optional so that browsers
   // with old versions of localStorage values can still load
-  isDidYouMeanActive: z.boolean().optional()
+  isDidYouMeanActive: z.boolean().optional(),
+  isCardHoverFocusTint: z.boolean().optional(),
 })
 
 export type FeatureFlags = z.infer<typeof FeatureFlagsSchema>
@@ -19,8 +20,12 @@ export type FeatureFlagUIRow = {
 
 const featureFlagsUI: Record<keyof FeatureFlags, FeatureFlagUIRow> = {
   isDidYouMeanActive: {
-    title: 'Homepage direct RFC/subseries  links',
-    description: 'Homepage search feature suggesting direct links to RFCs and other subseries.',
+    title: 'Homepage direct RFC/subseries links',
+    description: 'Homepage search feature suggesting direct links to RFCs and other subseries, bypassing search.',
+    storageType: 'boolean'
+  },
+  isCardHoverFocusTint: {
+    title: 'Website cards hover/focus tint ',
     storageType: 'boolean'
   }
 }
@@ -76,6 +81,10 @@ export const isFeatureFlagsModalVisibleKey = Symbol() as InjectionKey<Ref<boolea
 export const useFeatureFlags = () => {
   const featureFlagsRef = inject(featureFlagsKey)
 
+  if (!featureFlagsRef) {
+    throw Error('Expected provide(featureFlagsKey) above in component tree.')
+  }
+
   watch(
     () => featureFlagsRef?.value ?? undefined,
     () => {
@@ -90,5 +99,5 @@ export const useFeatureFlags = () => {
       }
     })
 
-  return { featureFlagsRef }
+  return featureFlagsRef
 }

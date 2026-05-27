@@ -1,10 +1,12 @@
 <template>
-  <div class="bg-gray-200 mt-3 px-4 py-3 rounded-md mb-6">
-    <label class="text-md mt-4 mb-0 pb-0 font-bold cursor-pointer">"{{ props.featureFlagUiRow.title }}" enabled?
-      <input type="checkbox" v-model="featureFlagRef" :aria-describedby="descriptionDomId">
+  <div class="bg-gray-200 dark:bg-gray-700 px-4 py-3 rounded-md">
+    <label class="text-md mt-4 mb-0 pb-0 font-bold cursor-pointer">
+      <input type="checkbox" v-model="featureFlagRef"
+        class="mr-1 size-6 align-middle accent-blue-500 dark:accent-black p-2" :aria-describedby="descriptionDomId">
+      "{{ props.featureFlagUiRow.title }}" enabled?
     </label>
     <p v-if="descriptionDomId" class="mt-2 pt-0 text-sm">
-      {{ featureFlagUiRow.description }}s
+      {{ featureFlagUiRow.description }}
     </p>
   </div>
 </template>
@@ -19,18 +21,18 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const { featureFlagsRef } = useFeatureFlags()
+const featureFlags = useFeatureFlags()
 
 const descriptionDomId = useId()
 
 const featureFlagRef = computed({
-  get: () => featureFlagsRef?.value[props.featureFlagKey],
+  get: () => featureFlags?.value[props.featureFlagKey],
   set: (value) => {
-    if (!featureFlagsRef) {
+    if (!featureFlags) {
       throw Error('Expected inject(featureFlagsKey) to be available')
     }
-    featureFlagsRef.value = {
-      ...featureFlagsRef.value,
+    featureFlags.value = {
+      ...featureFlags.value,
       [props.featureFlagKey]: value
     }
   }
