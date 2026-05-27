@@ -67,10 +67,10 @@ export const watchInputForFeatureFlagExperiments = ({
 }: WatchInputForFeatureFlagExperimentsProps): void => {
   watch(inputValueRef, () => {
     const { value } = inputValueRef
-    console.log("WATCHING", value)
     if (
       value.trim() === ENABLE_FEATURE_FLAGS_INPUT_VALUE
     ) {
+      console.log("Opening feature flag experiments modal")
       isFeatureFlagsModalVisibleRef.value = true
     }
   })
