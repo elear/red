@@ -1,12 +1,12 @@
 <template>
-  <fieldset>
-    <legend class="text-md mt-3 mb-0 pb-0 font-bold">{{ props.featureFlagUiRow.title }}</legend>
-    <p class="mt-0 pt-0 text-sm">{{ featureFlagUiRow.description }}</p>
-    <label>
-      enabled?
-      <input type="checkbox" v-model="featureFlagRef">
+  <div class="bg-gray-200 mt-3 px-4 py-3 rounded-md mb-6">
+    <label class="text-md mt-4 mb-0 pb-0 font-bold cursor-pointer">"{{ props.featureFlagUiRow.title }}" enabled?
+      <input type="checkbox" v-model="featureFlagRef" :aria-describedby="descriptionDomId">
     </label>
-  </fieldset>
+    <p v-if="descriptionDomId" class="mt-2 pt-0 text-sm">
+      {{ featureFlagUiRow.description }}s
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -20,6 +20,8 @@ type Props = {
 const props = defineProps<Props>()
 
 const { featureFlagsRef } = useFeatureFlags()
+
+const descriptionDomId = useId()
 
 const featureFlagRef = computed({
   get: () => featureFlagsRef?.value[props.featureFlagKey],

@@ -2,6 +2,8 @@ import { z } from 'zod'
 import { type Ref } from 'vue'
 
 export const FeatureFlagsSchema = z.object({
+  // Ensure all top-level fields are optional so that browsers
+  // with old versions of localStorage values can still load
   isDidYouMeanActive: z.boolean().optional()
 })
 
@@ -17,7 +19,7 @@ export type FeatureFlagUIRow = {
 
 const featureFlagsUI: Record<keyof FeatureFlags, FeatureFlagUIRow> = {
   isDidYouMeanActive: {
-    title: 'Homepage direct links',
+    title: 'Homepage direct RFC/subseries  links',
     description: 'Homepage search feature suggesting direct links to RFCs and other subseries.',
     storageType: 'boolean'
   }
@@ -81,7 +83,7 @@ export const useFeatureFlags = () => {
         throw Error('Expected inject(featureFlagsKey) to be available')
       }
       try {
-        // localStorage APIs can throw if browser storage is disabled or storage is full etc
+        // localStorage APIs can throw Errors if browser storage is disabled or storage is full etc
         window.localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(featureFlagsRef.value))
       } catch (e: unknown) {
         console.log(`Error saving to localStorage (this is expected behaviour if localStorage is disabled or full). Feature flag experiment config can't be saved.`, e)
