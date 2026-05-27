@@ -58,7 +58,7 @@ The following figure depicts the different streams that feed into the RFC Series
 
 #### What other criteria are there for Independent Stream RFCs?
 
-Documents must be well written, accurate, concise, and appropriate for the readership of the RFC series. They must not present security or operational risks to the Interent, they must adhere to any [IANA](https://iana.org/) rules for code point allocation, and in general may not create new IANA registries. Internal implementation descriptions are generally not accepted, nor are foundational formats upon which standards are expected to be built.
+Documents must be well written, accurate, concise, and appropriate for the readership of the RFC series. They must not present security or operational risks to the Internet, they must adhere to any [IANA](https://iana.org/) rules for code point allocation, and in general may not create new IANA registries. Internal implementation descriptions are generally not accepted, nor are foundational formats upon which standards are expected to be built.
 
 #### What if a document isn’t appropriate as an independent submission?
 
