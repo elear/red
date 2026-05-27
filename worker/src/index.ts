@@ -64,7 +64,7 @@ router
   .get('/source-definitions/', redirectTo('/series/rfc-tips/', 302))
   .get('/how-to-report/', redirectTo('/series/rfc-errata/', 302))
   .get('/history/', redirectTo('https://history.rfc-editor.org', 302))
-  .get('/about/clusters/', redirectTo('https://authors.ietf.org/rfc-publication-process', 302))
+  .get('/about/clusters/', redirectTo('https://authors.ietf.org/rfc-publication-process#clusters', 302))
   .get('/about/pubprocess/', redirectTo('https://authors.ietf.org/rfc-publication-process', 302))
   .get('/about/queue/', redirectTo(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/about/`, 302))
   .get('/about/queue/flowchart/', redirectTo(`https://queue${env.ENV_DOMAIN}.rfc-editor.org/about/`, 302))
