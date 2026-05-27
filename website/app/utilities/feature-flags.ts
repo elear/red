@@ -27,7 +27,7 @@ const featureFlagsUI: Record<keyof FeatureFlags, FeatureFlagUIRow> = {
   },
   isCardHoverFocusTint: {
     title: 'Website cards hover/focus tint',
-    description: `Site-wide 'Card' feature that further indicates clickable area by tinting the card on hover/focus. RFC Cards heading won't toggle underline. Colours haven't been tested for APCA compliance.`,
+    description: `Site-wide 'Card' feature that further indicates clickable area by tinting the card on hover/focus. RFC Cards heading won't toggle underline. Colours haven't been tested for APCA compliance. Tint is achieved by a semitransparent block covering the Card, so APCA testing has to be done on screenshots that compose the layers.`,
     storageType: 'boolean'
   }
 }
