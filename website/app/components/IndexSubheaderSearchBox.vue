@@ -26,25 +26,37 @@ import { SEARCH_PLACEHOLDER } from '~/utilities/search'
 import { NONBREAKING_SPACE } from '~/utilities/strings'
 import { apiRfcBucketDocumentPathBuilder, apiSubseriesPathBuilder, infoSeriesPathBuilder, SEARCH_PATH, searchPathBuilder, useApiV1UrlOrigin } from '~/utilities/url'
 import SubseriesTitle from './SubseriesTitle.vue'
+import { useFeatureFlags, watchInputForFeatureFlagExperiments, isFeatureFlagsModalVisibleKey } from '~/utilities/feature-flags.js'
+
+const isFeatureFlagsModalVisible = inject(isFeatureFlagsModalVisibleKey)
+
+if (!isFeatureFlagsModalVisible) {
+  throw Error(`Expected inject(isFeatureFlagsModalVisibleKey) to be available`)
+}
 
 const searchInputRef = useTemplateRef('search-input')
 
 const searchQuery = ref(searchInputRef.value?.value ?? '')
 
-const isDidYouMeanActive = ref(false)
-
 const didYouMean = ref<SeriesId | undefined>()
 
 let abortController: AbortController | undefined = undefined
 
+const { featureFlagsRef } = useFeatureFlags()
+
+watchInputForFeatureFlagExperiments({
+  inputValueRef: searchQuery,
+  isFeatureFlagsModalVisibleRef: isFeatureFlagsModalVisible
+})
+
 const checkSearchForSeriesId = async () => {
-  const { value } = searchQuery
-  if (
-    // require this value to enable suggestions  
-    value === '/allow suggestions') {
-    isDidYouMeanActive.value = true
+  if (!featureFlagsRef) {
+    return
   }
-  if (isDidYouMeanActive.value === false) {
+  const { isDidYouMeanActive } = featureFlagsRef.value
+  const value = searchQuery.value
+  console.log({ value, isDidYouMeanActive })
+  if (!value || isDidYouMeanActive === false) {
     return
   }
 

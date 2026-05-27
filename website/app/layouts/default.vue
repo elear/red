@@ -11,6 +11,7 @@
 </template>
 
 <script setup lang="ts">
+import { isFeatureFlagsModalVisibleKey, featureFlagsKey, loadFeatureFlagsFromLocalStorage, type FeatureFlags } from '~/utilities/feature-flags';
 import type { VueStyleClass } from '~/utilities/vue'
 
 type Props = {
@@ -18,6 +19,17 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+
+const isFeatureFlagsModalVisible = ref(false)
+
+const featureFlagsRef = ref<FeatureFlags>( { 
+  isDidYouMeanActive: false
+})
+
+provide(isFeatureFlagsModalVisibleKey, isFeatureFlagsModalVisible)
+provide(featureFlagsKey, featureFlagsRef)
+
+onMounted(() => loadFeatureFlagsFromLocalStorage(featureFlagsRef))
 </script>
 
 <style>

@@ -11,7 +11,8 @@
         <HeaderNavDesktop />
       </div>
     </nav>
-    <!-- slot used to extend the header eg for the homepage -->
+    <FeatureFlagsModal />
+    <!-- optional slot used to extend the header eg for the homepage -->
     <slot />
   </header>
 </template>
