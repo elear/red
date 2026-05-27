@@ -5,7 +5,7 @@ const { version } = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
 // inserted in the <head> some inline JS to determine scrollbar width so that CSS can use it in calc()
 // this is intentionally inserted in the <head> so that it runs immediately in the browser
-const scrollbarWidthInlineJS = `function _updateScrollbarWidth(){document.body.style.setProperty('--rfc-editor-org-scrollbar-width',(window.innerWidth-document.documentElement.clientWidth)+'px')}window.addEventListener('resize', _updateScrollbarWidth, false);document.addEventListener('DOMContentLoaded', _updateScrollbarWidth, false);window.addEventListener('load', _updateScrollbarWidth);window.setInterval(_updateScrollbarWidth,1000)`
+const scrollbarWidthInlineJS = `function _updateScrollbarWidth(){if(!document.body||!document.body.style)return;document.body.style.setProperty('--rfc-editor-org-scrollbar-width',(window.innerWidth-document.documentElement.clientWidth)+'px')}window.addEventListener('resize', _updateScrollbarWidth, false);document.addEventListener('DOMContentLoaded', _updateScrollbarWidth, false);window.addEventListener('load', _updateScrollbarWidth);window.setInterval(_updateScrollbarWidth,1000)`
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -165,6 +165,10 @@ export default defineNuxtConfig({
         proxy: 'https://www.staging.rfc-editor.org/api/v1/**'
         // proxy: 'http://localhost:3001/api/v1/**'
       }
-    },
+    }
+  },
+  devServer: {
+    host: '0.0.0.0',
+    port: 3001
   }
 })
