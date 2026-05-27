@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { type Ref } from 'vue'
+import { SEARCH_PATH } from './url'
 
 export const FeatureFlagsSchema = z.object({
   // Ensure all top-level fields are optional so that browsers
@@ -21,11 +22,12 @@ export type FeatureFlagUIRow = {
 const featureFlagsUI: Record<keyof FeatureFlags, FeatureFlagUIRow> = {
   isDidYouMeanActive: {
     title: 'Homepage direct RFC/subseries links',
-    description: 'Homepage search feature suggesting direct links to RFCs and other subseries, bypassing search.',
+    description: `Homepage search box feature suggesting direct links to RFCs/BCPs/etc when typing "RFCn" or "BCP n" etc into the homepage search box. This only occurs on the homepage, not on the ${SEARCH_PATH} route.`,
     storageType: 'boolean'
   },
   isCardHoverFocusTint: {
-    title: 'Website cards hover/focus tint ',
+    title: 'Website cards hover/focus tint',
+    description: `Site-wide 'Card' feature that further indicates clickable area by tinting the card on hover/focus. RFC Cards heading won't toggle underline. Colours haven't been tested for APCA compliance.`,
     storageType: 'boolean'
   }
 }
