@@ -62,7 +62,7 @@ export const sanitiseHtml = (untrustedHtml: string | undefined | null): string =
     !('setHTML' in el) ||
     typeof el.setHTML !== 'function'
   ) {
-    console.warn('Rendering HTML direct to DOM due to lack of browser window.Sanitizer or related functionality. HTML was:', JSON.stringify(untrustedHtml))
+    // console.warn('Rendering HTML direct to DOM due to lack of browser window.Sanitizer or related functionality. HTML was:', JSON.stringify(untrustedHtml))
     el.innerHTML = untrustedHtml // TODO: in this scenario what should we do? strip all HTML elements? escape them all?
     return el.innerHTML
   }
@@ -73,3 +73,26 @@ export const sanitiseHtml = (untrustedHtml: string | undefined | null): string =
   el.setHTML(untrustedHtml, { sanitizer })
   return el.innerHTML
 }
+
+const htmlEscapeMapping = {
+  '<': '&lt;',
+  '>': '&gt;',
+  "'": '&quot;',
+  '"': '&quot;',
+  '&': '&amp;',
+}
+
+/**
+ * Escapes HTML to text html with character entities, ie exposing <>'"& chars
+ */
+export const htmlEscapeToText = (html: string) => html.replace(/([<>'"&])/g, match => {
+  if (!match || !match[1]) {
+    return ''
+  }
+  const key = match[1]
+  if (key in htmlEscapeMapping) {
+    const validatedKey = key as keyof typeof htmlEscapeMapping
+    return htmlEscapeMapping[validatedKey]
+  }
+  return ''
+})

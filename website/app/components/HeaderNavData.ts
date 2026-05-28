@@ -1,3 +1,4 @@
+import { htmlEscapeToText } from '~/utilities/html'
 import {
   IETF_PRIVACY_STATEMENT_URL,
   INTERNET_DRAFT_AUTHOR_RESOURCES_RFC_PUBLICATION_PROCESS_URL,
@@ -199,4 +200,13 @@ export const useMenuData = (mode: Mode) => {
   })
 
   return menuData
+}
+
+export const renderNoScriptMenuItem = (menuItem: MenuItem): string => {
+  if (menuItem.href) {
+    return `<li class="text-sm"><a href="${htmlEscapeToText(menuItem.href)}">${htmlEscapeToText(menuItem.label)}</a>${menuItem.children
+      ? `<ul>${menuItem.children.map(renderNoScriptMenuItem).join('')}</ul>`
+      : ''}</li>`
+  }
+  return ''
 }

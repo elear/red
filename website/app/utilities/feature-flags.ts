@@ -4,9 +4,10 @@ import { SEARCH_PATH } from './url'
 
 export const FeatureFlagsSchema = z.object({
   // Ensure all top-level fields are optional so that browsers
-  // with old versions of localStorage values can still load
+  // with old versions saved in localStorage values can still validate
   isDidYouMeanActive: z.boolean().optional(),
   isCardHoverFocusTint: z.boolean().optional(),
+  isMockNonJSMenu: z.boolean().optional()
 })
 
 export type FeatureFlags = z.infer<typeof FeatureFlagsSchema>
@@ -29,7 +30,18 @@ const featureFlagsUI: Record<keyof FeatureFlags, FeatureFlagUIRow> = {
     title: 'Website cards hover/focus tint',
     description: `Site-wide 'Card' feature that further indicates clickable area by tinting the card on hover/focus. RFC Cards heading won't toggle underline. Colours haven't been tested for APCA compliance. Tint is achieved by a semitransparent block covering the Card, so APCA testing has to be done on screenshots that compose the layers.`,
     storageType: 'boolean'
+  },
+  isMockNonJSMenu: {
+    title: 'non-JS menu',
+    description: `non-JS browsers can't use the dropdowns so show the menu items in the page, like a mega menu / footer sitemap already expanded. Feature flags depend on JS so don't disable JS to see the effect, it's already simulated.`,
+    storageType: 'boolean'
   }
+}
+
+export const DEFAULT_FEATURE_FLAGS: Required<FeatureFlags> = {
+  isDidYouMeanActive: false,
+  isCardHoverFocusTint: false,
+  isMockNonJSMenu: false
 }
 
 export const featureFlagsUIRows = Object.entries(featureFlagsUI)
@@ -51,13 +63,19 @@ export const loadFeatureFlagsFromLocalStorage = (featureFlagsRef: Ref<FeatureFla
     const val = JSON.parse(valString)
     const { data, error } = FeatureFlagsSchema.safeParse(val)
     if (error || !data) {
-      const errorTitle = 'Unable to parse feature flag'
+      const errorTitle = 'Unable to validate feature flag JSON. Resetting localStorage config.'
       console.log(errorTitle, valString)
+      window.localStorage.removeItem(LOCALSTORAGE_KEY)
       throw Error(errorTitle)
     }
-    featureFlagsRef.value = data
+    featureFlagsRef.value = {
+      // merge current value as default data so that all keys will be present
+      ...featureFlagsRef.value,
+      ...data,
+    }
   } catch (e: unknown) {
-    console.log(`Error loading localStorage (this is expected behaviour if localStorage is disabled). Feature flag experiment config can't be loaded.`, e)
+    const _errorTitle = `Error loading from localStorage (this is expected behaviour if localStorage is disabled). ${e}`
+    // console.log(`[feature-flag-experiments] ${errorTitle}`, e)
   }
 }
 
@@ -97,9 +115,40 @@ export const useFeatureFlags = () => {
         // localStorage APIs can throw Errors if browser storage is disabled or storage is full etc
         window.localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(featureFlagsRef.value))
       } catch (e: unknown) {
-        console.log(`Error saving to localStorage (this is expected behaviour if localStorage is disabled or full). Feature flag experiment config can't be saved.`, e)
+        console.log(`[feature-flag-experiments]  Error saving config to localStorage (this is expected behaviour if browser localStorage is disabled or full)`, e)
       }
     })
 
   return featureFlagsRef
+}
+
+export const useAreFeatureFlagsEnabled = () => {
+  const featureFlagsRef = inject(featureFlagsKey)
+  const isMounted = ref(false)
+  onMounted(() => {
+    isMounted.value = true
+  })
+  onUnmounted(() => {
+    isMounted.value = false
+  })
+
+  if (!featureFlagsRef) {
+    throw Error('Expected provide(featureFlagsKey) above in component tree.')
+  }
+
+  const areFeatureFlagsEnabled = computed(() => {
+    const { value: featureFlags } = featureFlagsRef
+    if (!featureFlags) {
+      throw Error('Expected provide(featureFlagsKey) above in component tree.')
+    }
+    // Do nothing in server renders
+    if (isMounted.value === false) {
+      return false
+    }
+    const entries = Object.entries(featureFlags)
+    const isEnabled = entries.reduce((acc, [_key, value]) => acc ? acc : value, false)
+    return isEnabled
+  })
+
+  return areFeatureFlagsEnabled
 }
