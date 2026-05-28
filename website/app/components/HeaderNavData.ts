@@ -202,11 +202,33 @@ export const useMenuData = (mode: Mode) => {
   return menuData
 }
 
-export const renderNoScriptMenuItem = (menuItem: MenuItem): string => {
+type RenderNoScriptMenuItemOptions = {
+  renderListDisc?: boolean
+  menuHeaderTopSpacing?: boolean
+}
+
+/**
+ * This generates raw HTML. It's uses our trusted menu data but be very careful making change regardless.
+ */
+export const renderNoScriptMenuItem = (menuItem: MenuItem, options?: RenderNoScriptMenuItemOptions): string => {
   if (menuItem.href) {
-    return `<li class="text-sm"><a href="${htmlEscapeToText(menuItem.href)}">${htmlEscapeToText(menuItem.label)}</a>${menuItem.children
-      ? `<ul>${menuItem.children.map(renderNoScriptMenuItem).join('')}</ul>`
+    return `<li class="${options?.renderListDisc ? 'list-disc ml-5' : ''}"><a href="${htmlEscapeToText(menuItem.href)}">${htmlEscapeToText(menuItem.label)}</a>${menuItem.children
+      ? `<ul>${menuItem.children.map(menuItem => renderNoScriptMenuItem(menuItem, options)).join('')}</ul>`
       : ''}</li>`
   }
+
+  if (
+    // NoScript users can't run click handler JS. Ignore this menu item.
+    menuItem.click
+  ) {
+    return ''
+  }
+
+  if (menuItem.label && menuItem.children && menuItem.children.filter(menuItem => !menuItem.click).length > 0) {
+    return `<li>${menuItem.label ? `<b class="${options?.menuHeaderTopSpacing ? 'inline-block mt-1' :''}">${htmlEscapeToText(menuItem.label)}</b>`
+      : ''}${`<ul>${menuItem.children ? menuItem.children.map(menuItem => renderNoScriptMenuItem(menuItem, options)).join('') : ''}</ul>`
+      }</li>`
+  }
+
   return ''
 }

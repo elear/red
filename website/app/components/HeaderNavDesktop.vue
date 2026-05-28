@@ -95,7 +95,7 @@
             </li>
           </ul>
         </NavigationMenuContent>
-        <div v-html="menuItem.noScriptHtml"></div>
+        <div class="hidden lg:block text-sm" v-html="menuItem.noScriptHtml"></div>
       </NavigationMenuItem>
     </NavigationMenuList>
     <div class="perspective-[2000px] absolute top-full left-0 flex w-full">
@@ -134,7 +134,9 @@ const menuDataWithNoScripts = computed(() => {
     let noScriptHtml = ''
     if (featureFlags.value.isMockNonJSMenu) {
       noScriptHtml = `<div data-element-will-be-noscript>${menuItem.children
-        ? `<ul class="flex flex-col gap-1">${menuItem.children.map(renderNoScriptMenuItem).join('')}</ul>`
+        ? `<ul class="flex flex-col gap-1">${menuItem.children.map(menuItem => renderNoScriptMenuItem(menuItem, {
+          renderListDisc: true
+        })).join('')}</ul>`
         : ''
         }</div>`
     }

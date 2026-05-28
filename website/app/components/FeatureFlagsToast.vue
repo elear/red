@@ -2,7 +2,7 @@
   <div v-if="areFeatureFlagsEnabled && isFeatureFlagsModalVisible === false" :class="[
     'fixed z-100 transition-all left-2 ',
     {
-      '-top-10': !shouldShowToast,
+      '-top-20': !shouldShowToast,
       'top-2': shouldShowToast
     }
   ]">

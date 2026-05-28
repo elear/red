@@ -3,8 +3,9 @@
     aria-label="Search">
     <Icon name="fluent:search-12-filled" />
   </Anchor>
+
   <DialogRoot v-model:open="isOpen">
-    <DialogTrigger aria-label="Menu" class="absolute top-0 right-0 block px-3 py-4.5 block lg:hidden">
+    <DialogTrigger aria-label="Menu" type="button" class="absolute top-0 right-0 block px-3 py-4.5 block lg:hidden">
       <GraphicsHamburgerMenu />
     </DialogTrigger>
     <DialogPortal>
