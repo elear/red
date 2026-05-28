@@ -77,7 +77,7 @@ export const sanitiseHtml = (untrustedHtml: string | undefined | null): string =
 const htmlEscapeMapping = {
   '<': '&lt;',
   '>': '&gt;',
-  "'": '&quot;',
+  "'": '&apos;',
   '"': '&quot;',
   '&': '&amp;',
 }
@@ -85,14 +85,9 @@ const htmlEscapeMapping = {
 /**
  * Escapes HTML to text html with character entities, ie exposing <>'"& chars
  */
-export const htmlEscapeToText = (html: string) => html.replace(/([<>'"&])/g, match => {
-  if (!match || !match[1]) {
-    return ''
-  }
-  const key = match[1]
+export const htmlEscapeToText = (html: string) => html.replace(/([<>'"&])/g, (match, key) => {
   if (key in htmlEscapeMapping) {
-    const validatedKey = key as keyof typeof htmlEscapeMapping
-    return htmlEscapeMapping[validatedKey]
+    return htmlEscapeMapping[key as keyof typeof htmlEscapeMapping]
   }
-  return ''
+  return match
 })
