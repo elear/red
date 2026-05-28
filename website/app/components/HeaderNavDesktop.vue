@@ -1,5 +1,5 @@
 <template>
-  <NavigationMenuRoot v-model="currentNav" class="relative w-full z-90 justify-end content-end hidden lg:block"
+  <NavigationMenuRoot v-model="currentNav" class="relative w-full z-70 justify-end content-end hidden lg:block"
     disable-hover-trigger>
     <NavigationMenuList class="m-0 flex gap-2 w-full justify-end list-none rounded-md">
       <NavigationMenuItem v-for="(menuItem, index) in menuDataWithNoScripts" :key="index">
