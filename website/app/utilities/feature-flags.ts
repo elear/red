@@ -6,8 +6,9 @@ export const FeatureFlagsSchema = z.object({
   // Ensure all top-level fields are optional so that browsers
   // with old versions saved in localStorage values can still validate
   isDidYouMeanActive: z.boolean().optional(),
-  isCardHoverFocusTint: z.boolean().optional(),
-  isMockNonJSMenu: z.boolean().optional()
+  // isCardHoverFocusTint: z.boolean().optional()
+  isMockNonJSMenu: z.boolean().optional(),
+  // hasFontWeight_WCAG3_APCA: z.boolean().optional(),
 })
 
 export type FeatureFlags = z.infer<typeof FeatureFlagsSchema>
@@ -26,22 +27,28 @@ const featureFlagsUI: Record<keyof FeatureFlags, FeatureFlagUIRow> = {
     description: `Homepage search box feature suggesting direct links to RFCs/BCPs/etc when typing "RFCn" or "BCP n" etc into the homepage search box. This only occurs on the homepage, not on the ${SEARCH_PATH} route.`,
     storageType: 'boolean'
   },
-  isCardHoverFocusTint: {
-    title: 'Website cards hover/focus tint',
-    description: `Site-wide 'Card' feature that further indicates clickable area by tinting the card on hover/focus. RFC Cards heading won't toggle underline. Colours haven't been tested for APCA compliance. Tint is achieved by a semitransparent block covering the Card, so APCA testing has to be done on screenshots that compose the layers.`,
-    storageType: 'boolean'
-  },
+  // isCardHoverFocusTint: {
+  //   title: 'Website cards hover/focus tint',
+  //   description: `Site-wide 'Card' feature that further indicates clickable area by tinting the card on hover/focus. RFC Cards heading won't toggle underline. Colours haven't been tested for APCA compliance. Tint is achieved by a semitransparent block covering the Card, so APCA testing has to be done on screenshots that compose the layers.`,
+  //   storageType: 'boolean'
+  // },
   isMockNonJSMenu: {
     title: 'non-JS menu',
     description: `non-JS browsers can't use the dropdowns so show the menu items in the page, like a mega menu / footer sitemap already expanded. Feature flags depend on JS so don't disable JS to see the effect, it's already simulated.`,
     storageType: 'boolean'
-  }
+  },
+  // hasFontWeight_WCAG3_APCA: {
+  //   title: 'Font weight WCAG3 APCA fixes',
+  //   description: `WCAG3 (beta) has APCA boldness fixes`,
+  //   storageType: 'boolean'
+  // }
 }
 
 export const DEFAULT_FEATURE_FLAGS: Required<FeatureFlags> = {
   isDidYouMeanActive: false,
-  isCardHoverFocusTint: false,
-  isMockNonJSMenu: false
+  // isCardHoverFocusTint: false,
+  isMockNonJSMenu: false,
+  // hasFontWeight_WCAG3_APCA: false,
 }
 
 export const featureFlagsUIRows = Object.entries(featureFlagsUI)

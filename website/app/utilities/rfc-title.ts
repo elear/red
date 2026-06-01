@@ -19,9 +19,9 @@ export const formatTitleAsVNode = (
   }
 
   return h('span', [
-    h('span', { class: 'font-normal' }, parts.type.toUpperCase()),
+    h('span', { class: 'font-medium' }, parts.type.toUpperCase()),
     NONBREAKING_SPACE,
-    h('span', { class: 'font-semibold' }, parts.number),
+    h('span', { class: 'font-bold' }, parts.number),
     hasTrailingColon ? ':' : undefined
   ])
 }

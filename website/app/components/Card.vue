@@ -1,42 +1,55 @@
 <template>
-  <div :class="[
-    'bg-white dark:bg-blue-950 relative dark:border dark:border-gray-500 pl-5 pr-7 py-4 rounded shadow-xs print:border-2 print:border-black',
-    props.class
-  ]">
+  <div
+    :class="[
+      'bg-white dark:bg-blue-950 relative dark:border dark:border-gray-500 pl-5 pr-7 py-4 rounded shadow-xs print:border-2 print:border-black',
+      props.class
+    ]">
     <div :class="props.containerClass">
       <Heading :level="props.headingLevel" :class="`text-[22px] ${props.headingClass ? props.headingClass : ''}`">
-        <NuxtLink :to="props.href" :class="[
-          'font-semibold text-blue-300 dark:text-blue-100 print:text-black no-underline group',
-          
-          props.hasCoverLink && `before:absolute before:content-[\'\'] ${
-          // card tint
-          (featureFlags.isCardHoverFocusTint
-            ? `hover:before:bg-blue-500/20 focus:before:bg-blue-500/20 dark:focus:before:bg-blue-900/20 dark:hover:before:bg-blue-900/20`
-            : 'focus:underline hover:underline'
-          )
-          } ${
-          // Card shadow
-          `hover:before:shadow-md dark:before:shadow-slate-700 dark:hover:before:shadow-[0_0_10px_5px_#10202c]`
-          } ${
-          //
-          'before:inset-0 before:transition-all'
-          } ${
-          /* must be able to have <slot /> content above the coverLink, so coverlink is z-40 and slot content (eg buttons) could be z-50 to rise above it */
-          'before:z-40'
-          }`
-        ]">
-          <slot name="headingTitle">slot #headingTitle</slot>
+        <NuxtLink
+          :to="props.href"
+          :class="[
+            'font-semibold text-blue-300 dark:text-blue-100 print:text-black no-underline group',
+
+            props.hasCoverLink &&
+              `before:absolute before:content-[\'\'] before:inset-0 before:rounded ${
+                // below the content
+                'before:z-0'
+              } after:absolute after:content-[\'\'] after:inset-0 ${
+                // above the content
+                'after:z-40'
+              } after:transition-all ${
+                // card tint
+                `hover:text-blue-400 focus:text-blue-400 dark:hover:text-blue-300 dark:focus:text-blue-300 hover:before:bg-blue-25 focus:before:bg-blue-25 dark:hover:before:bg-blue-900 dark:focus:before:bg-blue-900`
+              } ${
+                // Card shadow
+                `after:shadow-blue-950/10 dark:after:shadow-blue-100/10 hover:after:shadow-3xl focus:after:shadow-3xl dark:hover:after:shadow-3xl dark:hover:after:shadow-3xl`
+              } ${
+                /* must be able to have <slot /> content above the coverLink, so coverlink is z-40 and slot content (eg buttons) could be z-50 to rise above it */
+                ''
+              }`
+          ]">
+          <span class="relative z-1">
+            <slot name="headingTitle">slot #headingTitle</slot>
+          </span>
           <span v-if="!props.hasCoverLink" class="block absolute right-0 w-10 h-full top-0">
             <!-- for a larger click area along the right-hand side -->
           </span>
-          <GraphicsChevron width="14" height="21" :class="[
-            'absolute right-4 text-gray-200 group-hover:text-blue-400 group-focus:text-blue-400 dark:group-hover:text-blue-100 dark:group-focus:text-blue-100 transition-all group-hover:right-3 group-focus:right-3 -rotate-90 print:hidden',
-            props.chevronPosition === 'center' ? 'bottom-[50%]' : 'bottom-4'
-          ]" />
+          <GraphicsChevron
+            width="14"
+            height="21"
+            :class="[
+              'absolute right-4 text-gray-200 group-hover:text-blue-400 group-focus:text-blue-400 dark:group-hover:text-blue-100 dark:group-focus:text-blue-100 transition-all group-hover:right-3 group-focus:right-3 -rotate-90 print:hidden',
+              props.chevronPosition === 'center' ? 'bottom-[50%]' : 'bottom-4'
+            ]" />
         </NuxtLink>
-        <slot name="afterHeadingTitle"></slot>
+        <span class="relative z-1">
+          <slot name="afterHeadingTitle"></slot>
+        </span>
       </Heading>
-      <slot />
+      <div class="relative z-1">
+        <slot />
+      </div>
     </div>
     <aside v-if="hasAsideSlot" :class="props.asideSlotClass">
       <slot name="aside"></slot>
@@ -60,8 +73,6 @@ type Props = {
   href: string
   chevronPosition?: 'center' | 'end'
 }
-
-const featureFlags = useFeatureFlags()
 
 const props = withDefaults(defineProps<Props>(), { chevronPosition: 'end' })
 

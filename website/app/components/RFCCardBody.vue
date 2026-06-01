@@ -1,49 +1,62 @@
 <template>
   <div class="md:pr-5 flex-1">
     <Pill v-if="tagText.length > 0" size="small" :text="tagText" class="print:m-0 my-2" />
-    <ul v-if="props.rfc.authors" class="hidden lg:block print:block text-base text-gray-800 dark:text-white">
+    <ul
+      v-if="props.rfc.authors"
+      class="hidden lg:block print:block text-base text-gray-800 dark:text-white">
       <li v-for="(author, index) in props.rfc.authors" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />
         <RFCDocumentAuthor :author="author" />
       </li>
     </ul>
-    <ul v-if="list2" class="hidden lg:block print:block text-base text-gray-800 mt-1 dark:text-white">
+    <ul
+      v-if="list2"
+      class="hidden lg:block print:block text-base text-gray-800 mt-1 dark:text-white">
       <li v-if="isAprilFool" class="inline pr-2">
         <AprilFools />
       </li>
-      <li v-for="(part, index) in list2" :key="index" class="inline text-slate-600 dark:text-slate-300 text-[0.9rem]">
+      <li
+        v-for="(part, index) in list2"
+        :key="index"
+        class="inline text-[0.9rem] text-slate-600 dark:text-slate-200">
         <GraphicsDiamond v-if="index > 0" class="align-middle" />{{ part }}
       </li>
     </ul>
     <template v-if="props.showAbstract && props.rfc.abstract">
       <div class="block lg:hidden">
         <!-- mobile abstract -->
-        <button type="button" :aria-expanded="isMobileAbstractOpen" :aria-controls="abstractDomId"
+        <button
+          type="button"
+          :aria-expanded="isMobileAbstractOpen"
+          :aria-controls="abstractDomId"
           class="relative z-50 text-blue-800 cursor-pointer dark:text-blue-100 underline text-base p-3 -left-3 -top-3 -mb-3 print:hidden"
           @click="isMobileAbstractOpen = !isMobileAbstractOpen">
           <template v-if="isMobileAbstractOpen">Hide abstract</template>
           <template v-else>Show abstract</template>
         </button>
-        <div :id="abstractDomId" :class="[
-          'mt-3',
-          {
-            'block ': isMobileAbstractOpen,
-            'hidden print:block': !isMobileAbstractOpen
-          }
-        ]">
+        <div
+          :id="abstractDomId"
+          :class="[
+            'mt-3',
+            {
+              'block ': isMobileAbstractOpen,
+              'hidden print:block': !isMobileAbstractOpen
+            }
+          ]">
           <Heading level="4" style-level="5" class="text-blue-900 dark:text-gray-300 pt-3 border-t inline-block">
             Abstract
           </Heading>
-          <div class="leading-snug text-gray-800 dark:text-gray-300 text-pretty" v-html="props.rfc.abstract // this should already be sanitised
-            ">
-          </div>
+          <div
+            class="leading-snug text-gray-800 dark:text-gray-300 text-pretty"
+            v-html="
+              props.rfc.abstract // this should already be sanitised
+            "></div>
         </div>
       </div>
     </template>
-    <p v-if="obsoletedBy" :class="[
-      'text-red-700 dark:text-red-300 text-base print:text-black',
-      { 'mt-2': isMobileAbstractOpen }
-    ]">
+    <p
+      v-if="obsoletedBy"
+      :class="['text-red-700 dark:text-red-300 text-base print:text-black', { 'mt-2': isMobileAbstractOpen }]">
       <Renderable :val="obsoletedBy" />
     </p>
   </div>
@@ -54,6 +67,7 @@ import { DateTime } from 'luxon'
 import { infoSeriesPathBuilder } from '../utilities/url'
 import { getRfcPillText, isAprilFoolsRfc, type RfcCommon } from '~/utilities/rfc'
 import { formatTitlePlaintext } from '~/utilities/rfc-converters-utils'
+import { useFeatureFlags } from '~/utilities/feature-flags'
 
 type Props = {
   rfc: RfcCommon
@@ -76,9 +90,7 @@ function formatDate(isoDate: string): string {
   })
 }
 
-function formatObsoletedBy(
-  obsoletedBy: RfcCommon['obsoleted_by']
-): VNode | undefined {
+function formatObsoletedBy(obsoletedBy: RfcCommon['obsoleted_by']): VNode | undefined {
   if (!obsoletedBy || obsoletedBy.length === 0) return undefined
 
   return h(
