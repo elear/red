@@ -1,6 +1,6 @@
 <div align="center">
   
-<img src="https://raw.githubusercontent.com/ietf-tools/common/main/assets/logos/rfced-www.svg" alt="RFC" height="125" />
+<img src="https://raw.githubusercontent.com/ietf-tools/common/main/assets/logos/rfced-www.svg" alt="RFC-Editor.org" height="125" />
 
 [![Release](https://img.shields.io/github/release/ietf-tools/red.svg?style=flat&maxAge=300)](https://github.com/ietf-tools/red/releases)
 [![License](https://img.shields.io/github/license/ietf-tools/red)](https://github.com/ietf-tools/red/blob/main/LICENSE)
