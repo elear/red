@@ -29,7 +29,9 @@ const excludeAuthorRedirects = [
   '/authors/rfc-style-guide',
   '/authors/rfc-edit/auth48',
   '/authors/rfc-edit/doc-clusters',
-  '/authors/rfc-edit/pub-queue'
+  '/authors/rfc-edit/pub-queue',
+  '/authors/ise/ise-checklist',
+  '/authors/ise/iseb'
 ]
 
 const subseriesRedirect = (req: IRequest) => {
