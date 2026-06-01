@@ -7,31 +7,11 @@ description: How the Independent Submission Stream works.
 The Independent Submission Stream allows RFC publication for some documents that are outside the official processes of the [IETF](https://www.ietf.org/), [IAB](https://www.iab.com/), and [IRTF](https://www.irtf.org/) but are relevant to the Internet community and achieve reasonable levels of technical and editorial quality. Note that RFCs published as independent submissions do not require, nor do they carry, community consensus, and they are not standards or best practices. [RFC 8730, "Independent Submission Editor Model"](/info/rfc8730/), as updated by [RFC 9920](/info/rfc9920/), describes the roles of
 
 - the Independent Submissions Editor (ISE) and
-- the [Independent Submissions Editorial Board](#independent-submissions-editorial-board), which provides review for the ISE.
+- the [Independent Submissions Editorial Board](/authors/ise/iseb), which provides review for the ISE.
 
 The Independent Submissions Editor (ISE) is currently [Eliot Lear](https://datatracker.ietf.org/person/lear@lear.ch), who can be reached at [rfc-ise@rfc-editor.org](mailto:rfc-ise@rfc-editor.org).
 
-## Independent Submissions Editorial Board
-
-The Independent Submissions Editorial Board (ISEB) provides reviews of independent submissions and offers advice to the Independent Submissions Editor (ISE). The ISEB can be reached at rfc-ed-board@rfc-editor.org.
-
-The present board includes (in alphabetical order):
-
-- Harald Alvestrand
-- Scott Bradner
-- Nevil Brownlee
-- Richard Clayton
-- Aaron Falk
-- Adrian Farrel
-- Stephen Farrell
-- Sharon Goldberg
-- Joel Halpern
-- Sue Hares
-- John Klensin
-- Subramanian Moonesamy (SM)
-- Kathleen Moriarty
-- Craig Partridge
-- Martin Thomson
+[Click here for steps to start the publication process](/authors/ise/ise-checklist).
 
 ## Publishing an Independent Submission
 
@@ -41,7 +21,6 @@ The present board includes (in alphabetical order):
 - [What if a document isn’t appropriate as an independent submission?](#what-if-a-document-isnt-appropriate-as-an-independent-submission)
 - [What about Intellectual Property Rights (IPR)?](#what-about-intellectual-property-rights-ipr)
 - [What’s the process?](#whats-the-process)
-- [How does one submit a draft for consideration as an independent submission RFC?](#how-does-one-submit-a-draft-for-consideration-as-an-independent-submission-rfc)
 - [At what stage is a document?](#at-what-stage-is-a-document)
 - [Who makes decisions about independent submissions?](#who-makes-decisions-about-independent-submissions)
 - [Who reviews submissions?](#who-reviews-submissions)
@@ -79,11 +58,11 @@ The following figure depicts the different streams that feed into the RFC Series
 
 #### What other criteria are there for Independent Stream RFCs?
 
-Documents must be well written, understandable, and appropriate for the readership of the RFC series. They must not present security or operational risks to the Interent, and they must adhere to any [IANA](https://iana.org/) rules for code point allocation, and in general may not create new IANA registries. Internal implementation descriptions are generally not accepted, nor are foundational formats upon which standards are expected to be built.
+Documents must be well written, accurate, concise, and appropriate for the readership of the RFC series. They must not present security or operational risks to the Internet, they must adhere to any [IANA](https://iana.org/) rules for code point allocation, and in general may not create new IANA registries. Internal implementation descriptions are generally not accepted, nor are foundational formats upon which standards are expected to be built.
 
 #### What if a document isn’t appropriate as an independent submission?
 
-If a document is not appropriate as an independent submission, the Independent Submissions Editor will attempt to assist the authors to find a more appropriate home. That could be the IETF, the [IRTF](https://irtf.org/), some other standards organization, a blog, or an academic publication. 
+If a document is not appropriate as an independent submission, the Independent Submissions Editor will attempt to assist the authors to find a more appropriate home. That could be the IETF, the [IRTF](https://irtf.org/), some other standards organization, a blog, or an academic publication.
 
 #### What about Intellectual Property Rights (IPR)?
 
@@ -110,22 +89,6 @@ The rest of the process is summarized as follows:
 
 It’s important to note that many drafts do not make it past Step 4, and that every step after submission may be iterated or repeated. For instance, if external review indicates that substantial amounts of work are needed, authors are expected to improve the document in discussions with reviewers and the Independent Submissions Editor.
 
-#### How does one submit a draft for consideration as an independent submission RFC?
-
-To be considered for publishing as an RFC, a document must first be posted online as an Internet-Draft. (The exception is a document that is submitted for consideration as an [April 1st RFC](#how-can-i-submit-an-april-1st-rfc). See [I-D Author Resources](https://authors.ietf.org/) for guidance on posting an Internet-Draft.
-
-After posting the document as an Internet-Draft, the author should send an email message to the ISE: [rfc-ise@rfc-editor.org](mailto:rfc-ise@rfc-editor.org). This message should include the following information:
-
-- The file name of the published Internet-Draft that is being submitted.
-- The desired category (Informational or Experimental).
-- A summary of related discussion of this document, if any, that has occurred in an IETF working group or in the IESG.
-- An assertion that no IANA allocation in the document requires IETF Review or Standards Action. See [RFC 8126](/info/rfc8126/) for a definition of these terms and [RFC 8726](/info/rfc8726/) for more information about how IANA requests are handled for Independent Submission Stream documents.
-- A statement describing the purpose, intended audience, merits, and significance of the document.
-- An acknowledgment that the IPR rules of RFCs [4846](/info/rfc4846/) and [5744](/info/rfc5744/) apply, and that unless the authors state otherwise, permission is granted to produce derivative works, in whole or in part, as stated in those RFCs.
-Suggestions for one or more competent and independent potential reviewers for the document, including contact information. This can speed the review and approval process.
-
-The ISE uses the [IETF Datatracker](https://datatracker.ietf.org) through all stages of Independent Submission Stream document handling. The Datatracker page for a given draft shows its ISE state. [RFC 6322](/info/rfc6322/) provides descriptions of these states. In addition, a complete list showing the ISE state for all documents in the Independent Submission Stream is available in the [Datatracker](https://datatracker.ietf.org/stream/ise/).
-
 #### At what stage is a document?
 
 Information about the current state of an independent submission can be found on the [Datatracker](https://datatracker.ietf.org/) page for that draft.  
@@ -136,11 +99,11 @@ Note that a document can sometimes appear to go "backwards" in the process. This
 
 The Independent Submissions Editor is responsible for making decisions about each submission, in accordance with the guidance set forth in [RFC 4846](/info/rfc4846/). The Independent Submissions Editor is appointed by the [Internet Architecture Board (IAB)](https://iab.org/), and serves at their pleasure. Anyone may send comments to the IAB about the Independent Submissions Editor.
 
-The Independent Submissions Editor is ably assisted by the [Independent Submissions Editorial Board](#independent-submissions-editorial-board).
+The Independent Submissions Editor is ably assisted by the [Independent Submissions Editorial Board](/authors/ise/iseb).
 
 #### Who reviews submissions?
 
-The Independent Submissions Editor seeks review of the work through individuals who are knowledgeable about the topic discussed in the draft. Authors are encouraged to submit suggestions, but some reviews will be conducted outside of that list. The ISE often relies on the [Independent Submissions Editorial Board](#independent-submissions-editorial-board) to provide reviews. In addition, the ISE welcomes comments from **anyone** on a draft that is being considered by the ISE.
+The Independent Submissions Editor seeks review of the work through individuals who are knowledgeable about the topic discussed in the draft. Authors are encouraged to submit suggestions, but some reviews will be conducted outside of that list. The ISE often relies on the [Independent Submissions Editorial Board](/authors/ise/iseb) to provide reviews. In addition, the ISE welcomes comments from **anyone** on a draft that is being considered by the ISE.
 
 #### Where can reviews be found?
 
@@ -170,7 +133,7 @@ No. RFCs are all but immutable. However, anyone may submit an erratum about any 
 
 From time to time, the Independent Submissions Editor may have a conflict of interest, or the appearance of a conflict of interest, with regard to a particular draft. This can occur for a number of reasons, for example, a document submitted by an author that is employed by the same employer as the ISE or one of its competitors. Such relationships in and of themselves may not lead to variance in the editorial process, but they must be disclosed.
 
-When the ISE believes that there may be a conflict of interest, or if authors or others believe that there may be a conflict of interest, the matter will be referred to the [Independent Submissions Editorial Board](#independent-submissions-editorial-board). They will advise the ISE as to what should happen at the various stages of the publication process. The ISE will inform the community and authors of such conflicts, and any actions to be taken as a result.
+When the ISE believes that there may be a conflict of interest, or if authors or others believe that there may be a conflict of interest, the matter will be referred to the [Independent Submissions Editorial Board](/authors/ise/iseb). They will advise the ISE as to what should happen at the various stages of the publication process. The ISE will inform the community and authors of such conflicts, and any actions to be taken as a result.
 
 #### How can I submit an April 1st RFC?
 
