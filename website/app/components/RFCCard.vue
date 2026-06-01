@@ -47,7 +47,6 @@ import type { RfcCommon } from '~/utilities/rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
 import { parseHeadingLevel, type HeadingLevel } from '~/utilities/html'
 import { SPACE } from '~/utilities/strings'
-import { useFeatureFlags } from '~/utilities/feature-flags'
 
 type Props = {
   rfc: RfcCommon
