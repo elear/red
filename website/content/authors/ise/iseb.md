@@ -1,4 +1,4 @@
-## Independent Submissions Editorial Board
+# Independent Submissions Editorial Board
 
 The Independent Submissions Editorial Board (ISEB) provides reviews of independent submissions and offers advice to the Independent Submissions Editor (ISE). The ISEB can be reached at rfc-ed-board@rfc-editor.org.
 

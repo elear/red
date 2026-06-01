@@ -1,4 +1,4 @@
-#### How does one submit a draft for consideration as an independent submission RFC?
+# How does one submit a draft for consideration as an independent submission RFC?
 
 To be considered for publishing as an RFC, a document must first be posted online as an Internet-Draft. (The exception is a document that is submitted for consideration as an [April 1st RFC](/authors/rfc-independent-submissions/#how-can-i-submit-an-april-1st-rfc). See [I-D Author Resources](https://authors.ietf.org/) for guidance on posting an Internet-Draft.
 
