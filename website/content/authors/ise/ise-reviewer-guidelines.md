@@ -43,7 +43,7 @@ Questions that the ISE would like you to answer:
 
 - Is the subject of this document relevant to the RFC Series?  
 
-   [RFC 4846](https://www.rfc-editor.org/rfc/rfc4846.txt) provides details as to what is acceptable as an individual submission.  Generally a draft must show that it is improving overall interoperability or otherwise provide some important insight or innovation relating to the Internet.
+   [RFC 4846](/info/rfc4846) provides details as to what is acceptable as an individual submission.  Generally a draft must show that it is improving overall interoperability or otherwise provide some important insight or innovation relating to the Internet.
 
 - Is this document technically competent, as far as you can tell?
 
