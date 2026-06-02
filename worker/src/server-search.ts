@@ -1,0 +1,90 @@
+import { IRequest } from 'itty-router'
+import { z } from 'zod'
+import { htmlTemplate, redTypesenseSearchRequestBuilder, safe } from './helpers'
+
+const TypesenseFacetCountSchema = z.object({
+  counts: z.array(z.unknown()),
+  field_name: z.string(),
+  sampled: z.boolean(),
+  stats: z.object({
+    total_values: z.number()
+  })
+})
+
+const TypesenseRequestParamsSchema = z.object({
+  collection_name: z.string(),
+  first_q: z.string(),
+  per_page: z.number(),
+  q: z.string()
+})
+
+const TypesenseHitSchema = z.object({
+  document: z.object({
+    rfc: z.string(),
+    title: z.string(),
+  })
+})
+
+const TypesenseResultSchema = z.object({
+  facet_counts: z.array(TypesenseFacetCountSchema),
+  found: z.number(),
+  hits: z.array(TypesenseHitSchema),
+  out_of: z.number(),
+  page: z.number(),
+  request_params: TypesenseRequestParamsSchema,
+  search_cutoff: z.boolean(),
+  search_time_ms: z.number()
+})
+
+export const TypesenseResponseSchema = z.object({
+  results: z.array(TypesenseResultSchema)
+})
+
+export type TypesenseResponse = z.infer<typeof TypesenseResponseSchema>
+
+const TYPESENSE_API_KEY_PARAM = 'x-typesense-api-key'
+const SEARCH_QUERY_PARAM = 'q'
+
+export async function serverSearch(req: IRequest, env: Env): Promise<Response | undefined> {
+  const { searchParams } = new URL(req.url, 'https://localhost/')
+  const typesenseApiKey = searchParams.get(TYPESENSE_API_KEY_PARAM)
+  const searchQuery = searchParams.get(SEARCH_QUERY_PARAM)
+  if (!typesenseApiKey) {
+    return new Response(`<!DOCTYPE html><h1>Search needs valid API key</h1>`, {
+      status: 500
+    })
+  }
+
+  const requestPojo = redTypesenseSearchRequestBuilder(typesenseApiKey, searchQuery ?? '', env.NUXT_PUBLIC_TYPESENSE_HOST)
+
+  const typesenseResponse = await fetch(requestPojo.url, {
+    method: 'post',
+    body: requestPojo.body
+  })
+
+  const responseText = await typesenseResponse.text()
+
+  if (!typesenseResponse.ok) {
+    console.error(`[typesense proxy search HTTP ${typesenseResponse.status}] ${responseText}`)
+    return new Response('<!DOCTYPE html><h1>Search is down</h1>', {
+      status: typesenseResponse.status
+    })
+  }
+
+  const { data, error } = TypesenseResponseSchema.safeParse(JSON.parse(responseText))
+  if (error || !data) {
+    console.error(`[typesense proxy parse error]`, error, data)
+    return new Response(`<!DOCTYPE html><h1>Internal error parsing search response. Please report this bug.</h1>`, {
+      status: 500
+    })
+  }
+
+  const hits = data.results.flatMap(result => result.hits)
+  const items = hits.map(hit => htmlTemplate`<li><a href="/info/${hit.document.rfc}/" target="_top">RFC <b>${hit.document.rfc}</b> ${hit.document.title}</a></li>`)
+  const html = htmlTemplate`<!DOCTYPE html><h1>Search results</h1><ul>${safe(items.join(''))}</ul>`
+
+  return new Response(html.toString(), {
+    status: 200,
+    headers: { 'Content-Type': 'text/html;charset=utf-8' }
+  })
+}

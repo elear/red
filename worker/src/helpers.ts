@@ -17,7 +17,12 @@ export function addNormalizedPath(req: IRequest, ..._args: unknown[]): void {
   req.normalizedPath = decodeURIComponent(url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname)
 }
 
-export function createBlobResponse(object: R2ObjectBody, contentType?: string, canonicalUrl?: string, cacheControl?: number): Response {
+export function createBlobResponse(
+  object: R2ObjectBody,
+  contentType?: string,
+  canonicalUrl?: string,
+  cacheControl?: number
+): Response {
   const headers = new Headers()
   object.writeHttpMetadata(headers)
   headers.set('etag', object.httpEtag)
@@ -80,9 +85,7 @@ export function detectContentType(path: string): string | undefined {
 function formatCanonicalHeader(url: string): string | undefined {
   try {
     const validatedUrl = new URL(url).toString()
-    const encodedUrl = encodeURI(validatedUrl)
-      .replace(/</g, '%3C')
-      .replace(/>/g, '%3E')
+    const encodedUrl = encodeURI(validatedUrl).replace(/</g, '%3C').replace(/>/g, '%3E')
 
     return `<${encodedUrl}>; rel="canonical"`
   } catch (e: unknown) {
@@ -134,29 +137,26 @@ type SearchPathBuilderProps = {
   showObsoleted?: '1'
 }
 
-export const searchPathBuilder = (
-  searchParams: Partial<SearchPathBuilderProps>,
-  envDomain: string = '',
-): string => {
+export const searchPathBuilder = (searchParams: Partial<SearchPathBuilderProps>, envDomain: string = ''): string => {
   const hasParams = Object.values(searchParams).join('').trim().length > 0
-  return `https://www${envDomain}.rfc-editor.org${SEARCH_PATH}${hasParams ? '?' : ''}${hasParams ?
-    Object.keys(searchParams)
-      .toSorted() // normalize order
-      .map((searchKey) => {
-        const typesenseSearchKey = searchKey
-        const searchValue =
-          searchParams[searchKey as keyof SearchPathBuilderProps]
+  return `https://www${envDomain}.rfc-editor.org${SEARCH_PATH}${hasParams ? '?' : ''}${
+    hasParams
+      ? Object.keys(searchParams)
+          .toSorted() // normalize order
+          .map((searchKey) => {
+            const typesenseSearchKey = searchKey
+            const searchValue = searchParams[searchKey as keyof SearchPathBuilderProps]
 
-        return searchValue ?
-          `${encodeURIComponent(typesenseSearchKey)}=${typeSenseEncodeUriComponent(
-            Array.isArray(searchValue) ? searchValue.join(',') : searchValue
-          )}`
-          : ''
-      })
-      .filter(Boolean)
-      .join('&')
-    : ''
-    }`
+            return searchValue
+              ? `${encodeURIComponent(typesenseSearchKey)}=${typeSenseEncodeUriComponent(
+                  Array.isArray(searchValue) ? searchValue.join(',') : searchValue
+                )}`
+              : ''
+          })
+          .filter(Boolean)
+          .join('&')
+      : ''
+  }`
 }
 
 export const rfcEditorErrataSearchUrl = (envDomain: string = '') => `https://errata${envDomain}.rfc-editor.org/search/`
@@ -169,4 +169,49 @@ export async function emptyFileResponse(req: IRequest): Promise<Response | undef
     headers.set('Content-Type', contentType)
   }
   return new Response('', { headers })
+}
+
+export const redTypesenseSearchRequestBuilder = (typesenseApiKey: string, searchTerm: string, typesenseHost: string) => {
+  return {
+    url: `${typesenseHost}/multi_search?x-typesense-api-key=${typesenseApiKey}`,
+    body: JSON.stringify({
+      searches: [
+        {
+          preset: 'red',
+          collection: 'docs',
+          q: searchTerm,
+          facet_by: 'area.full,authors.name,flags.hiddenDefault,group.full,publicationDate,status.name,stream.name',
+          filter_by: 'flags.hiddenDefault:=[false]',
+          max_facet_values: 200,
+          page: 1,
+          per_page: 10
+        }
+      ]
+    })
+  }
+}
+
+
+export const escapeHTML = (str: string) => String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+
+export class SafeHTML {
+  constructor(readonly value: string) {}
+  toString() { return this.value }
+}
+
+export const safe = (html: string) => new SafeHTML(html)
+
+export const htmlTemplate = (strings: TemplateStringsArray, ...values: (string | SafeHTML)[]) => {
+  let result = strings[0]
+  for (let i = 0; i < values.length; i++) {
+    const value = values[i]
+    result += value instanceof SafeHTML ? value.value : escapeHTML(String(value ?? ''))
+    result += strings[i + 1]
+  }
+  return new SafeHTML(result)
 }

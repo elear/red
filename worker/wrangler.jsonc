@@ -48,6 +48,7 @@
       ],
       "vars": {
         "ENV_DOMAIN": ".staging",
+        "NUXT_PUBLIC_TYPESENSE_HOST": "https://typesense.ietf.org",
         "OIDC_ISSUER": "https://auth.ietf.org/api/openid",
         "OIDC_CLIENT_AUTHORIZATION_ENDPOINT": "https://auth.ietf.org/api/openid/authorize",
         "OIDC_CLIENT_TOKEN_ENDPOINT": "https://auth.ietf.org/api/openid/token",
@@ -80,6 +81,7 @@
       ],
       "vars": {
         "ENV_DOMAIN": ".demo",
+        "NUXT_PUBLIC_TYPESENSE_HOST": "https://typesense.ietf.org",
         "OIDC_ISSUER": "https://auth.ietf.org/api/openid",
         "OIDC_CLIENT_AUTHORIZATION_ENDPOINT": "https://auth.ietf.org/api/openid/authorize",
         "OIDC_CLIENT_TOKEN_ENDPOINT": "https://auth.ietf.org/api/openid/token",
@@ -114,6 +116,7 @@
       ],
       "vars": {
         "ENV_DOMAIN": "",
+        "NUXT_PUBLIC_TYPESENSE_HOST": "https://typesense.ietf.org",
         "OIDC_ISSUER": "https://auth.ietf.org/api/openid",
         "OIDC_CLIENT_AUTHORIZATION_ENDPOINT": "https://auth.ietf.org/api/openid/authorize",
         "OIDC_CLIENT_TOKEN_ENDPOINT": "https://auth.ietf.org/api/openid/token",

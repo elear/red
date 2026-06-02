@@ -18,7 +18,7 @@ import {
 } from './blobs'
 import { addNormalizedPath, emptyFileResponse, redirectTo } from './helpers'
 import { legacySearchRedirectPathBuilder } from './legacy-search-redirect'
-
+import { serverSearch } from './server-search'
 import { legacyErrataSearchRedirectUrlBuilder } from './legacy-errata-search-redirect'
 
 // Temporary - Exclude the paths from being redirected to auth48-transition.rfc-editor.org
@@ -181,6 +181,7 @@ router
   // Blobs
   .get('/rfc/*', addNormalizedPath, blobsRfc)
   .get('/refs/*', addNormalizedPath, blobsRefs)
+  .get('/api/v1/search/', addNormalizedPath, serverSearch)
   .get('/api/v1/content/*', addNormalizedPath, blobsApiContentJson)
   .get('/api/v1/rfc-html/*', addNormalizedPath, blobsApiRfcHtml)
   .get('/api/v1/rfc-common/*', addNormalizedPath, blobsApiRfcCommon)
