@@ -35,7 +35,7 @@
       </DialogPortal>
     </DialogRoot>
 
-    <div class="sticky top-0 h-[calc(100vh)] w-[300px] flex flex-col">
+    <div :class="['w-[300px] flex flex-col', isMounted && 'sticky top-0 h-[calc(100vh)]']">
       <RFCTabs
         v-model="selectedTab"
         mode="desktop"
@@ -77,6 +77,10 @@ const handleCloseAndNavigate = (id: string) => {
     window.location.hash = id
   })
 }
+
+const isMounted = ref(false)
+
+onMounted(() => isMounted.value = true)
 
 provide(closeModalAndScrollToId, handleCloseAndNavigate)
 </script>

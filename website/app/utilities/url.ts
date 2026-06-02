@@ -89,6 +89,9 @@ export const useDashboardUrlOrigin = () => {
 export const useRfcEditorErrataSearchUrl = () => {
   return `${useErrataUrlOrigin()}/search/`
 }
+export const useRfcEditorErrataSearchForRfcUrl = (rfcNumber: number) => {
+  return `${useErrataUrlOrigin()}/search/?rfc_number=${rfcNumber}`
+}
 export const useRfcEditorQueueClustersUrl = () => {
   return `${useQueueUrlOrigin()}/clusters/`
 }

@@ -28,7 +28,7 @@
 import { computed } from 'vue'
 import { NuxtLink } from '#components'
 import { EXTERNAL_LINK_REL, TARGET_NEW_WINDOW } from '~/utilities/html'
-import {  isExternalLink, isOutsideNuxtLink,  } from '~/utilities/url'
+import { isExternalLink, isOutsideNuxtLink } from '~/utilities/url'
 
 const props = defineProps<{ href?: string; id?: string }>()
 

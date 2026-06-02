@@ -32,10 +32,7 @@ export const parseHeadingLevel = (headingLevel: string): HeadingLevel => {
   throw Error(`Unable to parse heading level "${headingLevel}"`)
 }
 
-export const preformattedTextToHtml = (
-  preText: string,
-  wrapAnywhere?: boolean
-): ReturnType<typeof h> => {
+export const preformattedTextToHtml = (preText: string, wrapAnywhere?: boolean): ReturnType<typeof h> => {
   return h(
     'span',
     { class: ['font-mono', wrapAnywhere ? 'wrap-anywhere' : undefined] },
@@ -79,15 +76,17 @@ const htmlEscapeMapping = {
   '>': '&gt;',
   "'": '&apos;',
   '"': '&quot;',
-  '&': '&amp;',
+  '&': '&amp;'
 }
 
 /**
  * Escapes HTML to text html with character entities, ie exposing <>'"& chars
+ * Useful for <noscript> HTML string generation
  */
-export const htmlEscapeToText = (html: string) => html.replace(/([<>'"&])/g, (match, key) => {
-  if (key in htmlEscapeMapping) {
-    return htmlEscapeMapping[key as keyof typeof htmlEscapeMapping]
-  }
-  return match
-})
+export const htmlEscapeToText = (html: string): string =>
+  html.replace(/([<>'"&])/g, (match, key) => {
+    if (key in htmlEscapeMapping) {
+      return htmlEscapeMapping[key as keyof typeof htmlEscapeMapping]
+    }
+    return match
+  })

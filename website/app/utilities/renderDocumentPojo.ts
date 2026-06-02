@@ -3,6 +3,8 @@ import type { VNode } from 'vue'
 import Fragment from '~/components/Fragment.vue'
 
 import type { DocumentPojo, ElementPojo, NodePojo } from '~/utilities/rfc-validators'
+import { EXTERNAL_LINK_REL, htmlEscapeToText } from './html'
+import { isExternalLink } from './url'
 
 const unwrapChildrenForVue = (vnodes: VNode[]) => {
   switch (vnodes.length) {
@@ -15,13 +17,17 @@ const unwrapChildrenForVue = (vnodes: VNode[]) => {
   }
 }
 
+export const defaultRenderer: ElementRenderers = {
+  __default: (node, childrenForVue) => h(node.nodeName, node.attributes, childrenForVue)
+}
+
 type ChildrenForVue = VNode | VNode[] | undefined
 type ElementRenderer = (node: ElementPojo, childrenForVue: ChildrenForVue) => VNode
 export type ElementRenderers = Record<string, ElementRenderer> & { __default: ElementRenderer }
 
 export const renderNodePojo = (node: NodePojo, elementRenderers: ElementRenderers): VNode => {
   if (node.type === 'Element') {
-    const children = node.children.map(node => renderNodePojo(node, elementRenderers))
+    const children = node.children.map((node) => renderNodePojo(node, elementRenderers))
     const childrenForVue = unwrapChildrenForVue(children)
     const key = node.attributes['data-component'] ?? node.nodeName
     const renderer = elementRenderers[key] ?? elementRenderers.__default
@@ -32,7 +38,37 @@ export const renderNodePojo = (node: NodePojo, elementRenderers: ElementRenderer
   throw Error(`Unhandled NodePojo ${JSON.stringify(node)}`)
 }
 
-export const renderDocumentPojo = (nodes: DocumentPojo, elementRenderers: ElementRenderers): VNode => {
+export const renderNodePojoToHtmlString = (node: NodePojo): string => {
+  if (node.type === 'Element') {
+    const { nodeName } = node
+    const nodeNameToUse = nodeName.match(/Anchor/i) ? 'a' : nodeName
+    const attributesEntries = Object.entries({
+      ...(node.attributes.href && isExternalLink(node.attributes.href) ? { rel: EXTERNAL_LINK_REL } : {}),
+      ...node.attributes
+    })
+    return `<${htmlEscapeToText(nodeNameToUse)} ${attributesEntries
+      .map(([attributeName, attributeValue]) => {
+        return `${htmlEscapeToText(attributeName)}="${htmlEscapeToText(attributeValue)}"`
+      })
+      .join(' ')}>${node.children.map(renderNodePojoToHtmlString).join('')}</${htmlEscapeToText(nodeNameToUse)}>`
+  } else if (node.type === 'Text') {
+    return htmlEscapeToText(node.textContent)
+  }
+  throw Error(`Unhandled NodePojo ${JSON.stringify(node)}`)
+}
+
+/**
+ * This does not sanitise its output so if you tell it to render onclick
+ * or href="javascript:" then it will.
+ */
+export const renderDocumentPojo = (
+  nodes: DocumentPojo,
+  elementRenderers: ElementRenderers = defaultRenderer
+): VNode => {
   const children = nodes.map((node) => renderNodePojo(node, elementRenderers))
   return h(Fragment, () => children)
+}
+
+export const renderDocumentPojoToHtmlString = (nodes: DocumentPojo): string => {
+  return nodes.map((node) => renderNodePojoToHtmlString(node)).join('')
 }

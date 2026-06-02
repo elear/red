@@ -1,73 +1,66 @@
 <template>
-  <TabsRoot
-    v-model="selectedTab"
-    class="min-h-0 flex flex-col"
-  >
+  <TabsRoot v-model="selectedTab" class="min-h-0 flex flex-col">
     <TabsList class="border-b-2 border-gray-400">
-      <HorizontalScrollable :inner-class="[
-        'flex flex-row gap-5',
-        { 'px-2': props.mode === 'mobile' }
-      ]">
+      <HorizontalScrollable :inner-class="['flex flex-row gap-5', { 'px-2': props.mode === 'mobile' }]">
         <TabsIndicator class="absolute" />
         <TabsTrigger
           v-if="props.hasTableOfContents"
           :class="[
             DEFAULT_CLASS,
             {
-              [SELECTED_CLASS]: selectedTab === 0,
+              [ONMOUNTED_CLASS]: isMounted,
+              [ONUNMOUNTED_CLASS]: !isMounted,
+              [SELECTED_CLASS]: selectedTab === 0 && isMounted,
               [UNSELECTED_CLASS]: selectedTab !== 0
             }
           ]"
-          :value="0"
-        >
+          :disabled="!isMounted"
+          :value="0">
           Contents
         </TabsTrigger>
         <TabsTrigger
           :class="[
             DEFAULT_CLASS,
             {
-              [SELECTED_CLASS]: selectedTab === 1,
+              [ONMOUNTED_CLASS]: isMounted,
+              [ONUNMOUNTED_CLASS]: !isMounted,
+              [SELECTED_CLASS]: selectedTab === 1 && isMounted,
               [UNSELECTED_CLASS]: selectedTab !== 1
             }
           ]"
-          :value="1"
-        >
+          :disabled="!isMounted"
+          :value="1">
           About this RFC
         </TabsTrigger>
         <TabsTrigger
           :class="[
             DEFAULT_CLASS,
             {
-              [SELECTED_CLASS]: selectedTab === 2,
+              [ONMOUNTED_CLASS]: isMounted,
+              [ONUNMOUNTED_CLASS]: !isMounted,
+              [SELECTED_CLASS]: selectedTab === 2 && isMounted,
               [UNSELECTED_CLASS]: selectedTab !== 2
             }
           ]"
-          :value="2"
-        >
+          :disabled="!isMounted"
+          :value="2">
           Errata
           <DiamondText
-            v-if="
-              props.rfcBucketHtmlDocument.errataList &&
-              props.rfcBucketHtmlDocument.errataList.length > 0
-            "
-            :text="props.rfcBucketHtmlDocument.errataList.length.toString()"
-          />
+            v-if="props.rfcBucketHtmlDocument.errataList && props.rfcBucketHtmlDocument.errataList.length > 0"
+            :text="props.rfcBucketHtmlDocument.errataList.length.toString()" />
         </TabsTrigger>
       </HorizontalScrollable>
     </TabsList>
 
     <TabsContent
-      v-if="
-        props.hasTableOfContents && props.rfcBucketHtmlDocument.tableOfContents
-      "
+      v-if="props.hasTableOfContents && props.rfcBucketHtmlDocument.tableOfContents"
       :value="0"
       :class="[
         TAB_CONTENT_CLASS,
         {
           'px-4': props.mode === 'mobile'
         }
-      ]"
-    >
+      ]">
       <TableOfContentsHighlight
         v-if="props.mode === 'desktop'"
         :toc="props.rfcBucketHtmlDocument.tableOfContents"
@@ -78,15 +71,8 @@
         :links-class="`block text-sm py-2 dark:border-t-gray-500 ${ANCHOR_COLOR_TAILWIND_STYLE}`"
         links-active-class="text-bold-without-layout-shift"
         link-class="block no-underline hover:underline no-underline hover:underline focus:underline"
-        last-link-class="flex-1"
-      >
-        <Heading
-          level="2"
-          style-level="5"
-          class="mt-4 mb-1 sr-only"
-        >
-          In this section
-        </Heading>
+        last-link-class="flex-1">
+        <Heading level="2" style-level="5" class="mt-4 mb-1 sr-only"> In this section </Heading>
       </TableOfContentsHighlight>
       <TableOfContents
         v-else-if="props.mode === 'mobile'"
@@ -98,15 +84,8 @@
         :list-item-class="`block text-sm py-2 dark:border-t-gray-500 ${ANCHOR_COLOR_TAILWIND_STYLE}`"
         links-active-class="text-bold-without-layout-shift"
         link-class="block no-underline hover:underline"
-        last-link-class="flex-1"
-      >
-        <Heading
-          level="2"
-          style-level="5"
-          class="mt-4 mb-1 sr-only"
-        >
-          In this section
-        </Heading>
+        last-link-class="flex-1">
+        <Heading level="2" style-level="5" class="mt-4 mb-1 sr-only"> In this section </Heading>
       </TableOfContents>
     </TabsContent>
     <TabsContent
@@ -116,61 +95,36 @@
         {
           'px-4': props.mode === 'mobile'
         }
-      ]"
-    >
+      ]">
       <VerticalScrollable>
-        <Heading
-          level="3"
-          style-level="4"
-          class="mt-4"
-        >
-          Details
-        </Heading>
+        <Heading level="3" style-level="4" class="mt-4"> Details </Heading>
         <dl class="text-sm pb-6">
-          <template v-if="
-            props.rfcBucketHtmlDocument.rfc.updates &&
-            props.rfcBucketHtmlDocument.rfc.updates.length > 0
-          ">
-            <dt class="font-bold mt-2">
-              Updates ({{ props.rfcBucketHtmlDocument.rfc.updates.length }})
-            </dt>
+          <template
+            v-if="props.rfcBucketHtmlDocument.rfc.updates && props.rfcBucketHtmlDocument.rfc.updates.length > 0">
+            <dt class="font-bold mt-2">Updates ({{ props.rfcBucketHtmlDocument.rfc.updates.length }})</dt>
             <dd>
               <RFCTabsReferences :rfcs="props.rfcBucketHtmlDocument.rfc.updates" />
             </dd>
           </template>
-          <template v-if="
-            props.rfcBucketHtmlDocument.rfc.updated_by &&
-            props.rfcBucketHtmlDocument.rfc.updated_by.length > 0
-          ">
-            <dt class="font-bold mt-2">
-              Updated by ({{
-                props.rfcBucketHtmlDocument.rfc.updated_by.length
-              }})
-            </dt>
+          <template
+            v-if="props.rfcBucketHtmlDocument.rfc.updated_by && props.rfcBucketHtmlDocument.rfc.updated_by.length > 0">
+            <dt class="font-bold mt-2">Updated by ({{ props.rfcBucketHtmlDocument.rfc.updated_by.length }})</dt>
             <dd>
               <RFCTabsReferences :rfcs="props.rfcBucketHtmlDocument.rfc.updated_by" />
             </dd>
           </template>
-          <template v-if="
-            props.rfcBucketHtmlDocument.rfc.obsoletes &&
-            props.rfcBucketHtmlDocument.rfc.obsoletes.length > 0
-          ">
-            <dt class="font-bold mt-2">
-              Obsoletes ({{ props.rfcBucketHtmlDocument.rfc.obsoletes.length }})
-            </dt>
+          <template
+            v-if="props.rfcBucketHtmlDocument.rfc.obsoletes && props.rfcBucketHtmlDocument.rfc.obsoletes.length > 0">
+            <dt class="font-bold mt-2">Obsoletes ({{ props.rfcBucketHtmlDocument.rfc.obsoletes.length }})</dt>
             <dd>
               <RFCTabsReferences :rfcs="props.rfcBucketHtmlDocument.rfc.obsoletes" />
             </dd>
           </template>
-          <template v-if="
-            props.rfcBucketHtmlDocument.rfc.obsoleted_by &&
-            props.rfcBucketHtmlDocument.rfc.obsoleted_by.length > 0
-          ">
-            <dt class="font-bold mt-2">
-              Obsoleted by ({{
-                props.rfcBucketHtmlDocument.rfc.obsoleted_by.length
-              }})
-            </dt>
+          <template
+            v-if="
+              props.rfcBucketHtmlDocument.rfc.obsoleted_by && props.rfcBucketHtmlDocument.rfc.obsoleted_by.length > 0
+            ">
+            <dt class="font-bold mt-2">Obsoleted by ({{ props.rfcBucketHtmlDocument.rfc.obsoleted_by.length }})</dt>
             <dd>
               <RFCTabsReferences :rfcs="props.rfcBucketHtmlDocument.rfc.obsoleted_by" />
             </dd>
@@ -190,33 +144,21 @@
             <dd>
               <ul class="-mt-1 leading-[1.75]">
                 <li
-                  v-for="(author, authorIndex) in props.rfcBucketHtmlDocument
-                    .rfc.authors"
+                  v-for="(author, authorIndex) in props.rfcBucketHtmlDocument.rfc.authors"
                   :key="authorIndex"
-                  class="inline"
-                >
+                  class="inline">
                   <span class="whitespace-nowrap">
                     <a
                       v-if="author.datatracker_person_path"
-                      :href="datatrackerAuthorUrlBuilder(
-                        author.datatracker_person_path
-                      )
-                        "
-                      :class="[ANCHOR_COLOR_TAILWIND_STYLE, ' py-0.5 pr-0.5 mb-0.5']"
-                    >
+                      :href="datatrackerAuthorUrlBuilder(author.datatracker_person_path)"
+                      :class="[ANCHOR_COLOR_TAILWIND_STYLE, ' py-0.5 pr-0.5 mb-0.5']">
                       <RFCDocumentAuthor :author="author" />
-                      <Icon
-                        name="fluent:window-new-20-regular"
-                        class="text-lg align-middle ml-1"
-                      />
+                      <Icon name="fluent:window-new-20-regular" class="text-lg align-middle ml-1" />
                     </a>
                     <span v-else>
                       <RFCDocumentAuthor :author="author" />
                     </span>
-                    <template v-if="
-                      authorIndex <
-                      props.rfcBucketHtmlDocument.rfc.authors.length - 1
-                    ">
+                    <template v-if="authorIndex < props.rfcBucketHtmlDocument.rfc.authors.length - 1">
                       {{ COMMA }} {{ NONBREAKING_SPACE }}
                     </template>
                   </span>
@@ -228,205 +170,31 @@
 
           <template v-if="shouldShowGroup(props.rfcBucketHtmlDocument.rfc)">
             <dt class="font-bold mt-2">
-              <template v-if="
-                // https://github.com/ietf-tools/red/issues/147#issuecomment-3417450159
-                props.rfcBucketHtmlDocument.rfc.stream.slug === 'IRTF'
-              ">
-                Research group
-              </template>
-              <template v-else-if="
-                props.rfcBucketHtmlDocument.rfc.group?.type === 'individ' ||
-                props.rfcBucketHtmlDocument.rfc.group?.type === 'area'
-              ">
-                Source
-              </template>
-              <template v-else>Working group</template>
+              {{ groupName(props.rfcBucketHtmlDocument.rfc) }}
             </dt>
             <dd>
-              <template v-if="
-                props.rfcBucketHtmlDocument.rfc.group?.type === 'individ'
-                // Note that `rfcBucketHtmlDocument.rfc.group.name` is plural, which is unwanted,
-                // so that's why it's written as singular below
-                // also we don't want it linked, unlike other groups
-              ">
-                Individual Submission
-              </template>
-              <template v-else-if="props.rfcBucketHtmlDocument.rfc.group?.type === 'area'">
-                Individual Submission in the
-                <abbr :title="props.rfcBucketHtmlDocument.rfc.group?.name.replace(/ Area$/i, '')">
-                  {{ props.rfcBucketHtmlDocument.rfc.group?.acronym?.toUpperCase() }}
-                </abbr>
-                area
-              </template>
-              <Anchor
-                v-else
-                :href="useWorkingGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.group)"
-                :class="ANCHOR_COLOR_TAILWIND_STYLE"
-              >
-                {{ props.rfcBucketHtmlDocument.rfc.group?.name }}
-
-                <template v-if="props.rfcBucketHtmlDocument.rfc.group?.acronym">
-                  ({{ props.rfcBucketHtmlDocument.rfc.group.acronym.toUpperCase() }})
-                </template>
-                <Icon
-                  name="fluent:window-new-20-regular"
-                  class="text-lg align-middle ml-1"
-                />
-              </Anchor>
+              <DocumentPojo :value="groupValuePojo(props.rfcBucketHtmlDocument.rfc)" />
             </dd>
           </template>
 
           <template v-if="shouldShowArea(props.rfcBucketHtmlDocument.rfc)">
             <dt class="font-bold mt-2">Area</dt>
             <dd>
-              <Anchor
-                :href="areaGroupUrlBuilder(props.rfcBucketHtmlDocument.rfc.area)"
-                :class="ANCHOR_COLOR_TAILWIND_STYLE"
-              >
-                {{ props.rfcBucketHtmlDocument.rfc.area?.name }}
-
-                <template v-if="props.rfcBucketHtmlDocument.rfc.area?.acronym">
-                  ({{ props.rfcBucketHtmlDocument.rfc.area.acronym.toUpperCase() }})
-                </template>
-
-                <Icon
-                  name="fluent:window-new-20-regular"
-                  class="text-lg align-middle ml-1"
-                />
-              </Anchor>
+              <DocumentPojo :value="areaValuePojo(props.rfcBucketHtmlDocument.rfc)" />
             </dd>
           </template>
 
-          <dt class="font-bold mt-2">
-            {{ streamName }}
-          </dt>
+          <dt class="font-bold mt-2">{{ streamName }}</dt>
           <dd v-if="shouldShowStreamValue(props.rfcBucketHtmlDocument.rfc)">
-            <template v-if="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)">
-              <Anchor
-                :href="streamUrlBuilder(props.rfcBucketHtmlDocument.rfc.stream)"
-                :class="ANCHOR_COLOR_TAILWIND_STYLE"
-              >
-                {{ props.rfcBucketHtmlDocument.rfc.stream.name }}
-                <Icon
-                  name="fluent:window-new-20-regular"
-                  class="text-lg align-middle ml-1"
-                />
-              </Anchor>
-            </template>
-            <template v-else>
-              {{ props.rfcBucketHtmlDocument.rfc.stream.name }}
-            </template>
+            <DocumentPojo :value="streamValuePojo(props.rfcBucketHtmlDocument.rfc)" />
           </dd>
 
-          <template v-if="props.rfcBucketHtmlDocument.rfc.identifiers">
-            <template
-              v-for="(identifier, identifierIndex) in props
-                .rfcBucketHtmlDocument.rfc.identifiers"
-              :key="identifierIndex"
-            >
-              <dt class="font-bold mt-2">
-                <template v-if="identifier.type === 'doi'">
-                  <abbr
-                    title="Digital object identifier"
-                    class="no-underline"
-                  >DOI</abbr>
-                </template>
-                <template v-else-if="identifier.type === 'issn'">
-                  <abbr
-                    title="International Standard Serial Number"
-                    class="no-underline"
-                  >ISSN</abbr>
-                </template>
-                <template v-else>{{ identifier.type }}</template>
-              </dt>
-              <dd>
-                <Anchor
-                  v-if="identifier.type === 'doi'"
-                  :href="doiUrlBuilder(identifier.value, true)"
-                  :class="ANCHOR_COLOR_TAILWIND_STYLE"
-                >
-                  {{ doiUrlBuilder(identifier.value, false) }}
-                  <Icon
-                    name="fluent:window-new-20-regular"
-                    class="text-lg align-middle ml-1"
-                  />
-                </Anchor>
-                <template v-else>
-                  {{ identifier.value }}
-                </template>
-              </dd>
-            </template>
-          </template>
+          <DocumentPojo :value="identifierValuePojo(props.rfcBucketHtmlDocument.rfc.identifiers)" />
 
-          <template v-if="formats.length > 0">
-            <dt class="font-bold mt-2">
-              <template v-if="formats.length === 1">
-                Format
-              </template>
-              <template v-else> Formats </template>
-            </dt>
-            <dd>
-              <ul class="text-sm">
-                <li
-                  v-for="(formatItem, formatIndex) in formats"
-                  :key="formatIndex"
-                  class="inline"
-                >
-                  <a
-                    :href="
-                      // This needs to be <a> not <Anchor> because the path is outside the Nuxt app
-                      // (served direct from blob storage) but is on the same domain
-                      // so we can't SPA navigate to it
-                      rfcFormatPathBuilder(
-                        `rfc${props.rfcBucketHtmlDocument.rfc.number}`,
-                        formatItem.format
-                      )
-                      "
-                    :class="ANCHOR_COLOR_TAILWIND_STYLE"
-                  >{{ formatItem.format.toUpperCase() }}</a>
-                  <template v-if="
-                    formatIndex <
-                    formats.length - 1
-                  ">
-                    {{ COMMA }}
-                    {{ SPACE }}
-                  </template>
-                  <template v-else>
-                    {{ FULLSTOP }}
-                  </template>
-                </li>
-              </ul>
-            </dd>
-          </template>
+          <DocumentPojo :value="formatsValuePojo(formats, props.rfcBucketHtmlDocument.rfc.number)" />
 
           <dt class="font-bold mt-2">Cite this RFC</dt>
-          <dd>
-            <a
-              :href="
-                // This needs to be <a> not <Anchor> because the path is outside the Nuxt app
-                // (served direct from blob storage) but is on the same domain
-                // so we can't SPA navigate to it
-                rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'txt')"
-              aria-label="Cite TXT URL"
-              :class="ANCHOR_COLOR_TAILWIND_STYLE"
-            >
-              TXT
-            </a>{{ COMMA }}
-            <Anchor
-              :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'xml')"
-              aria-label="Cite XML URL"
-              :class="ANCHOR_COLOR_TAILWIND_STYLE"
-            >
-              XML
-            </Anchor>{{ COMMA }}
-            <Anchor
-              :href="rfcCitePathBuilder(`rfc${props.rfcBucketHtmlDocument.rfc.number}`, 'bibTeX')"
-              aria-label="Cite BibTeX URL"
-              :class="ANCHOR_COLOR_TAILWIND_STYLE"
-            >
-              BibTeX
-            </Anchor>{{ FULLSTOP }}
-          </dd>
+          <dd><DocumentPojo :value="citeValuePojo(props.rfcBucketHtmlDocument.rfc.number)" /></dd>
         </dl>
       </VerticalScrollable>
     </TabsContent>
@@ -437,33 +205,20 @@
         {
           'px-4': props.mode === 'mobile'
         }
-      ]"
-    >
+      ]">
       <VerticalScrollable class="pl-1">
-        <Heading
-          level="3"
-          style-level="4"
-          class="mt-3 mb-1"
-        >
-          About Errata
-        </Heading>
+        <Heading level="3" style-level="4" class="mt-3 mb-1"> About Errata </Heading>
         <p class="text-sm leading-[1.5]">
-          RFC Errata are official records of technical or editorial errors found
-          in published RFCs, which remain unchanged once issued. You can report
-          Errata only after verifying the issue is not already documented and
-          constitutes a genuine error in the text rather than a request for new
-          features or protocol changes.
+          RFC Errata are official records of technical or editorial errors found in published RFCs, which remain
+          unchanged once issued. You can report Errata only after verifying the issue is not already documented and
+          constitutes a genuine error in the text rather than a request for new features or protocol changes.
         </p>
         <p class="border-b-1 border-gray-200 py-6 mb-4">
           <Anchor
             :href="errataUrlOrigin"
-            class="bg-blue-300 text-white dark:bg-blue-800 border-0 text-sm no-underline hover:underline focus:underline rounded my-2 p-3 font-bold"
-          >
+            class="bg-blue-300 text-white dark:bg-blue-800 border-0 text-sm no-underline hover:underline focus:underline rounded my-2 p-3 font-bold">
             Report a new erratum
-            <Icon
-              name="fluent:window-new-20-regular"
-              class="text-lg align-middle ml-1"
-            />
+            <Icon name="fluent:window-new-20-regular" class="text-lg align-middle ml-1" />
           </Anchor>
         </p>
 
@@ -471,17 +226,12 @@
       </VerticalScrollable>
     </TabsContent>
   </TabsRoot>
+  <div v-html="noScriptHtml"></div>
 </template>
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import {
-  TabsContent,
-  TabsIndicator,
-  TabsList,
-  TabsRoot,
-  TabsTrigger
-} from 'reka-ui'
+import { TabsContent, TabsIndicator, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
 import { formatDatePublished } from '~/utilities/rfc-converters-utils'
 import { COMMA, FULLSTOP, NONBREAKING_SPACE, SPACE } from '~/utilities/strings'
 import { ANCHOR_COLOR_TAILWIND_STYLE } from '~/utilities/theme'
@@ -493,10 +243,14 @@ import {
   streamUrlBuilder,
   useWorkingGroupUrlBuilder,
   rfcCitePathBuilder,
-  doiUrlBuilder
+  doiUrlBuilder,
+  useRfcEditorErrataSearchForRfcUrl,
+  infoSeriesPathBuilder
 } from '~/utilities/url'
 import type { RfcBucketHtmlDocument } from '~/utilities/rfc'
-import type { RfcCommon } from '~/utilities/rfc-validators'
+import type { DocumentPojo, NodePojo, RfcCommon } from '~/utilities/rfc-validators'
+import { htmlEscapeToText } from '~/utilities/html'
+import { renderDocumentPojoToHtmlString } from '~/utilities/renderDocumentPojo'
 
 type Props = {
   rfcBucketHtmlDocument: RfcBucketHtmlDocument
@@ -522,10 +276,7 @@ const shouldShowArea = (rfc: RfcCommon): boolean => {
   if (!rfc.area) {
     return false
   }
-  if (
-    rfc.stream.slug === 'IETF' &&
-    (rfc.group?.type === 'wg' || rfc.group?.type === 'ag')
-  ) {
+  if (rfc.stream.slug === 'IETF' && (rfc.group?.type === 'wg' || rfc.group?.type === 'ag')) {
     return true
   }
   return false
@@ -567,20 +318,308 @@ const streamName = computed(() => {
   }
 })
 
-const formats = computed(() => props.rfcBucketHtmlDocument.rfc.formats.filter(
-  format => {
+const formats = computed(() =>
+  props.rfcBucketHtmlDocument.rfc.formats.filter((format) => {
     switch (format.format) {
       case 'notprepped':
       case 'json':
         return false
     }
     return true
-  }
-))
+  })
+)
 
+const errataSearchForThisRfc = useRfcEditorErrataSearchForRfcUrl(props.rfcBucketHtmlDocument.rfc.number)
+
+const isMounted = ref(false)
+
+onMounted(() => (isMounted.value = true))
+
+type RfcReferences = NonNullable<
+  RfcCommon['updates'] | RfcCommon['updated_by'] | RfcCommon['obsoletes'] | RfcCommon['obsoleted_by']
+>
+
+const groupName = (rfc: RfcCommon): string => {
+  if (
+    // https://github.com/ietf-tools/red/issues/147#issuecomment-3417450159
+    rfc.stream.slug === 'IRTF'
+  ) {
+    return 'Research group'
+  }
+  if (rfc.group?.type === 'individ' || rfc.group?.type === 'area') {
+    return 'Source'
+  }
+  return 'Working group'
+}
+
+const groupValuePojo = (rfc: RfcCommon): DocumentPojo => {
+  const group = rfc.group
+
+  if (group?.type === 'individ') {
+    return [{ type: 'Text', textContent: 'Individual Submission' }]
+  }
+
+  if (group?.type === 'area') {
+    return [
+      { type: 'Text', textContent: 'Individual Submission in the ' },
+      {
+        type: 'Element',
+        nodeName: 'abbr',
+        attributes: { title: group.name.replace(/ Area$/i, '') },
+        children: [{ type: 'Text', textContent: group.acronym.toUpperCase() }]
+      },
+      { type: 'Text', textContent: ' area' }
+    ]
+  }
+
+  const children: NodePojo[] = []
+  if (group?.name) children.push({ type: 'Text', textContent: group.name })
+  if (group?.acronym) children.push({ type: 'Text', textContent: ` (${group.acronym.toUpperCase()})` })
+
+  return [
+    {
+      type: 'Element',
+      nodeName: 'Anchor',
+      attributes: {
+        href: useWorkingGroupUrlBuilder(group) ?? '',
+        class: LINK_CLASS
+      },
+      children
+    }
+  ]
+}
+
+const areaValuePojo = (rfc: RfcCommon): DocumentPojo => {
+  const { area } = rfc
+
+  const children: NodePojo[] = []
+  if (area?.name) children.push({ type: 'Text', textContent: area.name })
+  if (area?.acronym) children.push({ type: 'Text', textContent: ` (${area.acronym.toUpperCase()})` })
+
+  return [
+    {
+      type: 'Element',
+      nodeName: 'Anchor',
+      attributes: {
+        href: areaGroupUrlBuilder(area) ?? '',
+        class: LINK_CLASS
+      },
+      children
+    }
+  ]
+}
+
+const identifierValuePojo = (identifiers: RfcCommon['identifiers']): DocumentPojo => {
+  if (!identifiers) return []
+
+  return identifiers.flatMap(({ type, value }) => {
+    const labelNode: NodePojo =
+      type === 'doi'
+        ? {
+            type: 'Element',
+            nodeName: 'abbr',
+            attributes: { title: 'Digital object identifier', class: 'no-underline' },
+            children: [{ type: 'Text', textContent: 'DOI' }]
+          }
+        : {
+            type: 'Element',
+            nodeName: 'abbr',
+            attributes: { title: 'International Standard Serial Number', class: 'no-underline' },
+            children: [{ type: 'Text', textContent: 'ISSN' }]
+          }
+
+    const ddChildren: NodePojo[] =
+      type === 'doi'
+        ? [
+            {
+              type: 'Element',
+              nodeName: 'Anchor',
+              attributes: { href: doiUrlBuilder(value, true), class: LINK_CLASS },
+              children: [
+                { type: 'Text', textContent: doiUrlBuilder(value, false) },
+                {
+                  type: 'Element',
+                  nodeName: 'Icon',
+                  attributes: { name: 'fluent:window-new-20-regular', class: 'text-lg align-middle ml-1' },
+                  children: []
+                }
+              ]
+            }
+          ]
+        : [{ type: 'Text', textContent: value }]
+
+    return [
+      {
+        type: 'Element',
+        nodeName: 'dt',
+        attributes: { class: 'font-bold mt-2' },
+        children: [labelNode]
+      },
+      {
+        type: 'Element',
+        nodeName: 'dd',
+        attributes: {} as Record<string, string>,
+        children: ddChildren
+      }
+    ]
+  })
+}
+
+const formatsValuePojo = (formats: RfcCommon['formats'], rfcNumber: number): DocumentPojo => {
+  if (formats.length === 0) return []
+
+  return [
+    {
+      type: 'Element',
+      nodeName: 'dt',
+      attributes: { class: 'font-bold mt-2' },
+      children: [{ type: 'Text', textContent: formats.length === 1 ? 'Format' : 'Formats' }]
+    },
+    {
+      type: 'Element',
+      nodeName: 'dd',
+      attributes: {} as Record<string, string>,
+      children: [
+        {
+          type: 'Element',
+          nodeName: 'ul',
+          attributes: { class: 'text-sm' },
+          children: formats.map(({ format }, index) => ({
+            type: 'Element' as const,
+            nodeName: 'li',
+            attributes: { class: 'inline' },
+            children: [
+              {
+                type: 'Element' as const,
+                // This needs to be <a> not <Anchor> because the path is outside the Nuxt app
+                // (served direct from blob storage) but is on the same domain
+                nodeName: 'a',
+                attributes: {
+                  href: rfcFormatPathBuilder(`rfc${rfcNumber}`, format),
+                  class: LINK_CLASS
+                },
+                children: [{ type: 'Text' as const, textContent: format.toUpperCase() }]
+              },
+              { type: 'Text' as const, textContent: index < formats.length - 1 ? `${COMMA}${SPACE}` : FULLSTOP }
+            ]
+          }))
+        }
+      ]
+    }
+  ]
+}
+
+const citeValuePojo = (rfcNumber: number): DocumentPojo => {
+  const rfcId = `rfc${rfcNumber}`
+  return [
+    {
+      type: 'Element',
+      nodeName: 'Anchor',
+      attributes: {
+        href: rfcCitePathBuilder(rfcId, 'txt'),
+        'aria-label': 'Cite TXT URL',
+        class: LINK_CLASS
+      },
+      children: [{ type: 'Text', textContent: 'TXT' }]
+    },
+    { type: 'Text', textContent: `${COMMA}${SPACE}` },
+    {
+      type: 'Element',
+      nodeName: 'Anchor',
+      attributes: {
+        href: rfcCitePathBuilder(rfcId, 'xml'),
+        'aria-label': 'Cite XML URL',
+        class: LINK_CLASS
+      },
+      children: [{ type: 'Text', textContent: 'XML' }]
+    },
+    { type: 'Text', textContent: `${COMMA}${SPACE}` },
+    {
+      type: 'Element',
+      nodeName: 'Anchor',
+      attributes: {
+        href: rfcCitePathBuilder(rfcId, 'bibTeX'),
+        'aria-label': 'Cite BibTeX URL',
+        class: LINK_CLASS
+      },
+      children: [{ type: 'Text', textContent: 'BibTeX' }]
+    },
+    { type: 'Text', textContent: `${FULLSTOP}${SPACE}` }
+  ]
+}
+
+const streamValuePojo = (rfc: RfcCommon): DocumentPojo => {
+  const { stream } = rfc
+  const href = streamUrlBuilder(stream)
+
+  if (href) {
+    return [
+      {
+        type: 'Element',
+        nodeName: 'Anchor',
+        attributes: { href, class: LINK_CLASS },
+        children: [
+          { type: 'Text', textContent: stream.name },
+          {
+            type: 'Element',
+            nodeName: 'Icon',
+            attributes: { name: 'fluent:window-new-20-regular', class: 'text-lg align-middle ml-1' },
+            children: []
+          }
+        ]
+      }
+    ]
+  }
+
+  return [{ type: 'Text', textContent: stream.name }]
+}
+
+/**
+ * For non-JS users
+ */
+const noScriptHtml = computed(() => {
+  const { rfc } = props.rfcBucketHtmlDocument
+  const renderRfcList = (rfcs: RfcReferences): string =>
+    rfcs
+      .map((rfc, index, arr) => {
+        const punctuation = index < arr.length - 1 ? ', ' : '.'
+        return `<a href="${infoSeriesPathBuilder(`rfc${rfc.number}`)}" class="${LINK_CLASS}">RFC ${rfc.number}: ${htmlEscapeToText(rfc.title)}</a>${punctuation}`
+      })
+      .join('')
+  return `<noscript data-nosnippet><div class="pb-4">
+    <h2 class="text-lg font-bold">About this RFC</h2>
+    <h3 class="text-sm font-bold">Details</h3>
+    <dl>
+      ${rfc.updates?.length ? `<dt class="font-bold mt-2">Updates (${rfc.updates.length})</dt><dd>${renderRfcList(rfc.updates)}</dd>` : ''}
+      ${rfc.updated_by?.length ? `<dt class="font-bold mt-2">Updated by (${rfc.updated_by.length})</dt><dd>${renderRfcList(rfc.updated_by)}</dd>` : ''}
+      ${rfc.obsoletes?.length ? `<dt class="font-bold mt-2">Obsoletes (${rfc.obsoletes.length})</dt><dd>${renderRfcList(rfc.obsoletes)}</dd>` : ''}
+      ${rfc.obsoleted_by?.length ? `<dt class="font-bold mt-2">Obsoleted by (${rfc.obsoleted_by.length})</dt><dd>${renderRfcList(rfc.obsoleted_by)}</dd>` : ''}
+      ${rfc.published ? `<dt class="font-bold mt-2">Date published</dt><dd>${formattedPublished.value}</dd>` : ''}
+      ${rfc.authors.length > 0 ? `<dt class="font-bold mt-2">Authors</dt><dd>${rfc.authors.map((author, index, arr) => {
+          const punctuation = index < arr.length - 1 ? ', ' : '.'
+          if (author.datatracker_person_path) {
+            return `<a href="${htmlEscapeToText(datatrackerAuthorUrlBuilder(author.datatracker_person_path))}" class="${LINK_CLASS}">${htmlEscapeToText(author.titlepage_name ?? '(no name)')}</a>${punctuation}`
+          }
+          return `${htmlEscapeToText(author.titlepage_name ?? '(no name)')}${punctuation}`
+        }).join('')}</dd>` : ''}
+      ${shouldShowGroup(rfc) ? `<dt class="font-bold mt-2">${htmlEscapeToText(groupName(rfc))}</dt><dd>${renderDocumentPojoToHtmlString(groupValuePojo(rfc))}</dd>` : ''}
+      ${shouldShowArea(rfc) ? `<dt class="font-bold mt-2">Area</dt><dd>${renderDocumentPojoToHtmlString(areaValuePojo(rfc))}</dd>` : ''}
+      ${shouldShowStreamValue(rfc) ? `<dt class="font-bold mt-2">${htmlEscapeToText(streamName.value)}</dt><dd>${renderDocumentPojoToHtmlString(streamValuePojo(rfc))}</dd>` : ''}
+      ${rfc.identifiers ? renderDocumentPojoToHtmlString(identifierValuePojo(rfc.identifiers)) : ''}
+      ${formats.value.length > 0 ? renderDocumentPojoToHtmlString(formatsValuePojo(formats.value, rfc.number)) : ''}
+      <dt class="font-bold mt-2">Cite this RFC</dt><dd class="text-sm">${renderDocumentPojoToHtmlString(citeValuePojo(rfc.number))}</dd>
+    </dl>
+    <h2 class="text-lg font-bold mt-4">Errata</h2>
+    <p><a href="${errataSearchForThisRfc}" class="${LINK_CLASS}">RFC ${rfc.number} Errata</a></p>
+    </div>
+  </noscript>`
+})
+
+const LINK_CLASS = `${ANCHOR_COLOR_TAILWIND_STYLE} cursor-pointer underline`
 const TAB_CONTENT_CLASS = 'flex flex-col min-h-0 text-black dark:text-white'
-const DEFAULT_CLASS =
-  'py-4 px-[1px] whitespace-nowrap border-b-2 hover:bg-gray-100 dark:hover:bg-gray-900 text-sm md:text-md cursor-pointer'
+const DEFAULT_CLASS = 'py-4 px-[1px] whitespace-nowrap border-b-2 text-sm md:text-md'
+const ONUNMOUNTED_CLASS = 'border-b-transparent'
+const ONMOUNTED_CLASS = 'hover:bg-gray-100 dark:hover:bg-gray-900 cursor-pointer'
 const SELECTED_CLASS =
   'text-bold-without-layout-shift text-gray-900 dark:text-gray-100 border-b-blue-900 dark:border-b-white font-medium'
 const UNSELECTED_CLASS = 'border-b-transparent text-gray-800 dark:text-gray-300'
