@@ -65,7 +65,8 @@ export async function serverSearch(req: IRequest, env: Env): Promise<Response | 
   const typesenseResponse = await fetch(requestPojo.url, {
     method: 'post',
     headers: {
-      'Content-Type': 'application/json; charset=utf-8'
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Accept': 'application/json, text/plain, */*'
     },
     body: requestPojo.body
   })
