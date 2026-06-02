@@ -35,7 +35,7 @@ Board (ISEB)](/authors/ise/iseb/) for their information.
 
 Unless a review is unsolicited or otherwise requested, the ISE will identify the reviewer to the author.  It is expected that the review process will be both consultative and iterative, with an eye toward improving document quality.
 
-Reviews may be posted publicly.  In requested, your anonymity will be respected.
+Reviews may be posted publicly.  If requested, your anonymity will be respected.
 
 ## Contents of Reviews
 
@@ -43,11 +43,11 @@ Questions that the ISE would like you to answer:
 
 - Is the subject of this document relevant to the RFC Series?  
 
-   [RFC 4846](https://www.rfc-editor.org/rfc/rfc4846.txt) provides details as to what is acceptable as an individual submission.  Generally a draft must show that it is improving overall interoperability or otherwise provide some important incite or innovation relating to the Internet.
+   [RFC 4846](https://www.rfc-editor.org/rfc/rfc4846.txt) provides details as to what is acceptable as an individual submission.  Generally a draft must show that it is improving overall interoperability or otherwise provide some important insight or innovation relating to the Internet.
 
 - Is this document technically competent, as far as you can tell?
 
-     Are protocols and interfaces well-specified?  Is the specification
+     Are protocols and interfaces well specified?  Is the specification
      safe and appropriate to deploy at scale?  Is the document correct?
 
 - Is this document in reasonable (not necessarily final) editorial
