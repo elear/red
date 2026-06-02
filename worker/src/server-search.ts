@@ -58,8 +58,8 @@ export async function serverSearch(req: IRequest, env: Env): Promise<Response | 
 
   const requestPojo = redTypesenseSearchRequestBuilder(
     typesenseApiKey,
-    searchQuery ?? '',
-    env.NUXT_PUBLIC_TYPESENSE_HOST
+    searchQuery ?? '*',
+    'typesense.staging.ietf.org', // env.NUXT_PUBLIC_TYPESENSE_HOST
   )
 
   const typesenseResponse = await fetch(requestPojo.url, {
