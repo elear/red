@@ -64,6 +64,9 @@ export async function serverSearch(req: IRequest, env: Env): Promise<Response | 
 
   const typesenseResponse = await fetch(requestPojo.url, {
     method: 'post',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
     body: requestPojo.body
   })
 
@@ -71,10 +74,13 @@ export async function serverSearch(req: IRequest, env: Env): Promise<Response | 
 
   if (!typesenseResponse.ok) {
     console.error(`[typesense proxy search HTTP ${typesenseResponse.status}] ${responseText}`)
-    return new Response(`<!DOCTYPE html><h1>Search is down</h1><p>${requestPojo.url}</p><p>${typesenseResponse.status}: ${responseText}</p>`, {
-      status: typesenseResponse.status,
-      headers: { 'Content-Type': 'text/html;charset=utf-8' }
-    })
+    return new Response(
+      `<!DOCTYPE html><h1>Search is down</h1><p>${requestPojo.url}</p><p>${typesenseResponse.status}: ${responseText}</p>`,
+      {
+        status: typesenseResponse.status,
+        headers: { 'Content-Type': 'text/html;charset=utf-8' }
+      }
+    )
   }
 
   const { data, error } = TypesenseResponseSchema.safeParse(JSON.parse(responseText))
