@@ -41,47 +41,39 @@ Reviews may be posted publicly.  In requested, your anonymity will be respected.
 
 Questions that the ISE would like you to answer:
 
-<ol type="A">
-   <li>
-   Is the subject of this document relevant to the RFC Series?<br>
+- Is the subject of this document relevant to the RFC Series?  
 
-	<a ref="https://www.rfc-editor.org/rfc/rfc4846.txt">RFC 4846</a> provides details as to what is acceptable as an individual submission.
-Generally a draft must show that it is improving overall interoperability or otherwise provide some important incite or innovation relating to the Internet.
-</li>
-<li>
-   Is this document technically competent, as far as you can tell?
+   [RFC 4846](https://www.rfc-editor.org/rfc/rfc4846.txt) provides details as to what is acceptable as an individual submission.  Generally a draft must show that it is improving overall interoperability or otherwise provide some important incite or innovation relating to the Internet.
 
-   Are protocols and interfaces well-specified?  Is the specification
-   safe and appropriate to deploy at scale?  Is the document correct?
+- Is this document technically competent, as far as you can tell?
 
-</li>
-<li>Is this document in reasonable (not necessarily final) editorial 
+     Are protocols and interfaces well-specified?  Is the specification
+     safe and appropriate to deploy at scale?  Is the document correct?
+
+- Is this document in reasonable (not necessarily final) editorial
    shape?
 
-   Works should concisely and clearly make their point.  Was it easy 
-   to discern that point, and could you understand the approach being 
+   Works should concisely and clearly make their point.  Was it easy
+   to discern that point, and could you understand the approach being
    offered?  Is the document complete?
-</li>
-<li>
-   Are the abstract and introduction of this document reasonably clear?
 
-   Does the introduction provide enough background for those Internet 
+- Are the abstract and introduction of this document reasonably clear?
+
+   Does the introduction provide enough background for those Internet
    techies who may not be experts in the particular subject matter?  
-   Do the title and abstract fairly and accurately summarize the 
+   Do the title and abstract fairly and accurately summarize the
    contents?
-</li>
-<li>Does the document make clear upfront how the specification does or 
-   does not relate to past or current IETF activities?
-   <br>An independent submission <b>must not</b> mislead the reader that it is a standard.
-</li>
-<li>
-   How else can the document be improved?
 
-   Any additional suggestions that you can make to improve the quality 
-   and clarity of the document will be welcomed by the ISE and in most 
+- Does the document make clear upfront how the specification does or
+   does not relate to past or current IETF activities?  
+
+   An independent submission **must not** mislead the reader that it is a standard.
+
+- How else can the document be improved?
+
+   Any additional suggestions that you can make to improve the quality
+   and clarity of the document will be welcomed by the ISE and in most
    cases will be welcomed by the author(s).
-</li>
-</ol>
 
 ## Questions?
 
