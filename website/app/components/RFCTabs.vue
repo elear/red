@@ -384,7 +384,15 @@ const groupValuePojo = (rfc: RfcCommon): DocumentPojo => {
         href: useWorkingGroupUrlBuilder(group) ?? '',
         class: LINK_CLASS
       },
-      children
+      children: [
+        ...children,
+        {
+          type: 'Element',
+          nodeName: 'Icon',
+          attributes: { name: 'fluent:window-new-20-regular', class: 'text-lg align-middle ml-1' },
+          children: []
+        }
+      ]
     }
   ]
 }
@@ -404,7 +412,15 @@ const areaValuePojo = (rfc: RfcCommon): DocumentPojo => {
         href: areaGroupUrlBuilder(area) ?? '',
         class: LINK_CLASS
       },
-      children
+      children: [
+        ...children, 
+        {
+          type: 'Element',
+          nodeName: 'Icon',
+          attributes: { name: 'fluent:window-new-20-regular', class: 'text-lg align-middle ml-1' },
+          children: []
+        }
+      ]
     }
   ]
 }
@@ -595,13 +611,19 @@ const noScriptHtml = computed(() => {
       ${rfc.obsoletes?.length ? `<dt class="font-bold mt-2">Obsoletes (${rfc.obsoletes.length})</dt><dd>${renderRfcList(rfc.obsoletes)}</dd>` : ''}
       ${rfc.obsoleted_by?.length ? `<dt class="font-bold mt-2">Obsoleted by (${rfc.obsoleted_by.length})</dt><dd>${renderRfcList(rfc.obsoleted_by)}</dd>` : ''}
       ${rfc.published ? `<dt class="font-bold mt-2">Date published</dt><dd>${formattedPublished.value}</dd>` : ''}
-      ${rfc.authors.length > 0 ? `<dt class="font-bold mt-2">Authors</dt><dd>${rfc.authors.map((author, index, arr) => {
-          const punctuation = index < arr.length - 1 ? ', ' : '.'
-          if (author.datatracker_person_path) {
-            return `<a href="${htmlEscapeToText(datatrackerAuthorUrlBuilder(author.datatracker_person_path))}" class="${LINK_CLASS}">${htmlEscapeToText(author.titlepage_name ?? '(no name)')}</a>${punctuation}`
-          }
-          return `${htmlEscapeToText(author.titlepage_name ?? '(no name)')}${punctuation}`
-        }).join('')}</dd>` : ''}
+      ${
+          rfc.authors.length > 0
+            ? `<dt class="font-bold mt-2">Authors</dt><dd>${rfc.authors
+                .map((author, index, arr) => {
+                  const punctuation = index < arr.length - 1 ? ', ' : '.'
+                  if (author.datatracker_person_path) {
+                    return `<a href="${htmlEscapeToText(datatrackerAuthorUrlBuilder(author.datatracker_person_path))}" class="${LINK_CLASS}">${htmlEscapeToText(author.titlepage_name ?? '(no name)')}</a>${punctuation}`
+                  }
+                  return `${htmlEscapeToText(author.titlepage_name ?? '(no name)')}${punctuation}`
+                })
+                .join('')}</dd>`
+            : ''
+        }
       ${shouldShowGroup(rfc) ? `<dt class="font-bold mt-2">${htmlEscapeToText(groupName(rfc))}</dt><dd>${renderDocumentPojoToHtmlString(groupValuePojo(rfc))}</dd>` : ''}
       ${shouldShowArea(rfc) ? `<dt class="font-bold mt-2">Area</dt><dd>${renderDocumentPojoToHtmlString(areaValuePojo(rfc))}</dd>` : ''}
       ${shouldShowStreamValue(rfc) ? `<dt class="font-bold mt-2">${htmlEscapeToText(streamName.value)}</dt><dd>${renderDocumentPojoToHtmlString(streamValuePojo(rfc))}</dd>` : ''}
@@ -610,7 +632,7 @@ const noScriptHtml = computed(() => {
       <dt class="font-bold mt-2">Cite this RFC</dt><dd class="text-sm">${renderDocumentPojoToHtmlString(citeValuePojo(rfc.number))}</dd>
     </dl>
     <h2 class="text-lg font-bold mt-4">Errata</h2>
-    <p><a href="${errataSearchForThisRfc}" class="${LINK_CLASS}">RFC ${rfc.number} Errata</a></p>
+    <p><a href="${htmlEscapeToText(errataSearchForThisRfc)}" class="${LINK_CLASS}">RFC ${rfc.number} Errata</a></p>
     </div>
   </noscript>`
 })

@@ -41,7 +41,20 @@ export const renderNodePojo = (node: NodePojo, elementRenderers: ElementRenderer
 export const renderNodePojoToHtmlString = (node: NodePojo): string => {
   if (node.type === 'Element') {
     const { nodeName } = node
-    const nodeNameToUse = nodeName.match(/Anchor/i) ? 'a' : nodeName
+    let nodeNameToUse = nodeName
+    switch (nodeName) {
+      case 'Anchor':
+        nodeNameToUse = 'a'
+        break
+      case 'Icon':
+        nodeNameToUse = 'span'
+        const { name } = node.attributes
+        if (name) {
+          return `<span class="iconify i-${htmlEscapeToText(name)} text-lg align-middle ml-1" aria-hidden="true"></span>`
+        }
+        break
+    }
+
     const attributesEntries = Object.entries({
       ...(node.attributes.href && isExternalLink(node.attributes.href) ? { rel: EXTERNAL_LINK_REL } : {}),
       ...node.attributes
