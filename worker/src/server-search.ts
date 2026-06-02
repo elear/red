@@ -21,7 +21,7 @@ const TypesenseRequestParamsSchema = z.object({
 const TypesenseHitSchema = z.object({
   document: z.object({
     rfc: z.string(),
-    title: z.string(),
+    title: z.string()
   })
 })
 
@@ -51,11 +51,16 @@ export async function serverSearch(req: IRequest, env: Env): Promise<Response | 
   const searchQuery = searchParams.get(SEARCH_QUERY_PARAM)
   if (!typesenseApiKey) {
     return new Response(`<!DOCTYPE html><h1>Search needs valid API key</h1>`, {
-      status: 500
+      status: 500,
+      headers: { 'Content-Type': 'text/html;charset=utf-8' }
     })
   }
 
-  const requestPojo = redTypesenseSearchRequestBuilder(typesenseApiKey, searchQuery ?? '', env.NUXT_PUBLIC_TYPESENSE_HOST)
+  const requestPojo = redTypesenseSearchRequestBuilder(
+    typesenseApiKey,
+    searchQuery ?? '',
+    env.NUXT_PUBLIC_TYPESENSE_HOST
+  )
 
   const typesenseResponse = await fetch(requestPojo.url, {
     method: 'post',
@@ -66,8 +71,9 @@ export async function serverSearch(req: IRequest, env: Env): Promise<Response | 
 
   if (!typesenseResponse.ok) {
     console.error(`[typesense proxy search HTTP ${typesenseResponse.status}] ${responseText}`)
-    return new Response('<!DOCTYPE html><h1>Search is down</h1>', {
-      status: typesenseResponse.status
+    return new Response(`<!DOCTYPE html><h1>Search is down</h1><p>${requestPojo.url}</p><p>${typesenseResponse.status}: ${responseText}</p>`, {
+      status: typesenseResponse.status,
+      headers: { 'Content-Type': 'text/html;charset=utf-8' }
     })
   }
 
@@ -75,12 +81,16 @@ export async function serverSearch(req: IRequest, env: Env): Promise<Response | 
   if (error || !data) {
     console.error(`[typesense proxy parse error]`, error, data)
     return new Response(`<!DOCTYPE html><h1>Internal error parsing search response. Please report this bug.</h1>`, {
-      status: 500
+      status: 500,
+      headers: { 'Content-Type': 'text/html;charset=utf-8' }
     })
   }
 
-  const hits = data.results.flatMap(result => result.hits)
-  const items = hits.map(hit => htmlTemplate`<li><a href="/info/${hit.document.rfc}/" target="_top">RFC <b>${hit.document.rfc}</b> ${hit.document.title}</a></li>`)
+  const hits = data.results.flatMap((result) => result.hits)
+  const items = hits.map(
+    (hit) =>
+      htmlTemplate`<li><a href="/info/${hit.document.rfc}/" target="_top">RFC <b>${hit.document.rfc}</b> ${hit.document.title}</a></li>`
+  )
   const html = htmlTemplate`<!DOCTYPE html><h1>Search results</h1><ul>${safe(items.join(''))}</ul>`
 
   return new Response(html.toString(), {
