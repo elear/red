@@ -59,49 +59,59 @@ export async function serverSearch(req: IRequest, env: Env): Promise<Response | 
   const requestPojo = redTypesenseSearchRequestBuilder(
     typesenseApiKey,
     searchQuery ?? '*',
-    'typesense.staging.ietf.org', // env.NUXT_PUBLIC_TYPESENSE_HOST
+    'typesense.staging.ietf.org' // env.NUXT_PUBLIC_TYPESENSE_HOST
   )
 
-  const typesenseResponse = await fetch(requestPojo.url, {
-    method: 'post',
-    headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
-      'Accept': 'application/json, text/plain, */*'
-    },
-    body: requestPojo.body
-  })
+  try {
+    const typesenseResponse = await fetch(requestPojo.url, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        Accept: 'application/json, text/plain, */*'
+      },
+      body: requestPojo.body
+    })
 
-  const responseText = await typesenseResponse.text()
+    const responseText = await typesenseResponse.text()
 
-  if (!typesenseResponse.ok) {
-    console.error(`[typesense proxy search HTTP ${typesenseResponse.status}] ${responseText}`)
+    if (!typesenseResponse.ok) {
+      console.error(`[typesense proxy search HTTP ${typesenseResponse.status}] ${responseText}`)
+      return new Response(
+        `<!DOCTYPE html><h1>Search is down</h1><p>${requestPojo.url}</p><p>${typesenseResponse.status}: ${responseText}</p>`,
+        {
+          status: typesenseResponse.status,
+          headers: { 'Content-Type': 'text/html;charset=utf-8' }
+        }
+      )
+    }
+
+    const { data, error } = TypesenseResponseSchema.safeParse(JSON.parse(responseText))
+    if (error || !data) {
+      console.error(`[typesense proxy parse error]`, error, data)
+      return new Response(`<!DOCTYPE html><h1>Internal error parsing search response. Please report this bug.</h1>`, {
+        status: 500,
+        headers: { 'Content-Type': 'text/html;charset=utf-8' }
+      })
+    }
+
+    const hits = data.results.flatMap((result) => result.hits)
+    const items = hits.map(
+      (hit) =>
+        htmlTemplate`<li><a href="/info/${hit.document.rfc}/" target="_top">RFC <b>${hit.document.rfc}</b> ${hit.document.title}</a></li>`
+    )
+    const html = htmlTemplate`<!DOCTYPE html><h1>Search results</h1><ul>${safe(items.join(''))}</ul>`
+
+    return new Response(html.toString(), {
+      status: 200,
+      headers: { 'Content-Type': 'text/html;charset=utf-8' }
+    })
+  } catch (e: unknown) {
     return new Response(
-      `<!DOCTYPE html><h1>Search is down</h1><p>${requestPojo.url}</p><p>${typesenseResponse.status}: ${responseText}</p>`,
+      `<!DOCTYPE html><h1>Search is down</h1><p>${e}</p>`,
       {
-        status: typesenseResponse.status,
+        status: 500,
         headers: { 'Content-Type': 'text/html;charset=utf-8' }
       }
     )
   }
-
-  const { data, error } = TypesenseResponseSchema.safeParse(JSON.parse(responseText))
-  if (error || !data) {
-    console.error(`[typesense proxy parse error]`, error, data)
-    return new Response(`<!DOCTYPE html><h1>Internal error parsing search response. Please report this bug.</h1>`, {
-      status: 500,
-      headers: { 'Content-Type': 'text/html;charset=utf-8' }
-    })
-  }
-
-  const hits = data.results.flatMap((result) => result.hits)
-  const items = hits.map(
-    (hit) =>
-      htmlTemplate`<li><a href="/info/${hit.document.rfc}/" target="_top">RFC <b>${hit.document.rfc}</b> ${hit.document.title}</a></li>`
-  )
-  const html = htmlTemplate`<!DOCTYPE html><h1>Search results</h1><ul>${safe(items.join(''))}</ul>`
-
-  return new Response(html.toString(), {
-    status: 200,
-    headers: { 'Content-Type': 'text/html;charset=utf-8' }
-  })
 }
