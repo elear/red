@@ -85,5 +85,4 @@ Generally a draft must show that it is improving overall interoperability or oth
 
 ## Questions?
 
-Feel free to contact the ISE [rfc-ise@rfc-editor.org](mailto:rfc-ise@rfc-editor.org) with any questions 
-you may have about document reviews.
+Feel free to contact the ISE [rfc-ise@rfc-editor.org](mailto:rfc-ise@rfc-editor.org) with any questions you may have about document reviews.
